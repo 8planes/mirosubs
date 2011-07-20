@@ -1,18 +1,17 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 #   <iesusnp@gmail.com>, 2011.
 # ilabastida <ilabastida@ub.edu>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-19 23:06-0500\n"
-"PO-Revision-Date: 2011-07-19 20:12+0000\n"
+"Report-Msgid-Bugs-To: https://www.pivotaltracker.com/projects/224127\n"
+"POT-Creation-Date: 2011-07-20 05:01-0500\n"
+"PO-Revision-Date: 2011-07-20 10:12+0000\n"
 "Last-Translator: tasman <iesusnp@gmail.com>\n"
-"Language-Team: Catalan (http://www.transifex.net/projects/p/"
-"universalsubtitles/team/ca/)\n"
+"Language-Team: Catalan (http://www.transifex.net/projects/p/universalsubtitles/team/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,147 +20,147 @@ msgstr ""
 
 #: settings.py:31
 msgid "Spanish, Argentinian"
-msgstr ""
+msgstr "Espanyol, Argentí"
 
 #: settings.py:32 utils/translation_names.py:50
 msgid "English, British"
-msgstr ""
+msgstr "Anglès, Britànic"
 
 #: settings.py:33
 msgid "Portuguese, Brazilian"
-msgstr ""
+msgstr "Portuguès, Brassileny"
 
 #: settings.py:34
 msgid "Latin, Serbian"
-msgstr ""
+msgstr "Llatí, Serbi"
 
 #: settings.py:35 utils/translation_names.py:38
 msgid "Chinese, Simplified"
-msgstr ""
+msgstr "Xinés, Simplificat"
 
 #: settings.py:36 utils/translation_names.py:39
 msgid "Chinese, Traditional"
-msgstr ""
+msgstr "Xinés, Tradicional"
 
 #: settings.py:37 utils/translation_names.py:51
 msgid "Esperanto"
-msgstr ""
+msgstr "Esperanto"
 
 #: settings.py:49 utils/translation_names.py:74
 msgid "Inuktitut"
-msgstr ""
+msgstr "Inuktitut"
 
 #: settings.py:50
 msgid "Mohawk"
-msgstr ""
+msgstr "Mohawk"
 
 #: settings.py:51
 msgid "Anishinaabe"
-msgstr ""
+msgstr "Anishinaabe"
 
 #: settings.py:52 utils/translation_names.py:42
 msgid "Cree"
-msgstr ""
+msgstr "Cree"
 
 #: settings.py:53
 msgid "Haida"
-msgstr ""
+msgstr "Haida"
 
 #: settings.py:54
 msgid "American Sign Language"
-msgstr ""
+msgstr "Llenguatge de signes americà"
 
 #: settings.py:55 utils/translation_names.py:175
 msgid "Wolof"
-msgstr ""
+msgstr "Wòlof"
 
 #: settings.py:56 utils/translation_names.py:124
 msgid "Quechua"
-msgstr ""
+msgstr "Quítxua"
 
 #: settings.py:57 utils/translation_names.py:148
 msgid "Swahili"
-msgstr ""
+msgstr "Suahili"
 
 #: settings.py:58 utils/translation_names.py:167
 msgid "Urdu"
-msgstr ""
+msgstr "Urdú"
 
 #: settings.py:59 utils/translation_names.py:123
 msgid "Punjabi"
-msgstr ""
+msgstr "Panjabi"
 
 #: settings.py:60 utils/translation_names.py:30
 msgid "Breton"
-msgstr ""
+msgstr "Bretó"
 
 #: settings.py:61 utils/translation_names.py:25
 msgid "Belarusian"
-msgstr ""
+msgstr "Bielorús"
 
 #: settings.py:62
 msgid "Berber"
-msgstr ""
+msgstr "Berber"
 
 #: settings.py:63 utils/translation_names.py:64
 msgid "Hausa"
-msgstr ""
+msgstr "Hausa"
 
 #: settings.py:64 utils/translation_names.py:117
 msgid "Oromo"
-msgstr ""
+msgstr "Oromo"
 
 #: settings.py:65 utils/translation_names.py:180
 msgid "Zulu"
-msgstr ""
+msgstr "Zulu"
 
 #: settings.py:66 utils/translation_names.py:144
 msgid "Somali"
-msgstr ""
+msgstr "Somali"
 
 #: settings.py:67 utils/translation_names.py:178
 msgid "Yoruba"
-msgstr ""
+msgstr "Ioruba"
 
 #: settings.py:68
 msgid "Igbo"
-msgstr ""
+msgstr "Igbo"
 
 #: settings.py:69 utils/translation_names.py:7
 msgid "Afrikaans"
-msgstr ""
+msgstr "Afrikaans"
 
 #: settings.py:70
 msgid "Kinyarwanda"
-msgstr ""
+msgstr "Kinyarwanda"
 
 #: settings.py:71 utils/translation_names.py:11
 msgid "Amharic"
-msgstr ""
+msgstr "Amhàric"
 
 #: settings.py:72 utils/translation_names.py:137
 msgid "Shona"
-msgstr ""
+msgstr "Shona"
 
 #: settings.py:73 utils/translation_names.py:22
 msgid "Bambara"
-msgstr ""
+msgstr "Bambara"
 
 #: settings.py:74 utils/translation_names.py:8
 msgid "Akan"
-msgstr ""
+msgstr "Àkan"
 
 #: settings.py:75
 msgid "Ibibio"
-msgstr ""
+msgstr "Ibibio"
 
 #: settings.py:76
 msgid "Fula"
-msgstr ""
+msgstr "Ful"
 
 #: settings.py:77 utils/translation_names.py:99
 msgid "Malagasy"
-msgstr ""
+msgstr "Malagaix"
 
 #: settings.py:78 utils/translation_names.py:93
 msgid "Lingala"
@@ -506,17 +505,19 @@ msgstr "Les dues contrasenyes no coincideixen."
 
 #: apps/profiles/rpc.py:56
 msgid "Your email was updated."
-msgstr ""
+msgstr "El vostre correu electrònic s'ha actualitat"
 
 #: apps/profiles/views.py:60 apps/teams/views.py:329
 msgid ""
 "File server unavailable. Try later. You can edit some other information "
 "without any problem."
 msgstr ""
+"El servidor de fitxers no està disponible. Proveu de nou més endavant. Podeu"
+" editar alguna informació sense cap problema."
 
 #: apps/profiles/views.py:115
 msgid "Your profile has been updated."
-msgstr ""
+msgstr "El vostre perfil ha estat actualitzat."
 
 #: apps/search/forms.py:11
 msgid "Most languages"
@@ -558,7 +559,7 @@ msgstr ""
 msgid "Video In"
 msgstr ""
 
-#: apps/search/forms.py:76
+#: apps/search/forms.py:79
 msgid "All Languages"
 msgstr ""
 
@@ -605,8 +606,8 @@ msgstr ""
 
 #: apps/teams/forms.py:73
 msgid ""
-"Enter the URL of any compatible video or any video on our site. You can also "
-"browse the site and use the 'Add Video to Team' menu."
+"Enter the URL of any compatible video or any video on our site. You can also"
+" browse the site and use the 'Add Video to Team' menu."
 msgstr ""
 
 #: apps/teams/forms.py:98
@@ -645,8 +646,7 @@ msgstr ""
 #: apps/teams/forms.py:173 apps/teams/forms.py:208
 msgid ""
 "You can put an optional video \n"
-"on your team homepage that explains what your team is about, to attract "
-"volunteers. \n"
+"on your team homepage that explains what your team is about, to attract volunteers. \n"
 "Enter a link to any compatible video, or to any video page on our site."
 msgstr ""
 
@@ -945,26 +945,23 @@ msgstr "Algú està subtitulant aquest video ara. Proveu-ho més tard"
 #, python-format
 msgid ""
 "Please try again with a link to a video page. \n"
-"                        <a href=\"mailto:%s\">Contact us</a> if there's a "
-"problem."
+"                        <a href=\"mailto:%s\">Contact us</a> if there's a problem."
 msgstr ""
-"Sisplau, torneu-ho a intentar de nou amb un enllaç a una pàgina de vídeo. <a "
-"href=\"mailto:%s\">Contacteu amb nosaltres</a>  si teniu problemes."
+"Sisplau, torneu-ho a intentar de nou amb un enllaç a una pàgina de vídeo. <a"
+" href=\"mailto:%s\">Contacteu amb nosaltres</a>  si teniu problemes."
 
 #: apps/videos/forms.py:349
 #, python-format
 msgid ""
-"You must link to a video on a compatible site (like YouTube) or directly to "
-"a\n"
-"                    video file that works with HTML5 browsers. For example: "
-"http://mysite.com/myvideo.ogg or http://mysite.com/myipadvideo.m4v\n"
-"                    <a href=\"mailto:%s\">Contact us</a> if there's a "
-"problem."
+"You must link to a video on a compatible site (like YouTube) or directly to a\n"
+"                    video file that works with HTML5 browsers. For example: http://mysite.com/myvideo.ogg or http://mysite.com/myipadvideo.m4v\n"
+"                    <a href=\"mailto:%s\">Contact us</a> if there's a problem."
 msgstr ""
-"Heu d'enllaçar amb un vídeo d'un lloc compatible (com YouTube) o directament "
-"a un fitxer de vídeo que funcione amb els navegadors amb suport HTML 5. com "
-"per exemple: http://mysite.com/myvideo.ogg o http://mysite.com/myipadvideo."
-"m4v <a href=\"mailto:%s\">Contacteu amb nosaltres</a> si hi ha cap problema."
+"Heu d'enllaçar amb un vídeo d'un lloc compatible (com YouTube) o directament"
+" a un fitxer de vídeo que funcione amb els navegadors amb suport HTML 5. com"
+" per exemple: http://mysite.com/myvideo.ogg o "
+"http://mysite.com/myipadvideo.m4v <a href=\"mailto:%s\">Contacteu amb "
+"nosaltres</a> si hi ha cap problema."
 
 #: apps/videos/forms.py:370
 msgid "Youtube usernames"
@@ -981,7 +978,8 @@ msgstr "Enllaç de la pàgina de Youtube."
 
 #: apps/videos/forms.py:372
 msgid ""
-"<span class=\"hint\">For example: http://www.youtube.com/user/username</span>"
+"<span class=\"hint\">For example: "
+"http://www.youtube.com/user/username</span>"
 msgstr ""
 "<span class=\"hint\">Per Exemple: http://www.youtube.com/user/usuari</span>"
 
@@ -990,8 +988,8 @@ msgid ""
 "<span class=\"hint\">Supported: Youtube, Vimeo, Blip or Dailymotion. Only "
 "supported sites added.</span>"
 msgstr ""
-"<span class=\"hint\">Suportats: Youtube, Vimeo, Blip o Dailymotion. Suportat "
-"només els llocs afegits.</span>"
+"<span class=\"hint\">Suportats: Youtube, Vimeo, Blip o Dailymotion. Suportat"
+" només els llocs afegits.</span>"
 
 #: apps/videos/forms.py:374
 msgid "Save feed"
@@ -1030,8 +1028,8 @@ msgid ""
 "Sorry, you cannot upload subtitles right now because someone is editing the "
 "language you are uploading or a translation of it"
 msgstr ""
-"Ens sap greu, no podeu pujar els subtítols en aquest moment perquè algú està "
-"editant l'idioma o una traducció d'aquest."
+"Ens sap greu, no podeu pujar els subtítols en aquest moment perquè algú està"
+" editant l'idioma o una traducció d'aquest."
 
 #: apps/videos/models.py:1075
 #, python-format
@@ -1080,29 +1078,29 @@ msgstr ""
 #: apps/videos/models.py:1118
 #, python-format
 msgid ""
-"started <a href=\"%(language_url)s\">%(language)s subtitles</a> for <a href="
-"\"%(video_url)s\">%(video_name)s</a>"
+"started <a href=\"%(language_url)s\">%(language)s subtitles</a> for <a "
+"href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
 #: apps/videos/models.py:1120
 #, python-format
 msgid ""
-"<a href=\"%(language_url)s\">%(language)s subtitles</a> started for <a href="
-"\"%(video_url)s\">%(video_name)s</a>"
+"<a href=\"%(language_url)s\">%(language)s subtitles</a> started for <a "
+"href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
 #: apps/videos/models.py:1131
 #, python-format
 msgid ""
-"edited <a href=\"%(language_url)s\">%(language)s subtitles</a> for <a href="
-"\"%(video_url)s\">%(video_name)s</a>"
+"edited <a href=\"%(language_url)s\">%(language)s subtitles</a> for <a "
+"href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
 #: apps/videos/models.py:1133
 #, python-format
 msgid ""
-"<a href=\"%(language_url)s\">%(language)s subtitles</a> edited for <a href="
-"\"%(video_url)s\">%(video_name)s</a>"
+"<a href=\"%(language_url)s\">%(language)s subtitles</a> edited for <a "
+"href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
 #: apps/videos/models.py:1139
@@ -1217,8 +1215,8 @@ msgstr ""
 #: apps/videos/share_utils.py:76
 #, python-format
 msgid ""
-"Hey-- just found a version of this video %(video_title)s with captions: %"
-"(url)s"
+"Hey-- just found a version of this video %(video_title)s with captions: "
+"%(url)s"
 msgstr ""
 
 #: apps/videos/share_utils.py:101
@@ -1229,13 +1227,12 @@ msgstr ""
 #: apps/videos/views.py:187
 msgid ""
 "Here is the subtitle workspace for your video.  You can\n"
-"share the video with friends, or get an embed code for your site.  To add "
-"or\n"
+"share the video with friends, or get an embed code for your site.  To add or\n"
 "improve subtitles, click the button below the video"
 msgstr ""
-"Aquí està l'espai de treball dels subtítols per al vídeo. Podeu compartir el "
-"vídeo amb els amics o aconseguir un codi d'inserció per al vostre lloc. Per "
-"a afegir o millorar els subtítols, feu clic al botó situat sota el vídeo"
+"Aquí està l'espai de treball dels subtítols per al vídeo. Podeu compartir el"
+" vídeo amb els amics o aconseguir un codi d'inserció per al vostre lloc. Per"
+" a afegir o millorar els subtítols, feu clic al botó situat sota el vídeo"
 
 #: apps/videos/views.py:201
 #, python-format
@@ -1364,8 +1361,9 @@ msgstr ""
 #: libs/rosetta/templates/rosetta/languages.html:57
 #, python-format
 msgid ""
-"Please refer to <a href=\"%(i18n_doc_link)s\">Django's I18N documentation</"
-"a> for a guide on how to set up internationalization for your project."
+"Please refer to <a href=\"%(i18n_doc_link)s\">Django's I18N "
+"documentation</a> for a guide on how to set up internationalization for your"
+" project."
 msgstr ""
 "Sisplau, consulteu la <a href=\"%(i18n_doc_link)s\">documentació I18N de "
 "Django</a> per a configurar la internacionalització del vostre projecte. "
@@ -1429,7 +1427,7 @@ msgstr "Vés"
 
 #: libs/rosetta/templates/rosetta/pofile.html:54
 msgid "Original"
-msgstr ""
+msgstr "Original"
 
 #: libs/rosetta/templates/rosetta/pofile.html:58
 msgid "Occurrences(s)"
@@ -1543,9 +1541,10 @@ msgstr ""
 
 #: templates/_testing_widget.html:16
 msgid ""
-"Warning #2: These subtitles are non-permanent and should not be relied on -- "
-"someone could change them."
-msgstr "Avís #2: Aquests subtítols no són definitius i podrien ser modificats."
+"Warning #2: These subtitles are non-permanent and should not be relied on --"
+" someone could change them."
+msgstr ""
+"Avís #2: Aquests subtítols no són definitius i podrien ser modificats."
 
 #: templates/_testing_widget.html:17
 msgid "This alpha site is for purely testing purposes."
@@ -1557,25 +1556,18 @@ msgid ""
 "    <h2>About Universal Subtitles</h2>\n"
 "    \n"
 "    <p>\n"
-"        Universal Subtitles gives individuals, communities, and larger "
-"organizations the power \n"
-"        to overcome accessibility and language barriers for online video. "
-"The tools are free \n"
-"        and open source and make the work of subtitling and translating "
-"video simpler, more \n"
+"        Universal Subtitles gives individuals, communities, and larger organizations the power \n"
+"        to overcome accessibility and language barriers for online video. The tools are free \n"
+"        and open source and make the work of subtitling and translating video simpler, more \n"
 "        appealing, and, most of all, more collaborative.\n"
 "    </p>\n"
 "    \n"
 "    <p>\n"
 "        The benefits of captioning and subtitling are immense:\n"
 "        <ul>\n"
-"            <li>Captions make videos accessible for viewers who are deaf or "
-"hard of hearing</li>\n"
-"            <li>Translations make it possible for all of us to watch video "
-"in languages that we don't speak</li>\n"
-"            <li>Video creators get: better SEO, more views, access to a far "
-"bigger (potentially multilingual and global) audience, accessibility for "
-"deaf and hard of hearing viewers, and more</li>\n"
+"            <li>Captions make videos accessible for viewers who are deaf or hard of hearing</li>\n"
+"            <li>Translations make it possible for all of us to watch video in languages that we don't speak</li>\n"
+"            <li>Video creators get: better SEO, more views, access to a far bigger (potentially multilingual and global) audience, accessibility for deaf and hard of hearing viewers, and more</li>\n"
 "        </ul>\n"
 "    </p>\n"
 "    \n"
@@ -1589,44 +1581,33 @@ msgid ""
 "    </p>\n"
 "\n"
 "    <p>\n"
-"        Everything we do is available under the open source <a href=\"http://"
-"www.gnu.org/licenses/agpl-3.0.html\">AGPL</a> license.\n"
+"        Everything we do is available under the open source <a href=\"http://www.gnu.org/licenses/agpl-3.0.html\">AGPL</a> license.\n"
 "    </p>\n"
 "    \n"
 "    <h2>Three Important Ways You Can Help</h2>\n"
 "    \n"
 "    <p>\n"
-"        Universal Subtitles is an open source, non-profit project. We are "
-"volunteer driven and would love to have your help!\n"
+"        Universal Subtitles is an open source, non-profit project. We are volunteer driven and would love to have your help!\n"
 "        <br/>\n"
 "        Here are three ways you can get involved:\n"
 "        <ul>\n"
 "            <li>\n"
-"                Want to help us test new versions of the software before "
-"it's released? \n"
-"                Join the <a href=\"http://groups.google.com/group/universal-"
-"subtitles-testing\">testers list</a> \n"
-"                and follow our <a href=\"http://develop.participatoryculture."
-"org/index.php/UniversalSubtitlesQA\">testing guidelines</a> \n"
+"                Want to help us test new versions of the software before it's released? \n"
+"                Join the <a href=\"http://groups.google.com/group/universal-subtitles-testing\">testers list</a> \n"
+"                and follow our <a href=\"http://develop.participatoryculture.org/index.php/UniversalSubtitlesQA\">testing guidelines</a> \n"
 "                to get started!\n"
 "            </li>\n"
 "            <li>\n"
-"                If you are a developer, check out the <a href=\"http://wiki."
-"github.com/8planes/mirosubs/dev-center\">development center</a> \n"
-"                and start with some 'bite-sized' tickets that are listed "
-"there.\n"
+"                If you are a developer, check out the <a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">development center</a> \n"
+"                and start with some 'bite-sized' tickets that are listed there.\n"
 "            </li>\n"
 "            <li>\n"
-"                Help out new users! Take a look at the <a href=\"http://"
-"universalsubtitles.org/videos/\">videos list</a> \n"
-"                and give positive and helpful feedback to people that have "
-"added subtitles to various videos.\n"
+"                Help out new users! Take a look at the <a href=\"http://universalsubtitles.org/videos/\">videos list</a> \n"
+"                and give positive and helpful feedback to people that have added subtitles to various videos.\n"
 "            </li>\n"
 "            <li>\n"
-"                Are you deaf, hard-of-hearing, or an accessibility "
-"advocate?  \n"
-"                Please join our <a href=\"http://groups.google.com/group/"
-"universal-subtitles-deaf-hoh/\">deaf/hoh discussion list</a>.\n"
+"                Are you deaf, hard-of-hearing, or an accessibility advocate?  \n"
+"                Please join our <a href=\"http://groups.google.com/group/universal-subtitles-deaf-hoh/\">deaf/hoh discussion list</a>.\n"
 "            </li>\n"
 "        </ul>\n"
 "    </p>\n"
@@ -1634,221 +1615,168 @@ msgid ""
 "    <h2>Our Organization</h2>\n"
 "    \n"
 "    <p>\n"
-"        <a href=\"http://www.pculture.org/\">Participatory Culture "
-"Foundation</a> \n"
-"        is a non-profit organization building free and open tools for more a "
-"democratic and \n"
-"        decentralized media. Other projects of ours include <a href=\"http://"
-"www.getmiro.com/\">Miro</a>, \n"
-"        <a href=\"http://www.mirovideoconverter.com/\">Miro Video Converter</"
-"a>, \n"
+"        <a href=\"http://www.pculture.org/\">Participatory Culture Foundation</a> \n"
+"        is a non-profit organization building free and open tools for more a democratic and \n"
+"        decentralized media. Other projects of ours include <a href=\"http://www.getmiro.com/\">Miro</a>, \n"
+"        <a href=\"http://www.mirovideoconverter.com/\">Miro Video Converter</a>, \n"
 "        <a href=\"http://www.mirocommunity.org/\">Miro Community</a>, and \n"
-"        <a href=\"http://www.openvideoalliance.org/\">Open Video Alliance</"
-"a>.\n"
+"        <a href=\"http://www.openvideoalliance.org/\">Open Video Alliance</a>.\n"
 "    </p>\n"
 "    \n"
 "    <p>\n"
-"        Universal Subtitles is a featured project of <a href=\"http://www."
-"drumbeat.org/\">Mozilla Drumbeat</a>, \n"
+"        Universal Subtitles is a featured project of <a href=\"http://www.drumbeat.org/\">Mozilla Drumbeat</a>, \n"
 "        and the Mozilla Foundation has provided development support.  \n"
-"        Open Society Institute and the MacArthur Foundation are also "
-"financial supporters.\n"
+"        Open Society Institute and the MacArthur Foundation are also financial supporters.\n"
 "    </p>\n"
 "    \n"
 "    <p>\n"
-"        Software development for Universal Subtitles is being done in "
-"partnership with \n"
+"        Software development for Universal Subtitles is being done in partnership with \n"
 "        <br/><a href=\"http://www.8planes.com/\">8 Planes</a>.\n"
 "    </p>\n"
 "    \n"
 "    <h2>What's Coming Next?</h2>\n"
 "    \n"
 "    <p>\n"
-"        We are currently in the alpha stages of this website and the "
-"subtitling tool-- that means we're just getting started! But we've opened up "
-"the site so that we can begin testing and get early feedback.\n"
-"        Many very important features are missing. Here's some of what we'll "
-"be working on in the coming months:\n"
+"        We are currently in the alpha stages of this website and the subtitling tool-- that means we're just getting started! But we've opened up the site so that we can begin testing and get early feedback.\n"
+"        Many very important features are missing. Here's some of what we'll be working on in the coming months:\n"
 "        <ul>\n"
 "            <li>Better support for non-latin character sets</li>\n"
-"            <li>A volunteer page and request center, where people can ask "
-"for captions and subtitles</li>\n"
-"            <li>Machine translation option once subtitles have been "
-"transcribed</li>\n"
+"            <li>A volunteer page and request center, where people can ask for captions and subtitles</li>\n"
+"            <li>Machine translation option once subtitles have been transcribed</li>\n"
 "            <li>Better keyboard accessibility for site and widget</li>\n"
 "            <li>Subtitle ratings and flagging</li>\n"
 "            <li>Better community website features</li>\n"
-"            <li>Better video browsing on our site, for finding interesting "
-"content</li>\n"
+"            <li>Better video browsing on our site, for finding interesting content</li>\n"
 "            <li>Compliance with emerging timed text standards</li>\n"
 "        </ul>\n"
 "    </p>\n"
 "    \n"
 "    <p>\n"
-"        Are there other features that are particular important to your "
-"use? \n"
+"        Are there other features that are particular important to your use? \n"
 "        We'd love to hear from you.<br/>\n"
-"        Email us: <a href=\"mailto:universalsubtitles@pculture.org"
-"\">universalsubtitles@pculture.org</a>\n"
+"        Email us: <a href=\"mailto:universalsubtitles@pculture.org\">universalsubtitles@pculture.org</a>\n"
 "    </p>\n"
 "    "
 msgstr ""
-"\n"
 "    <h2>Quant aUniversal Subtitles</h2>\n"
 "    \n"
 "    <p>\n"
-"        Universal Subtitles oferix a individus, comunitats, i grans "
-"organitzacions el poder \n"
-"        per a superar l'accessibilitat  i les barreres idiomàtiques dels "
-"vídeos en línia. Les eines son gratuïtes i de codi obert i fan el treball de "
-"subtitulat i traducció més simple, atractiu i sobretot més col·laboratiu.\n"
+"        Universal Subtitles oferix a individus, comunitats, i grans organitzacions el poder \n"
+"        per a superar l'accessibilitat  i les barreres idiomàtiques dels vídeos en línia. Les eines son gratuïtes i de codi obert i fan el treball de subtitulat i traducció més simple, atractiu i sobretot més col·laboratiu.\n"
 "    </p>\n"
 "    \n"
 "    <p>\n"
-"\n"
-"        The benefits of captioning and subtitling are immense:\n"
+"        Els avantatges de les llegendes i el subtitulat són immens:\n"
 "        <ul>\n"
-"            <li>Captions make videos accessible for viewers who are deaf or "
-"hard of hearing</li>\n"
-"            <li>Translations make it possible for all of us to watch video "
-"in languages that we don't speak</li>\n"
-"            <li>Video creators get: better SEO, more views, access to a far "
-"bigger (potentially multilingual and global) audience, accessibility for "
-"deaf and hard of hearing viewers, and more</li>\n"
+"            <li>Les llegendes fan els vídeos més accessible als espectadors sords o amb dificultats d'audició.</li>\n"
+"            <li>Les traduccions permet a tots nosaltres vorer vídeos en idiomes que no parlem</li>\n"
+"            <li>El creadors de vídeos obtenen: millor posició als cercadors, més espectadors, accés a una major (potencialment multilingüe i global) audiència, accessibilitat per a persones sordes o amb dificultats d'audició</li>\n"
 "        </ul>\n"
 "    </p>\n"
 "    \n"
 "    <p>\n"
-"        Universal Subtitles is composed of three main parts:\n"
+"        Universal Subtitles està format principalment per tres parts:\n"
 "        <ul>\n"
-"            <li>A subtitle creation and viewing tool (aka the widget)</li>\n"
-"            <li>A collaborative subtitling website</li>\n"
-"            <li>An open protocol for subtitle search/delivery</li>\n"
+"            <li>Una eina de creació i visor de subtítols coneguts com a ginys</li>\n"
+"            <li>Un lloc web col·laboratiu de subtitulació </li>\n"
+"            <li>Un protocol obert de cerca i distribució de subtítols</li>\n"
 "        </ul>\n"
 "    </p>\n"
 "\n"
 "    <p>\n"
-"        Everything we do is available under the open source <a href=\"http://"
-"www.gnu.org/licenses/agpl-3.0.html\">AGPL</a> license.\n"
+"        Tot el que nosaltres oferim està sota la llicència de codi lliure <a href=\"http://www.gnu.org/licenses/agpl-3.0.html\">AGPL</a>.\n"
 "    </p>\n"
 "    \n"
-"    <h2>Three Important Ways You Can Help</h2>\n"
+"    <h2>Hi ha 3 maneres importants amb les que pots ajudar</h2>\n"
 "    \n"
 "    <p>\n"
-"        Universal Subtitles is an open source, non-profit project. We are "
-"volunteer driven and would love to have your help!\n"
+"        Universal Subtitles és un projecte de codi lliure sense ànim de lucre. Sóm impulsors voluntaris i ens agradaria que ens ajudareu!\n"
 "        <br/>\n"
-"        Here are three ways you can get involved:\n"
+"        Hi ha tres formes de participar:\n"
 "        <ul>\n"
 "            <li>\n"
-"                Want to help us test new versions of the software before "
-"it's released? \n"
-"                Join the <a href=\"http://groups.google.com/group/universal-"
-"subtitles-testing\">testers list</a> \n"
-"                and follow our <a href=\"http://develop.participatoryculture."
-"org/index.php/UniversalSubtitlesQA\">testing guidelines</a> \n"
-"                to get started!\n"
+"                Voleu ajudar-nos a provar les noves versions del programari abans del seu llançament? \n"
+"                Uniu-vos a la <a href=\"http://groups.google.com/group/universal-subtitles-testing\">llista de testejadors</a> \n"
+"                i seguiu la nostra <a href=\"http://develop.participatoryculture.org/index.php/UniversalSubtitlesQA\">guia de proves</a> \n"
+"                per a iniciar-se!\n"
 "            </li>\n"
 "            <li>\n"
-"                If you are a developer, check out the <a href=\"http://wiki."
-"github.com/8planes/mirosubs/dev-center\">development center</a> \n"
-"                and start with some 'bite-sized' tickets that are listed "
-"there.\n"
+"                Si sou desenvolupadors, pegueu un colp d'ull al <a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">centre de desenvolupament</a> \n"
+"                i comenceu amb alguns tiquets 'menys significants' que es llisten allà.\n"
 "            </li>\n"
 "            <li>\n"
-"                Help out new users! Take a look at the <a href=\"http://"
-"universalsubtitles.org/videos/\">videos list</a> \n"
-"                and give positive and helpful feedback to people that have "
-"added subtitles to various videos.\n"
+"                Ajudeu als nous usuaris! Pegueu una mirada a la <a href=\"http://universalsubtitles.org/videos/\">llista de vídeos</a> \n"
+"                i feu comentaris positius i útils per a que la gent afegeixi subtítols a varis vídeos.\n"
 "            </li>\n"
 "            <li>\n"
-"                Are you deaf, hard-of-hearing, or an accessibility "
-"advocate?  \n"
-"                Please join our <a href=\"http://groups.google.com/group/"
-"universal-subtitles-deaf-hoh/\">deaf/hoh discussion list</a>.\n"
+"                Ets sord, amb dificultat auditiva, o defensor de l'accessibilitat?  \n"
+"                Sisplau, uniu-vos a la <a href=\"http://groups.google.com/group/universal-subtitles-deaf-hoh/\">llista de discussió sords/hoh</a>.\n"
 "            </li>\n"
 "        </ul>\n"
 "    </p>\n"
 "\n"
-"    <h2>Our Organization</h2>\n"
+"    <h2>La nostra organització</h2>\n"
 "    \n"
 "    <p>\n"
-"        <a href=\"http://www.pculture.org/\">Participatory Culture "
-"Foundation</a> \n"
-"        is a non-profit organization building free and open tools for more a "
-"democratic and \n"
-"        decentralized media. Other projects of ours include <a href=\"http://"
-"www.getmiro.com/\">Miro</a>, \n"
-"        <a href=\"http://www.mirovideoconverter.com/\">Miro Video Converter</"
-"a>, \n"
-"        <a href=\"http://www.mirocommunity.org/\">Miro Community</a>, and \n"
-"        <a href=\"http://www.openvideoalliance.org/\">Open Video Alliance</"
-"a>.\n"
+"        <a href=\"http://www.pculture.org/\">Participatory Culture Foundation</a> \n"
+"        és una organització sense ànim de lucre que construeix eines gratuïtes i obertes per a uns medis més democràtics i descentralitzats. Altres dels nostres projectes inclouen <a href=\"http://www.getmiro.com/\">Miro</a>, \n"
+"        <a href=\"http://www.mirovideoconverter.com/\">Miro Video Converter</a>, \n"
+"        <a href=\"http://www.mirocommunity.org/\">Miro Community</a>, i \n"
+"        <a href=\"http://www.openvideoalliance.org/\">Open Video Alliance</a>.\n"
 "    </p>\n"
 "    \n"
 "    <p>\n"
-"        Universal Subtitles is a featured project of <a href=\"http://www."
-"drumbeat.org/\">Mozilla Drumbeat</a>, \n"
-"        and the Mozilla Foundation has provided development support.  \n"
-"        Open Society Institute and the MacArthur Foundation are also "
-"financial supporters.\n"
+"        Universal Subtitles està al projecte <a href=\"http://www.drumbeat.org/\">Mozilla Drumbeat</a>, \n"
+"        i la Fundació Mozilla ha donat suport al seu desenvolupament.  \n"
+"        L'Open Society Institute i la fundació MacArthur també han col·laborat financerament.\n"
 "    </p>\n"
 "    \n"
 "    <p>\n"
-"        Software development for Universal Subtitles is being done in "
-"partnership with \n"
+"        El desenvolupament del programari de Universal Subtitles està fent-se en col·laboració amb \n"
 "        <br/><a href=\"http://www.8planes.com/\">8 Planes</a>.\n"
 "    </p>\n"
 "    \n"
-"    <h2>What's Coming Next?</h2>\n"
+"    <h2>Què ha de vindre?</h2>\n"
 "    \n"
 "    <p>\n"
-"        We are currently in the alpha stages of this website and the "
-"subtitling tool-- that means we're just getting started! But we've opened up "
-"the site so that we can begin testing and get early feedback.\n"
-"        Many very important features are missing. Here's some of what we'll "
-"be working on in the coming months:\n"
+"        Actualment estem en una etapa alfa quan al lloc web i l'eina de subtitulació-- Això significa que just hem començat! Però hem obert el lloc per a poder iniciar les proves i obtindre els primers comentaris.\n"
+"        Falten encara molt més importants característiques. Ací estan algunes de les que treballarem els pròxims mesos:\n"
 "        <ul>\n"
-"            <li>Better support for non-latin character sets</li>\n"
-"            <li>A volunteer page and request center, where people can ask "
-"for captions and subtitles</li>\n"
-"            <li>Machine translation option once subtitles have been "
-"transcribed</li>\n"
-"            <li>Better keyboard accessibility for site and widget</li>\n"
-"            <li>Subtitle ratings and flagging</li>\n"
-"            <li>Better community website features</li>\n"
-"            <li>Better video browsing on our site, for finding interesting "
-"content</li>\n"
-"            <li>Compliance with emerging timed text standards</li>\n"
+"            <li>Millor suport per a conjunts de caràcters no llatins</li>\n"
+"            <li>Una pàgina de voluntariat i un centre de peticions, on la gent puga preguntar per llegendes i subtítols</li>\n"
+"            <li>La opció de traducció automàtica d'un únic subtítol ha estat transcrita</li>\n"
+"            <li>Millor accessibilitat per teclat al lloc web i al giny</li>\n"
+"            <li>Valoració i senyalització de subtítols</li>\n"
+"            <li>Millores característiques al web de la comunitat</li>\n"
+"            <li>Millor navegació de vídeo al nostre web per a trobar contingut interessant</li>\n"
+"            <li>Conformitat amb els estàndards del període del text emergent</li>\n"
 "        </ul>\n"
 "    </p>\n"
 "    \n"
 "    <p>\n"
-"        Are there other features that are particular important to your "
-"use? \n"
-"        We'd love to hear from you.<br/>\n"
-"        Email us: <a href=\"mailto:universalsubtitles@pculture.org"
-"\">universalsubtitles@pculture.org</a>\n"
+"        Hi ha cap altra característica que és particularment útil per al vostre ús?\n"
+"        Ens agrada escoltar-vos.<br/>\n"
+"        Envieu-nos un correu: <a href=\"mailto:universalsubtitles@pculture.org\">universalsubtitles@pculture.org</a>\n"
 "    </p>\n"
 "    "
 
 #: templates/base.html:49 templates/base_masterbranch.html:34
 #: templates/bug.html:5 templates/index_masterbranch.html:7
 msgid "Make subtitles, translations, and captions for almost any video."
-msgstr ""
+msgstr "Fer els subtítols,traduccions i llegendes per a qualssevol vídeo."
 
 #: templates/base.html:98 templates/base_masterbranch.html:92
 #: templates/bug.html:77 templates/index_masterbranch.html:72
 msgid "Feedback"
-msgstr ""
+msgstr "Comentaris"
 
 #: templates/base.html:103 templates/base_masterbranch.html:97
 msgid ""
 "Universal Subtitles does not support your browser. Upgrade your browser or "
 "<a href=\"http://getfirefox.com\">Try Firefox</a>."
 msgstr ""
-"Universal Subtitles no admet el vostre navegador. Actualitzeu el navegador o "
-"<a href=\"http://getfirefox.com\">Proveu Firefox</a>."
+"Universal Subtitles no admet el vostre navegador. Actualitzeu el navegador o"
+" <a href=\"http://getfirefox.com\">Proveu Firefox</a>."
 
 #: templates/base.html:114
 msgid "Admin"
@@ -1856,20 +1784,20 @@ msgstr "Admin"
 
 #: templates/base.html:117
 msgid "Sentry"
-msgstr ""
+msgstr "Sentinella"
 
 #: templates/base.html:120
 msgid "Rosetta"
-msgstr ""
+msgstr "Rosetta"
 
 #: templates/base.html:137 templates/teams/_team_video_lang_detail.html:34
 msgid "Create"
-msgstr ""
+msgstr "Crear"
 
 #: templates/base.html:138 templates/base_masterbranch.html:129
 #: templates/bug.html:94 templates/index_masterbranch.html:89
 msgid "Watch"
-msgstr ""
+msgstr "Vorer"
 
 #: templates/base.html:140
 msgid "Contribute"
@@ -1889,7 +1817,7 @@ msgstr "Voluntari"
 
 #: templates/base.html:145
 msgid "Services"
-msgstr ""
+msgstr "Serveis"
 
 #: templates/base.html:146
 msgid "Help"
@@ -1902,11 +1830,11 @@ msgstr ""
 #: templates/base.html:179 templates/base_masterbranch.html:168
 #: templates/bug.html:317 templates/index_masterbranch.html:306
 msgid ""
-"Universal Subtitles is a project of <a href=\"http://participatoryculture."
-"org/\">PCF</a>."
+"Universal Subtitles is a project of <a "
+"href=\"http://participatoryculture.org/\">PCF</a>."
 msgstr ""
-"Universal Subtitles és un projecte de <a href=\"http://participatoryculture."
-"org/\">PCF</a>."
+"Universal Subtitles és un projecte de <a "
+"href=\"http://participatoryculture.org/\">PCF</a>."
 
 #: templates/base.html:182 templates/base_masterbranch.html:171
 #: templates/index_masterbranch.html:310
@@ -1927,31 +1855,31 @@ msgstr "Política de privacitat"
 #: templates/base.html:187 templates/base_masterbranch.html:176
 #: templates/bug.html:325 templates/index_masterbranch.html:315
 msgid "Terms of Service"
-msgstr ""
+msgstr "Terminis de Servei"
 
 #: templates/base_masterbranch.html:125 templates/bug.html:89
 #: templates/index_masterbranch.html:85
 msgid "Subtitle"
-msgstr ""
+msgstr "Subtítol"
 
 #: templates/base_masterbranch.html:126 templates/bug.html:90
 #: templates/index_masterbranch.html:86
 msgid "a video now"
-msgstr ""
+msgstr "un vídeo ara"
 
 #: templates/base_masterbranch.html:130 templates/bug.html:95
 #: templates/index_masterbranch.html:90
 msgid "subbed videos"
-msgstr ""
+msgstr "vídeo subtitulat"
 
 #: templates/base_masterbranch.html:135 templates/bug.html:104
 #: templates/index_masterbranch.html:97
 msgid "blog"
-msgstr ""
+msgstr "blog"
 
 #: templates/base_masterbranch.html:136 templates/index_masterbranch.html:98
 msgid "Professional Services"
-msgstr ""
+msgstr "Serveis Professionals"
 
 #: templates/base_masterbranch.html:137 templates/bug.html:106
 #: templates/index_masterbranch.html:99
@@ -1961,25 +1889,27 @@ msgstr "PMF"
 #: templates/base_masterbranch.html:140 templates/bug.html:110
 #: templates/index_masterbranch.html:102
 msgid "admin"
-msgstr ""
+msgstr "administració"
 
 #: templates/base_masterbranch.html:144 templates/bug.html:113
 #: templates/index_masterbranch.html:106
 msgid "login"
-msgstr ""
+msgstr "Iniciar sessió"
 
 #: templates/bug.html:105
 msgid "about"
-msgstr ""
+msgstr "quant a"
 
 #: templates/bug.html:108
 msgid "logout"
-msgstr ""
+msgstr "tancar sessió"
 
 #: templates/bug.html:121 templates/index.html:25
 #: templates/index_masterbranch.html:113
 msgid "Easily caption and translate your videos, with help from your viewers."
 msgstr ""
+"Fàcil comprensió i traducció dels seus vídeos amb l'ajuda dels seus "
+"espectadors."
 
 #: templates/bug.html:125 templates/index.html:27
 #: templates/index_masterbranch.html:115
@@ -1987,18 +1917,22 @@ msgid ""
 "Increase video views by reaching global audiences and being accessible to "
 "the deaf and hard-of-hearing."
 msgstr ""
+"Incrementar les reproduccions de vídeo per arribar a un públic global i que "
+"són accessibles per a les persones sordes i amb problemes d'audició."
 
 #: templates/bug.html:127 templates/index.html:28
 #: templates/index_masterbranch.html:116
 msgid ""
-"It's powered by viewers and other volunteers: it's collaborative editing and "
-"translation, like a wiki."
+"It's powered by viewers and other volunteers: it's collaborative editing and"
+" translation, like a wiki."
 msgstr ""
+"És impulsat pels espectadors i altres voluntaris: és l'edició col·laborativa"
+" i la traducció com a una wiki."
 
 #: templates/bug.html:129 templates/index.html:29
 #: templates/index_masterbranch.html:117
 msgid "It's the world's easiest subtitle creator - type and tap."
-msgstr ""
+msgstr "És el creador de subtítols més fàcil del món - escriviu i tabuleu."
 
 #: templates/bug.html:131 templates/index.html:30
 #: templates/index_masterbranch.html:118
@@ -2006,196 +1940,213 @@ msgid ""
 "The fastest way to add subtitle functionality to a single video or a whole "
 "site. Super easy to integrate with no software to install."
 msgstr ""
+"La manera més ràpida d'afegir funcionalment subtítols a un únic vídeo o a "
+"tot un lloc web. Super fàcil d'integrar sense caldre instal·lacions de "
+"programari. "
 
 #: templates/bug.html:133 templates/index.html:31
 #: templates/index_masterbranch.html:119
 msgid "Free, open-source, and non-profit!"
-msgstr ""
+msgstr "Lliure, de codi obert, i sense ànim de lucre."
 
 #: templates/bug.html:137 templates/index.html:34
 #: templates/index_masterbranch.html:122
 msgid "videos use"
-msgstr ""
+msgstr "utilitzacions de vídeos"
 
 #: templates/bug.html:156 templates/index.html:61
 #: templates/index_masterbranch.html:148
 msgid "Add this subtitle tab to a video in seconds."
-msgstr ""
+msgstr "Afegir aquesta fitxa de subtítols a un vídeo en segons."
 
 #: templates/bug.html:159 templates/index.html:64
 #: templates/index_masterbranch.html:151
 msgid "For an individual video"
-msgstr ""
+msgstr "Per a un vídeo individual"
 
 #: templates/bug.html:163 templates/index_masterbranch.html:155
 msgid "enter a video URL to enable"
-msgstr ""
+msgstr "entreu una URL del vídeo per a habilitar"
 
 #: templates/bug.html:164 templates/index_masterbranch.html:155
 msgid "and then embed anywhere"
-msgstr ""
+msgstr "i després incrustar a qualssevol lloc"
 
 #: templates/bug.html:172 templates/index.html:70
 #: templates/index_masterbranch.html:162
 msgid "For every video on a page or site"
-msgstr ""
+msgstr "Per a tots els vídeos a una pàgina o lloc"
 
 #: templates/bug.html:174 templates/index.html:72
 #: templates/index_masterbranch.html:164
 msgid ""
-"paste this single line of code into your page header and every video will be "
-"subtitle enabled"
+"paste this single line of code into your page header and every video will be"
+" subtitle enabled"
 msgstr ""
+"enganxeu aquesta línia de codi dins el vostre encapçalament de pàgina i el "
+"vídeo serà habilitat per a subtitular "
 
 #: templates/bug.html:181 templates/index_masterbranch.html:170
 msgid "Universal Subtitles works with these video sites and formats:"
-msgstr ""
+msgstr "Universal Subtitles funciona amb aquests llocs de vídeo i formats:"
 
 #: templates/bug.html:198 templates/index.html:88
 #: templates/index_masterbranch.html:186
 msgid "With Universal Subtitles, you can:"
-msgstr ""
+msgstr "Amb Universal Subtitles podeu:"
 
 #: templates/bug.html:202 templates/index.html:90
 #: templates/index_masterbranch.html:190
 msgid "Add subtitles"
-msgstr ""
+msgstr "Afegir subtítols"
 
 #: templates/bug.html:204 templates/index_masterbranch.html:192
 msgid ""
 "\n"
-"          We've built the easiest way to subtitle videos. Add our subtitling "
-"widget to\n"
-"          your video (or your site) and click the \"subtitle me\" button. "
-"The rest is\n"
+"          We've built the easiest way to subtitle videos. Add our subtitling widget to\n"
+"          your video (or your site) and click the \"subtitle me\" button. The rest is\n"
 "          simple! Totally free, and no software to download.\n"
 "          "
 msgstr ""
+"\n"
+"Hem fet la manera més fàcil de subtitular vídeos. Afegiu el nostre giny de subtitulat al\n"
+" teu vídeo (o web) i premeu al botó \"subtituleu-me\". La resta és senzill! \n"
+"Completament gratuït i sense descarregar programari.          "
 
 #: templates/bug.html:215 templates/index.html:95
 #: templates/index_masterbranch.html:203
 msgid "Add translations"
-msgstr ""
+msgstr "Afegir traduccions"
 
 #: templates/bug.html:217 templates/index.html:97
 #: templates/index_masterbranch.html:205
 msgid ""
 "\n"
-"          Once subtitles exist, any viewer can add a translation in any "
-"language.  No\n"
-"          need for robotic machine translations that confuse viewers.  "
-"Universal\n"
-"          Subtitles lets you collect high-quality translations from your "
-"viewer\n"
+"          Once subtitles exist, any viewer can add a translation in any language.  No\n"
+"          need for robotic machine translations that confuse viewers.  Universal\n"
+"          Subtitles lets you collect high-quality translations from your viewer\n"
 "          community.\n"
 "          "
 msgstr ""
+"\n"
+"Una volta existeixen subtítols, qualssevol espectador pot afegir una traducció a qualssevol llengua.\n"
+"No cal traduccions automàtiques robòtiques que confonen als espectadors.\n"
+"Universal Subtitles us permet obtindre traduccions d'alta qualitat des de la seua comunitat d'espectadors."
 
 #: templates/bug.html:229 templates/index.html:107
 #: templates/index_masterbranch.html:217
 msgid "Get volunteer help"
-msgstr ""
+msgstr "Obteniu ajuda voluntària"
 
 #: templates/bug.html:231 templates/index.html:109
 #: templates/index_masterbranch.html:219
 msgid ""
 "\n"
-"          Your viewers (and members of our subtitling community) can improve "
-"any\n"
-"          subtitles or translation. That way subtitles are constantly "
-"getting better -\n"
-"          like an article on wikipedia. We mobilize your international "
-"audience to make\n"
+"          Your viewers (and members of our subtitling community) can improve any\n"
+"          subtitles or translation. That way subtitles are constantly getting better -\n"
+"          like an article on wikipedia. We mobilize your international audience to make\n"
 "          your videos more accessible.\n"
 "        "
 msgstr ""
+"\n"
+"Els seus espectadors (i membres de la nostra comunitat de subtitulat) poden millorar qualssevol subtitulat o traducció.\n"
+" Aquesta manera de subtitular millora constantment - com un article a la Viquipèdia. \n"
+"Mobilitzem la vostra audiència per fer els vostres vídeos més accessibles."
 
 #: templates/bug.html:245 templates/index.html:121
 #: templates/index_masterbranch.html:232
 msgid "It’s free with no software to download"
-msgstr ""
+msgstr "És gratuït sense necessitat de descarregar programari."
 
 #: templates/bug.html:246 templates/index.html:122
 #: templates/index_masterbranch.html:233
 msgid "Add our embed code to your videos."
-msgstr ""
+msgstr "Afegiu el nostre codi incrustable als vostres vídeos."
 
 #: templates/bug.html:247 templates/index.html:123
 #: templates/index_masterbranch.html:234
 msgid ""
 "\n"
 "    Submit your video, and get an embed code to post in your site. \n"
-"    When the page loads, our subtitle tools will display underneath your "
-"video \n"
+"    When the page loads, our subtitle tools will display underneath your video \n"
 "    (as a small, simple button)\n"
 "    "
 msgstr ""
+"\n"
+"Envieu el vostre vídeo, i obtingueu un codi incrustable per a publicar al vostre lloc web.\n"
+"Quan la pàgina carregue, la nostra eina de subtitulat es mostrarà per sota del vostre vídeo (com un petit i senzill botó)"
 
 #: templates/bug.html:256 templates/index.html:131
 #: templates/index_masterbranch.html:243
 msgid "Subtitling tools open in your page."
-msgstr ""
+msgstr "Obertura de les eines de subtitulat a la vostra pàgina."
 
 #: templates/bug.html:257 templates/index.html:132
 #: templates/index_masterbranch.html:244
 msgid ""
 "\n"
 "      When someone clicks the “subtitle me” button, \n"
-"      a subtitling interface appears on your page (most users never leave "
-"your site). \n"
+"      a subtitling interface appears on your page (most users never leave your site). \n"
 "      Subtitles they create are then visible to other users, on your site.\n"
 "      "
 msgstr ""
+"\n"
+"Quan algú prem el botó \"subtituleu-me\",\n"
+"una interfície apareix a la vostra pàgina (la majoria dels seus usuaris mai surten del seu web). Els subtítols que creen són aleshores visibles per a d'altres usuaris del seu lloc."
 
 #: templates/bug.html:266 templates/index.html:141
 #: templates/index_masterbranch.html:253
 msgid "How it works"
-msgstr ""
+msgstr "Com treballa"
 
 #: templates/bug.html:268 templates/index_masterbranch.html:255
 msgid ""
 "\n"
 "      You add our widget to your videos.  Then you and your viewers can add\n"
-"      subtitles, which anyone can watch.  We save the subtitles on our site "
-"(but you\n"
-"      can download them).  And each video has its own collaboration space on "
-"our site\n"
-"      (like a wikipedia article) where people can make improvements, track "
-"changes,\n"
+"      subtitles, which anyone can watch.  We save the subtitles on our site (but you\n"
+"      can download them).  And each video has its own collaboration space on our site\n"
+"      (like a wikipedia article) where people can make improvements, track changes,\n"
 "      and give feedback.\n"
 "    "
 msgstr ""
+"\n"
+"Afegiu el nostre giny als vostres vídeos.\n"
+"Aleshores, vostès i els seus espectadors podreu afegir subtítols, que tothom podrà vorer.\n"
+"Nosaltres desarem els subtítols a la nostra web (però podreu baixar-los)\n"
+"I cada vídeo te el seu propi espai de col·laboració al nostre web (com un article a la Viquipèdia) on la gent pot fer millores, realitzar canvis i fer comentaris."
 
 #: templates/bug.html:275 templates/index.html:148
 #: templates/index_masterbranch.html:262
 msgid "Try the demo"
-msgstr ""
+msgstr "Proveu la demo"
 
 #: templates/bug.html:282 templates/index.html:155
 #: templates/index_masterbranch.html:269
 msgid "Why Universal Subtitles is different"
-msgstr ""
+msgstr "Per què Universal Subtitles és diferent"
 
 #: templates/bug.html:286 templates/index.html:157
 #: templates/index_masterbranch.html:273
 msgid ""
 "It's built by a 501(c)3 nonprofit working with a community of volunteers"
 msgstr ""
+"Està fet per una organització 501(c)3 sense ànim de lucre treballant amb una"
+" comunitat de voluntaris."
 
 #: templates/bug.html:287 templates/index.html:157
 #: templates/index_masterbranch.html:274
 msgid "find out how to volunteer"
-msgstr ""
+msgstr "Trobeu com ser voluntari"
 
 #: templates/bug.html:291 templates/index.html:159
 #: templates/index_masterbranch.html:278
 msgid "The code is free and open source"
-msgstr ""
+msgstr "El codi es lliure i obert"
 
 #: templates/bug.html:292 templates/index.html:159
 #: templates/index_masterbranch.html:279
 msgid "get the source code"
-msgstr ""
+msgstr "obteniu el codi font"
 
 #: templates/bug.html:295 templates/index.html:160
 #: templates/index_masterbranch.html:282
@@ -2203,11 +2154,13 @@ msgid ""
 "It's built using Javascript and HTML5 instead of proprietary software like "
 "Flash"
 msgstr ""
+"Està construït amb Javascript i HTML5 en lloc de programari propietari com "
+"Flash"
 
 #: templates/bug.html:297 templates/index.html:161
 #: templates/index_masterbranch.html:284
 msgid "It's 100% web-based, there’s no software to download."
-msgstr ""
+msgstr "100% basat en la web, no cal descarregar cap programari."
 
 #: templates/bug.html:299 templates/index.html:162
 #: templates/index_masterbranch.html:286
@@ -2215,11 +2168,13 @@ msgid ""
 "You don't have to host your video with us, and you're not dependent on any "
 "one video host, platform, or format."
 msgstr ""
+"No heu de allotjar els vostres vídeos amb nosaltres i no et fa dependre de "
+"qualssevol allotjament de vídeo, plataforma o format."
 
 #: templates/bug.html:301 templates/index.html:163
 #: templates/index_masterbranch.html:288
 msgid "People are free to add subtitles to any video"
-msgstr ""
+msgstr "La gent es lliure d'afegir subtítols a qualssevol vídeo"
 
 #: templates/bug.html:307 templates/index.html:169
 #: templates/index_masterbranch.html:294 templates/jsdemo/home.html:112
@@ -2244,8 +2199,7 @@ msgstr ""
 msgid ""
 "\n"
 "        <strong>What's this?</strong> The video below is for \n"
-"        demonstration purposes &mdash; try clicking the 'Subtitle Me' "
-"button!\n"
+"        demonstration purposes &mdash; try clicking the 'Subtitle Me' button!\n"
 "        Don't worry, nothing you do will be saved.\n"
 "        "
 msgstr ""
@@ -2269,90 +2223,91 @@ msgstr ""
 
 #: templates/dmca.html:6
 msgid "Copyright Infringement Notification"
-msgstr ""
+msgstr "Notificació d'infraccions de drets d'autor"
 
 #: templates/dmca.html:9
 msgid ""
 "\n"
-"To file a copyright infringement notification with us, you will need to send "
-"a\n"
-"written communication that includes substantially the following (please "
-"consult\n"
+"To file a copyright infringement notification with us, you will need to send a\n"
+"written communication that includes substantially the following (please consult\n"
 "your legal counsel or see Section 512(c)(3) of the Copyright Act to confirm\n"
 "these requirements):\n"
 msgstr ""
+"\n"
+"Per a presentar una notificació d'infracció de drets d'autor, haurà d'enviar una comunicació per escrit que incloga fonamentalment el següent (consulteu al vostre assessor legal o vegeu la Secció 512(c)(3) de la Llei de Propietat Intel·lectual per a confirmar aquests requisits): \n"
 
 #: templates/dmca.html:18
 msgid ""
 "\n"
-"A physical or electronic signature of a person authorized to act on behalf "
-"of\n"
+"A physical or electronic signature of a person authorized to act on behalf of\n"
 "the owner of an exclusive right that is allegedly infringed.\n"
-"Identification of the copyrighted work claimed to have been infringed, or, "
-"if\n"
+"Identification of the copyrighted work claimed to have been infringed, or, if\n"
 "multiple copyrighted works at a single online site are covered by a single\n"
 "notification, a representative list of such works at that site.\n"
-"Identification of the material that is claimed to be infringing or to be "
-"the\n"
-"subject of infringing activity and that is to be removed or access to which "
-"is\n"
+"Identification of the material that is claimed to be infringing or to be the\n"
+"subject of infringing activity and that is to be removed or access to which is\n"
 "to be disabled, and information reasonably sufficient to permit the service\n"
-"provider to locate the material. Providing URLs in the body of an email is "
-"the\n"
+"provider to locate the material. Providing URLs in the body of an email is the\n"
 "best way to help us locate content quickly.\n"
-"Information reasonably sufficient to permit the service provider to contact "
-"the\n"
-"complaining party, such as an address, telephone number, and, if available, "
-"an\n"
+"Information reasonably sufficient to permit the service provider to contact the\n"
+"complaining party, such as an address, telephone number, and, if available, an\n"
 "electronic mail address at which the complaining party may be contacted.\n"
-"A statement that the complaining party has a good faith belief that use of "
-"the\n"
-"material in the manner complained of is not authorized by the copyright "
-"owner,\n"
+"A statement that the complaining party has a good faith belief that use of the\n"
+"material in the manner complained of is not authorized by the copyright owner,\n"
 "its agent, or the law.\n"
 "A statement that the information in the notification is accurate, and under\n"
-"penalty of perjury, that the complaining party is authorized to act on "
-"behalf\n"
+"penalty of perjury, that the complaining party is authorized to act on behalf\n"
 "of the owner of an exclusive right that is allegedly infringed.\n"
 "Such written notice should be sent to our designated agent as follows:\n"
 msgstr ""
+"\n"
+"Una signatura física o electrònica de una persona autoritzada a actuar en nom del propietari del dret exclusiu d'allò que es lega d'infringit.\n"
+"Identificació del treball clamat de ser infringit pels drets d'autor o, en cas de haver múltiples treballs a un mateix lloc, serà comunicat per una única notificació, amb un llistat dels treballs trobats al web.\n"
+"Identificació dels materials que infringeixen o el tema de l'activitat de la infracció la qual es va a eliminar o a deshabilitar l'accés, i informació suficientment raonable que permeta al servei localitzar el material.\n"
+"La millor manera d'ajudar a localitzar ràpidament el contingut, és indicar les URLs al cos del correu electrònic.\n"
+"Informació que permeta al proveïdor del servei contactar amb la part interessada, tal com una adreça, número de telèfon, i si està disponible, una adreça de correu electrònic on poder contactar.\n"
+"Una declaració de la part interessada indicant tindre bona fe que l'ús del material indicat no està autoritzat pel propietari dels drets d'autor, el seu agent o per llei.\n"
+"Una declaració de que la informació de la notificació és precisa, i sota pena de perjuri, de que la part interessada està autoritzada a actuar en nom del propietari d'un dret exclusiu que lega infringit.\n"
+"Tal escrit hauria de ser enviat al nostre agent designat a continuació:\n"
 
 #: templates/dmca.html:55
 msgid ""
 "\n"
-"Please also note that under Section 512(f) any person who knowingly "
-"materially\n"
+"Please also note that under Section 512(f) any person who knowingly materially\n"
 "misrepresents that material or activity is infringing may be subject to\n"
 "liability.\n"
 msgstr ""
+"\n"
+"Tingueu en compte que sota la Secció 512(f) qualssevol persona que sabent que un material o activitat és infractora, es pot exigir la responsabilitat civil.\n"
 
 #: templates/dmca.html:63
 msgid "Counter-Notification"
-msgstr ""
+msgstr "Contra-notificació"
 
 #: templates/dmca.html:65
 msgid ""
 "\n"
 "Please note that under Section 512(f) of the Copyright Act, any person who\n"
 "knowingly materially misrepresents that material or activity was removed or\n"
-"disabled by mistake or misidentification may be subject to liability. "
-"Please\n"
-"also be advised that we enforce a policy that provides for the termination "
-"in\n"
+"disabled by mistake or misidentification may be subject to liability. Please\n"
+"also be advised that we enforce a policy that provides for the termination in\n"
 "appropriate circumstances of subscribers who are repeat infringers.\n"
 msgstr ""
+"\n"
+"Teniu en compte que sota la secció 512 (f) de la Llei de Drets d'Autor, qualssevol persona que sabent que qualssevol material o activitat falsificada va ser eliminat o inhabilitat per error o mala identificació pot estar subjecte a responsabilitat. Sisplau teniu en compte també que apliquem una política que preveu la cancel·lació del compte d'usuaris que són infractors reincidents.\n"
 
 #: templates/dmca.html:75
 msgid "How do I file a DMCA counter notice?"
-msgstr ""
+msgstr "Com puc presentar una contra notificació DMCA?"
 
 #: templates/dmca.html:77
 msgid ""
 "\n"
 "The process for counter-notifications is governed by Section 512(g) of the\n"
-"Digital Millennium Copyright Act: http://www.copyright.gov/legislation/dmca."
-"pdf\n"
+"Digital Millennium Copyright Act: http://www.copyright.gov/legislation/dmca.pdf\n"
 msgstr ""
+"\n"
+"El procés de contra-notificació es regit per la secció 512 (g) de la Digital Millennium Copyright Act: http://www.copyright.gov/legislation/dmca.pdf \n"
 
 #: templates/dmca.html:82
 msgid ""
@@ -2360,198 +2315,218 @@ msgid ""
 "To file a counter notification with us, you must provide a written\n"
 "communication that sets forth the items specified below.\n"
 msgstr ""
+"\n"
+"Per a presentar una reclamació contra la notificació, heu de fer-nos arribar un comunicat per escrit que incloga tots els elements que a continuació passem a detallar.\n"
 
 #: templates/dmca.html:87
 msgid ""
 "\n"
 "Please note that under Section 512(f) of the Copyright Act, any person who\n"
 "knowingly materially misrepresents that material or activity was removed or\n"
-"disabled by mistake or misidentification may be subject to liability. "
-"Please\n"
-"also be advised that we enforce a policy that provides for the termination "
-"in\n"
+"disabled by mistake or misidentification may be subject to liability. Please\n"
+"also be advised that we enforce a policy that provides for the termination in\n"
 "appropriate circumstances of subscribers who are repeat infringers.\n"
 "Accordingly, if you are not sure whether certain material infringes the\n"
 "copyrights of others, we suggest that you first contact an attorney.\n"
 msgstr ""
+"Sisplau, teniu en compte que sota la Secció 512(f) de la Llei de Drets d'Autors, qualssevol persona que sabent que qualssevol material o activitat falsificada va ser eliminat o inhabilitat per error o mala identificació pot estar subjecte a responsabilitat. Sisplau teniu en compte també que apliquem una política que preveu la cancel·lació del compte d'usuaris que són infractors reincidents.\n"
+"En conseqüència, si no esteu segurs de que cert material infringeix els drets d'autor, us suggerim que primer contacteu amb un advocat.\n"
 
 #: templates/dmca.html:99
 msgid "Elements of Counter-Notification"
-msgstr ""
+msgstr "Elements de la contra-notificació"
 
 #: templates/dmca.html:101
 msgid ""
 "\n"
 "A sample counter notification may be found at:\n"
-"http://www.chillingeffects.org/dmca/counter512.pdf. To expedite our ability "
-"to\n"
-"process your counter notification, please use the following format "
-"(including\n"
+"http://www.chillingeffects.org/dmca/counter512.pdf. To expedite our ability to\n"
+"process your counter notification, please use the following format (including\n"
 "section numbers):\n"
 msgstr ""
+"Una mostra de reclamació contra la notificació es pot trobar a: "
+"http://www.chillingeffects.org/dmca/counter512.pdf Per a alleugerar el "
+"procés de la vostra notificació , sisplau feu ús del següent format "
+"(inclosos els números de secció):"
 
 #: templates/dmca.html:109
 msgid ""
 "\n"
-"Identify the specific URLs of material that Miro Guide has removed or to "
-"which\n"
+"Identify the specific URLs of material that Miro Guide has removed or to which\n"
 "Miro Guide has disabled access.\n"
-"Provide your full name, address, telephone number, and email address, and "
-"the\n"
+"Provide your full name, address, telephone number, and email address, and the\n"
 "username of your Miro Guide account.\n"
-"Provide a statement that you consent to the jurisdiction of Federal "
-"District\n"
+"Provide a statement that you consent to the jurisdiction of Federal District\n"
 "Court for the judicial district in which your address is located (or San\n"
-"Francisco County, California if your address is outside of the United "
-"States),\n"
+"Francisco County, California if your address is outside of the United States),\n"
 "and that you will accept service of process from the person who provided\n"
 "notification under subsection (c)(1)(C) or an agent of such person.\n"
-"Include the following statement: \"I swear, under penalty of perjury, that "
-"I\n"
-"have a good faith belief that the material was removed or disabled as a "
-"result\n"
-"of a mistake or misidentification of the material to be removed or disabled."
-"\"\n"
+"Include the following statement: \"I swear, under penalty of perjury, that I\n"
+"have a good faith belief that the material was removed or disabled as a result\n"
+"of a mistake or misidentification of the material to be removed or disabled.\"\n"
 "Sign the notice. If you are providing notice by e-mail, a scanned physical\n"
 "signature or a valid electronic signature will be accepted.\n"
 "Send the written communication to the following address:\n"
 msgstr ""
+"\n"
+"Identificar les URLs específiqueu que Miro Guide ha eliminat o en tal cas ha deshabilitat el vostre accés.\n"
+"Indicar el vostre nom complet, adreça, número de telèfon i adreça de correu electrònica i el nom d'usuari del vostre compte de Miro Guide.\n"
+"Proporcionar una declaració del vostre consentiment sota la jurisdicció de la Cort del Districte Federal del districte judicial on viviu (o del Estat de San Francisco, California si sou de fora dels Estats Units),\n"
+"i que acceptareu el procés judicial de la persona que ha previst la notifiació sota la subsecció (c)(1)(C) o un agent representant.\n"
+"Incloure la següent declaració \"Jure, sota pena de perjuri que amb bona fe crec que el material eliminat o deshabilitat ha estat un error o una mala identificació de dit material.\"\n"
+"Signeu el comunicat. Si entregueu el comunicat per correu electrònic s'acceptarà una firma física escanejada o una signatura electrònica vàlida.\n"
+"Envieu l'escrit a la següent adreça: \n"
 
 #: templates/dmca.html:141
 msgid "What happens next?"
-msgstr ""
+msgstr "Que passa després?"
 
 #: templates/dmca.html:143
 msgid ""
 "\n"
-"After we receive your counter-notification, we will forward it to the party "
-"who\n"
-"submitted the original claim of copyright infringement. Please note that "
-"when\n"
-"we forward the counter-notification, it includes your personal information. "
-"By\n"
+"After we receive your counter-notification, we will forward it to the party who\n"
+"submitted the original claim of copyright infringement. Please note that when\n"
+"we forward the counter-notification, it includes your personal information. By\n"
 "submitting a counter-notification, you consent to having your information\n"
-"revealed in this way. We will not forward the counter-notification to any "
-"party\n"
+"revealed in this way. We will not forward the counter-notification to any party\n"
 "other than the original claimant.\n"
 msgstr ""
+"\n"
+"Després de rebre la vostra contra-notificació, la remetrem a la part que va enviar la reclamació original per infracció dels drets d'autor. \n"
+"Teniu en compte que enviarem la contra-notificació, incloent les vostres dades personals. \n"
+"Al enviar una contra-notificació, doneu el consentiment de que la informació siga revelada. \n"
+"Nosaltres no remetrem la contra-notificació a cap altra part que no siga la original.\n"
 
 #: templates/dmca.html:153
 msgid ""
 "\n"
-"After we send out the counter-notification, the claimant must then notify "
-"us\n"
+"After we send out the counter-notification, the claimant must then notify us\n"
 "within 10 days that he or she has filed an action seeking a court order to\n"
-"restrain you from engaging in infringing activity relating to the material "
-"on\n"
-"the Miro Guide. If we receive such notification we will be unable to "
-"restore\n"
+"restrain you from engaging in infringing activity relating to the material on\n"
+"the Miro Guide. If we receive such notification we will be unable to restore\n"
 "the material. If we do not receive such notification, we may reinstate the\n"
 "material.\n"
 msgstr ""
+"\n"
+"Després de enviar la contra-notificació, el reclamant ha de notificar-nos amb 10 dies que ell o ella ha presentat un recurs per ordre judicial per a impedir l'activitat infractora del material a Miro Guide. \n"
+"Si rebem tal notificació no podrem restaurar el material.\n"
+"En canvi si no la rebem, podrem instaurar de nou el material.\n"
 
 #: templates/dmca.html:163
 msgid ""
 "\n"
-"DISCLAIMER: WE ARE NOT YOUR ATTORNEYS, AND THE INFORMATION WE PRESENT HERE "
-"IS\n"
-"NOT LEGAL ADVICE. WE PRESENT THIS INFORMATION FOR INFORMATIONAL PURPOSES "
-"ONLY.\n"
+"DISCLAIMER: WE ARE NOT YOUR ATTORNEYS, AND THE INFORMATION WE PRESENT HERE IS\n"
+"NOT LEGAL ADVICE. WE PRESENT THIS INFORMATION FOR INFORMATIONAL PURPOSES ONLY.\n"
 msgstr ""
+"\n"
+"DESCÀRREC DE RESPONSABILITAT: NO SOM ELS VOSTRES ADVOCATS O LA INFORMACIÓ QUE PRESENTEM AQUÍ NO ES ASSESSORAMENT LEGAL.\n"
+"PRESENTEM AQUESTA INFORMACIÓ NOMÉS PER A ÚS INFORMATIU.\n"
 
 #: templates/embed_page.html:9
 msgid "Add collaborative subtitling to every video on your site"
-msgstr ""
+msgstr "Afegir subtitulat de col·laboració per a cada vídeo al vostre lloc"
 
 #: templates/embed_page.html:13
 msgid ""
-"Just add this line of code to your webpage, or to your blog/CMS theme (right "
-"before the &lt;/head&gt; tag)"
+"Just add this line of code to your webpage, or to your blog/CMS theme (right"
+" before the &lt;/head&gt; tag)"
 msgstr ""
+"Només cal afegir aquesta línia de codi al vostre lloc web o al teu blog / "
+"tema de la CMS (just abans de l'etiqueta &lt;/ ​​head&gt;)"
 
 #: templates/embed_page.html:20
 msgid "This lets you and visitors to your site"
-msgstr ""
+msgstr "Açò us deixa a vostès i als vostres visitants al vostre lloc web"
 
 #: templates/embed_page.html:23
 msgid "Not sure how?"
-msgstr ""
+msgstr "No sabeu com?"
 
 #: templates/embed_page.html:23 templates/videos/_video_url_panel.html:7
 msgid "Learn more"
-msgstr ""
+msgstr "Saber més"
 
 #: templates/embed_page.html:24
 msgid "Contact us"
-msgstr ""
+msgstr "Contacteu-nos"
 
 #: templates/embed_page.html:28
 msgid "Create subtitles for any compatible video"
-msgstr ""
+msgstr "Creeu subtítols per a qualssevol vídeo compatible"
 
 #: templates/embed_page.html:31
 msgid "Find subtitles created by others"
-msgstr ""
+msgstr "Cercar subtítols creats per altres"
 
 #: templates/embed_page.html:34
 msgid "Add translations and improve other's work"
-msgstr ""
+msgstr "Afegir traduccions i millores als treballs d'altres"
 
 #: templates/embed_page.html:37
 msgid "Make your videos searchable and accessible"
 msgstr ""
+"Fer que els vostres vídeos pugen ser cercats i que siguen més accessibles"
 
 #: templates/embed_page.html:40
 msgid "Bring your videos to an international audience"
-msgstr ""
+msgstr "Porteu els vostres vídeos a una audiència internacional"
 
 #: templates/embed_page.html:45
 msgid "Proud to be a"
-msgstr ""
+msgstr "Orgullós de ser un"
 
 #: templates/embed_page.html:45
 msgid "Featured Mozilla Drumbeat Project"
-msgstr ""
+msgstr "Projecte Mozilla Drumbeat destacat"
 
 #: templates/embed_page.html:53
 msgid ""
 "\n"
-"        A \"subtitle me\" or \"choose language\" button will appear across "
-"all compatible videos. \n"
+"        A \"subtitle me\" or \"choose language\" button will appear across all compatible videos. \n"
 "        Users can click to activate (or create) subtitles.\n"
 "        "
 msgstr ""
+"\n"
+"El botó \"subtituleu-me\" o \"elegiu idioma\" apareixerà a tots els vídeos compatibles. Els usuaris poden fer clic per a activar (o crear els subtítols)"
 
 #: templates/embed_page.html:64
 msgid ""
 "Note: this code is an experimental part of the Universal Subtitles service."
 msgstr ""
+"Nota: Aquest codi es una part experimental del servei de Universal "
+"Subtitles."
 
 #: templates/embed_page.html:65
 msgid "If you run into problems, please"
-msgstr ""
+msgstr "Si arribeu a tindre problemes, sisplau"
 
 #: templates/embed_page.html:66
 msgid "contact us"
-msgstr ""
+msgstr "contacteu-nos"
 
 #: templates/embed_page.html:67
 msgid "Known issues:"
-msgstr ""
+msgstr "Problemes coneguts:"
 
 #: templates/embed_page.html:71
 msgid "Most Flash videos (e.g. Youtube) will be set to a default, small size"
 msgstr ""
+"La majoria de vídeos Flash (p.e. Youtube) seran establerts a un valor "
+"predeterminat, grandària petita"
 
 #: templates/embed_page.html:74
 msgid "Blip.TV and some other sitesʼ videos will play in our custom player"
 msgstr ""
+"Blip.TV i algun dels vídeos de altres llocs seran reproduïts al nostre "
+"reproductor personalitzat"
 
 #: templates/embed_page.html:78
 msgid ""
 "Any other problems, especially styling problems on the page, contact us and "
 "include the site URL!"
 msgstr ""
+"Per qualssevol altre problema, especialment els problemes d'estil a la "
+"pàgina, contacteu-nos i indiqueu la URL del lloc!"
 
 #: templates/faq.html:16
 msgid "Frequently Asked Questions"
@@ -2582,8 +2557,8 @@ msgid ""
 "Will Universal Subtitles support closed captions for the deaf and hard of "
 "hearing?"
 msgstr ""
-"Admetrà Universal Subtitles subtítols codificats per a les persones sordes o "
-"amb discapacitat auditiva?"
+"Admetrà Universal Subtitles subtítols codificats per a les persones sordes o"
+" amb discapacitat auditiva?"
 
 #: templates/faq.html:24 templates/faq.html.py:82
 msgid "Will your subtitles support my language or characterset?"
@@ -2623,9 +2598,11 @@ msgstr "On puc descarregar subtítols en .SRT i altres formats?"
 
 #: templates/faq.html:33 templates/faq.html.py:149
 msgid ""
-"It says \"Someone else is currently editing these subtitles\" and I can't do "
-"anything.  How long will this last for?  Why does it happen?"
+"It says \"Someone else is currently editing these subtitles\" and I can't do"
+" anything.  How long will this last for?  Why does it happen?"
 msgstr ""
+"Diu \"Algú està editant aquests subtítols\" i no puc fer res. Quant trigarà "
+"aquesta situació? Per què passa açò?"
 
 #: templates/faq.html:34 templates/faq.html.py:159
 msgid "Why can't I change the timing on a translation?"
@@ -2633,42 +2610,46 @@ msgstr "Per què no puc canviar la sincronització d'una traducció?"
 
 #: templates/faq.html:35 templates/faq.html.py:170
 msgid ""
-"How do old revisions work? What if somebody makes a change to my work that I "
-"don't approve of?"
+"How do old revisions work? What if somebody makes a change to my work that I"
+" don't approve of?"
 msgstr ""
+"Com de velles son les revisions del treball? Que passa si algú fa un canvi "
+"en el meu treball i no ho aprove?"
 
 #: templates/faq.html:36 templates/faq.html.py:186
 msgid ""
-"How do I add the Universal Subtitles &quot;embed all videos&quot; code to my "
-"site?"
+"How do I add the Universal Subtitles &quot;embed all videos&quot; code to my"
+" site?"
 msgstr ""
+"Com puc afegir el codi &quot;incrustar a tots els vídeos&quot; de Universal "
+"Subtitles al meu web?"
 
 #: templates/faq.html:37 templates/faq.html.py:199
 msgid "Hey, you don’t list my language!"
-msgstr ""
+msgstr "Ei! No heu llistat el meu idioma!"
 
 #: templates/faq.html:45
 msgid ""
 "\n"
-"      \t\tUniversal Subtitles is an easy way for anyone to add subtitles, "
-"captions, \n"
-"\t\t\tor translate nearly any video on the web. It works in a "
-"collaborative \n"
-"\t\t\tWikipedia-like fashion. The software is free and open source and can "
-"be used and \n"
-"\t\t\t<a href=\"http://wiki.github.com/8planes/mirosubs/dev-center"
-"\">improved by anyone</a>.\n"
+"      \t\tUniversal Subtitles is an easy way for anyone to add subtitles, captions, \n"
+"\t\t\tor translate nearly any video on the web. It works in a collaborative \n"
+"\t\t\tWikipedia-like fashion. The software is free and open source and can be used and \n"
+"\t\t\t<a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">improved by anyone</a>.\n"
 "\t\t"
 msgstr ""
+"\n"
+"      <span class=\"whitespace other\" title=\"Tab\">»</span><span class=\"whitespace other\" title=\"Tab\">»</span>Universal Subtitles és una manera fàcil de que quelcom afegeixi subtítols, llegendes,\n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span><span class=\"whitespace other\" title=\"Tab\">»</span><span class=\"whitespace other\" title=\"Tab\">»</span>o tradueixi qualssevol vídeo a la web. Es treballa de forma col·laborativa\n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span><span class=\"whitespace other\" title=\"Tab\">»</span><span class=\"whitespace other\" title=\"Tab\">»</span>Un estil a la Viquipèdia. El programari es gratuït i de codi obert i pt ser utilitzat i \n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span><span class=\"whitespace other\" title=\"Tab\">»</span><span class=\"whitespace other\" title=\"Tab\">»</span><a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">millorat per qualssevol</a>.\n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span><span class=\"whitespace other\" title=\"Tab\">»</span>"
 
 #: templates/faq.html:56
 msgid ""
 "\n"
-"      \t\tYou're welcome to try our <a href=\"http://universalsubtitles.org/"
-"demo/\">demo</a> \n"
+"      \t\tYou're welcome to try our <a href=\"http://universalsubtitles.org/demo/\">demo</a> \n"
 "\t\t\tto see how the software works. You can also \n"
-"\t\t\t<a href=\"http://universalsubtitles.org/videos/create\">begin "
-"subtitling</a> \n"
+"\t\t\t<a href=\"http://universalsubtitles.org/videos/create\">begin subtitling</a> \n"
 "\t\t\ta video you have already posted on the web.\t\n"
 "\t\t"
 msgstr ""
@@ -2684,9 +2665,11 @@ msgstr ""
 
 #: templates/faq.html:69
 msgid ""
-"Translations make it possible for all of us to watch video in languages that "
-"we don't speak"
+"Translations make it possible for all of us to watch video in languages that"
+" we don't speak"
 msgstr ""
+"Les traduccions fan possible que cadascú de nosaltres puguem vorer el vídeo "
+"en idiomes que no parlem"
 
 #: templates/faq.html:70
 msgid ""
@@ -2694,14 +2677,23 @@ msgid ""
 "(potentially multilingual and global) audience, accessibility for deaf and "
 "hard of hearing viewers, and more"
 msgstr ""
+"Els creadors de vídeo aconsegueixen: un millor posicionament, més "
+"espectadors, accés a una major (potencialment multilingüe i global) "
+"audiència, accessibilitat per a espectadors sords o amb dificultats "
+"d'audició, i més"
 
 #: templates/faq.html:75
 msgid ""
-"he Participatory Culture Foundation is a 501c3 non-profit organization whose "
-"mission is to build a fairer, more open, and more democratic media space. "
+"he Participatory Culture Foundation is a 501c3 non-profit organization whose"
+" mission is to build a fairer, more open, and more democratic media space. "
 "PCF saw a gap in the marketplace for more open and collaborative subtitling "
 "&mdash; Universal Subtitles is helping to fill that need."
 msgstr ""
+"La Participatory Culture Foundation és una 501c3 organització sense ànim de "
+"lucre, que té com a finalitat construir un espai multimèdia més obert i "
+"democràtic. PCF va vorer un espai de mercat per subtitular, més obert i "
+"col·laboratiu. &mdash; Universal Subtitles està ajudant a omplir aquesta "
+"carència."
 
 #: templates/faq.html:79
 msgid ""
@@ -2720,31 +2712,37 @@ msgstr ""
 #: templates/faq.html:88
 msgid ""
 "\n"
-"      \tThe site and tools are available in a number of languages (set your "
-"language \n"
-"\t\tin your browser preferences and we’ll take care of the rest). We’re "
-"always looking for \n"
-"\t\t<a href=\"http://blog.universalsubtitles.org/2010/09/13/our-site-is-"
-"translateable-looking-for-translators/\">volunteer translators</a> \n"
+"      \tThe site and tools are available in a number of languages (set your language \n"
+"\t\tin your browser preferences and we’ll take care of the rest). We’re always looking for \n"
+"\t\t<a href=\"http://blog.universalsubtitles.org/2010/09/13/our-site-is-translateable-looking-for-translators/\">volunteer translators</a> \n"
 "\t\tto help improve and add more languages.\n"
 "\t  "
 msgstr ""
+"\n"
+"      <span class=\"whitespace other\" title=\"Tab\">»</span> Aquest lloc i eines estan disponibles en diferents idiomes (configureu el vostre idioma \n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span><span class=\"whitespace other\" title=\"Tab\">»</span>a les preferències del vostre navegador i nosaltres s'encarregarem del demés). Sempre estem buscant\n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span><span class=\"whitespace other\" title=\"Tab\">»</span><a href=\"http://blog.universalsubtitles.org/2010/09/13/our-site-is-translateable-looking-for-translators/\">traductors voluntaris</a> \n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span><span class=\"whitespace other\" title=\"Tab\">»</span>per a ajudar a millorar i afegir més idiomes.\n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span>  "
 
 #: templates/faq.html:99
 msgid ""
 "\n"
-"\t      For a single video, use our site. For multiple videos on your "
-"website, use \n"
-"\t\t  <a href=\"http://universalsubtitles.org/en/get-code/\">this code</a> "
-"in your \n"
+"\t      For a single video, use our site. For multiple videos on your website, use \n"
+"\t\t  <a href=\"http://universalsubtitles.org/en/get-code/\">this code</a> in your \n"
 "\t\t  website’s template inside the &lt;head&gt; tags.\n"
 "\t\t"
 msgstr ""
+"\n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span>      Per a un únic vídeo, utilitzeu el nostre lloc web. Per a més d'un vídeo al vostre lloc web, utilitzeu \n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span><span class=\"whitespace other\" title=\"Tab\">»</span>  <a href=\"http://universalsubtitles.org/en/get-code/\">aquest codi</a> en la \n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span><span class=\"whitespace other\" title=\"Tab\">»</span>  vostra pàgina web dins l'etiqueta <head>.\n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span><span class=\"whitespace other\" title=\"Tab\">»</span>"
 
 #: templates/faq.html:108
 msgid ""
-"For our subtitling widget and community website, we're using the <a href="
-"\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a>."
+"For our subtitling widget and community website, we're using the <a "
+"href=\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a>."
 msgstr ""
 "Per al giny de subtitulació i la web de la comunitat estem utilitzant la <a "
 "href=\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a>."
@@ -2763,47 +2761,50 @@ msgstr ""
 msgid ""
 "\n"
 "\t\tIf you're interested in general involvement, please see our \n"
-"\t\t<a href=\"https://www.drumbeat.org/project/universal-subtitles\">Mozilla "
-"Drumbeat page</a>. \n"
+"\t\t<a href=\"https://www.drumbeat.org/project/universal-subtitles\">Mozilla Drumbeat page</a>. \n"
 "\t\tIf you have a specific idea, please get in touch: \n"
-"\t\t<a href=\"mailto:universalsubtitles@pculture.org"
-"\">universalsubtitles@pculture.org</a> \n"
-"\t\tAnd as a 501c3 non-profit org, we do accept donations (see the next "
-"question for details).\n"
+"\t\t<a href=\"mailto:universalsubtitles@pculture.org\">universalsubtitles@pculture.org</a> \n"
+"\t\tAnd as a 501c3 non-profit org, we do accept donations (see the next question for details).\n"
 "\t\t"
 msgstr ""
+"\n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span><span class=\"whitespace other\" title=\"Tab\">»</span>Si esteu interessats a participar en general, mireu la nostra \n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span><span class=\"whitespace other\" title=\"Tab\">»</span><a href=\"https://www.drumbeat.org/project/universal-subtitles\">pàgina de Mozilla Drumbea</a>. \n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span><span class=\"whitespace other\" title=\"Tab\">»</span>Si teniu una idea específica, podeu posar-vos en contacte a: \n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span><span class=\"whitespace other\" title=\"Tab\">»</span><a href=\"mailto:universalsubtitles@pculture.org\">universalsubtitles@pculture.org</a> \n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span><span class=\"whitespace other\" title=\"Tab\">»</span>I com una Organització 501c3 sense ànim de lucre, acceptem donacions (mireu la següent pregunta per a més detalls).\n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span><span class=\"whitespace other\" title=\"Tab\">»</span>"
 
 #: templates/faq.html:128
 msgid ""
 "\n"
-"      \t\tYes and yes! You can <a href=\"https://donate.mozilla.org/page/"
-"contribute/universalsubtitles\">donate here</a> (through the Mozilla "
-"Drumbeat project).\n"
+"      \t\tYes and yes! You can <a href=\"https://donate.mozilla.org/page/contribute/universalsubtitles\">donate here</a> (through the Mozilla Drumbeat project).\n"
 "\t\t"
 msgstr ""
+"\n"
+"      <span class=\"whitespace other\" title=\"Tab\">»</span><span class=\"whitespace other\" title=\"Tab\">»</span>Sí és sí! Podeu fer les vostres<a href=\"https://donate.mozilla.org/page/contribute/universalsubtitles\">donacions aquí</a> (Mitjançant el projecte Mozilla Drumbeat).\n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span><span class=\"whitespace other\" title=\"Tab\">»</span>"
 
 #: templates/faq.html:135
 msgid ""
 "The Mozilla Foundation has provided Universal Subtitles with seed funding, "
-"community support, and fundraising support through <a href=\"http://www."
-"drumbeat.org/about\">Drumbeat</a>. Drumbeat is a movement to keep the web "
-"open for the next 100 years, and Universal Subtitles is a featured project!"
+"community support, and fundraising support through <a "
+"href=\"http://www.drumbeat.org/about\">Drumbeat</a>. Drumbeat is a movement "
+"to keep the web open for the next 100 years, and Universal Subtitles is a "
+"featured project!"
 msgstr ""
 "La fundació Mozilla ha proporcionat a Universal Subtitles el finançament "
 "inicial suportant a la comunitat i ajudant a recaptar fons mitjançant  <a "
-"href=\"http://www.drumbeat.org/about\">Drumbeat</a>. Drumbeat és un moviment "
-"per a mantindre la web oberta durant els pròxims 100 anys, i Universal "
+"href=\"http://www.drumbeat.org/about\">Drumbeat</a>. Drumbeat és un moviment"
+" per a mantindre la web oberta durant els pròxims 100 anys, i Universal "
 "Subtitles és un dels seus projectes!"
 
 #: templates/faq.html:140
 msgid ""
 "\n"
-"     \t When subtitles exist, you can download them in .SRT, .SSA, .SBV, ."
-"TXT, and TTML \n"
-"     \t formats on the page for that language (<a href=\"http://"
-"universalsubtitles.org/videos/yKsUAgChJlGA/lt/\">example</a>). \n"
-"\t\t Click \"Download Subtitles\" button in the lower right to the left from "
-"\"Edit Subtitles\" \n"
+"     \t When subtitles exist, you can download them in .SRT, .SSA, .SBV, .TXT, and TTML \n"
+"     \t formats on the page for that language (<a href=\"http://universalsubtitles.org/videos/yKsUAgChJlGA/lt/\">example</a>). \n"
+"\t\t Click \"Download Subtitles\" button in the lower right to the left from \"Edit Subtitles\" \n"
 "\t\t button and choose the desired file format from the drop-down list.\n"
 "       "
 msgstr ""
@@ -2811,23 +2812,22 @@ msgstr ""
 #: templates/faq.html:151
 msgid ""
 "\n"
-"        The system currently only allows one user to edit subtitles for any "
-"given video \n"
-"        at a time. So, if someone else is already editing subtitles for the "
-"video when \n"
+"        The system currently only allows one user to edit subtitles for any given video \n"
+"        at a time. So, if someone else is already editing subtitles for the video when \n"
 "        you try to edit the subtitles, you'll get this message.\n"
 "        "
 msgstr ""
+"\n"
+"Actualment el sistema només permet un usuari per a editar els subtítols a qualssevol vídeo a la volta.\n"
+"Així que, si algú ja està editant els subtítols d'un vídeo quan tu probes a editar-los també. obtindràs aquest missatge.\n"
+"        "
 
 #: templates/faq.html:161
 msgid ""
 "\n"
-"        You can. Go to the translation editor and click “Change subtitle "
-"timing”. \n"
-"\t\tOnly do this if the timing on the original language really cannot "
-"match \n"
-"\t\tthe language you’re translating into. Otherwise, improvements in the "
-"original \n"
+"        You can. Go to the translation editor and click “Change subtitle timing”. \n"
+"\t\tOnly do this if the timing on the original language really cannot match \n"
+"\t\tthe language you’re translating into. Otherwise, improvements in the original \n"
 "\t\twill automatically cascade.\n"
 "        "
 msgstr ""
@@ -2836,17 +2836,13 @@ msgstr ""
 msgid ""
 "\n"
 "        Each set of subtitles or translation has a full revision history. \n"
-"\t\tJust click on the tab on the subtitle page in you will see a list of "
-"revisions. \n"
-"\t\tYou can use the checkboxes on the left and the \"compare revisions\" "
-"button \n"
-"\t\tto see the difference between two revisions. Or you can click on any one "
-"revision, \n"
+"\t\tJust click on the tab on the subtitle page in you will see a list of revisions. \n"
+"\t\tYou can use the checkboxes on the left and the \"compare revisions\" button \n"
+"\t\tto see the difference between two revisions. Or you can click on any one revision, \n"
 "\t\tand edit based on that revision or roll back to that revision.\n"
 "        <br/><br/>\n"
 "        If the current version is blank, but there are older revisions, \n"
-"\t\tit make sense to check those older revisions before starting from "
-"scratch, \n"
+"\t\tit make sense to check those older revisions before starting from scratch, \n"
 "\t\tbecause there could be useful work in an older revision.\n"
 "        "
 msgstr ""
@@ -2854,14 +2850,11 @@ msgstr ""
 #: templates/faq.html:188
 msgid ""
 "\n"
-"          Go to <a href=\"http://universalsubtitles.org/get-code/\">this "
-"page</a> \n"
+"          Go to <a href=\"http://universalsubtitles.org/get-code/\">this page</a> \n"
 "\t\t  and double click on the code in the white box to select it all.  \n"
-"\t\t  Go to Edit > Copy in your browser's menu to copy the code to your "
-"clipboard.  \n"
+"\t\t  Go to Edit > Copy in your browser's menu to copy the code to your clipboard.  \n"
 "\t\t  Then start editing the headers in your site or blog theme, \n"
-"\t\t  and paste the script somewhere between the &lt;head&gt; and &lt;/"
-"head&gt; \n"
+"\t\t  and paste the script somewhere between the &lt;head&gt; and &lt;/head&gt; \n"
 "\t\t  tags in your blog theme.  \n"
 "        "
 msgstr ""
@@ -2898,8 +2891,8 @@ msgid ""
 "PS. We do our best to respond to all questions, but please be patient -- we "
 "get a lot of email"
 msgstr ""
-"PS. Respondrem a totes les preguntes el millor possible, però sisplau sigueu "
-"pacients -- rebem un fum de correus"
+"PS. Respondrem a totes les preguntes el millor possible, però sisplau sigueu"
+" pacients -- rebem un fum de correus"
 
 #: templates/index.html:67
 msgid "enter a video URL to enable and then embed anywhere"
@@ -2920,8 +2913,7 @@ msgstr ""
 msgid ""
 "\n"
 "      You add our widget to your videos.  Then you and your viewers can add\n"
-"      subtitles.  We save the subtitles on our site.  And each video has its "
-"own collaboration space on our site\n"
+"      subtitles.  We save the subtitles on our site.  And each video has its own collaboration space on our site\n"
 "      where people can track changes, and give feedback.\n"
 "    "
 msgstr ""
@@ -2941,8 +2933,8 @@ msgstr ""
 "La cimera Open Subtitles Design reunirà als interessats al món del "
 "subtitulat per a discutir els punts forts / objectius a Nova York. "
 "L'esdeveniment està sent organitzat per The Participatory Culture "
-"Foundation, els desenvolupadors del projecte de Universal Subtitles. Esperem "
-"uns 40 participants. "
+"Foundation, els desenvolupadors del projecte de Universal Subtitles. Esperem"
+" uns 40 participants. "
 
 #: templates/opensubtitles2010.html:34
 msgid "Meeting Goals"
@@ -2999,8 +2991,8 @@ msgid ""
 "Attendees are selected by invitation; however, if you or your organization "
 "would like to participate, please contact:"
 msgstr ""
-"Els assistents seran seleccionats per invitació. En cas d'estar interessat i "
-"no disposar d'invitació, poseu-se en contacte sisplau."
+"Els assistents seran seleccionats per invitació. En cas d'estar interessat i"
+" no disposar d'invitació, poseu-se en contacte sisplau."
 
 #: templates/opensubtitles2010.html:62
 msgid "When"
@@ -3016,19 +3008,13 @@ msgstr "On"
 
 #: templates/opensubtitles2010.html:68
 msgid ""
-"The summit will be held at the beautiful Open Plans penthouse in Soho, which "
-"is located at 148 Lafayette St, Floor 12, New York City. (<a href=\"http://"
-"maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=148+Lafayette+St,+Floor"
-"+12,+New+York+City&sll=40.701809,-"
-"73.92127&sspn=0.009175,0.022724&ie=UTF8&hq=&hnear=148+Lafayette+St,+New+York,"
-"+10013&ll=40.718575,-74.000988&spn=0.03669,0.090895&z=14\">map</a>)"
+"The summit will be held at the beautiful Open Plans penthouse in Soho, which"
+" is located at 148 Lafayette St, Floor 12, New York City. (<a "
+"href=\"http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=148+Lafayette+St,+Floor+12,+New+York+City&sll=40.701809,-73.92127&sspn=0.009175,0.022724&ie=UTF8&hq=&hnear=148+Lafayette+St,+New+York,+10013&ll=40.718575,-74.000988&spn=0.03669,0.090895&z=14\">map</a>)"
 msgstr ""
 "La cimera es celebrà en el magnífic àtic Open Plans al Soho, situat al "
-"carrer Lafayette número 148 planta 12 a Nova York. (<a href=\"http://maps."
-"google.com/maps?f=q&source=s_q&hl=en&geocode=&q=148+Lafayette+St,+Floor+12,"
-"+New+York+City&sll=40.701809,-"
-"73.92127&sspn=0.009175,0.022724&ie=UTF8&hq=&hnear=148+Lafayette+St,+New+York,"
-"+10013&ll=40.718575,-74.000988&spn=0.03669,0.090895&z=14\">mapa</a>)"
+"carrer Lafayette número 148 planta 12 a Nova York. (<a "
+"href=\"http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=148+Lafayette+St,+Floor+12,+New+York+City&sll=40.701809,-73.92127&sspn=0.009175,0.022724&ie=UTF8&hq=&hnear=148+Lafayette+St,+New+York,+10013&ll=40.718575,-74.000988&spn=0.03669,0.090895&z=14\">mapa</a>)"
 
 #: templates/opensubtitles2010.html:73
 msgid "Why"
@@ -3037,31 +3023,18 @@ msgstr "Per què"
 #: templates/opensubtitles2010.html:75
 msgid ""
 "\n"
-"            The focus of this summit is increased availability and better "
-"usability for captions and subtitles, \n"
+"            The focus of this summit is increased availability and better usability for captions and subtitles, \n"
 "            which are both sorely needed. It comes at a critical time, \n"
-"            as internet video usage is skyrocketing&mdash;people who rely on "
-"captions are threatened to be left behind. \n"
+"            as internet video usage is skyrocketing&mdash;people who rely on captions are threatened to be left behind. \n"
 "            New users from every culture are coming online en masse; \n"
-"            standardizing and ubiquitizing the technology can make potential "
-"audiences exponentially larger and messages can cross cultural boundaries "
-"more easily. \n"
-"            More captions will also make it simpler for computers to "
-"process, index, \n"
+"            standardizing and ubiquitizing the technology can make potential audiences exponentially larger and messages can cross cultural boundaries more easily. \n"
+"            More captions will also make it simpler for computers to process, index, \n"
 "            and make sense of the ever growing sea of online video.\n"
 "           "
 msgstr ""
 "\n"
-"            L'objectiu de la cimera és una major disponibilitat i una major "
-"usabilitat de les llegendes i subtítols,ambdós molt necessaris. \n"
-"Ha arribat un moment crític en el que l'ús de vídeos a Internet s'ha "
-"disparat i les persones que depenen dels subtítols corren perill de quedar-"
-"se enrere. Els nous usuaris de totes les cultures estan arribant "
-"massivament. La normalització i omnipresència de la tecnologia pot fer que "
-"els usuaris potencials cresquen de manera exponencial i que els missatges "
-"puguen superar les barreres culturals amb la major facilitat. Un major "
-"nombre de llegendes ajudaria als ordinadors a processar, indexar i donar "
-"sentit  a, cada volta major, font de vídeos en línia."
+"            L'objectiu de la cimera és una major disponibilitat i una major usabilitat de les llegendes i subtítols,ambdós molt necessaris. \n"
+"Ha arribat un moment crític en el que l'ús de vídeos a Internet s'ha disparat i les persones que depenen dels subtítols corren perill de quedar-se enrere. Els nous usuaris de totes les cultures estan arribant massivament. La normalització i omnipresència de la tecnologia pot fer que els usuaris potencials cresquen de manera exponencial i que els missatges puguen superar les barreres culturals amb la major facilitat. Un major nombre de llegendes ajudaria als ordinadors a processar, indexar i donar sentit  a, cada volta major, font de vídeos en línia."
 
 #: templates/opensubtitles2010.html:91
 msgid "Organizers, Facilitators, Sponsors"
@@ -3074,13 +3047,13 @@ msgstr "Organitzadors"
 #: templates/opensubtitles2010.html:95
 msgid ""
 "The <a href=\"http://www.participatoryculture.org/\">Participatory Culture "
-"Foundation</a> is organizing the summit. Their most recent project, <a href="
-"\"http://universalsubtitles.org/\">Universal Subtitles</a>, makes open "
+"Foundation</a> is organizing the summit. Their most recent project, <a "
+"href=\"http://universalsubtitles.org/\">Universal Subtitles</a>, makes open "
 "source and collaborative subtitling and translation easy."
 msgstr ""
 "La <a href=\"http://www.participatoryculture.org/\">Participatory Culture "
-"Foundation</a> is organizing the summit. Their most recent project, <a href="
-"\"http://universalsubtitles.org/\">Universal Subtitles</a>, makes open "
+"Foundation</a> is organizing the summit. Their most recent project, <a "
+"href=\"http://universalsubtitles.org/\">Universal Subtitles</a>, makes open "
 "source and collaborative subtitling and translation easy."
 
 #: templates/opensubtitles2010.html:99
@@ -3090,8 +3063,8 @@ msgstr "Col·laboradors"
 #: templates/opensubtitles2010.html:100
 msgid ""
 "<a href=\"http://www.aspirationtech.org/\">Aspiration</a> is providing "
-"facilitation and agenda design. Aspiration believes that face-to-face events "
-"are the most powerful way to facilitate interaction, build networks, and "
+"facilitation and agenda design. Aspiration believes that face-to-face events"
+" are the most powerful way to facilitate interaction, build networks, and "
 "collaborate."
 msgstr ""
 "<a href=\"http://www.aspirationtech.org/\">Aspiration</a> facilita la "
@@ -3105,19 +3078,19 @@ msgstr "Patrocinadors"
 
 #: templates/opensubtitles2010.html:104
 msgid ""
-"The summit has been generously funded by the <a href=\"http://www.soros.org/"
-"\">Open Society Institute</a>."
+"The summit has been generously funded by the <a "
+"href=\"http://www.soros.org/\">Open Society Institute</a>."
 msgstr ""
-"La cimera ha estat generosament finançada per l'<a href=\"http://www.soros."
-"org/\">Open Society Institute</a> ."
+"La cimera ha estat generosament finançada per l'<a "
+"href=\"http://www.soros.org/\">Open Society Institute</a> ."
 
 #: templates/opensubtitles2010.html:113
 msgid ""
 "Special thanks to <a href=\"http://openplans.org/\">Open Plans</a> for "
 "providing meeting space!"
 msgstr ""
-"Un agraïment especial per a <a href=\"http://openplans.org/\">Open Plans</a> "
-"per oferir-nos un espai de trobada."
+"Un agraïment especial per a <a href=\"http://openplans.org/\">Open Plans</a>"
+" per oferir-nos un espai de trobada."
 
 #: templates/services.html:8
 msgid "Want more video views and a more engaged audience?"
@@ -3125,15 +3098,14 @@ msgstr ""
 
 #: templates/services.html:11
 msgid ""
-"Subtitles extend your reach to a <strong>global multilingual audience</"
-"strong>"
+"Subtitles extend your reach to a <strong>global multilingual "
+"audience</strong>"
 msgstr ""
 
 #: templates/services.html:14
 msgid ""
 "\n"
-"        With transcripts, your videos <strong>get much better SEO</strong>. "
-"You'll\n"
+"        With transcripts, your videos <strong>get much better SEO</strong>. You'll\n"
 "        rank higher in Google and other search engines.\n"
 "        "
 msgstr ""
@@ -3149,8 +3121,7 @@ msgstr ""
 #: templates/services.html:26
 msgid ""
 "\n"
-"        Viewers can <strong>watch without headphones</strong> (eg. in a "
-"cubicle\n"
+"        Viewers can <strong>watch without headphones</strong> (eg. in a cubicle\n"
 "        setting)\n"
 "        "
 msgstr ""
@@ -3170,8 +3141,7 @@ msgstr ""
 #: templates/services.html:41
 msgid ""
 "\n"
-"        Engage existing fans and <strong>grow your audience</strong> at the "
-"same\n"
+"        Engage existing fans and <strong>grow your audience</strong> at the same\n"
 "        time.\n"
 "        "
 msgstr ""
@@ -3179,8 +3149,7 @@ msgstr ""
 #: templates/services.html:47
 msgid ""
 "\n"
-"        <strong>Integration is easy and flexible</strong>. We're compatible "
-"with\n"
+"        <strong>Integration is easy and flexible</strong>. We're compatible with\n"
 "        nearly every video format.\n"
 "        "
 msgstr ""
@@ -3196,8 +3165,7 @@ msgstr ""
 #: templates/services.html:59
 msgid ""
 "\n"
-"        Our white label product (suitable for enterprise use) "
-"<strong>simplifies\n"
+"        Our white label product (suitable for enterprise use) <strong>simplifies\n"
 "        subtitle deployment</strong>.\n"
 "        "
 msgstr ""
@@ -3205,8 +3173,7 @@ msgstr ""
 #: templates/services.html:65
 msgid ""
 "\n"
-"        <strong>From enterprise to independent</strong>, we can help you "
-"develop a\n"
+"        <strong>From enterprise to independent</strong>, we can help you develop a\n"
 "        great subtitle strategy.\n"
 "        "
 msgstr ""
@@ -3235,11 +3202,11 @@ msgstr "Vorer perfil"
 
 #: templates/settings.html:15 templates/profiles/_top_user_panel.html:23
 msgid "Edit Profile"
-msgstr ""
+msgstr "Editar Perfil"
 
 #: templates/settings.html:27 templates/profiles/_top_user_panel.html:42
 msgid "Team Management"
-msgstr ""
+msgstr "Administració d'Equip"
 
 #: templates/admin/base_site.html:4 templates/admin/base_site.html.py:7
 msgid "Universal Subtitles"
@@ -3251,7 +3218,7 @@ msgstr "Visitar el lloc"
 
 #: templates/admin/base_site.html:13
 msgid "Edit settings"
-msgstr ""
+msgstr "Editar la configuració"
 
 #: templates/admin/teams/team/change_list.html:9
 msgid "Send"
@@ -3259,21 +3226,21 @@ msgstr ""
 
 #: templates/auth/delete_user.html:9
 msgid "Are you sure that you want to permanently delete your profile?"
-msgstr ""
+msgstr "Esteu segurs de voler eliminar definitivament el vostre perfil?"
 
 #: templates/auth/delete_user.html:13
 msgid "Delete"
-msgstr ""
+msgstr "Esborrar"
 
 #: templates/auth/delete_user.html:14
 #: templates/profiles/_select_language_dialog.html:100
 #: templates/videos/_feedback_form.html:30
 msgid "Cancel"
-msgstr ""
+msgstr "Cancel·lar"
 
 #: templates/auth/login.html:9
 msgid "Login to Your Existing Account"
-msgstr ""
+msgstr "Ingressar al vostre compte existent"
 
 #: templates/auth/login.html:13
 msgid "Login"
@@ -3281,19 +3248,19 @@ msgstr "Iniciar sessió"
 
 #: templates/auth/login.html:14
 msgid "Forgot password?"
-msgstr ""
+msgstr "Heu oblidat la contrasenya?"
 
 #: templates/auth/login.html:17
 msgid "You can also login using"
-msgstr ""
+msgstr "També podeu iniciar sessió amb"
 
 #: templates/auth/login.html:23
 msgid "Create an Account"
-msgstr ""
+msgstr "Crear un compte"
 
 #: templates/auth/login.html:27
 msgid "Create Account"
-msgstr ""
+msgstr "Crear compte"
 
 #: templates/comments/_item.html:8 templates/messages/index.html:154
 #: templates/messages/sent.html:121 templates/videos/_action_tpl_video.html:12
@@ -3304,11 +3271,11 @@ msgstr "abans"
 #: templates/comments/_item.html:13 templates/messages/index.html:193
 #: templates/messages/sent.html:160
 msgid "Reply"
-msgstr ""
+msgstr "Resposta"
 
 #: templates/comments/_item.html:17
 msgid "replied to comment from"
-msgstr ""
+msgstr "va respondre al comentari de"
 
 #: templates/jsdemo/home.html:16
 msgid "Subtitles and Captions for Every Video on the Web"
@@ -3389,8 +3356,8 @@ msgstr "Protocol de recerca de subtítols"
 
 #: templates/jsdemo/home.html:40
 msgid ""
-"An open standard to let Firefox extensions, desktop video players, websites, "
-"browsers--any client--find and retrieve subtitles for any video."
+"An open standard to let Firefox extensions, desktop video players, websites,"
+" browsers--any client--find and retrieve subtitles for any video."
 msgstr ""
 "Un estàndard obert per permetre que les extensions del Firefox, els "
 "reproductors de vídeo d'escriptori, els llocs web i les navegador -- "
@@ -3426,50 +3393,51 @@ msgstr "Proveu la Demo"
 
 #: templates/livesettings/site_settings.html:48
 msgid "Documentation"
-msgstr ""
+msgstr "Documentació"
 
 #: templates/livesettings/site_settings.html:48
 msgid "Change password"
-msgstr ""
+msgstr "Canviar contrasenya"
 
 #: templates/livesettings/site_settings.html:48
 msgid "Log out"
-msgstr ""
+msgstr "Sortir"
 
 #: templates/livesettings/site_settings.html:52
 msgid "Edit Site Settings"
-msgstr ""
+msgstr "Editar configuració del lloc"
 
 #: templates/livesettings/site_settings.html:59
 msgid "Livesettings are disabled for this site."
-msgstr ""
+msgstr "Les configuracions en línia estan deshabilitades per aquest lloc."
 
 #: templates/livesettings/site_settings.html:60
 msgid "All configuration options must be edited in the site settings.py file"
 msgstr ""
+"Totes les opcions de configuració han de ser editades al fitxer settings.py"
 
 #: templates/livesettings/site_settings.html:66
 msgid "Please correct the error below."
 msgid_plural "Please correct the errors below."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sisplau, corregiu el error de sota."
+msgstr[1] "Sisplau, corregiu els errors de sota."
 
 #: templates/livesettings/site_settings.html:82
 #, python-format
 msgid "Group settings: %(name)s"
-msgstr ""
+msgstr "Grup de configuració: %(name)s"
 
 #: templates/livesettings/site_settings.html:108
 msgid "Update Settings"
-msgstr ""
+msgstr "Configuració d'Actualització"
 
 #: templates/livesettings/site_settings.html:109
 msgid "Uncollapse all"
-msgstr ""
+msgstr "Desplegar-ho tot"
 
 #: templates/livesettings/site_settings.html:113
 msgid "You don't have permission to edit values."
-msgstr ""
+msgstr "No teniu permís per a editar els valors"
 
 #: templates/messages/_messages.html:4
 #, python-format
@@ -3499,24 +3467,24 @@ msgstr "Enviar missatge"
 #: templates/videos/_paste_transcription.html:113
 #: templates/videos/_upload_subtitles.html:7 templates/videos/video.html:108
 msgid "Close"
-msgstr ""
+msgstr "Tancar"
 
 #: templates/messages/_send_message_form.html:15
 msgid "Send message to"
-msgstr ""
+msgstr "Enviar missatge a"
 
 #: templates/messages/_send_message_form.html:18
 #: templates/messages/_send_message_form.html:20
 #: templates/messages/_send_to_team_message_form.html:22
 #: templates/messages/index.html:173 templates/messages/sent.html:140
 msgid "avatar"
-msgstr ""
+msgstr "Avatar"
 
 #: templates/messages/_send_message_form.html:30
 #: templates/messages/_send_to_team_message_form.html:34
 #: templates/messages/index.html:204 templates/messages/sent.html:171
 msgid "Send Message"
-msgstr ""
+msgstr "Enviar Missatge"
 
 #: templates/messages/_send_message_form.html:60
 #: templates/messages/index.html:54 templates/messages/sent.html:49
@@ -3538,7 +3506,7 @@ msgstr ""
 #: templates/messages/index.html:6 templates/messages/index.html.py:117
 #: templates/messages/sent.html:84 templates/profiles/_top_user_panel.html:27
 msgid "My Messages"
-msgstr ""
+msgstr "Els meus missatges"
 
 #: templates/messages/index.html:24 templates/messages/sent.html:19
 msgid "Do you really wish to delete this message?"
@@ -3547,7 +3515,7 @@ msgstr ""
 #: templates/messages/index.html:117 templates/messages/sent.html:6
 #: templates/messages/sent.html.py:84
 msgid "Sent Messages"
-msgstr ""
+msgstr "Missatges enviats"
 
 #: templates/messages/index.html:127 templates/profiles/_send_message.html:10
 msgid "From"
@@ -3569,23 +3537,23 @@ msgstr "Data"
 #: templates/messages/index.html:140 templates/messages/index.html.py:142
 #: templates/messages/sent.html:107 templates/messages/sent.html.py:109
 msgid "Avatar"
-msgstr ""
+msgstr "Avatar"
 
 #: templates/messages/index.html:164 templates/messages/sent.html:131
 msgid "You have no messages."
-msgstr ""
+msgstr "No teniu missatges."
 
 #: templates/messages/index.html:171
 msgid "Message from"
-msgstr ""
+msgstr "Missatge de"
 
 #: templates/messages/index.html:179 templates/messages/sent.html:146
 msgid "Subject"
-msgstr ""
+msgstr "Assumpte"
 
 #: templates/messages/sent.html:94
 msgid "To"
-msgstr ""
+msgstr "A"
 
 #: templates/messages/sent.html:138
 msgid "Message to"
@@ -3607,14 +3575,17 @@ msgid ""
 "It looks like you logged in without submitting an email. We need an email "
 "address to notify you (for example, when others edit your work)."
 msgstr ""
+"Sembla que us heu registrat sense indicar-nos un correu electrònic. Ens cal "
+"una adreça de correu per a notificar-vos per exemple, quan algú edita el "
+"vostre treball."
 
 #: templates/profiles/_require_email_dialog.html:8
 msgid "Please enter a valid e-mail address"
-msgstr ""
+msgstr "Sisplau introduïu una adreça de correu electrònica vàlida"
 
 #: templates/profiles/_require_email_dialog.html:10
 msgid "Enter valid email please."
-msgstr ""
+msgstr "Introduïu un correu electrònic vàlid sisplau."
 
 #: templates/profiles/_select_language_dialog.html:4
 #: templates/search/search.html:180 templates/videos/featured_videos.html:55
@@ -3622,31 +3593,31 @@ msgstr ""
 #: templates/videos/volunteer_featured.html:55
 #: templates/videos/volunteer_popular.html:83
 msgid "Loading..."
-msgstr ""
+msgstr "Carregant..."
 
 #: templates/profiles/_select_language_dialog.html:5
 msgid "Select your Languages"
-msgstr ""
+msgstr "Seleccioneu els vostres idiomes"
 
 #: templates/profiles/_select_language_dialog.html:55
 msgid "Select at least one language."
-msgstr ""
+msgstr "Seleccioneu almenys un idioma"
 
 #: templates/profiles/_select_language_dialog.html:57
 msgid "Saving your language settings..."
-msgstr ""
+msgstr "Desant la configuració dels vostres idiomes"
 
 #: templates/profiles/_select_language_dialog.html:85
 msgid "We really need your help!"
-msgstr ""
+msgstr "Ens cal la vostra ajuda de veritat!"
 
 #: templates/profiles/_select_language_dialog.html:86
 msgid "What languages do you speak?"
-msgstr ""
+msgstr "Quins idiomes parleu?"
 
 #: templates/profiles/_select_language_dialog.html:99
 msgid "Submit"
-msgstr ""
+msgstr "Enviar"
 
 #: templates/profiles/_send_message.html:16
 msgid "No HTML"
@@ -3679,30 +3650,30 @@ msgstr "Tancar sessió"
 #: templates/profiles/_user_avatar.html:6
 #: templates/profiles/my_profile.html:79
 msgid "Edit profile"
-msgstr ""
+msgstr "Editar perfil"
 
 #: templates/profiles/_user_videos_activity.html:4
 msgid "Edits to my videos"
-msgstr ""
+msgstr "Edicions dels meus vídeos"
 
 #: templates/profiles/_user_videos_activity.html:10
 msgid "No Activity"
-msgstr ""
+msgstr "Sense activitat"
 
 #: templates/profiles/edit_profile.html:5
 msgid "Edit My Profile"
-msgstr ""
+msgstr "Editar el meu perfil"
 
 #: templates/profiles/edit_profile.html:12
 msgid "Do you really want delete picture?"
-msgstr ""
+msgstr "Voleu eliminar la imatge?"
 
 #: templates/profiles/edit_profile.html:33
 #: templates/videos/_paste_transcription.html:106
 #: templates/videos/_paste_transcription.html:158
 #: templates/videos/_video_url_panel.html:95
 msgid "Saving..."
-msgstr ""
+msgstr "Desant..."
 
 #: templates/profiles/edit_profile.html:46
 msgid "Edit Your Profile"
@@ -3716,11 +3687,11 @@ msgstr "Informació personal"
 #: templates/profiles/edit_profile.html:63
 #: templates/profiles/edit_profile.html:69
 msgid "will display publicly"
-msgstr ""
+msgstr "es mostrarà públicament"
 
 #: templates/profiles/edit_profile.html:82
 msgid "remove picture"
-msgstr ""
+msgstr "eliminar imatge"
 
 #: templates/profiles/edit_profile.html:88
 msgid "Upload picture"
@@ -3759,23 +3730,23 @@ msgstr "Desar els canvis al perfil"
 
 #: templates/profiles/edit_profile.html:190
 msgid "Permanently Delete Your Profile"
-msgstr ""
+msgstr "Eliminar definitivament el vostre perfil"
 
 #: templates/profiles/my_profile.html:6 templates/profiles/my_profile.html:19
 msgid "My videos"
-msgstr ""
+msgstr "Els meus vídeos"
 
 #: templates/profiles/my_profile.html:66
 msgid "Bio"
-msgstr ""
+msgstr "Biografia"
 
 #: templates/profiles/my_profile.html:72
 msgid "Languages I understand"
-msgstr ""
+msgstr "idiomes que entenc"
 
 #: templates/profiles/view_profile.html:35
 msgid "Member since"
-msgstr ""
+msgstr "Membre des de"
 
 #: templates/profiles/view_profile.html:36
 msgid "Preferred Language"
@@ -3791,7 +3762,7 @@ msgstr "<i>L'usuari no ha publicat informació personal </i>"
 
 #: templates/profiles/view_profile.html:55
 msgid "User deleted his profile"
-msgstr ""
+msgstr "L'usuari ha esborrat el seu perfil"
 
 #: templates/registration/password_reset_complete.html:4
 #: templates/registration/password_reset_confirm.html:6
@@ -3828,8 +3799,8 @@ msgid ""
 "Please enter your new password twice so we can verify you typed it in "
 "correctly."
 msgstr ""
-"Sisplau introduïu la contrasenya dues vegades per comprovar que l'has escrit "
-"correctament."
+"Sisplau introduïu la contrasenya dues vegades per comprovar que l'has escrit"
+" correctament."
 
 #: templates/registration/password_reset_confirm.html:19
 msgid "New password:"
@@ -3931,7 +3902,7 @@ msgstr[1] ""
 
 #: templates/search/_video_item.html:24
 msgid "lines"
-msgstr ""
+msgstr "línies"
 
 #: templates/search/_video_item.html:34
 msgid "Plays (this week)"
@@ -3970,39 +3941,39 @@ msgstr ""
 
 #: templates/statistic/index.html:26
 msgid "Users statistic"
-msgstr ""
+msgstr "Estadística d'usuaris"
 
 #: templates/statistic/index.html:27
 #: templates/statistic/videos_statistic.html:6
 msgid "Videos statistic"
-msgstr ""
+msgstr "Estadística de Vídeos"
 
 #: templates/statistic/index.html:28
 msgid "Languages statistic"
-msgstr ""
+msgstr "Estadística d'idiomes"
 
 #: templates/statistic/index.html:73
 #: templates/statistic/language_statistic.html:31
 msgid "stats for"
-msgstr ""
+msgstr "estadístiques per a"
 
 #: templates/statistic/index.html:74
 #: templates/statistic/language_statistic.html:32
 #: templates/statistic/languages_statistic.html:37
 msgid "day"
-msgstr ""
+msgstr "dia"
 
 #: templates/statistic/index.html:75
 #: templates/statistic/language_statistic.html:33
 #: templates/statistic/languages_statistic.html:38
 msgid "week"
-msgstr ""
+msgstr "setmana"
 
 #: templates/statistic/index.html:76
 #: templates/statistic/language_statistic.html:34
 #: templates/statistic/languages_statistic.html:39
 msgid "month"
-msgstr ""
+msgstr "mes"
 
 #: templates/statistic/index.html:77
 #: templates/statistic/language_statistic.html:35
@@ -4010,54 +3981,54 @@ msgstr ""
 #: templates/statistic/users_statistic.html:16
 #: templates/statistic/videos_statistic.html:16
 msgid "TOTAL"
-msgstr ""
+msgstr "TOTAL"
 
 #: templates/statistic/index.html:83
 msgid "Total number of videos captioned"
-msgstr ""
+msgstr "Número total de vídeos subtitulats"
 
 #: templates/statistic/index.html:90
 msgid "Tweets"
-msgstr ""
+msgstr "Tweets"
 
 #: templates/statistic/index.html:97
 msgid "Facebook shares"
-msgstr ""
+msgstr "Compartits pel Facebook"
 
 #: templates/statistic/index.html:104
 msgid "Email shares"
-msgstr ""
+msgstr "Compartits per correu"
 
 #: templates/statistic/language_statistic.html:25
 msgid "Language statistic for "
-msgstr ""
+msgstr "Estadística d'idioma per a"
 
 #: templates/statistic/language_statistic.html:26
 #: templates/statistic/languages_statistic.html:31
 #: templates/statistic/users_statistic.html:7
 #: templates/statistic/videos_statistic.html:7
 msgid "General statistic"
-msgstr ""
+msgstr "Estadística general"
 
 #: templates/statistic/language_statistic.html:41
 msgid "Videos count"
-msgstr ""
+msgstr "Comptador de vídeos"
 
 #: templates/statistic/language_statistic.html:48
 msgid "Subtitles views count"
-msgstr ""
+msgstr "Comptador de visualització de subtítols"
 
 #: templates/statistic/language_statistic.html:55
 msgid "Videos views count"
-msgstr ""
+msgstr "Comptador de visualització de vídeos"
 
 #: templates/statistic/languages_statistic.html:25
 msgid "Language statistic"
-msgstr ""
+msgstr "Estadística d'idioma"
 
 #: templates/statistic/languages_statistic.html:36
 msgid "Lanuage"
-msgstr ""
+msgstr "Idioma"
 
 #: templates/statistic/log_entry_model_admin.html:38
 #: templates/statistic/logger_model_admin.html:38
@@ -4071,22 +4042,22 @@ msgstr ""
 
 #: templates/statistic/users_statistic.html:6
 msgid "Activity statistic"
-msgstr ""
+msgstr "Estadística d'activitat"
 
 #: templates/statistic/users_statistic.html:13
 #: templates/statistic/videos_statistic.html:13
 msgid "Day"
-msgstr ""
+msgstr "Dia"
 
 #: templates/statistic/users_statistic.html:14
 #: templates/statistic/videos_statistic.html:14
 msgid "Week"
-msgstr ""
+msgstr "Setmana"
 
 #: templates/statistic/users_statistic.html:15
 #: templates/statistic/videos_statistic.html:15
 msgid "Month"
-msgstr ""
+msgstr "Mes"
 
 #: templates/statistic/videos_statistic.html:12
 msgid "Video"
@@ -4094,7 +4065,7 @@ msgstr "Vídeo"
 
 #: templates/statistic/log_methods/changelist_view.html:39
 msgid "By logger"
-msgstr ""
+msgstr "Per logger"
 
 #: templates/statistic/log_methods/changelist_view.html:41
 msgid "all"
@@ -4102,129 +4073,133 @@ msgstr ""
 
 #: templates/statistic/log_methods/changelist_view.html:55
 msgid "Class"
-msgstr ""
+msgstr "Clase"
 
 #: templates/statistic/log_methods/changelist_view.html:56
 msgid "Method"
-msgstr ""
+msgstr "Mètode"
 
 #: templates/statistic/log_methods/changelist_view.html:57
 msgid "Value"
-msgstr ""
+msgstr "Valor"
 
 #: templates/teams/_application_form.html:4
 msgid "Send application"
-msgstr ""
+msgstr "Enviar sol·licitut"
 
 #: templates/teams/_application_form.html:8
 msgid "Apply to"
-msgstr ""
+msgstr "Aplicar a"
 
 #: templates/teams/_application_form.html:13
 msgid "Language skill"
-msgstr ""
+msgstr "Habilitats lingüístiques"
 
 #: templates/teams/_application_form.html:14
 #, python-format
 msgid ""
 "\n"
 "            No formal language training is required to translate for\n"
-"            %(team)s. But we do ask that all translators are confident in "
-"their\n"
-"            translation abilities. Please make sure your profile has your "
-"language\n"
+"            %(team)s. But we do ask that all translators are confident in their\n"
+"            translation abilities. Please make sure your profile has your language\n"
 "            "
 msgstr ""
+"\n"
+"            No es requereix un estudi formal dels idiomes per a traduir\n"
+"            %(team)s. Però nosaltres preguntem quin de tots els traductors estan segurs de les seves \n"
+"            habilitats de traducció. Sisplau assegureu-vos de que teniu ben indicat l'idioma al vostre perfil\n"
+" "
 
 #: templates/teams/_application_form.html:19
 msgid "proficiency"
-msgstr ""
+msgstr "competència"
 
 #: templates/teams/_application_form.html:19
 msgid "specified"
-msgstr ""
+msgstr "especificat"
 
 #: templates/teams/_application_form.html:32
 msgid "Submit Application"
-msgstr ""
+msgstr "Enviar sol·licitut"
 
 #: templates/teams/_complete_team_video_detail.html:8
 msgid "Completed Languages"
-msgstr ""
+msgstr "Idiomes completats"
 
 #: templates/teams/_complete_team_video_detail.html:14
 msgid "Video Page"
-msgstr ""
+msgstr "Pàgina de vídeos"
 
 #: templates/teams/_edit_top_navigation.html:4 templates/teams/edit.html:8
 msgid "Team Settings"
-msgstr ""
+msgstr "Configuració d'Equip"
 
 #: templates/teams/_edit_top_navigation.html:8
 #: templates/teams/_team_detail.html:124 templates/teams/edit_members.html:8
 msgid "Team Members"
-msgstr ""
+msgstr "Membres del equip"
 
 #: templates/teams/_edit_top_navigation.html:12
 #: templates/teams/edit_videos.html:8
 msgid "Team Videos"
-msgstr ""
+msgstr "Vídeos del equip"
 
 #: templates/teams/_edit_top_navigation.html:16
 msgid "Review Applicants"
-msgstr ""
+msgstr "Revisar sol·licitut"
 
 #: templates/teams/_edit_top_navigation.html:20
 msgid "View Team"
-msgstr ""
+msgstr "Vorer equip"
 
 #: templates/teams/_invite_friends_to_team.html:4
 msgid "According to your"
-msgstr ""
+msgstr "D'acord a les vostres "
 
 #: templates/teams/_invite_friends_to_team.html:4
 msgid "language choices"
-msgstr ""
+msgstr "Opcions d'idioma"
 
 #: templates/teams/_invite_friends_to_team.html:4
 msgid "there don't appear to be videos you can translate."
-msgstr ""
+msgstr "No sembla que haja vídeos que pugueu traduir."
 
 #: templates/teams/_invite_friends_to_team.html:4
 msgid "But check back soon! There may soon be translations for you to review."
-msgstr ""
+msgstr "Però torneu! Prompte poden haver noves traduccions per a revisar.  "
 
 #: templates/teams/_invite_friends_to_team.html:4
 msgid "You can also invite friends who speak other languages to help out."
 msgstr ""
+"Podeu convidar als vostres amics que parlen altres idiomes per a ajudar."
 
 #: templates/teams/_invite_message.html:3
 msgid "You have been invited to a new team"
-msgstr ""
+msgstr "Heu estat convidats a un nou equip"
 
 #: templates/teams/_invite_message.html:5 templates/teams/index.html:129
 msgid "Join"
-msgstr ""
+msgstr "Unir-se"
 
 #: templates/teams/_invite_message.html:6 templates/teams/applications.html:33
 msgid "Deny"
-msgstr ""
+msgstr "Denegar"
 
 #: templates/teams/_team_activity.html:19
 msgid "Team Activity Stream"
-msgstr ""
+msgstr "Flux d'activitat en equip"
 
 #: templates/teams/_team_activity.html:25
 msgid "No Video Activity"
-msgstr ""
+msgstr "Sense activitat al vídeo"
 
 #: templates/teams/_team_activity.html:30
 msgid "See All Activity"
-msgstr ""
+msgstr "Vorer tota l'activitat"
 
 #: templates/teams/_team_add_video_select.html:7
 msgid "Add video to team"
-msgstr ""
+msgstr "Afegir vídeo al equip"
 
 #: templates/teams/_team_detail.html:10
 msgid "Do you really wish to join this team?"
@@ -4236,58 +4211,57 @@ msgstr ""
 
 #: templates/teams/_team_detail.html:52 templates/teams/_team_detail.html:111
 msgid "Team Description"
-msgstr ""
+msgstr "Descripció de l'equip"
 
 #: templates/teams/_team_detail.html:56
 msgid "Show Members"
-msgstr ""
+msgstr "Mostrar membres"
 
 #: templates/teams/_team_detail.html:59 templates/teams/_team_detail.html:119
 msgid "Team Managers"
-msgstr ""
+msgstr "Caps d'equip"
 
 #: templates/teams/_team_detail.html:65 templates/teams/_team_detail.html:138
 msgid "Video Policy"
-msgstr ""
+msgstr "Política de vídeo"
 
 #: templates/teams/_team_detail.html:69 templates/teams/_team_detail.html:139
 msgid "Membership Policy"
-msgstr ""
+msgstr "Política d'afiliació"
 
 #: templates/teams/_team_detail.html:74
 msgid "Team Page"
-msgstr ""
+msgstr "Pàgina d'equip"
 
 #: templates/teams/_team_detail.html:78
 msgid "Completed Videos"
-msgstr ""
+msgstr "Vídeos completats"
 
 #: templates/teams/_team_detail.html:83 templates/teams/_team_detail.html:128
 msgid "Manager's Settings & Controls"
-msgstr ""
+msgstr "Configuració d'administrador i controls"
 
 #: templates/teams/_team_detail.html:84 templates/teams/index.html:126
 msgid "Leave"
-msgstr ""
+msgstr "Deixar"
 
 #: templates/teams/_team_detail.html:89 templates/teams/_team_detail.html:101
 msgid "Join this team now!"
-msgstr ""
+msgstr "Uniu-vos a aquest equip ara!"
 
 #: templates/teams/_team_detail.html:125
 msgid "Completed Subtitles"
-msgstr ""
+msgstr "Subtítols completats"
 
 #: templates/teams/_team_detail.html:130
 msgid "Leave this team"
-msgstr ""
+msgstr "Deixar aquest equip"
 
 #: templates/teams/_team_message.html:3
 #, python-format
 msgid ""
 "\n"
-"    A message from <a href=\"%(author_page)s\">%(author)s</a> to all "
-"members \n"
+"    A message from <a href=\"%(author_page)s\">%(author)s</a> to all members \n"
 "    of the <a href=\"%(team_page)s\">%(team)s</a> team.\n"
 "    "
 msgstr ""
@@ -4303,62 +4277,62 @@ msgstr ""
 
 #: templates/teams/_team_select.html:6
 msgid "Managing"
-msgstr ""
+msgstr "Gestió"
 
 #: templates/teams/_team_select.html:15
 msgid "Add new team"
-msgstr ""
+msgstr "Afegir nou equip"
 
 #: templates/teams/_team_video_detail.html:14
 msgid "Video in:"
-msgstr ""
+msgstr "Vídeo en:"
 
 #: templates/teams/_team_video_detail.html:18
 msgid "Add Subtitles "
-msgstr ""
+msgstr "Afegir subtítols"
 
 #: templates/teams/_team_video_detail.html:21
 msgid "Edit Video"
-msgstr ""
+msgstr "Editar vídeo"
 
 #: templates/teams/_team_video_in_progress_list.html:5
 msgid "Subtitles currently in progress"
-msgstr ""
+msgstr "Subtítols en curs"
 
 #: templates/teams/_team_video_lang_detail.html:10
 #: templates/teams/edit_videos.html:45 templates/teams/index.html:123
 msgid "Edit"
-msgstr ""
+msgstr "Editar"
 
 #: templates/teams/_team_video_lang_detail.html:27
 #: templates/teams/_team_video_lang_detail.html:49
 msgid "Review"
-msgstr ""
+msgstr "Revisió"
 
 #: templates/teams/_team_video_lang_detail.html:27
 #: templates/teams/_team_video_lang_detail.html:34
 msgid "Captions"
-msgstr ""
+msgstr "Llegendes"
 
 #: templates/teams/_team_video_lang_detail.html:42
 msgid "Translate into"
-msgstr ""
+msgstr "Traduir al"
 
 #: templates/teams/_team_video_lang_detail.html:49
 msgid "Translation"
-msgstr ""
+msgstr "Traducció"
 
 #: templates/teams/_team_video_lang_list.html:10
 msgid "complete"
-msgstr ""
+msgstr "completat"
 
 #: templates/teams/_team_video_lang_list.html:10
 msgid "incomplete"
-msgstr ""
+msgstr "incomplet"
 
 #: templates/teams/_team_video_lang_list.html:16
 msgid "and"
-msgstr ""
+msgstr "i"
 
 #: templates/teams/_team_video_lang_list.html:18
 #, python-format
@@ -4371,32 +4345,38 @@ msgid_plural ""
 "    %(total)s others.\n"
 "    "
 msgstr[0] ""
+"\n"
+"    %(total)s altre.\n"
+"    "
 msgstr[1] ""
+"\n"
+"    %(total)s altres.\n"
+"    "
 
 #: templates/teams/add_video.html:8
 msgid "Team video"
-msgstr ""
+msgstr "Equip de vídeo"
 
 #: templates/teams/add_video.html:23 templates/teams/edit_videos.html:17
 msgid "Add video"
-msgstr ""
+msgstr "Afegir vídeo"
 
 #: templates/teams/add_video.html:29 templates/teams/edit.html:138
 #: templates/teams/team_video.html:34
 msgid "Save"
-msgstr ""
+msgstr "Desar"
 
 #: templates/teams/applications.html:8
 msgid "Team Aplications"
-msgstr ""
+msgstr "Sol·licituts d'equip"
 
 #: templates/teams/applications.html:32
 msgid "Approve"
-msgstr ""
+msgstr "Aprovar"
 
 #: templates/teams/applications.html:41
 msgid "There are no applicants at this time."
-msgstr ""
+msgstr "No hi ha sol·licituts a hores d'ara."
 
 #: templates/teams/completed_videos.html:30
 #: templates/teams/detail-debug.html:43 templates/teams/detail.html:41
@@ -4547,8 +4527,7 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"            %(team_name)s needs your help subtitling and translating the "
-"following new videos:\n"
+"            %(team_name)s needs your help subtitling and translating the following new videos:\n"
 "        "
 msgstr ""
 
@@ -4565,15 +4544,14 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"            Please visit the <a href=\"http://%(domain)s%(team_url)s\">%"
-"(team_name)s</a> \n"
+"            Please visit the <a href=\"http://%(domain)s%(team_url)s\">%(team_name)s</a> \n"
 "            to see the new videos that need your help:\n"
 "        "
 msgstr ""
 
 #: templates/teams/index.html:22
 msgid "Do you really wish join this team?"
-msgstr ""
+msgstr "Voleu unir-vos al equip?"
 
 #: templates/teams/index.html:59
 msgid "Start a Team"
@@ -4594,7 +4572,7 @@ msgstr ""
 
 #: templates/teams/index.html:78
 msgid "Sort by"
-msgstr ""
+msgstr "Ordenat per"
 
 #: templates/teams/index.html:91
 msgid "My teams"
@@ -4633,7 +4611,8 @@ msgid "Edit Team"
 msgstr ""
 
 #: templates/videos/_error_feedback_form.html:7
-msgid "Please let us know what you were doing when you encountered this error."
+msgid ""
+"Please let us know what you were doing when you encountered this error."
 msgstr "Sisplau, indiqueu-nos que fèieu quan es va produir aquest error."
 
 #: templates/videos/_error_feedback_form.html:9
@@ -4653,12 +4632,14 @@ msgid "How are you using Universal Subtitles?  What would make it better?"
 msgstr ""
 
 #: templates/videos/_feedback_form.html:13
-msgid "Please let us know if you have any comments, questions, or suggestions!"
+msgid ""
+"Please let us know if you have any comments, questions, or suggestions!"
 msgstr "Sisplau, envia'ns els teus comentaris, dubtes o suggeriments!"
 
 #: templates/videos/_feedback_form.html:14
 msgid ""
-"Note: we read/speak English best, but try to read/respond to anything we can."
+"Note: we read/speak English best, but try to read/respond to anything we "
+"can."
 msgstr ""
 
 #: templates/videos/_feedback_form.html:19
@@ -4802,8 +4783,7 @@ msgstr ""
 #: templates/videos/_paste_transcription.html:118
 msgid ""
 "\n"
-"            Paste a transcript into the space below.  How you enter "
-"subtitles here \n"
+"            Paste a transcript into the space below.  How you enter subtitles here \n"
 "            determines how they display on the screen.<br/>\n"
 "            1) Hit enter twice to separate each subtitle;<br/> \n"
 "            2) You cannot submit subtitles longer than 3 lines (2 is best).\n"
@@ -4813,8 +4793,7 @@ msgstr ""
 #: templates/videos/_paste_transcription.html:126
 msgid ""
 "\n"
-"            Some of your subtitles take up more than two lines and will not "
-"display correctly.\n"
+"            Some of your subtitles take up more than two lines and will not display correctly.\n"
 "            "
 msgstr ""
 
@@ -4849,8 +4828,7 @@ msgstr "Pujar subtítols"
 #: templates/videos/_upload_subtitles.html:12
 msgid ""
 "\n"
-"              Our site accepts SRT, SSA, SBV and TTML format. Only files "
-"ending in .srt, .ssa, .sbv\n"
+"              Our site accepts SRT, SSA, SBV and TTML format. Only files ending in .srt, .ssa, .sbv\n"
 "              or .xml (for TTML) are accepted. Or you can\n"
 "              "
 msgstr ""
@@ -4870,11 +4848,11 @@ msgstr ""
 
 #: templates/videos/_upload_subtitles.html:47
 msgid ""
-"If you believe your subtitle file is compatible, <a href='mailto:"
-"feedback@universalsubtitles.org'>send it to us</a>"
+"If you believe your subtitle file is compatible, <a "
+"href='mailto:feedback@universalsubtitles.org'>send it to us</a>"
 msgstr ""
-"Si creeu que el fitxer del teu subtítol és compatible,<a href='mailto:"
-"feedback@universalsubtitles.org'> envieu-nos-lo</a>"
+"Si creeu que el fitxer del teu subtítol és compatible,<a "
+"href='mailto:feedback@universalsubtitles.org'> envieu-nos-lo</a>"
 
 #: templates/videos/_upload_subtitles.html:48
 msgid ""
@@ -4981,14 +4959,14 @@ msgstr ""
 #: templates/videos/_video_url_panel.html:74
 msgid ""
 "Two versions of the same video exist on Youtube.  You don't want subtitle "
-"volunteers to duplicate their work, so you add both versions to the multiple "
-"URLs pane."
+"volunteers to duplicate their work, so you add both versions to the multiple"
+" URLs pane."
 msgstr ""
 
 #: templates/videos/_video_url_panel.html:75
 msgid ""
-"You put your video on Youtube, Vimeo, Blip, and Dailymotion and you want the "
-"subtitles you make to work on all of those versions."
+"You put your video on Youtube, Vimeo, Blip, and Dailymotion and you want the"
+" subtitles you make to work on all of those versions."
 msgstr ""
 
 #: templates/videos/_video_url_panel.html:76
@@ -5013,8 +4991,8 @@ msgstr ""
 
 #: templates/videos/_video_url_panel.html:85
 msgid ""
-"This is useful in cases where many versions of the same video exist, or when "
-"there are versions in different formats (like HTML5)"
+"This is useful in cases where many versions of the same video exist, or when"
+" there are versions in different formats (like HTML5)"
 msgstr ""
 
 #: templates/videos/_video_url_panel.html:92
@@ -5047,14 +5025,11 @@ msgstr "No hi ha activitats"
 #: templates/videos/create.html:10
 msgid ""
 "\n"
-"        \"Sorry, we couldn't identify the video at the link you sent.  "
-"Perhaps\n"
+"        \"Sorry, we couldn't identify the video at the link you sent.  Perhaps\n"
 "        it's a link we don't recognize, or perhaps you've linked to a page\n"
-"        that has multiple videos.  Try entering a different link to the "
-"video\n"
+"        that has multiple videos.  Try entering a different link to the video\n"
 "        you want to submit.  If you think there's been some mistake,\n"
-"        <a href=\"mailto:feedback@universalsubtitles.org\">contact us</a>!"
-"\"\n"
+"        <a href=\"mailto:feedback@universalsubtitles.org\">contact us</a>!\"\n"
 "        "
 msgstr ""
 
@@ -5102,8 +5077,7 @@ msgstr "Cal que inicieu sessió per a fer açò."
 #, python-format
 msgid ""
 "\n"
-"            Comparing revision (#%(second_version_no)s) to revision (#%"
-"(version_no)s)\n"
+"            Comparing revision (#%(second_version_no)s) to revision (#%(version_no)s)\n"
 "            "
 msgstr ""
 
@@ -5111,8 +5085,7 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"            Comparing revision (#%(second_version_no)s) to current revision "
-"(#%(version_no)s)\n"
+"            Comparing revision (#%(second_version_no)s) to current revision (#%(version_no)s)\n"
 "            "
 msgstr ""
 
@@ -5181,14 +5154,10 @@ msgstr "Envia-ho a un amic!"
 #, python-format
 msgid ""
 "\n"
-"            <b><a href=\"http://%(domain)s%(language_url)s\">%(lang)s "
-"subtitles</a></b> \n"
-"            you contributed to <b><a href=\"http://%(domain)s%(video_url)s\">"
-"%(v)s</a></b> \n"
-"            were changed by <b><a href=\"http://%(domain)s%(user_url)s\">%(u)"
-"s</a></b>. \n"
-"            These changes went live immediately.  %(text_change)s of the "
-"text and\n"
+"            <b><a href=\"http://%(domain)s%(language_url)s\">%(lang)s subtitles</a></b> \n"
+"            you contributed to <b><a href=\"http://%(domain)s%(video_url)s\">%(v)s</a></b> \n"
+"            were changed by <b><a href=\"http://%(domain)s%(user_url)s\">%(u)s</a></b>. \n"
+"            These changes went live immediately.  %(text_change)s of the text and\n"
 "            %(time_change)s of the timing was changed.\n"
 "            "
 msgstr ""
@@ -5197,12 +5166,9 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"            <b><a href=\"http://%(domain)s%(language_url)s\">%(lang)s "
-"subtitles</a></b> \n"
-"            you contributed to <b><a href=\"http://%(domain)s%(video_url)s\">"
-"%(v)s</a></b> \n"
-"            were changed. These changes went live immediately. %(text_change)"
-"s of the text and \n"
+"            <b><a href=\"http://%(domain)s%(language_url)s\">%(lang)s subtitles</a></b> \n"
+"            you contributed to <b><a href=\"http://%(domain)s%(video_url)s\">%(v)s</a></b> \n"
+"            were changed. These changes went live immediately. %(text_change)s of the text and \n"
 "            %(time_change)s of the timing was changed.\n"
 "            "
 msgstr ""
@@ -5240,13 +5206,9 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"            <b><a href=\"http://%(domain)s%(language_url)s\">%(lang)s "
-"subtitles</a></b> \n"
-"            to video <b><a href=\"http://%(domain)s%(video_url)s\">%(v)s</"
-"a></b>\n"
-"            were changed by <b><a href=\"http://%(domain)s%(user_url)s\">%(u)"
-"s</a></b>. These changes went live immediately. %(change_percent)s of the "
-"timing was changed.  \n"
+"            <b><a href=\"http://%(domain)s%(language_url)s\">%(lang)s subtitles</a></b> \n"
+"            to video <b><a href=\"http://%(domain)s%(video_url)s\">%(v)s</a></b>\n"
+"            were changed by <b><a href=\"http://%(domain)s%(user_url)s\">%(u)s</a></b>. These changes went live immediately. %(change_percent)s of the timing was changed.  \n"
 "            "
 msgstr ""
 
@@ -5254,12 +5216,9 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"            <b><a href=\"http://%(domain)s%(language_url)s\">%(lang)s "
-"subtitles</a></b> \n"
-"            to video <b><a href=\"http://%(domain)s%(video_url)s\">%(v)s</"
-"a></b>\n"
-"            were changed. These changes went live immediately. %"
-"(change_percent)s of the timing was changed.             \n"
+"            <b><a href=\"http://%(domain)s%(language_url)s\">%(lang)s subtitles</a></b> \n"
+"            to video <b><a href=\"http://%(domain)s%(video_url)s\">%(v)s</a></b>\n"
+"            were changed. These changes went live immediately. %(change_percent)s of the timing was changed.             \n"
 "            "
 msgstr ""
 
@@ -5271,17 +5230,15 @@ msgstr "Benvolgut"
 #, python-format
 msgid ""
 "\n"
-"    Great news! <a href=\"http://%(domain)s%(user_url)s\">%(user)s</a> has "
-"just started a %(language)s \n"
-"    translation of your video <a href=\"http://%(domain)s%(video_url)s\">%"
-"(video)s</a>\n"
+"    Great news! <a href=\"http://%(domain)s%(user_url)s\">%(user)s</a> has just started a %(language)s \n"
+"    translation of your video <a href=\"http://%(domain)s%(video_url)s\">%(video)s</a>\n"
 "\t"
 msgstr ""
 
 #: templates/videos/email_start_notification.html:13
 msgid ""
-"You can review the translation and thank them for their contribution on this "
-"page:"
+"You can review the translation and thank them for their contribution on this"
+" page:"
 msgstr ""
 "Podeu revisar la traducció i agrair la seva contribució a la següent pàgina:"
 
@@ -5397,7 +5354,7 @@ msgstr ""
 
 #: templates/videos/history.html:148 templates/videos/video.html:99
 msgid "edit title"
-msgstr ""
+msgstr "editar títol"
 
 #: templates/videos/history.html:165 templates/videos/video.html:124
 #: templates/videos/video.html.py:153
@@ -5432,8 +5389,7 @@ msgstr "Descarregar subtítols"
 #: templates/videos/history.html:246
 msgid ""
 "\n"
-"                        The most recent revision for this language is blank, "
-"but there are older\n"
+"                        The most recent revision for this language is blank, but there are older\n"
 "                        revisions that contain subtitles.\n"
 "                        "
 msgstr ""
@@ -5535,8 +5491,8 @@ msgid ""
 "            differ significantly from the current revision.\n"
 "            "
 msgstr ""
-"Aquesta és una revisió antiga dels subtítols en  l'idioma %(lang)s per a \" %"
-"(video)s \", editat per %(user)s el %(date)s . Poden diferir substancial-"
+"Aquesta és una revisió antiga dels subtítols en  l'idioma %(lang)s per a \" "
+"%(video)s \", editat per %(user)s el %(date)s . Poden diferir substancial-"
 "ment de la versió actual."
 
 #: templates/videos/revision.html:98
@@ -5627,19 +5583,20 @@ msgstr "opcional: obtindre actualitzacions quant a Universal Subtitles"
 
 #: templates/videos/test_form_page.html:45
 msgid "Submit!"
-msgstr ""
+msgstr "Enviar!"
 
 #: templates/videos/test_form_page.html:67
 msgid "Simple Instructions"
-msgstr ""
+msgstr "Instruccions senzilles"
 
 #: templates/videos/test_form_page.html:73
 msgid "All tasks 2 & 3 are optional (but we recommend trying them all)."
 msgstr ""
+"Totes les tasques 2 i 3 són opcionals (però es recomana intentar-les) "
 
 #: templates/videos/test_form_page.html:74
 msgid "That’s it!"
-msgstr ""
+msgstr "Açò és tot!"
 
 #: templates/videos/video.html:75
 msgid ""
@@ -5680,19 +5637,19 @@ msgstr ""
 
 #: templates/videos/video_list.html:8
 msgid "All Submitted Videos"
-msgstr ""
+msgstr "Tots els vídeos enviats"
 
 #: templates/videos/video_list.html:13
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: templates/videos/video_list.html:15
 msgid "Pageloads"
-msgstr ""
+msgstr "Pageloads"
 
 #: templates/videos/video_list.html:19
 msgid "Subtitles Fetched"
-msgstr ""
+msgstr "Subtítols recuperats"
 
 #: templates/videos/video_list.html:23
 msgid "Subtitles and Translations"
@@ -5700,7 +5657,7 @@ msgstr ""
 
 #: templates/videos/video_list.html:44
 msgid "There are no videos."
-msgstr ""
+msgstr "No hi ha vídeos"
 
 #: templates/videos/volunteer.html:18
 #: templates/videos/volunteer_featured.html:32
@@ -6267,8 +6224,8 @@ msgstr ""
 #: utils/validators.py:9
 #, python-format
 msgid ""
-"Please keep filesize under %(required_size)s. Current filesize %"
-"(current_size)s"
+"Please keep filesize under %(required_size)s. Current filesize "
+"%(current_size)s"
 msgstr ""
 
 #: utils/forms/__init__.py:75
@@ -6277,10 +6234,12 @@ msgstr "Entreu adreces de correu electrònica vàlides separades per comes. "
 
 #: utils/forms/__init__.py:83
 msgid ""
-"Enter valid usernames separated by commas. Username can contain only a-z, A-"
-"Z and 0-9."
+"Enter valid usernames separated by commas. Username can contain only a-z, "
+"A-Z and 0-9."
 msgstr ""
 
 #: utils/templatetags/utils_tags.py:45
 msgid "more..."
 msgstr ""
+
+
