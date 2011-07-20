@@ -5,8 +5,8 @@
 {% block content %}
     <p style="font-size: 12px;">
         {% blocktrans with team as team_name and team.get_absolute_url|rmlocale as team_url %}
-            Please visit the <a href="http://{{ domain }}{{ team_url }}">{{ team_name }}</a> 
-            to see the new videos that need your help:
+            The <a href="http://{{ domain }}{{ team_url }}">{{ team_name }}</a> 
+            team has added new videos, and they need your help:
         {% endblocktrans %}
         <br/><br/>
         <ul>
@@ -17,9 +17,7 @@
             {% endfor %}
         </ul>
         <br/><br/>
-        {% trans "Or you can visit the team page to see the latest work" %}
-        <br/><br/>
-        <a href="http://{{ domain }}{{ team.get_absolute_url|rmlocale }}">{{ team }}</a>
+        {% trans "Thank you!" %}
         <br/><br/>
         {#<a href="http://{{ domain }}#">{% trans "Stop receiving new notifications when a new video is added." %}</a>#}
     </p>
