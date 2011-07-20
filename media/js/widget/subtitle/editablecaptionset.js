@@ -28,8 +28,10 @@ goog.provide('mirosubs.subtitle.EditableCaptionSet');
 /**
  * @constructor
  * @param {array.<object.<string, *>>} existingJsonCaptions No sort order necessary.
+ * @param {boolean=} opt_completed Only meaningful for non-dependent subs.
+ * @param {string=} opt_title Only meaningful for translations
  */
-mirosubs.subtitle.EditableCaptionSet = function(existingJsonCaptions)
+mirosubs.subtitle.EditableCaptionSet = function(existingJsonCaptions, opt_completed, opt_title)
 {
     goog.events.EventTarget.call(this);
     var that = this;
@@ -48,6 +50,8 @@ mirosubs.subtitle.EditableCaptionSet = function(existingJsonCaptions)
         this.captions_[i - 1].setNextCaption(this.captions_[i]);
         this.captions_[i].setPreviousCaption(this.captions_[i - 1]);
     }
+    this.completed = opt_completed;
+    this.title = opt_title;
 };
 goog.inherits(mirosubs.subtitle.EditableCaptionSet, goog.events.EventTarget);
 
