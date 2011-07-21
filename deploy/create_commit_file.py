@@ -1,6 +1,6 @@
 import os
 
-from utils.git_helpers import get_current_branch, get_current_commit_hash
+from deploy.git_helpers import get_current_branch, get_current_commit_hash
 
     
 def main():

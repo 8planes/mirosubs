@@ -42,7 +42,7 @@ except ImportError:
     raise ImportError, "The boto Python library is not installed."
 
 from apps.unisubs_compressor.management.commands.compile_media import get_cache_dir
-from utils.git_helpers import get_current_commit_hash
+from deploy.git_helpers import get_current_commit_hash
 class Command(BaseCommand):
 
     # Extra variables to avoid passing these around

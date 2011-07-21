@@ -21,7 +21,7 @@ import sys, os, shutil, subprocess, logging
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from utils.git_helpers import get_current_commit_hash
+from deploy.git_helpers import get_current_commit_hash
 
 
 
