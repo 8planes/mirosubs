@@ -71,7 +71,7 @@ class Command(BaseCommand):
         if os.path.exists(dir_path) is True:
             to_name = os.tempnam("/tmp", os.path.dirname(dir_path))
             shutil.move(dir_path, to_name )
-        os.mkdir(dir_path)
+        os.makedirs(dir_path)
         return dir_path
 
     def compile_css_bundle(self, bundle_name, bundle_type, files):
