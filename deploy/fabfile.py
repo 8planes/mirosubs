@@ -237,7 +237,6 @@ def update_web():
             with cd('{0}/mirosubs/deploy'.format(env.web_dir)):
                 run('. ../../env/bin/activate && pip install -q -r requirements.txt')
             run('{0} deploy/create_commit_file.py'.format(python_exe))
-            run('{0} manage.py update_compiled_urls --settings=unisubs_settings'.format(python_exe))
             run('touch deploy/unisubs.wsgi')
     if env.admin_dir is not None:
         env.host_string = ADMIN_HOST
@@ -295,10 +294,11 @@ def _update_static(dir):
                 python_exe, media_dir))
         run('{0} manage.py compile_statwidgetconfig {1} --settings=unisubs_settings'.format(
                 python_exe, media_dir))
-        run('{0} closure/compile.py'.format(python_exe))
         run('{0} manage.py compile_embed {1} --settings=unisubs_settings'.format(
                 python_exe, media_dir))
-
+        # we need to remove whatever was left on static-cache
+        static_cache_path = "./media/static-cache/*"
+        sudo("rm -fr {0}").format(static_cache_path)
         run('{0} manage.py  compile_media --settings=unisubs_settings'.format(python_exe))
         
 def update_static():

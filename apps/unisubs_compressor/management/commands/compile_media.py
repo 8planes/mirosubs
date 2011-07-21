@@ -16,7 +16,7 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-import sys, os, shutil, subprocess, logging
+import sys, os, shutil, subprocess, logging, time
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -69,9 +69,12 @@ class Command(BaseCommand):
     def create_cache_dir(self):
         dir_path = get_cache_dir()
         if os.path.exists(dir_path) is True:
-            to_name = os.tempnam("/tmp", os.path.dirname(dir_path))
+            # we need to move this to a unique place, since on some environments
+            # (namely dev) differene users with different permissions will compile
+            # (and therefore move the old artifac ).
+            to_name = os.path.join("/tmp", "static-%s-%s" % (get_current_commit_hash(), int(time.time()))) 
             shutil.move(dir_path, to_name )
-        os.mkdir(dir_path)
+        os.makedirs(dir_path)
         return dir_path
 
     def compile_css_bundle(self, bundle_name, bundle_type, files):

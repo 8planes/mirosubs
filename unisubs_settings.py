@@ -132,5 +132,5 @@ except ImportError:
 
 USE_BUNDLED_MEDIA = not DEBUG
 if USE_BUNDLED_MEDIA:
-    MEDIA_URL += LAST_COMMIT_GUID.split("/")[1] + "/"
+    MEDIA_URL += "%s/%s/" % (COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID.split("/")[1])
 
