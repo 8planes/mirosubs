@@ -128,7 +128,9 @@ mirosubs.widget.SubtitleDialogOpener.prototype.resumeEditing_ =
             if (result['response'] == 'ok') {
                 result['subtitles']['subtitles'] = 
                     savedSubtitles.CAPTION_SET.makeJsonSubs();
-                that.startEditingResponseHandler_(result, true);
+                that.startEditingResponseHandler_(
+                    result, true, 
+                    savedSubtitles.CAPTION_SET.wasForkedDuringEdits());
             }
             else {
                 // someone else stepped in front of us.
@@ -209,17 +211,21 @@ mirosubs.widget.SubtitleDialogOpener.prototype.saveInitialSubs_ = function(sessi
 };
 
 mirosubs.widget.SubtitleDialogOpener.prototype.startEditingResponseHandler_ = 
-    function(result, fromResuming)
+    function(result, fromResuming, opt_wasForkedDuringEditing)
 {
     this.showLoading_(false);
     if (result['can_edit']) {
         var sessionPK = result['session_pk'];
         var subtitles = mirosubs.widget.SubtitleState.fromJSON(
             result['subtitles']);
+        if (opt_wasForkedDuringEditing) {
+            subtitles.fork();
+        }
         var originalSubtitles = mirosubs.widget.SubtitleState.fromJSON(
             result['original_subtitles']);
         var captionSet = new mirosubs.subtitle.EditableCaptionSet(
-            subtitles.SUBTITLES, subtitles.IS_COMPLETE, subtitles.TITLE);
+            subtitles.SUBTITLES, subtitles.IS_COMPLETE, 
+            subtitles.TITLE, opt_wasForkedDuringEditing);
         if (!fromResuming) {
             this.saveInitialSubs_(sessionPK, captionSet);
         }

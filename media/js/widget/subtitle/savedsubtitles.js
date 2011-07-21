@@ -43,6 +43,7 @@ mirosubs.widget.SavedSubtitles.prototype.serialize = function() {
         { sessionPK: this.SESSION_PK,
           title: this.CAPTION_SET.title,
           isComplete: this.CAPTION_SET.completed,
+          forked: this.CAPTION_SET.wasForkedDuringEdits(),
           captionSet: this.CAPTION_SET.makeJsonSubs() });
 };
 
@@ -51,7 +52,8 @@ mirosubs.widget.SavedSubtitles.deserialize = function(json) {
     return new mirosubs.widget.SavedSubtitles(
         obj.sessionPK, 
         new mirosubs.subtitle.EditableCaptionSet(
-            obj.captionSet, obj.complete, obj.title));
+            obj.captionSet, obj.isComplete, obj.title, 
+            obj.forked));
 };
 
 mirosubs.widget.SavedSubtitles.saveInitial = function(savedSubs) {

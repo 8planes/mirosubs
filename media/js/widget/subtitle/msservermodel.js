@@ -46,7 +46,6 @@ mirosubs.subtitle.MSServerModel = function(
     this.initialized_ = false;
     this.finished_ = false;
     this.timerTickCount_ = 0;
-    this.forked_ = false;
     this.timer_ = new goog.Timer(
         (mirosubs.LOCK_EXPIRATION - 5) * 1000);
     this.logger_ = goog.debug.Logger.getLogger(
@@ -125,7 +124,6 @@ mirosubs.subtitle.MSServerModel.prototype.anySubtitlingWorkDone = function() {
  */
 mirosubs.subtitle.MSServerModel.prototype.fork = function(standardSubState) {
     this.captionSet_.fork(standardSubState);
-    this.forked_ = true;
     this.saveSubsLocally_();
 };
 
@@ -157,7 +155,7 @@ mirosubs.subtitle.MSServerModel.prototype.makeFinishArgs_ = function() {
         args['completed'] = this.captionSet_.completed;
         atLeastOneThingChanged = true;
     }
-    if (this.forked_) {
+    if (this.captionSet_.wasForkedDuringEdits()) {
         args['forked'] = true;
         // a fork alone isn't sufficient to trigger a save, 
         // so not setting atLeastOneThingChanged.

@@ -30,8 +30,11 @@ goog.provide('mirosubs.subtitle.EditableCaptionSet');
  * @param {array.<object.<string, *>>} existingJsonCaptions No sort order necessary.
  * @param {boolean=} opt_completed Only meaningful for non-dependent subs.
  * @param {string=} opt_title Only meaningful for translations
+ * @param {boolean=} opt_forkedDuringEdits This is a bit ugly, but this parameter should only be used 
+ *     when deserializing an EditableCaptionSet from memory after a finish failure. It means that 
+ *     during the failed editing session, the EditableCaptionSet got forked.
  */
-mirosubs.subtitle.EditableCaptionSet = function(existingJsonCaptions, opt_completed, opt_title)
+mirosubs.subtitle.EditableCaptionSet = function(existingJsonCaptions, opt_completed, opt_title, opt_forkedDuringEdits)
 {
     goog.events.EventTarget.call(this);
     var that = this;
@@ -52,6 +55,7 @@ mirosubs.subtitle.EditableCaptionSet = function(existingJsonCaptions, opt_comple
     }
     this.completed = opt_completed;
     this.title = opt_title;
+    this.forkedDuringEdits_ = !!opt_forkedDuringEdits;
 };
 goog.inherits(mirosubs.subtitle.EditableCaptionSet, goog.events.EventTarget);
 
@@ -293,13 +297,22 @@ mirosubs.subtitle.EditableCaptionSet.prototype.fork = function(originalSubtitleS
                 translatedSub.fork(origSub);
             }
         });
+    goog.array.sort(
+        this.captions_,
+        mirosubs.subtitle.EditableCaption.orderCompare);
+    this.forkedDuringEdits_ = true;
+};
+
+mirosubs.subtitle.EditableCaptionSet.prototype.wasForkedDuringEdits = function() {
+    return this.forkedDuringEdits_;
 };
 
 mirosubs.subtitle.EditableCaptionSet.prototype.makeMap = function() {
     var map = {};
-    goog.array.forEach(this.captions_, 
-                       function(c) {
-                           map[c.getCaptionID()] = c;
-                       });
+    goog.array.forEach(
+        this.captions_, 
+        function(c) {
+            map[c.getCaptionID()] = c;
+        });
     return map;
 };
