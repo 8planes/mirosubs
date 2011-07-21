@@ -69,7 +69,10 @@ class Command(BaseCommand):
     def create_cache_dir(self):
         dir_path = get_cache_dir()
         if os.path.exists(dir_path) is True:
-            to_name = os.tempnam("/tmp", os.path.dirname(dir_path))
+            # we need to move this to a unique place, since on some environments
+            # (namely dev) differene users with different permissions will compile
+            # (and therefore move the old artifac ).
+            to_name = os.path.join("/tmp", "static-%s-%s" % (get_current_commit_hash(), time.time())) 
             shutil.move(dir_path, to_name )
         os.makedirs(dir_path)
         return dir_path
