@@ -156,6 +156,7 @@ PREVIOUS_EMBED_JS_VERSIONS = []
 CSS_USE_COMPILED = True
 JS_USE_COMPILED = False
 
+USE_BUNDLED_MEDIA = not DEBUG
 
 COMPRESS_YUI_BINARY = "java -jar ./css-compression/yuicompressor-2.4.6.jar"
 COMPRESS_OUTPUT_DIRNAME = "static-cache"
@@ -450,7 +451,7 @@ LOCALE_INDEPENDENT_PATHS = (
     re.compile('^/api'),
     re.compile('^/jstest'),
     re.compile('^/sitemap.*.xml'),
-    re.compile('^/crossdomain.xml'),
+    #re.compile('^/crossdomain.xml'),
 )
 
 #Haystack configuration
@@ -515,9 +516,11 @@ GOOGLE_ANALYTICS_NUMBER = 'UA-163840-22'
 MIXPANEL_TOKEN = '44205f56e929f08b602ccc9b4605edc3'
 
 try:
-    from commit import LAST_COMMIT_GUID
-except ImportError:
-    LAST_COMMIT_GUID = ''
+    from deploy.git_helpers import get_current_commit_hash, get_current_branch
+    LAST_COMMIT_GUID = '%s/%s' % (get_current_branch(), get_current_commit_hash())
+    
+except:
+    LAST_COMMIT_GUID = ""
 
 AWS_ACCESS_KEY_ID = ''
 AWS_SECRET_ACCESS_KEY = ''
@@ -594,8 +597,42 @@ MEDIA_BUNDLES = {
             "css/mirosubs-widget.css",
 
          ),
-        }
+        },
+    "mirosubs-offsite-compiled":{
+        "type": "js",
+        "files": JS_OFFSITE,
+        },
 
+    "mirosubs-onsite-compiled":{
+        "type": "js",
+        "files": JS_ONSITE,
+     },
+     "mirosubs-widgetizer":{
+        "type": "js",
+        "files": ["config.js"] + JS_EXTENSION,
+     },
+    "mirosubs-widgetizer-debug":{
+        "type": "js",
+        "files": ["config.js" ] + JS_EXTENSION,
+        "debug": True,
+     },
+
+    "mirosubs-statwidget":{
+        "type": "js",
+        "closure_deps": "closure-stat-dependencies.js",
+        "include_flash_deps": False,
+        "files": [
+            'mirosubs.js',
+            'rpc.js',
+            'loadingdom.js',
+            'statwidget/statwidgetconfig.js',
+            'statwidget/statwidget.js'],
+     },
+
+    "mirosubs-api":{
+        "type": "js",
+        "files": ["config.js"] + JS_API,
+     },
 }
 
 

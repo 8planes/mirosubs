@@ -129,3 +129,8 @@ try:
     from settings_local import *
 except ImportError:
     pass
+
+USE_BUNDLED_MEDIA = not DEBUG
+if USE_BUNDLED_MEDIA:
+    MEDIA_URL += LAST_COMMIT_GUID.split("/")[1] + "/"
+

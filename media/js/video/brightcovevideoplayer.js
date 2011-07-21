@@ -242,7 +242,6 @@ mirosubs.video.BrightcoveVideoPlayer.prototype.getBufferedEnd = function(index) 
 
 mirosubs.video.BrightcoveVideoPlayer.prototype.getStartBytes_ = function() {
     return this.bcPlayerController_ ? this.bcPlayerController_['getVideoStartBytes']() : 0;
-    return this.bcPlayerController_ ? this.bcPlayerController_.getVideoBytesTotal() : 0;
 };
 
 mirosubs.video.BrightcoveVideoPlayer.prototype.getBytesTotal_ = function() {

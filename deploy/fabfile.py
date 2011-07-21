@@ -306,11 +306,9 @@ def update_static():
     if env.s3_bucket is not None:
         _update_static(env.static_dir)
         media_dir = '{0}/mirosubs/media/'.format(env.static_dir)
-        run('/usr/local/s3sync/s3sync.rb -r -p -v {0} {1}:'.format(
-                media_dir, env.s3_bucket))
+        run('{0} manage.py  send_to_s3 --settings=unisubs_settings'.format(python_exe))
     else:
         _update_static(env.web_dir)
-    
 
 def update():
     update_static()
