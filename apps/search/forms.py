@@ -41,6 +41,7 @@ class SearchForm(forms.Form):
             self.fields['langs'].choices = self._make_choices_from_faceting(langs_data)
         else:
             choices = list(get_simple_languages_list())
+            choices.insert(0, ('', _('All Languages')))
             self.fields['langs'].choices = choices
             self.fields['video_lang'].choices = choices
     
@@ -75,8 +76,9 @@ class SearchForm(forms.Form):
                 pass
 
         choices.sort(key=lambda item: item[-1], reverse=True)
-        
+        choices = list((item[0], item[1]) for item in choices)
         choices.insert(0, ('', _('All Languages')))
+
         return choices
     
     @classmethod
@@ -93,10 +95,10 @@ class SearchForm(forms.Form):
         
         #aplly filtering
         if video_language:
-            qs = qs.filter(video_language__exact=video_language)
+            qs = qs.filter(video_language__exact=LanguageField.prepare_lang(video_language))
         
         if langs:
-            qs = qs.filter(languages__exact=langs)
+            qs = qs.filter(languages=LanguageField.prepare_lang(langs))
         
         if ordering:
             qs = qs.order_by('-' + ordering)

@@ -118,8 +118,12 @@ body#watch h1 a {
 	padding: 12px;
 }
 
-#watch_search a#advanced_search #advanced_menu_closed {
+#watch_search #advanced_menu {
 	display: none;
+}
+
+#watch_search #advanced_menu.open {
+    display: block;    
 }
 
 #watch_search a:hover#advanced_search {
@@ -134,8 +138,7 @@ body#watch h1 a {
 	-webkit-border-top-right-radius: 5px;
 }
 
-#watch_search #advanced_menu_open {
-	display: block;
+#watch_search #advanced_menu {
 	background: #FFF;
 	width: 170px;
 	position: relative;
@@ -150,10 +153,10 @@ body#watch h1 a {
 	-webkit-box-shadow: 0 1px 3px #e5ebed;
 }
 
-#watch_search #advanced_menu_open .menu_item {
+#watch_search #advanced_menu .menu_item {
 }
 
-#watch_search #advanced_menu_open .menu_item label {
+#watch_search #advanced_menu .menu_item label {
 	font-size: 12px;
 	margin: 0;
 	padding: 0;
@@ -163,15 +166,15 @@ body#watch h1 a {
 	font-weight: bold;
 }
 
-#watch_search #advanced_menu_open .videos_in {
+#watch_search #advanced_menu .videos_in {
 	margin: -20px 0 15px 0;
 }
 
-#watch_search #advanced_menu_open .menu_item select {
+#watch_search #advanced_menu .menu_item select {
 	width: 170px;
 }
 
-#watch_search #advanced_menu_open button {
+#watch_search #advanced_menu button {
 	border: 1px #34454b solid;
 	background: -webkit-gradient(linear, left top, left bottom, from(#6e8b93), to(#566d75)) no-repeat;
 	background: -moz-linear-gradient(top,  #6e8b93,  #566d75) no-repeat;
@@ -188,7 +191,7 @@ body#watch h1 a {
 	margin: 5px 0 0 0;
 }
 
-#watch_search #advanced_menu_open button:hover {
+#watch_search #advanced_menu button:hover {
 	background: -webkit-gradient(linear, left top, left bottom, from(#7897a0), to(#607881)) no-repeat;
 	background: -moz-linear-gradient(top,  #7897a0,  #607881) no-repeat;
 	-webkit-box-shadow: 0 1px 1px #a1a1a1, inset 0 1px 0 #9ababf;
@@ -196,7 +199,7 @@ body#watch h1 a {
 	text-shadow: 0 -1px 0 #34454b;
 }
 
-#watch_search #advanced_menu_open button:active {
+#watch_search #advanced_menu button:active {
 	background: -webkit-gradient(linear, left bottom, left top, from(#7897a0), to(#607881)) no-repeat;
 	background: -moz-linear-gradient(bottom,  #7897a0,  #607881) no-repeat;
 	-webkit-box-shadow: 0 -1px 1px #a1a1a1, inset 0 -1px 0 #9ababf;
