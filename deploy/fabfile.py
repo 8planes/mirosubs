@@ -295,7 +295,6 @@ def _update_static(dir):
                 python_exe, media_dir))
         run('{0} manage.py compile_statwidgetconfig {1} --settings=unisubs_settings'.format(
                 python_exe, media_dir))
-        #run('{0} closure/compile.py'.format(python_exe))
         run('{0} manage.py compile_embed {1} --settings=unisubs_settings'.format(
                 python_exe, media_dir))
 
