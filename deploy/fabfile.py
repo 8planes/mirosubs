@@ -237,7 +237,6 @@ def update_web():
             with cd('{0}/mirosubs/deploy'.format(env.web_dir)):
                 run('. ../../env/bin/activate && pip install -q -r requirements.txt')
             run('{0} deploy/create_commit_file.py'.format(python_exe))
-            run('{0} manage.py update_compiled_urls --settings=unisubs_settings'.format(python_exe))
             run('touch deploy/unisubs.wsgi')
     if env.admin_dir is not None:
         env.host_string = ADMIN_HOST
