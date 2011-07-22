@@ -206,6 +206,7 @@ def _git_pull():
     run('git pull --rebase')
     run('chgrp pcf-web -R .git 2> /dev/null; /bin/true')
     run('chmod g+w -R .git 2> /dev/null; /bin/true')
+    run('{0} deploy/create_commit_file.py'.format(python_exe))
     _clear_permissions('.')
 
 def add_disabled():
@@ -236,7 +237,6 @@ def update_web():
             env.warn_only = False
             with cd('{0}/mirosubs/deploy'.format(env.web_dir)):
                 run('. ../../env/bin/activate && pip install -q -r requirements.txt')
-            run('{0} deploy/create_commit_file.py'.format(python_exe))
             run('touch deploy/unisubs.wsgi')
     if env.admin_dir is not None:
         env.host_string = ADMIN_HOST

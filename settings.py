@@ -515,10 +515,7 @@ EDIT_END_THRESHOLD = 120
 GOOGLE_ANALYTICS_NUMBER = 'UA-163840-22'
 MIXPANEL_TOKEN = '44205f56e929f08b602ccc9b4605edc3'
 
-# FIXME: this method of getting git info fails.
-#from deploy.git_helpers import get_guid
-#LAST_COMMIT_GUID = get_guid()
-LAST_COMMIT_GUID = ''
+from commit import LAST_COMMIT_GUID
 
 AWS_ACCESS_KEY_ID = ''
 AWS_SECRET_ACCESS_KEY = ''
