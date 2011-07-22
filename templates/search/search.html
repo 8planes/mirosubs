@@ -82,9 +82,11 @@
                     if (typeof data[value] != 'undefined'){
                         var $span = $this.find('span');
                         
-                        if ( ! $span.length){
+                        if ($span.length != 2){
                             $span = $('<span></span>');
                             $this.append($span);
+                        }else{
+                            $span = $span[1];
                         }
                         
                         $span.html('('+data[value]+')');
