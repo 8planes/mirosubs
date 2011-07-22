@@ -609,12 +609,16 @@ MEDIA_BUNDLES = {
      },
      "mirosubs-widgetizer":{
         "type": "js",
-        "files": ["config.js"] + JS_EXTENSION,
+        "files": ["config.js"] + JS_WIDGETIZER,
      },
     "mirosubs-widgetizer-debug":{
         "type": "js",
-        "files": ["config.js" ] + JS_EXTENSION,
+        "files": ["config.js" ] + JS_WIDGETIZER,
         "debug": True,
+     },
+    "mirosubs-extension":{
+        "type": "js",
+        "files": ["config.js" ] + JS_EXTENSION,
      },
 
     "mirosubs-statwidget":{
