@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-21 23:00-0500\n"
+"POT-Creation-Date: 2011-07-22 05:00-0500\n"
 "PO-Revision-Date: 2011-07-21 10:11+0000\n"
 "Last-Translator: unisubsapi <debert+pcf@gmail.com>\n"
 "Language-Team: Italian (http://www.transifex.net/projects/p/"
@@ -311,12 +311,12 @@ msgstr ""
 msgid "Lakota"
 msgstr ""
 
-#: apps/api/1_0/forms.py:54 apps/videos/forms.py:64 apps/videos/forms.py:85
-#: apps/videos/forms.py:266
+#: apps/api/1_0/forms.py:54 apps/videos/forms.py:63 apps/videos/forms.py:84
+#: apps/videos/forms.py:260
 msgid "Can not detect file encoding"
 msgstr "La codificazione del file non è identificabile"
 
-#: apps/api/1_0/forms.py:57 apps/videos/forms.py:87 apps/videos/forms.py:268
+#: apps/api/1_0/forms.py:57 apps/videos/forms.py:86 apps/videos/forms.py:262
 msgid "Incorrect subtitles format"
 msgstr "Sottotitoli in formato errato"
 
@@ -631,7 +631,7 @@ msgstr "Il video non esiste"
 msgid "Incorrect URL."
 msgstr "URL errato"
 
-#: apps/teams/forms.py:115 apps/videos/forms.py:113
+#: apps/teams/forms.py:115 apps/videos/forms.py:112
 #, python-format
 msgid ""
 "Universal Subtitles does not support that website or video format.\n"
@@ -734,7 +734,7 @@ msgstr "principi per la scelta dei video"
 msgid "publicly Visible?"
 msgstr "pubblicamente visibile?"
 
-#: apps/teams/models.py:81 templates/search/search.html:177
+#: apps/teams/models.py:81 templates/search/search.html:179
 #: templates/videos/featured_videos.html:52
 #: templates/videos/popular_videos.html:84
 #: templates/videos/volunteer_featured.html:52
@@ -940,31 +940,31 @@ msgstr "Qualcuno mi può aiutare a sottotitolare questi video? %(url)s"
 msgid "Email for alert"
 msgstr "Email per notifica"
 
-#: apps/videos/forms.py:55
+#: apps/videos/forms.py:54
 msgid "File should have txt format"
 msgstr "Il file dovrebbe avere il formato txt"
 
-#: apps/videos/forms.py:59 apps/videos/forms.py:77 apps/videos/forms.py:258
+#: apps/videos/forms.py:58 apps/videos/forms.py:76 apps/videos/forms.py:252
 msgid "File size should be less {0} kb"
 msgstr "Il file dovrebbe fare meno di {0} kb"
 
-#: apps/videos/forms.py:68
+#: apps/videos/forms.py:67
 msgid "Can't encode file. It should have utf8 encoding."
 msgstr "Il file non può essere codificato. Dovrebbe essere codificato in utf8."
 
-#: apps/videos/forms.py:80 apps/videos/forms.py:261
+#: apps/videos/forms.py:79 apps/videos/forms.py:255
 msgid "Incorrect format. Upload .srt, .ssa, .sbv or .xml (TTML  format)"
 msgstr "Formato errato. Carica .srt, .ssa, .sbv or .xml (formato TTML)"
 
-#: apps/videos/forms.py:124
+#: apps/videos/forms.py:123
 msgid "You have not permission add video URL for this video"
 msgstr "Non sei autorizzato ad aggiungere URL di video per questo video"
 
-#: apps/videos/forms.py:156
+#: apps/videos/forms.py:155
 msgid "Somebody is subtitling this video right now. Try later."
 msgstr "Qualcuno sta sottotitolando ora questo video. Riprova più tardi."
 
-#: apps/videos/forms.py:346
+#: apps/videos/forms.py:340
 #, python-format
 msgid ""
 "Please try again with a link to a video page. \n"
@@ -975,7 +975,7 @@ msgstr ""
 "                        <a href=\"mailto:%s\">Contattaci</a> se c'è un "
 "problema."
 
-#: apps/videos/forms.py:349
+#: apps/videos/forms.py:343
 #, python-format
 msgid ""
 "You must link to a video on a compatible site (like YouTube) or directly to "
@@ -992,27 +992,27 @@ msgstr ""
 "m4v\n"
 "                    <a href=\"mailto:%s\">Contattaci</a> se c'è un problema."
 
-#: apps/videos/forms.py:370
+#: apps/videos/forms.py:364
 msgid "Youtube usernames"
 msgstr "Nomi utenti YouTube"
 
-#: apps/videos/forms.py:370
+#: apps/videos/forms.py:364
 msgid "<span class=\"hint\">Enter usernames separated by comma.</span>"
 msgstr ""
 "<span class=\"hint\">Inserisci i nomi utenti separandoli con una virgola.</"
 "span>"
 
-#: apps/videos/forms.py:371
+#: apps/videos/forms.py:365
 msgid "Youtube page link."
 msgstr "link a pagina YouTube."
 
-#: apps/videos/forms.py:372
+#: apps/videos/forms.py:366
 msgid ""
 "<span class=\"hint\">For example: http://www.youtube.com/user/username</span>"
 msgstr ""
 "<span class=\"hint\">Ad esempio: http://www.youtube.com/user/username</span>"
 
-#: apps/videos/forms.py:373
+#: apps/videos/forms.py:367
 msgid ""
 "<span class=\"hint\">Supported: Youtube, Vimeo, Blip or Dailymotion. Only "
 "supported sites added.</span>"
@@ -1020,11 +1020,11 @@ msgstr ""
 "<span class=\"hint\">Ammessi: Youtube, Vimeo, Blip or Dailymotion. Soltanto "
 "i siti ammessi sono aggiunti.</span>"
 
-#: apps/videos/forms.py:374
+#: apps/videos/forms.py:368
 msgid "Save feed"
 msgstr "Salva il feed"
 
-#: apps/videos/forms.py:374
+#: apps/videos/forms.py:368
 msgid ""
 "<span class=\"hint checkbox_hint\">Choose this if you wish to add videos "
 "from this feed in the future. Only valid RSS feeds will be saved.</span>"
@@ -1033,7 +1033,7 @@ msgstr ""
 "video da questo feed in futuro. Soltanto i feed RSS validi verranno salvati."
 "</span>"
 
-#: apps/videos/forms.py:453
+#: apps/videos/forms.py:447
 msgid "captcha"
 msgstr "captcha"
 
@@ -1049,7 +1049,7 @@ msgstr "Sottotitoli richiamati"
 msgid "Widget views"
 msgstr "Visualizzazioni del widget"
 
-#: apps/videos/models.py:117 templates/videos/_video.html:24
+#: apps/videos/models.py:117 templates/videos/_video.html:20
 msgid "Views"
 msgstr "Visualizzazioni"
 
@@ -4165,7 +4165,7 @@ msgid "Enter valid email please."
 msgstr "Inserisci un indirizzo e-mail valido, per favore."
 
 #: templates/profiles/_select_language_dialog.html:4
-#: templates/search/search.html:180 templates/videos/featured_videos.html:55
+#: templates/search/search.html:182 templates/videos/featured_videos.html:55
 #: templates/videos/popular_videos.html:87
 #: templates/videos/volunteer_featured.html:55
 #: templates/videos/volunteer_popular.html:83
@@ -4510,15 +4510,15 @@ msgstr "Visualizzazioni (questo mese)"
 msgid "Plays (all time)"
 msgstr "Visualizzazioni (da sempre)"
 
-#: templates/search/search.html:112 templates/search/search.html.py:151
+#: templates/search/search.html:114 templates/search/search.html.py:153
 msgid "Search Videos"
 msgstr "Cerca tra i video"
 
-#: templates/search/search.html:114
+#: templates/search/search.html:116
 msgid "Search Results for"
 msgstr "Risultati della ricerca per"
 
-#: templates/search/search.html:147
+#: templates/search/search.html:149
 #, python-format
 msgid ""
 "\n"
@@ -4529,7 +4529,7 @@ msgstr ""
 "                Risultati della ricerca per %(query)s\n"
 "            "
 
-#: templates/search/search.html:175 templates/videos/featured_videos.html:50
+#: templates/search/search.html:177 templates/videos/featured_videos.html:50
 #: templates/videos/popular_videos.html:82
 #: templates/videos/volunteer_featured.html:50
 #: templates/videos/volunteer_popular.html:78
@@ -5519,7 +5519,11 @@ msgstr ""
 "Grazie per il caricamento. Ci vorrà circa un minuto affinché i tuoi "
 "sottotitoli appaiano."
 
-#: templates/videos/_video.html:31
+#: templates/videos/_video.html:20 templates/videos/_video_url_panel.html:29
+msgid "Added"
+msgstr "Aggiunto"
+
+#: templates/videos/_video.html:27
 #, python-format
 msgid ""
 "\n"
@@ -5599,10 +5603,6 @@ msgstr "Titolo/URL"
 #: templates/videos/_video_url_panel.html:26
 msgid "Format/Host"
 msgstr "Formato/Piattaforma"
-
-#: templates/videos/_video_url_panel.html:29
-msgid "Added"
-msgstr "Aggiunto"
 
 #: templates/videos/_video_url_panel.html:32
 msgid "Added by"

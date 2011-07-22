@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-21 23:08-0500\n"
+"POT-Creation-Date: 2011-07-22 05:06-0500\n"
 "PO-Revision-Date: 2011-07-21 10:11+0000\n"
 "Last-Translator: unisubsapi <debert+pcf@gmail.com>\n"
 "Language-Team: Catalan (http://www.transifex.net/projects/p/"
@@ -311,12 +311,12 @@ msgstr "Pashto"
 msgid "Lakota"
 msgstr ""
 
-#: apps/api/1_0/forms.py:54 apps/videos/forms.py:64 apps/videos/forms.py:85
-#: apps/videos/forms.py:266
+#: apps/api/1_0/forms.py:54 apps/videos/forms.py:63 apps/videos/forms.py:84
+#: apps/videos/forms.py:260
 msgid "Can not detect file encoding"
 msgstr "No es pot detectar la codificació de fitxers"
 
-#: apps/api/1_0/forms.py:57 apps/videos/forms.py:87 apps/videos/forms.py:268
+#: apps/api/1_0/forms.py:57 apps/videos/forms.py:86 apps/videos/forms.py:262
 msgid "Incorrect subtitles format"
 msgstr "Subtítols amb format incorrecte"
 
@@ -630,7 +630,7 @@ msgstr "El vídeo no existeix."
 msgid "Incorrect URL."
 msgstr "URL incorrecta."
 
-#: apps/teams/forms.py:115 apps/videos/forms.py:113
+#: apps/teams/forms.py:115 apps/videos/forms.py:112
 #, python-format
 msgid ""
 "Universal Subtitles does not support that website or video format.\n"
@@ -732,7 +732,7 @@ msgstr "política de vídeo"
 msgid "publicly Visible?"
 msgstr "Visible per als públics?"
 
-#: apps/teams/models.py:81 templates/search/search.html:177
+#: apps/teams/models.py:81 templates/search/search.html:179
 #: templates/videos/featured_videos.html:52
 #: templates/videos/popular_videos.html:84
 #: templates/videos/volunteer_featured.html:52
@@ -936,31 +936,31 @@ msgstr "Pot algú ajudar-me subtitulant aquest vídeo? %(url)s"
 msgid "Email for alert"
 msgstr "Correu electrònic d'alertes"
 
-#: apps/videos/forms.py:55
+#: apps/videos/forms.py:54
 msgid "File should have txt format"
 msgstr "El fitxer hauria de ser un txt"
 
-#: apps/videos/forms.py:59 apps/videos/forms.py:77 apps/videos/forms.py:258
+#: apps/videos/forms.py:58 apps/videos/forms.py:76 apps/videos/forms.py:252
 msgid "File size should be less {0} kb"
 msgstr "La grandària del fitxer a de ser menor de {0} kb"
 
-#: apps/videos/forms.py:68
+#: apps/videos/forms.py:67
 msgid "Can't encode file. It should have utf8 encoding."
 msgstr "No es pot codificar el fitxer. Hauria de estar codificat amb UTF-8."
 
-#: apps/videos/forms.py:80 apps/videos/forms.py:261
+#: apps/videos/forms.py:79 apps/videos/forms.py:255
 msgid "Incorrect format. Upload .srt, .ssa, .sbv or .xml (TTML  format)"
 msgstr "Format incorrecte. Pugeu .srt, .ssa, .sbv or .xml (format  TTML)"
 
-#: apps/videos/forms.py:124
+#: apps/videos/forms.py:123
 msgid "You have not permission add video URL for this video"
 msgstr "No teniu permís per afegir URL de vídeo per a aquest vídeo"
 
-#: apps/videos/forms.py:156
+#: apps/videos/forms.py:155
 msgid "Somebody is subtitling this video right now. Try later."
 msgstr "Algú està subtitulant aquest video ara. Proveu-ho més tard"
 
-#: apps/videos/forms.py:346
+#: apps/videos/forms.py:340
 #, python-format
 msgid ""
 "Please try again with a link to a video page. \n"
@@ -970,7 +970,7 @@ msgstr ""
 "Sisplau, torneu-ho a intentar de nou amb un enllaç a una pàgina de vídeo. <a "
 "href=\"mailto:%s\">Contacteu amb nosaltres</a>  si teniu problemes."
 
-#: apps/videos/forms.py:349
+#: apps/videos/forms.py:343
 #, python-format
 msgid ""
 "You must link to a video on a compatible site (like YouTube) or directly to "
@@ -985,26 +985,26 @@ msgstr ""
 "per exemple: http://mysite.com/myvideo.ogg o http://mysite.com/myipadvideo."
 "m4v <a href=\"mailto:%s\">Contacteu amb nosaltres</a> si hi ha cap problema."
 
-#: apps/videos/forms.py:370
+#: apps/videos/forms.py:364
 msgid "Youtube usernames"
 msgstr "Nom d'usuari de Youtube"
 
-#: apps/videos/forms.py:370
+#: apps/videos/forms.py:364
 msgid "<span class=\"hint\">Enter usernames separated by comma.</span>"
 msgstr ""
 "<span class=\"hint\">Introduïu els noms d'usuari separats per comes.</span>"
 
-#: apps/videos/forms.py:371
+#: apps/videos/forms.py:365
 msgid "Youtube page link."
 msgstr "Enllaç de la pàgina de Youtube."
 
-#: apps/videos/forms.py:372
+#: apps/videos/forms.py:366
 msgid ""
 "<span class=\"hint\">For example: http://www.youtube.com/user/username</span>"
 msgstr ""
 "<span class=\"hint\">Per Exemple: http://www.youtube.com/user/usuari</span>"
 
-#: apps/videos/forms.py:373
+#: apps/videos/forms.py:367
 msgid ""
 "<span class=\"hint\">Supported: Youtube, Vimeo, Blip or Dailymotion. Only "
 "supported sites added.</span>"
@@ -1012,11 +1012,11 @@ msgstr ""
 "<span class=\"hint\">Suportats: Youtube, Vimeo, Blip o Dailymotion. Suportat "
 "només els llocs afegits.</span>"
 
-#: apps/videos/forms.py:374
+#: apps/videos/forms.py:368
 msgid "Save feed"
 msgstr "Desar resposta"
 
-#: apps/videos/forms.py:374
+#: apps/videos/forms.py:368
 msgid ""
 "<span class=\"hint checkbox_hint\">Choose this if you wish to add videos "
 "from this feed in the future. Only valid RSS feeds will be saved.</span>"
@@ -1024,7 +1024,7 @@ msgstr ""
 "<span class=\"hint checkbox_hint\">Elegiu aquesta opció si desitgeu afegir "
 "vídeos d'aquest canal en un futur. Només els RSS vàlids seran desats</span>"
 
-#: apps/videos/forms.py:453
+#: apps/videos/forms.py:447
 msgid "captcha"
 msgstr "codi de la imatge"
 
@@ -1040,7 +1040,7 @@ msgstr "Sub-recerca"
 msgid "Widget views"
 msgstr "Vistes del Giny"
 
-#: apps/videos/models.py:117 templates/videos/_video.html:24
+#: apps/videos/models.py:117 templates/videos/_video.html:20
 msgid "Views"
 msgstr "Vistes"
 
@@ -4064,7 +4064,7 @@ msgid "Enter valid email please."
 msgstr "Introduïu un correu electrònic vàlid sisplau."
 
 #: templates/profiles/_select_language_dialog.html:4
-#: templates/search/search.html:180 templates/videos/featured_videos.html:55
+#: templates/search/search.html:182 templates/videos/featured_videos.html:55
 #: templates/videos/popular_videos.html:87
 #: templates/videos/volunteer_featured.html:55
 #: templates/videos/volunteer_popular.html:83
@@ -4408,15 +4408,15 @@ msgstr "Reproduïts (aquesta mes)"
 msgid "Plays (all time)"
 msgstr "Reproduïts (Total)"
 
-#: templates/search/search.html:112 templates/search/search.html.py:151
+#: templates/search/search.html:114 templates/search/search.html.py:153
 msgid "Search Videos"
 msgstr "Cercar vídeos"
 
-#: templates/search/search.html:114
+#: templates/search/search.html:116
 msgid "Search Results for"
 msgstr "Cercar resultats per a"
 
-#: templates/search/search.html:147
+#: templates/search/search.html:149
 #, python-format
 msgid ""
 "\n"
@@ -4426,7 +4426,7 @@ msgstr ""
 "\n"
 "Cercar resultats per a %(query)s"
 
-#: templates/search/search.html:175 templates/videos/featured_videos.html:50
+#: templates/search/search.html:177 templates/videos/featured_videos.html:50
 #: templates/videos/popular_videos.html:82
 #: templates/videos/volunteer_featured.html:50
 #: templates/videos/volunteer_popular.html:78
@@ -5394,7 +5394,11 @@ msgid ""
 msgstr ""
 "Gràcies per pujar. Trigarà uns minuts fins que apareguen els subtítols."
 
-#: templates/videos/_video.html:31
+#: templates/videos/_video.html:20 templates/videos/_video_url_panel.html:29
+msgid "Added"
+msgstr "Afegit"
+
+#: templates/videos/_video.html:27
 #, python-format
 msgid ""
 "\n"
@@ -5471,10 +5475,6 @@ msgstr "Títol/URL"
 #: templates/videos/_video_url_panel.html:26
 msgid "Format/Host"
 msgstr "Format/Anfitrió"
-
-#: templates/videos/_video_url_panel.html:29
-msgid "Added"
-msgstr "Afegit"
 
 #: templates/videos/_video_url_panel.html:32
 msgid "Added by"
