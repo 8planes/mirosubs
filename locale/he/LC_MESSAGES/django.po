@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-22 05:01-0500\n"
+"POT-Creation-Date: 2011-07-22 11:01-0500\n"
 "PO-Revision-Date: 2011-07-21 10:11+0000\n"
 "Last-Translator: unisubsapi <debert+pcf@gmail.com>\n"
 "Language-Team: Hebrew (http://www.transifex.net/projects/p/"
@@ -714,7 +714,7 @@ msgstr ""
 msgid "publicly Visible?"
 msgstr ""
 
-#: apps/teams/models.py:81 templates/search/search.html:179
+#: apps/teams/models.py:81 templates/search/search.html:145
 #: templates/videos/featured_videos.html:52
 #: templates/videos/popular_videos.html:84
 #: templates/videos/volunteer_featured.html:52
@@ -3358,7 +3358,7 @@ msgid "Enter valid email please."
 msgstr ""
 
 #: templates/profiles/_select_language_dialog.html:4
-#: templates/search/search.html:182 templates/videos/featured_videos.html:55
+#: templates/search/search.html:148 templates/videos/featured_videos.html:55
 #: templates/videos/popular_videos.html:87
 #: templates/videos/volunteer_featured.html:55
 #: templates/videos/volunteer_popular.html:83
@@ -3682,15 +3682,15 @@ msgstr ""
 msgid "Plays (all time)"
 msgstr ""
 
-#: templates/search/search.html:114 templates/search/search.html.py:153
+#: templates/search/search.html:86 templates/search/search.html.py:119
 msgid "Search Videos"
 msgstr ""
 
-#: templates/search/search.html:116
+#: templates/search/search.html:88
 msgid "Search Results for"
 msgstr ""
 
-#: templates/search/search.html:149
+#: templates/search/search.html:115
 #, python-format
 msgid ""
 "\n"
@@ -3698,7 +3698,7 @@ msgid ""
 "            "
 msgstr ""
 
-#: templates/search/search.html:177 templates/videos/featured_videos.html:50
+#: templates/search/search.html:143 templates/videos/featured_videos.html:50
 #: templates/videos/popular_videos.html:82
 #: templates/videos/volunteer_featured.html:50
 #: templates/videos/volunteer_popular.html:78
