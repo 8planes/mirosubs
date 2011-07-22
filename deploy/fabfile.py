@@ -206,7 +206,7 @@ def _git_pull():
     run('git pull --rebase')
     run('chgrp pcf-web -R .git 2> /dev/null; /bin/true')
     run('chmod g+w -R .git 2> /dev/null; /bin/true')
-    run('{0} deploy/create_commit_file.py'.format(python_exe))
+    run('pyton deploy/create_commit_file.py')
     _clear_permissions('.')
 
 def add_disabled():
