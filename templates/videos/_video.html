@@ -16,11 +16,7 @@
         </a>
         <span class="views">
             <strong>
-                {% if video_views %}
-                    {{ video_views }}
-                {% else %}
-                    {{ video.total_views }}
-                {% endif %}
+                {{ video_views }}
             </strong> {% trans "Views" %}
         </span>
         <span class="languages">
