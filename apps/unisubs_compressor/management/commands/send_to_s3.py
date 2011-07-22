@@ -19,7 +19,6 @@ AWS_BUCKET_NAME = ''
 
 For example it wil sync anything in
 MEDIA_ROOT/static-cache/0234dsd/*
-/bucket-name/0234dsd/
 
 
 """
@@ -70,7 +69,7 @@ class Command(BaseCommand):
             action='store_true', dest='gzip', default=True,
             help="Enables gzipping CSS and Javascript files."),
         optparse.make_option('--expires',
-            action='store_true', dest='expires', default=False,
+            action='store_true', dest='expires', default=True,
             help="Enables setting a far future expires header."),
         optparse.make_option('--force',
             action='store_true', dest='force', default=True,
@@ -111,8 +110,7 @@ class Command(BaseCommand):
         self.verbosity = int(options.get('verbosity'))
         self.prefix = options.get('prefix')
         if bool(self.prefix) is False:
-            self.prefix = get_current_commit_hash()
-
+            self.prefix = os.path.join(settings.COMPRESS_OUTPUT_DIRNAME, get_current_commit_hash())
         self.do_gzip = options.get('gzip')
         self.do_expires = options.get('expires')
         self.do_force = options.get('force')
@@ -144,8 +142,7 @@ class Command(BaseCommand):
             fname = os.path.basename(item)
             base_dir =os.path.join(settings.MEDIA_ROOT, os.path.dirname( item))
             full_path = os.path.join(settings.MEDIA_ROOT, item)
-            print fname, base_dir, full_path, outside_dir, 
-            self.upload_one(bucket, key, self.AWS_BUCKET_NAME, outside_dir, full_path, item)
+            self.upload_one(bucket, key, self.AWS_BUCKET_NAME, outside_dir, full_path, item, do_expires=False)
         self.prefix = old_prefix    
             
 
@@ -191,9 +188,9 @@ class Command(BaseCommand):
             filename = os.path.join(dirname, file)
             for p in self.FILTER_LIST:
                 if p.match(file) or p.match(filename):
-                    print "not uplodaing! filterdd", file
+                    print "not uplodaing! filtering ", file
                     continue # Skip files we don't want to sync
-            continue
+
             if os.path.isdir(filename):
                 continue # Don't try to upload directories
 
@@ -221,11 +218,9 @@ class Command(BaseCommand):
                     
 
                     
-    def upload_one(self, bucket, key, bucket_name, root_dir , filename, file_key):
+    def upload_one(self, bucket, key, bucket_name, root_dir , filename, file_key, do_expires=True):
         if self.verbosity > 0:
             print "Uploading %s..." % (file_key)
-
-
         headers = {}
         content_type = mimetypes.guess_type(filename)[0]
         if content_type:
@@ -242,7 +237,7 @@ class Command(BaseCommand):
                 if self.verbosity > 1:
                     print "\tgzipped: %dk to %dk" % \
                         (file_size/1024, len(filedata)/1024)
-        if self.do_expires :
+        if self.do_expires and do_expires :
             # HTTP/1.0
             headers['Expires'] = '%s GMT' % (email.Utils.formatdate(
                 time.mktime((datetime.datetime.now() +
@@ -252,6 +247,7 @@ class Command(BaseCommand):
             if self.verbosity > 1:
                 print "\texpires: %s" % (headers['Expires'])
                 print "\tcache-control: %s" % (headers['Cache-Control'])
+
 
         try:
             key.name = file_key
