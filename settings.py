@@ -638,9 +638,3 @@ MEDIA_BUNDLES = {
         "files": ["config.js"] + JS_API,
      },
 }
-
-
-try:
-    from mediabundles_list import MEDIA_BUNDLE_URLS
-except ImportError:
-    MEDIA_BUNDLE_URLS = {} 
