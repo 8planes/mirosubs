@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-21 23:01-0500\n"
+"POT-Creation-Date: 2011-07-22 05:01-0500\n"
 "PO-Revision-Date: 2011-07-21 10:11+0000\n"
 "Last-Translator: unisubsapi <debert+pcf@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.net/projects/p/"
@@ -310,12 +310,12 @@ msgstr "파슈토어"
 msgid "Lakota"
 msgstr ""
 
-#: apps/api/1_0/forms.py:54 apps/videos/forms.py:64 apps/videos/forms.py:85
-#: apps/videos/forms.py:266
+#: apps/api/1_0/forms.py:54 apps/videos/forms.py:63 apps/videos/forms.py:84
+#: apps/videos/forms.py:260
 msgid "Can not detect file encoding"
 msgstr "파일 인코딩을 찾을 수 없음"
 
-#: apps/api/1_0/forms.py:57 apps/videos/forms.py:87 apps/videos/forms.py:268
+#: apps/api/1_0/forms.py:57 apps/videos/forms.py:86 apps/videos/forms.py:262
 msgid "Incorrect subtitles format"
 msgstr "잘못된 자막 포맷입니다."
 
@@ -625,7 +625,7 @@ msgstr "동영상이 존재하지 않습니다."
 msgid "Incorrect URL."
 msgstr "잘못된 URL입니다."
 
-#: apps/teams/forms.py:115 apps/videos/forms.py:113
+#: apps/teams/forms.py:115 apps/videos/forms.py:112
 #, python-format
 msgid ""
 "Universal Subtitles does not support that website or video format.\n"
@@ -727,7 +727,7 @@ msgstr "동영상 정책"
 msgid "publicly Visible?"
 msgstr "공개?"
 
-#: apps/teams/models.py:81 templates/search/search.html:177
+#: apps/teams/models.py:81 templates/search/search.html:179
 #: templates/videos/featured_videos.html:52
 #: templates/videos/popular_videos.html:84
 #: templates/videos/volunteer_featured.html:52
@@ -932,32 +932,32 @@ msgstr "누군가 이 비디오에 자막 만드는 것을 도와줄 수 있을�
 msgid "Email for alert"
 msgstr "경보에 대한 이메일"
 
-#: apps/videos/forms.py:55
+#: apps/videos/forms.py:54
 msgid "File should have txt format"
 msgstr "파일은 txt 포맷이어야 합니다."
 
-#: apps/videos/forms.py:59 apps/videos/forms.py:77 apps/videos/forms.py:258
+#: apps/videos/forms.py:58 apps/videos/forms.py:76 apps/videos/forms.py:252
 msgid "File size should be less {0} kb"
 msgstr "파일 크기는 {0}kb보다 작아야 합니다."
 
-#: apps/videos/forms.py:68
+#: apps/videos/forms.py:67
 msgid "Can't encode file. It should have utf8 encoding."
 msgstr "파일을 인코딩할 수 없습니다. utf8 인코딩이 있어야 합니다."
 
-#: apps/videos/forms.py:80 apps/videos/forms.py:261
+#: apps/videos/forms.py:79 apps/videos/forms.py:255
 msgid "Incorrect format. Upload .srt, .ssa, .sbv or .xml (TTML  format)"
 msgstr "잘못된 포맷입니다. .srt, .ssa, .sbv .xml(TTML 포맷)을 업로드 하세요. "
 
-#: apps/videos/forms.py:124
+#: apps/videos/forms.py:123
 msgid "You have not permission add video URL for this video"
 msgstr "당신은 이 비디오에 대한 동영상 URL을 추가할 권한이 없습니다."
 
-#: apps/videos/forms.py:156
+#: apps/videos/forms.py:155
 msgid "Somebody is subtitling this video right now. Try later."
 msgstr ""
 "누군가가 지금 이 비디오에 자막을 만들고 있습니다. 나중에 다시 시도해 주세요."
 
-#: apps/videos/forms.py:346
+#: apps/videos/forms.py:340
 #, python-format
 msgid ""
 "Please try again with a link to a video page. \n"
@@ -967,7 +967,7 @@ msgstr ""
 "비디오 페이지에 대한 링크와 함께 다시 시도해 주십시오. 만약 문제가 있다면 <a "
 "href=\"mailto:%s\">문의해 주세요.</a> "
 
-#: apps/videos/forms.py:349
+#: apps/videos/forms.py:343
 #, python-format
 msgid ""
 "You must link to a video on a compatible site (like YouTube) or directly to "
@@ -982,26 +982,26 @@ msgstr ""
 "com/myvideo.ogg 또는 http://mysite.com/myipadvideo.m4v\n"
 "만약 문제가 있다면 <a href=\"mailto:%s\">문의해 주세요.</a> "
 
-#: apps/videos/forms.py:370
+#: apps/videos/forms.py:364
 msgid "Youtube usernames"
 msgstr "YouTube 사용자 이름"
 
-#: apps/videos/forms.py:370
+#: apps/videos/forms.py:364
 msgid "<span class=\"hint\">Enter usernames separated by comma.</span>"
 msgstr "<span class=\"hint\">쉼표로 나눠서 사용자 이름을 적어주세요.</span>"
 
-#: apps/videos/forms.py:371
+#: apps/videos/forms.py:365
 msgid "Youtube page link."
 msgstr "Youtube 페이지 링크"
 
-#: apps/videos/forms.py:372
+#: apps/videos/forms.py:366
 msgid ""
 "<span class=\"hint\">For example: http://www.youtube.com/user/username</span>"
 msgstr ""
 "<span class=\"hint\">예를 들면 다음과 같습니다. http://www.youtube.com/user/"
 "username</span>"
 
-#: apps/videos/forms.py:373
+#: apps/videos/forms.py:367
 msgid ""
 "<span class=\"hint\">Supported: Youtube, Vimeo, Blip or Dailymotion. Only "
 "supported sites added.</span>"
@@ -1009,11 +1009,11 @@ msgstr ""
 "<span class=\"hint\">지원 : Youtube, Vimeo, Blip 또는 Dailymotion. 지원하는 "
 "사이트만이 추가됩니다. </span>"
 
-#: apps/videos/forms.py:374
+#: apps/videos/forms.py:368
 msgid "Save feed"
 msgstr "피드 저장"
 
-#: apps/videos/forms.py:374
+#: apps/videos/forms.py:368
 msgid ""
 "<span class=\"hint checkbox_hint\">Choose this if you wish to add videos "
 "from this feed in the future. Only valid RSS feeds will be saved.</span>"
@@ -1021,7 +1021,7 @@ msgstr ""
 "<span class=\"hint checkbox_hint\">나중에 이 피드에서 동영상을 추가하려는 경"
 "우 이것을 선택합니다. 유효한 RSS 피드만이 저장됩니다.</span>"
 
-#: apps/videos/forms.py:453
+#: apps/videos/forms.py:447
 msgid "captcha"
 msgstr ""
 
@@ -1037,7 +1037,7 @@ msgstr ""
 msgid "Widget views"
 msgstr ""
 
-#: apps/videos/models.py:117 templates/videos/_video.html:24
+#: apps/videos/models.py:117 templates/videos/_video.html:20
 msgid "Views"
 msgstr ""
 
@@ -3762,7 +3762,7 @@ msgid "Enter valid email please."
 msgstr "유효한 이메일을 입력하세요."
 
 #: templates/profiles/_select_language_dialog.html:4
-#: templates/search/search.html:180 templates/videos/featured_videos.html:55
+#: templates/search/search.html:182 templates/videos/featured_videos.html:55
 #: templates/videos/popular_videos.html:87
 #: templates/videos/volunteer_featured.html:55
 #: templates/videos/volunteer_popular.html:83
@@ -4095,15 +4095,15 @@ msgstr ""
 msgid "Plays (all time)"
 msgstr ""
 
-#: templates/search/search.html:112 templates/search/search.html.py:151
+#: templates/search/search.html:114 templates/search/search.html.py:153
 msgid "Search Videos"
 msgstr ""
 
-#: templates/search/search.html:114
+#: templates/search/search.html:116
 msgid "Search Results for"
 msgstr ""
 
-#: templates/search/search.html:147
+#: templates/search/search.html:149
 #, python-format
 msgid ""
 "\n"
@@ -4111,7 +4111,7 @@ msgid ""
 "            "
 msgstr ""
 
-#: templates/search/search.html:175 templates/videos/featured_videos.html:50
+#: templates/search/search.html:177 templates/videos/featured_videos.html:50
 #: templates/videos/popular_videos.html:82
 #: templates/videos/volunteer_featured.html:50
 #: templates/videos/volunteer_popular.html:78
@@ -5047,7 +5047,11 @@ msgid ""
 "appear."
 msgstr ""
 
-#: templates/videos/_video.html:31
+#: templates/videos/_video.html:20 templates/videos/_video_url_panel.html:29
+msgid "Added"
+msgstr "추가됨"
+
+#: templates/videos/_video.html:27
 #, python-format
 msgid ""
 "\n"
@@ -5110,10 +5114,6 @@ msgstr "제목 / URL"
 #: templates/videos/_video_url_panel.html:26
 msgid "Format/Host"
 msgstr "형식 / 호스트"
-
-#: templates/videos/_video_url_panel.html:29
-msgid "Added"
-msgstr "추가됨"
 
 #: templates/videos/_video_url_panel.html:32
 msgid "Added by"

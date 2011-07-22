@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-21 23:07-0500\n"
+"POT-Creation-Date: 2011-07-22 05:05-0500\n"
 "PO-Revision-Date: 2011-07-21 10:11+0000\n"
 "Last-Translator: unisubsapi <debert+pcf@gmail.com>\n"
 "Language-Team: Hungarian (http://www.transifex.net/projects/p/"
@@ -310,12 +310,12 @@ msgstr ""
 msgid "Lakota"
 msgstr ""
 
-#: apps/api/1_0/forms.py:54 apps/videos/forms.py:64 apps/videos/forms.py:85
-#: apps/videos/forms.py:266
+#: apps/api/1_0/forms.py:54 apps/videos/forms.py:63 apps/videos/forms.py:84
+#: apps/videos/forms.py:260
 msgid "Can not detect file encoding"
 msgstr ""
 
-#: apps/api/1_0/forms.py:57 apps/videos/forms.py:87 apps/videos/forms.py:268
+#: apps/api/1_0/forms.py:57 apps/videos/forms.py:86 apps/videos/forms.py:262
 msgid "Incorrect subtitles format"
 msgstr "Hibás feliratformátum."
 
@@ -623,7 +623,7 @@ msgstr ""
 msgid "Incorrect URL."
 msgstr ""
 
-#: apps/teams/forms.py:115 apps/videos/forms.py:113
+#: apps/teams/forms.py:115 apps/videos/forms.py:112
 #, python-format
 msgid ""
 "Universal Subtitles does not support that website or video format.\n"
@@ -718,7 +718,7 @@ msgstr ""
 msgid "publicly Visible?"
 msgstr ""
 
-#: apps/teams/models.py:81 templates/search/search.html:177
+#: apps/teams/models.py:81 templates/search/search.html:179
 #: templates/videos/featured_videos.html:52
 #: templates/videos/popular_videos.html:84
 #: templates/videos/volunteer_featured.html:52
@@ -918,31 +918,31 @@ msgstr ""
 msgid "Email for alert"
 msgstr ""
 
-#: apps/videos/forms.py:55
+#: apps/videos/forms.py:54
 msgid "File should have txt format"
 msgstr ""
 
-#: apps/videos/forms.py:59 apps/videos/forms.py:77 apps/videos/forms.py:258
+#: apps/videos/forms.py:58 apps/videos/forms.py:76 apps/videos/forms.py:252
 msgid "File size should be less {0} kb"
 msgstr ""
 
-#: apps/videos/forms.py:68
+#: apps/videos/forms.py:67
 msgid "Can't encode file. It should have utf8 encoding."
 msgstr ""
 
-#: apps/videos/forms.py:80 apps/videos/forms.py:261
+#: apps/videos/forms.py:79 apps/videos/forms.py:255
 msgid "Incorrect format. Upload .srt, .ssa, .sbv or .xml (TTML  format)"
 msgstr ""
 
-#: apps/videos/forms.py:124
+#: apps/videos/forms.py:123
 msgid "You have not permission add video URL for this video"
 msgstr ""
 
-#: apps/videos/forms.py:156
+#: apps/videos/forms.py:155
 msgid "Somebody is subtitling this video right now. Try later."
 msgstr "Valaki most feliratozza ezt a videót. Próbálkozz később."
 
-#: apps/videos/forms.py:346
+#: apps/videos/forms.py:340
 #, python-format
 msgid ""
 "Please try again with a link to a video page. \n"
@@ -950,7 +950,7 @@ msgid ""
 "problem."
 msgstr ""
 
-#: apps/videos/forms.py:349
+#: apps/videos/forms.py:343
 #, python-format
 msgid ""
 "You must link to a video on a compatible site (like YouTube) or directly to "
@@ -961,40 +961,40 @@ msgid ""
 "problem."
 msgstr ""
 
-#: apps/videos/forms.py:370
+#: apps/videos/forms.py:364
 msgid "Youtube usernames"
 msgstr ""
 
-#: apps/videos/forms.py:370
+#: apps/videos/forms.py:364
 msgid "<span class=\"hint\">Enter usernames separated by comma.</span>"
 msgstr ""
 
-#: apps/videos/forms.py:371
+#: apps/videos/forms.py:365
 msgid "Youtube page link."
 msgstr ""
 
-#: apps/videos/forms.py:372
+#: apps/videos/forms.py:366
 msgid ""
 "<span class=\"hint\">For example: http://www.youtube.com/user/username</span>"
 msgstr ""
 
-#: apps/videos/forms.py:373
+#: apps/videos/forms.py:367
 msgid ""
 "<span class=\"hint\">Supported: Youtube, Vimeo, Blip or Dailymotion. Only "
 "supported sites added.</span>"
 msgstr ""
 
-#: apps/videos/forms.py:374
+#: apps/videos/forms.py:368
 msgid "Save feed"
 msgstr ""
 
-#: apps/videos/forms.py:374
+#: apps/videos/forms.py:368
 msgid ""
 "<span class=\"hint checkbox_hint\">Choose this if you wish to add videos "
 "from this feed in the future. Only valid RSS feeds will be saved.</span>"
 msgstr ""
 
-#: apps/videos/forms.py:453
+#: apps/videos/forms.py:447
 msgid "captcha"
 msgstr ""
 
@@ -1010,7 +1010,7 @@ msgstr ""
 msgid "Widget views"
 msgstr ""
 
-#: apps/videos/models.py:117 templates/videos/_video.html:24
+#: apps/videos/models.py:117 templates/videos/_video.html:20
 msgid "Views"
 msgstr ""
 
@@ -3363,7 +3363,7 @@ msgid "Enter valid email please."
 msgstr ""
 
 #: templates/profiles/_select_language_dialog.html:4
-#: templates/search/search.html:180 templates/videos/featured_videos.html:55
+#: templates/search/search.html:182 templates/videos/featured_videos.html:55
 #: templates/videos/popular_videos.html:87
 #: templates/videos/volunteer_featured.html:55
 #: templates/videos/volunteer_popular.html:83
@@ -3687,15 +3687,15 @@ msgstr ""
 msgid "Plays (all time)"
 msgstr ""
 
-#: templates/search/search.html:112 templates/search/search.html.py:151
+#: templates/search/search.html:114 templates/search/search.html.py:153
 msgid "Search Videos"
 msgstr ""
 
-#: templates/search/search.html:114
+#: templates/search/search.html:116
 msgid "Search Results for"
 msgstr ""
 
-#: templates/search/search.html:147
+#: templates/search/search.html:149
 #, python-format
 msgid ""
 "\n"
@@ -3703,7 +3703,7 @@ msgid ""
 "            "
 msgstr ""
 
-#: templates/search/search.html:175 templates/videos/featured_videos.html:50
+#: templates/search/search.html:177 templates/videos/featured_videos.html:50
 #: templates/videos/popular_videos.html:82
 #: templates/videos/volunteer_featured.html:50
 #: templates/videos/volunteer_popular.html:78
@@ -4618,7 +4618,11 @@ msgid ""
 "appear."
 msgstr ""
 
-#: templates/videos/_video.html:31
+#: templates/videos/_video.html:20 templates/videos/_video_url_panel.html:29
+msgid "Added"
+msgstr ""
+
+#: templates/videos/_video.html:27
 #, python-format
 msgid ""
 "\n"
@@ -4677,10 +4681,6 @@ msgstr ""
 
 #: templates/videos/_video_url_panel.html:26
 msgid "Format/Host"
-msgstr ""
-
-#: templates/videos/_video_url_panel.html:29
-msgid "Added"
 msgstr ""
 
 #: templates/videos/_video_url_panel.html:32
