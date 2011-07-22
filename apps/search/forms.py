@@ -95,10 +95,10 @@ class SearchForm(forms.Form):
         
         #aplly filtering
         if video_language:
-            qs = qs.filter(video_language__exact=LanguageField.prepare_lang(video_language))
+            qs = qs.filter(video_language_exact=LanguageField.prepare_lang(video_language))
         
         if langs:
-            qs = qs.filter(languages=LanguageField.prepare_lang(langs))
+            qs = qs.filter(languages_exact=LanguageField.prepare_lang(langs))
         
         if ordering:
             qs = qs.order_by('-' + ordering)
