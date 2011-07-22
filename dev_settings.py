@@ -51,6 +51,7 @@ try:
 except ImportError:
     pass
 
+AWS_BUCKET_NAME = AWS_STORAGE_BUCKET_NAME
 USE_BUNDLED_MEDIA = not DEBUG
 if USE_BUNDLED_MEDIA:
     MEDIA_URL += "%s/%s/" % (COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID.split("/")[1])
