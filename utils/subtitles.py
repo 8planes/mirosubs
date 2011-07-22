@@ -26,8 +26,8 @@ from django.utils import simplejson as json
 from django.db.models import ObjectDoesNotExist
 from datetime import datetime
 import re
-import htmllib
 import random
+from uuid import uuid4
 
 # see video.models.Subtitle..start_time
 MAX_SUB_TIME = (60 * 60 * 99) -1 
@@ -52,6 +52,11 @@ def is_version_same(version, parser):
 def save_subtitle(video, language, parser, user=None, update_video=True):
     from videos.models import SubtitleVersion, Subtitle
     from videos.tasks import video_changed_tasks
+
+    key = str(uuid4()).replace('-', '')
+
+    video._make_writelock(user, key)
+    video.save()
     
     try:
         old_version = language.subtitleversion_set.all()[:1].get()    

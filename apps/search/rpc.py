@@ -70,6 +70,12 @@ class SearchApiClass(object):
         else:
             qs = SearchQuerySet().none()    
         
+        #result = [item.object for item in qs]
+        #qs1 = Video.objects.filter(title__contains=rdata['q'])
+        #for o in qs1:
+        #    if not o in result:
+        #        print o.title
+        
         display_views = form.get_display_views()
         return render_page(rdata.get('page', 1), qs, 20, request, display_views=display_views)
     

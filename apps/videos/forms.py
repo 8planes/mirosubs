@@ -28,7 +28,6 @@ from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, Subt
 from utils.subtitles import save_subtitle
 from django.utils.encoding import force_unicode, DjangoUnicodeDecodeError
 import chardet
-from uuid import uuid4
 from math_captcha.forms import MathCaptchaForm
 from django.utils.safestring import mark_safe
 from django.db.models import ObjectDoesNotExist
@@ -227,11 +226,6 @@ class SubtitlesUploadBaseForm(forms.Form):
     def save_subtitles(self, parser, video=None, language=None, update_video=True):
         video = video or self.cleaned_data['video']
         
-        key = str(uuid4()).replace('-', '')
-
-        video._make_writelock(self.user, key)
-        video.save()
-
         if not video.has_original_language():
             self._save_original_language(
                 video, self.cleaned_data['video_language'])
