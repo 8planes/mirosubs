@@ -14,3 +14,8 @@ def get_current_branch():
     branches = process.communicate()[0].strip()
     branch = re.search(r"\* ([^\n]+)", branches).group(1)
     return branch
+
+def get_guid():
+    guid = get_current_commit_hash()
+    branch = get_current_branch()
+    return "%s/%s" % (branch, guid)

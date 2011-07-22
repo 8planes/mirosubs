@@ -118,12 +118,6 @@ BROKER_VHOST = AWS_QUEUE_PREFIX
 
 EMAIL_BCC_LIST = EMAIL_BCC_LIST.append('hwilson+notifications@gmail.com')
 
-try:
-    from commit import LAST_COMMIT_GUID
-except ImportError:
-    LAST_COMMIT_GUID = ''
-
-
 
 try:
     from settings_local import *

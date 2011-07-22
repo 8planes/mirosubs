@@ -515,12 +515,8 @@ EDIT_END_THRESHOLD = 120
 GOOGLE_ANALYTICS_NUMBER = 'UA-163840-22'
 MIXPANEL_TOKEN = '44205f56e929f08b602ccc9b4605edc3'
 
-try:
-    from deploy.git_helpers import get_current_commit_hash, get_current_branch
-    LAST_COMMIT_GUID = '%s/%s' % (get_current_branch(), get_current_commit_hash())
-    
-except:
-    LAST_COMMIT_GUID = ""
+from deploy.git_helpers import get_guid
+LAST_COMMIT_GUID = get_guid()
 
 AWS_ACCESS_KEY_ID = ''
 AWS_SECRET_ACCESS_KEY = ''
