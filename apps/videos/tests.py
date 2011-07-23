@@ -1788,3 +1788,5 @@ def _create_trans( video, latest_version=None, lang_code=None, forked=False):
         if latest_version is not None:
             for s in latest_version.subtitle_set.all():
                 s.duplicate_for(v).save()
+        return translation
+
