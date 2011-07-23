@@ -21,7 +21,7 @@ import json
 
 from django.test import TestCase
 from videos.models import Video, Action, VIDEO_TYPE_YOUTUBE, UserTestResult, \
-    SubtitleLanguage, VideoUrl, VideoFeed, SubtitleRequest
+    SubtitleLanguage, VideoUrl, VideoFeed
 from apps.auth.models import CustomUser as User
 from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, YoutubeSubtitleParser, TxtSubtitleParser
 from django.core.urlresolvers import reverse
