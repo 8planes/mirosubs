@@ -50,14 +50,14 @@ mirosubs.RequestDialog = function(videoID) {
      * @const
      * @type {string}
      */
-    this.TRACK_REQUEST_LABEL_ = 'Keep me posted on any relating activities';
+    this.TRACK_REQUEST_LABEL_ = 'Keep me posted about future relating activity';
     /**
      * The default content of request description text area
      * @const
      * @type {string}
      */
-    this.DESCRIPTION_INITIAL_ = 'Please tell us the reason you need these '+
-                                'subtitles so that volunteers can act '    +
+    this.DESCRIPTION_INITIAL_ = 'Please tell us about the reason you need '+
+                                'the subtitles so that volunteers can act '+
                                 'appropriately.';
     /**
      * Displayed on a successfull request submission
