@@ -24,7 +24,7 @@ import simplejson as json
 
 
 def js_dependencies():
-    js_files = list(settings.JS_ONSITE)
+    js_files = list(settings.JS_API)
     js_files.append('widget/testing/stubvideoplayer.js')
     js_files.append('widget/testing/events.js')
     return js_files

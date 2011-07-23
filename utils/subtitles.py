@@ -23,13 +23,77 @@
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django.utils import simplejson as json
+from django.db.models import ObjectDoesNotExist
+from datetime import datetime
 import re
-import htmllib
+import random
+from uuid import uuid4
 
 # see video.models.Subtitle..start_time
 MAX_SUB_TIME = (60 * 60 * 99) -1 
 
+def is_version_same(version, parser):
+    if not version:
+        return False
+    
+    subtitles = list(parser)
+    
+    if version.subtitle_set.count() != len(subtitles):
+        return False
+    
+    for item in zip(subtitles, version.subtitle_set.all()):
+        if item[0]['subtitle_text'] != item[1].subtitle_text or \
+            item[0]['start_time'] != item[1].start_time or \
+            item[0]['end_time'] != item[1].end_time:
+                return False
+            
+    return True
 
+def save_subtitle(video, language, parser, user=None, update_video=True):
+    from videos.models import SubtitleVersion, Subtitle
+    from videos.tasks import video_changed_tasks
+
+    key = str(uuid4()).replace('-', '')
+
+    video._make_writelock(user, key)
+    video.save()
+    
+    try:
+        old_version = language.subtitleversion_set.all()[:1].get()    
+        version_no = old_version.version_no + 1
+    except ObjectDoesNotExist:
+        old_version = None
+        version_no = 0
+    version = None
+    if not is_version_same(old_version, parser):
+        version = SubtitleVersion(
+            language=language, version_no=version_no,
+            datetime_started=datetime.now(), user=user,
+            note=u'Uploaded', is_forked=True, time_change=1, text_change=1)
+        version.save()
+
+        ids = []
+
+        for i, item in enumerate(parser):
+            id = int(random.random()*10e12)
+            while id in ids:
+                id = int(random.random()*10e12)
+            ids.append(id)
+            caption = Subtitle(**item)
+            caption.version = version
+            caption.subtitle_id = str(id)
+            caption.subtitle_order = i+1
+            caption.save()
+            
+    language.video.release_writelock()
+    language.video.save()
+    translations = video.subtitlelanguage_set.filter(standard_language=language)
+    [t.fork(from_version=old_version, user=user) for t in translations]
+    if update_video:
+        video_changed_tasks.delay(video.id, None if version is None else version.id)
+        
+    return language  
+            
 class SubtitleParserError(Exception):
     pass
     
@@ -116,7 +180,43 @@ class YoutubeSubtitleParser(SubtitleParser):
 from xml.dom.minidom import parseString
 from xml.parsers.expat import ExpatError
 from django.utils.html import strip_tags
+from utils.clean_xml import htmlentitydecode
 
+class STSubtitleParser(SubtitleParser):
+
+    def __init__(self, subtitles):
+        try:
+            dom = parseString(subtitles.encode('utf8'))
+            self.nodes = dom.getElementsByTagName('transcript')[0].getElementsByTagName('content')
+        except (ExpatError, IndexError):
+            raise SubtitleParserError('Incorrect format of SpeakerText subtitles')
+
+    def __len__(self):
+        return len(self.nodes)
+    
+    def __nonzero__(self):
+        return bool(len(self.nodes))
+    
+    def _get_time(self, val):
+        try:
+            return int(val) / 1000.
+        except ValueError:
+            return -1
+    
+    def _get_data(self, node):
+
+        output = {
+            'subtitle_text': htmlentitydecode(strip_tags(node.toxml()).strip())
+        }
+        output['start_time'] = self._get_time(node.getAttribute('timestamp'))
+        output['end_time'] = self._get_time(node.getAttribute('end_timestamp'))
+
+        return output
+        
+    def _result_iter(self):
+        for item in self.nodes:
+            yield self._get_data(item)
+            
 class TtmlSubtitleParser(SubtitleParser):
     
     def __init__(self, subtitles):
@@ -125,12 +225,6 @@ class TtmlSubtitleParser(SubtitleParser):
             self.nodes = dom.getElementsByTagName('body')[0].getElementsByTagName('p')
         except (ExpatError, IndexError):
             raise SubtitleParserError('Incorrect format of TTML subtitles')
-
-    def unescape(self, s):
-        p = htmllib.HTMLParser(None)
-        p.save_bgn()
-        p.feed(s)
-        return p.save_end() 
         
     def __len__(self):
         return len(self.nodes)
@@ -158,7 +252,7 @@ class TtmlSubtitleParser(SubtitleParser):
         
     def _get_data(self, node):
         output = {
-            'subtitle_text': self.unescape(strip_tags(node.toxml()))
+            'subtitle_text': htmlentitydecode(strip_tags(node.toxml()))
         }        
         output['start_time'], output['end_time'] = \
             self._get_time(node.getAttribute('begin'), node.getAttribute('dur'))

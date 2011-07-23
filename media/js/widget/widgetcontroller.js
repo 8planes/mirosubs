@@ -38,6 +38,9 @@ mirosubs.widget.WidgetController.prototype.initializeState = function(result) {
         this.initializeStateImpl_(result);
     }
     catch (e) {
+        if (console && console.log) {
+            console.log(e);
+        }
         this.videoTab_.showError();
     }
 };
@@ -87,7 +90,7 @@ mirosubs.widget.WidgetController.makeGeneralSettings = function(settings) {
     if (settings['username'])
         mirosubs.currentUsername = settings['username'];
     mirosubs.embedVersion = settings['embed_version'];
-    mirosubs.subtitle.MSServerModel.LOCK_EXPIRATION = 
+    mirosubs.LOCK_EXPIRATION = 
         settings["writelock_expiration"];
     mirosubs.languages = settings['languages'];
     mirosubs.metadataLanguages = settings['metadata_languages'];

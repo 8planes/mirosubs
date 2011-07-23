@@ -59,6 +59,13 @@ mirosubs.embedVersion = null;
 mirosubs.languages = null;
 
 /**
+ * editing lock expiration, in seconds. set in initial loading.
+ * @type {number}
+ * @const
+ */
+mirosubs.LOCK_EXPIRATION = 0;
+
+/**
  * Set when widget gets initial state from server. All available languages.
  * Each member is a two-element array, with language code first then 
  * language name.
@@ -373,13 +380,19 @@ mirosubs.createLinkButton = function($d, text, opt_className) {
     return $d('a', atts, text);
 };
 
+mirosubs.storage_ = window['localStorage'];
+
+mirosubs.supportsLocalStorage = function() {
+    return !!(mirosubs.storage_ && mirosubs.storage_['getItem']);
+};
+
 mirosubs.saveInLocalStorage = function(key, value) {
     if (goog.DEBUG) {
         mirosubs.logger_.info(
             "Saving local storage, key: " + key + 
                 " and value " + value);
     }
-    window['localStorage']['setItem'](key, value);
+    mirosubs.storage_['setItem'](key, value);
 };
 
 mirosubs.fetchFromLocalStorage = function(key) {
@@ -387,16 +400,16 @@ mirosubs.fetchFromLocalStorage = function(key) {
         mirosubs.logger_.info(
             "Fetching local storage, key: " + key + 
                 " and value " + 
-                window['localStorage']['getItem'](key));
+                mirosubs.storage_['getItem'](key));
     }
-    return window['localStorage']['getItem'](key);
+    return mirosubs.storage_['getItem'](key);
 };
 
 mirosubs.removeFromLocalStorage = function(key) {
     if (goog.DEBUG) {
         mirosubs.logger_.info("Removing " + key + " from localStorage.");
     }
-    window['localStorage']['removeItem'](key);
+    mirosubs.storage_['removeItem'](key);
 };
 
 if (goog.DEBUG) {

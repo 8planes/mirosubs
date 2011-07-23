@@ -15,7 +15,9 @@
             <h4>{{ video }}</h4>
         </a>
         <span class="views">
-            <strong>{{ video.total_views }}</strong> {% trans "Views" %}
+            <strong>
+                {{ video_views }}
+            </strong> {% trans "Views" %} | <strong>{% trans "Added" %} {{ video.created|date:"M j" }}</strong>
         </span>
         <span class="languages">
             {% if video.languages_count %}

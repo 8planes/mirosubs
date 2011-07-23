@@ -258,12 +258,12 @@
 
 .featured .links a {
   font-size: 12px;
-  color: #727272;
+  color: #126895;
   margin-right: 10px;
 }
 
 .featured .links a:hover {
-	color: #000;
+	color: #333;
 }
 
 .featured .rounded-img {

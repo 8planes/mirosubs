@@ -92,7 +92,7 @@ class BaseSubtitles(object):
     def __init__(self, subtitles, video, line_delimiter=u'\n', sl=None):
         """
         Use video for extra data in subtitles like Title
-        Subtitles is list of {'text': 'text', 'start': 'seconds', 'end': 'seconds'}
+        Subtitles is list of {'text': 'text', 'start': 'seconds', 'end': 'seconds', 'id': id}
         """
         self.subtitles = subtitles
         self.video = video
@@ -107,13 +107,36 @@ class BaseSubtitles(object):
     def isnumber(cls, val):
         return isinstance(val, (int, long, float))
     
+    @classmethod
+    def create(cls, sv, video=None, sl=None):
+        sl = sl or sv.language
+        video = video or sl.video
+        
+        subtitles = []
+        
+        for item in sv.subtitles():
+            subtitles.append(item.for_generator())
+        
+        return cls(subtitles, video, sl=sl)        
+        
 class GenerateSubtitlesHandlerClass(dict):
     
     def register(self, handler, type=None):
         self[type or handler.file_type] = handler
 
 GenerateSubtitlesHandler = GenerateSubtitlesHandlerClass()
-    
+
+class MGSubtitles(BaseSubtitles):
+
+    def __unicode__(self):
+        output = []
+        
+        for item in self.subtitles:
+            output.append(u'[[[%s]]]' % item['id'])
+            output.append(item['text'].replace(u'[[[', u'').replace(u']]]', u''))
+
+        return u''.join(output)
+
 class SRTSubtitles(BaseSubtitles):
     file_type = 'srt'
 

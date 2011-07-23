@@ -4,12 +4,13 @@ from django.contrib.sites.models import Site
 from django.conf import settings
 from celery.decorators import periodic_task
 from celery.schedules import crontab
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.db.models import F
 from django.utils.translation import ugettext_lazy as _
 from haystack import site
 
-@periodic_task(run_every=crontab(minute=0, hour=6))
+#@periodic_task(run_every=crontab(minute=0, hour=6))
+@periodic_task(run_every=timedelta(seconds=60))
 def add_videos_notification(*args, **kwargs):
     from teams.models import TeamVideo, Team
     
@@ -24,14 +25,14 @@ def add_videos_notification(*args, **kwargs):
         team.save()
 
         members = team.users.filter(changes_notification=True, is_active=True) \
-            .filter(teammember__changes_notification=True)
+            .filter(teammember__changes_notification=True).distinct()
 
         subject = _(u'New %(team)s videos ready for subtitling!') % dict(team=team)
 
         for user in members:
             if not user.email:
                 continue
-            
+
             context = {
                 'domain': domain,
                 'user': user,

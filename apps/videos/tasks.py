@@ -8,10 +8,17 @@ from django.contrib.sites.models import Site
 from django.db.models import ObjectDoesNotExist
 from celery.signals import task_failure, worker_ready
 from haystack import site
-from videos.models import VideoFeed, SubtitleLanguage
+from videos.models import VideoFeed, SubtitleLanguage, Video
 from sentry.client.models import client
 from celery.decorators import periodic_task
 from celery.schedules import crontab
+
+@task
+def save_thumbnail_in_s3(video_id):
+    try:
+        video = Video.objects.get(pk=video_id)
+    except Video.DoesNotExist:
+        return
 
 @periodic_task(run_every=crontab(minute=0, hour=1))
 def update_from_feed(*args, **kwargs):
@@ -274,7 +281,8 @@ def _send_letter_caption(caption_version):
         'language': language,
         'last_version': most_recent_version,
         'captions': captions,
-        'video_url': language.get_absolute_url(),
+        'video_url': video.get_absolute_url(),
+        'language_url': language.get_absolute_url(),
         'user_url': caption_version.user and caption_version.user.get_absolute_url()
     }
 

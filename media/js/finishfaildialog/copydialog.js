@@ -83,8 +83,8 @@ mirosubs.finishfaildialog.CopyDialog.subsToString_ = function(jsonSubs) {
     baseString = ['browser_id: ' + goog.net.cookies.get('unisub-user-uuid', 'n/a'), 
                   'video_id: ' + (serverModel ? 
                                   serverModel.getVideoID() : 'n/a'),
-                  'draft_pk: ' + (serverModel ?
-                                  serverModel.getDraftPK() : 'n/a'),
+                  'session_pk: ' + (serverModel ?
+                                    serverModel.getSessionPK() : 'n/a'),
                   baseString].join('\n');
     return baseString
 };

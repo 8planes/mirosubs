@@ -196,7 +196,7 @@
 
       <div id="transcripts-tab">
           <div class="action_buttons grid_9 alpha omega">
-            <a href="{{edit_url}}" class="blue_button small {% if not video.is_subtitled  %}add-translation-behavior{% endif %}">{% if not video.is_subtitled %}{% trans 'Add Translation' %}{% else %}{% trans 'Edit Subtitles' %}{% endif %}</a> 
+            <a id="edit_subtitles_button" href="{{edit_url}}" class="blue_button small {% if not video.is_subtitled  %}add-translation-behavior{% endif %}">{% if not video.is_subtitled %}{% trans 'Add Translation' %}{% else %}{% trans 'Edit Subtitles' %}{% endif %}</a> 
             {% if last_version.subtitles %}
             <div class="sort_button floatright">
               <div class='arrow'></div>
@@ -335,6 +335,12 @@
 <script>
   $(window).load(function(){
     mirosubs.messaging.simplemessage.displayPendingMessages();
+    $('#edit_subtitles_button').click(function(e) {
+       if (!(localStorage && localStorage.getItem)) {
+           alert("Sorry, you'll need to upgrade your browser to use the subtitling dialog.");
+           e.preventDefault();
+       }
+    });
   });
 </script>
 {% endblock %}

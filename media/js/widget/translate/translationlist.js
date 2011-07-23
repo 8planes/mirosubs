@@ -21,21 +21,21 @@ goog.provide('mirosubs.translate.TranslationList');
 /**
  *
  * @param {mirosubs.subtitle.EditableCaptionSet} captionSet
- * @param {array.<object.<string, *>>} subtitles Array of json base-language subs.
- * @param {string} videoTitle
+ * @param {array.<object.<string, *>>} baseLanguageSubtitles Array of json base-language subs.
+ * @param {string} baseLanguageTitle 
  * @extends {goog.ui.Component}
  * @constructor
  */
-mirosubs.translate.TranslationList = function(captionSet, subtitles, videoTitle) {
+mirosubs.translate.TranslationList = function(captionSet, baseLanguageSubtitles, baseLanguageTitle) {
     goog.ui.Component.call(this);
     this.captionSet_ = captionSet;
+    this.baseLanguageTitle_ = baseLanguageTitle || '';
     /**
      * Array of subtitles in json format
      */
-    this.subtitles_ = subtitles;
-    this.videoTitle_ = videoTitle || '';
+    this.baseLanguageSubtitles_ = baseLanguageSubtitles;
     goog.array.sort(
-        this.subtitles_,
+        this.baseLanguageSubtitles_,
         function(a, b) {
             return goog.array.defaultCompare(a['sub_order'], b['sub_order']);
         });
@@ -43,7 +43,7 @@ mirosubs.translate.TranslationList = function(captionSet, subtitles, videoTitle)
      * @type {Array.<mirosubs.translate.TranslationWidget>}
      */
     this.translationWidgets_ = [];
-    this.titleTranslationWidget = null;
+    this.titleTranslationWidget_ = null;
 };
 goog.inherits(mirosubs.translate.TranslationList, goog.ui.Component);
 
@@ -52,16 +52,18 @@ mirosubs.translate.TranslationList.prototype.createDom = function() {
     var that = this;
     var w;
 
-    if (this.videoTitle_){
-        this.titleTranslationWidget = 
-            new mirosubs.translate.TitleTranslationWidget(this.videoTitle_);
-        this.addChild(this.titleTranslationWidget, true);
+    if (this.baseLanguageTitle_) {
+        this.titleTranslationWidget_ = 
+            new mirosubs.translate.TitleTranslationWidget(
+                this.baseLanguageTitle_, this.captionSet_);
+        this.addChild(this.titleTranslationWidget_, true);
+        this.titleTranslationWidget_.setTranslation(this.captionSet_.title || '');
     }
 
     var map = this.captionSet_.makeMap();
 
     goog.array.forEach(
-        this.subtitles_,
+        this.baseLanguageSubtitles_,
         function(subtitle) {
             var editableCaption = map[subtitle['subtitle_id']];
             if (!editableCaption)
@@ -73,10 +75,6 @@ mirosubs.translate.TranslationList.prototype.createDom = function() {
             this.translationWidgets_.push(w);
         },
         this);
-};
-
-mirosubs.translate.TranslationList.prototype.setTitleTranslation = function(value){
-    this.titleTranslationWidget && this.titleTranslationWidget.setTranslation(value);
 };
 
 /**
@@ -105,8 +103,8 @@ mirosubs.translate.TranslationList.prototype.translateViaGoogle = function(fromL
      */
     var needTranslating = [];
 
-    if (this.titleTranslationWidget && this.titleTranslationWidget.isEmpty()) {
-        needTranslating.push(this.titleTranslationWidget);
+    if (this.titleTranslationWidget_ && this.titleTranslationWidget_.isEmpty()) {
+        needTranslating.push(this.titleTranslationWidget_);
     };
     
     goog.array.forEach(this.translationWidgets_, function(w) {

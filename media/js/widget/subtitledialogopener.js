@@ -76,6 +76,9 @@ mirosubs.widget.SubtitleDialogOpener.prototype.openDialog = function(
     openDialogArgs,
     opt_completeCallback)
 {
+    if (this.disallow_()) {
+        return;
+    }
     var that = this;
     this.showLoading_(true);
     var resumeEditingRecord = this.getResumeEditingRecord_(openDialogArgs);
@@ -125,7 +128,9 @@ mirosubs.widget.SubtitleDialogOpener.prototype.resumeEditing_ =
             if (result['response'] == 'ok') {
                 result['subtitles']['subtitles'] = 
                     savedSubtitles.CAPTION_SET.makeJsonSubs();
-                that.startEditingResponseHandler_(result, true);
+                that.startEditingResponseHandler_(
+                    result, true, 
+                    savedSubtitles.CAPTION_SET.wasForkedDuringEdits());
             }
             else {
                 // someone else stepped in front of us.
@@ -140,6 +145,9 @@ mirosubs.widget.SubtitleDialogOpener.prototype.resumeEditing_ =
 mirosubs.widget.SubtitleDialogOpener.prototype.showStartDialog = 
     function(opt_effectiveVideoURL, opt_lang) 
 {
+    if (this.disallow_()) {
+        return;
+    }
     var that = this;
     var dialog = new mirosubs.startdialog.Dialog(
         this.videoID_, opt_lang, 
@@ -155,12 +163,25 @@ mirosubs.widget.SubtitleDialogOpener.prototype.showStartDialog =
     dialog.setVisible(true);
 };
 
+mirosubs.widget.SubtitleDialogOpener.prototype.disallow_ = function() {
+    if (!mirosubs.supportsLocalStorage()) {
+        alert("Sorry, you'll need to upgrade your browser to use the subtitling dialog.");
+        return true;
+    }
+    else {
+        return false;
+    }
+};
+
 mirosubs.widget.SubtitleDialogOpener.prototype.openDialogOrRedirect =
     function(openDialogArgs, 
              opt_effectiveVideoURL,
              opt_completeCallback)
 {
-    if (mirosubs.DEBUG || !goog.userAgent.GECKO || mirosubs.returnURL)
+    if (this.disallow_()) {
+        return;
+    }
+    if (mirosubs.returnURL)
         this.openDialog(openDialogArgs,
                         opt_completeCallback);
     else {
@@ -183,47 +204,35 @@ mirosubs.widget.SubtitleDialogOpener.prototype.openDialogOrRedirect =
     }
 }
 
-/**
- * @param {number} draftPK The draft saved with this primary key should 
- *     already be in forked state on the server.
- * @param {mirosubs.widget.SubtitleState} subtitles The subtitles should 
- *     include current timing information.
- */
-mirosubs.widget.SubtitleDialogOpener.prototype.openForkedTranslationDialog = 
-    function(draftPK, subtitles)
-{
-    var serverModel = new mirosubs.subtitle.MSServerModel(
-        draftPK, this.videoID_, this.videoURL_);
-    this.openSubtitlingDialog_(serverModel, subtitles);
-};
-
-mirosubs.widget.SubtitleDialogOpener.prototype.saveInitialSubs_ = function(sessionPK, subtitles) {
+mirosubs.widget.SubtitleDialogOpener.prototype.saveInitialSubs_ = function(sessionPK, editableCaptionSet) {
     var savedSubs = new mirosubs.widget.SavedSubtitles(
-        sessionPK, null, subtitles.IS_COMPLETE, 
-        new mirosubs.subtitle.EditableCaptionSet(subtitles.SUBTITLES));
+        sessionPK, editableCaptionSet);
     mirosubs.widget.SavedSubtitles.saveInitial(savedSubs);
 };
 
 mirosubs.widget.SubtitleDialogOpener.prototype.startEditingResponseHandler_ = 
-    function(result, fromResuming)
+    function(result, fromResuming, opt_wasForkedDuringEditing)
 {
     this.showLoading_(false);
     if (result['can_edit']) {
         var sessionPK = result['session_pk'];
         var subtitles = mirosubs.widget.SubtitleState.fromJSON(
             result['subtitles']);
+        if (opt_wasForkedDuringEditing) {
+            subtitles.fork();
+        }
         var originalSubtitles = mirosubs.widget.SubtitleState.fromJSON(
             result['original_subtitles']);
         var captionSet = new mirosubs.subtitle.EditableCaptionSet(
-            subtitles.SUBTITLES);
+            subtitles.SUBTITLES, subtitles.IS_COMPLETE, 
+            subtitles.TITLE, opt_wasForkedDuringEditing);
         if (!fromResuming) {
-            this.saveInitialSubs_(sessionPK, subtitles);
+            this.saveInitialSubs_(sessionPK, captionSet);
         }
         var serverModel = new mirosubs.subtitle.MSServerModel(
-            sessionPK, this.videoID_, this.videoURL_,
-            subtitles.IS_COMPLETE, captionSet);
+            sessionPK, this.videoID_, this.videoURL_, captionSet);
         if (subtitles.IS_ORIGINAL || subtitles.FORKED)
-            this.openSubtitlingDialog_(serverModel, subtitles);
+            this.openSubtitlingDialog(serverModel, subtitles);
         else {
             this.openDependentTranslationDialog_(
                 serverModel, subtitles, originalSubtitles);
@@ -239,7 +248,7 @@ mirosubs.widget.SubtitleDialogOpener.prototype.startEditingResponseHandler_ =
     }
 };
 
-mirosubs.widget.SubtitleDialogOpener.prototype.openSubtitlingDialog_ = 
+mirosubs.widget.SubtitleDialogOpener.prototype.openSubtitlingDialog = 
     function(serverModel, subtitleState) 
 {
     if (this.subOpenFn_)

@@ -90,7 +90,7 @@ mirosubs.translate.Dialog.prototype.enterDocument = function() {
     var that = this;
     this.getRightPanelInternal().showDownloadLink(
         function() {
-            return that.translationPanel_.makeJsonSubs();
+            return that.makeJsonSubs();
         });
 };
 mirosubs.translate.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
@@ -129,7 +129,7 @@ mirosubs.translate.Dialog.prototype.translateViaGoogle = function(){
         this.standardSubState_.LANGUAGE, this.subtitleState_.LANGUAGE);
 };
 
-mirosubs.translate.Dialog.prototype.getStandartLanguage = function(){
+mirosubs.translate.Dialog.prototype.getStandardLanguage = function(){
     return this.standardSubState_.LANGUAGE;
 };
 
@@ -142,5 +142,20 @@ mirosubs.translate.Dialog.prototype.getServerModel = function(){
 }
 
 mirosubs.translate.Dialog.prototype.makeJsonSubs =  function (){
-    return this.translationPanel_.makeJsonSubs();
+    return this.serverModel_.getCaptionSet().makeJsonSubs();
+};
+
+mirosubs.translate.Dialog.prototype.forkAndClose = function() {
+    var dialog = new mirosubs.translate.ForkDialog(
+        goog.bind(this.forkImpl_, this));
+    dialog.setVisible(true);
+};
+
+mirosubs.translate.Dialog.prototype.forkImpl_ = function() {
+    this.subtitleState_.fork();
+    this.serverModel_.fork(this.standardSubState_);
+    this.hideToFork();
+    this.opener_.openSubtitlingDialog(
+        this.serverModel_,
+        this.subtitleState_);
 };

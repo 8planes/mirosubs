@@ -19,6 +19,16 @@
     <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js" type="text/javascript"></script>
 
+{% ifequal type "widgetizerasync" %}
+    <script type="text/javascript">
+      function onYouTubePlayerReady(apiID) {
+        if (apiID == "undefined" || !apiID)
+          apiID = "";
+        window.unisubs_readyAPIIDs = window.unisubs_readyAPIIDs || [];
+        window.unisubs_readyAPIIDs.push(apiID);
+      }
+    </script>
+{% endifequal %}
 
 {% ifequal type "widgetizer" %}
 {% if not js_use_compiled %}
@@ -219,6 +229,25 @@ United States and other countries.</small></p>
         target.css("color", "red").css("font-size","2em")
     });
 </script>    
+
+{% ifequal type "widgetizerasync" %}
+{% if not js_use_compiled %}
+  <script type="text/javascript">
+    alert('This page only works with compiled js');
+  </script>
+{% else %}
+<script type="text/javascript">
+        var us = document.createElement('script'); 
+        us.type = 'text/javascript'; 
+        us.async = true;
+        us.src = '{{MEDIA_URL}}js/mirosubs-widgetizer.js';
+        var s = document.getElementsByTagName('script')[0]; 
+        s.parentNode.insertBefore(us, s);
+</script>
+{% endif %}
+{% endifequal %}
+
+
 </body>
 
 </html>

@@ -45,6 +45,12 @@ mirosubs.subtitle.EditableCaption = function(opt_subOrder, opt_jsonCaption) {
 };
 goog.inherits(mirosubs.subtitle.EditableCaption, goog.events.EventTarget);
 
+mirosubs.subtitle.EditableCaption.prototype.fork = function(jsonSub) {
+    this.json['sub_order'] = jsonSub['sub_order'];
+    this.json['start_time'] = jsonSub['start_time'];
+    this.json['end_time'] = jsonSub['end_time'];
+};
+
 mirosubs.subtitle.EditableCaption.orderCompare = function(a, b) {
     return a.getSubOrder() - b.getSubOrder();
 };

@@ -241,18 +241,87 @@ input {
 
 #user {
   margin-right: 0;
+	position: relative;
+	margin-left: 0;
 }
 
 #user a {
-  background: url(../images/new_user_arrow.png) right center no-repeat;
+  background: url(../images/new_user_arrow.png) 85% center no-repeat;
   color: #116b8f;
-  padding-right: 12px;
+	padding: 14px 30px 17px 10px;
 }
 
+#user a:hover {
+	background: #FFF url(../images/new_user_arrow.png) 85% center no-repeat;
+}
+	
 #user img {
   position: relative;
   top: 3px;
-  margin-right: 6px;
+  margin-right: 8px;
+}
+
+#user #menu {
+	display: block;
+	position: absolute;
+	right: 0;
+	top: 45px;
+	background: #FFF;
+	border: 1px #EEE solid;
+	-webkit-border-bottom-left-radius: 5px;
+	-webkit-border-bottom-right-radius: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	-moz-border-radius-bottomright: 5px;
+	-webkit-box-shadow: 0 2px 3px rgba(0,0,0, 0.3);
+}
+
+#user #menu ul {
+	margin: 0;
+}
+
+#user #menu ul li {
+	margin: 0;
+	border-bottom: 1px #DDD solid;
+}
+
+#user #menu ul li#last {
+	border: 0;
+}
+
+#user #menu ul li a {
+	background: transparent;
+	display: block;
+	width: 150px;
+	
+	padding: 10px;
+	margin: 0;
+	line-height: 12px;
+	font-size: 12px;
+	font-weight: bold;
+	letter-spacing: 0.5px;
+}
+
+#user #menu ul li a:hover {
+	background: #EEE;
+	color: #333;
+}
+
+#user #menu ul li.section {
+	width: 150px;
+	padding: 20px 10px 10px 10px;
+}
+
+#user #menu ul li.section strong {
+	font-weight: bold;
+	font-size: 13px;
+	color: #777;
+	margin: 0;
+	padding: 0;
+	line-height: 13px;
+	display: block;
+}
+
+#user:hover #menu {
 }
 
 #subheader {
@@ -295,6 +364,7 @@ input {
 
 #search {
   float: right;
+	margin: 0 15px 0 0;
 }
 
 #search input {
@@ -302,6 +372,7 @@ input {
   border: 1px solid #000;
   box-shadow: 0 1px 0 #1a90bf, inset 0 2px 4px rgba(0,0,0,0.2);
   padding-left: 24px;
+	width: 245px;
 }
 
 #footer {

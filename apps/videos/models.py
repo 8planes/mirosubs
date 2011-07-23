@@ -252,6 +252,7 @@ class Video(models.Model):
 
     @classmethod
     def get_or_create_for_url(cls, video_url=None, vt=None, user=None):
+        assert video_url or vt, 'should be video URL or VideoType'
         vt = vt or video_type_registrar.video_type_for_url(video_url)
         if not vt:
             return None, False
@@ -1363,7 +1364,7 @@ class VideoFeed(models.Model):
         _iter = feed_parser.items(reverse=True, until=last_link, ignore_error=True)
         
         for vt, info, entry in _iter:
-            Video.get_or_create_for_url(vt=vt, user=self.user)
+            vt and Video.get_or_create_for_url(vt=vt, user=self.user)
             checked_entries += 1
         
         return checked_entries

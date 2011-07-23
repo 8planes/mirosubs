@@ -118,14 +118,15 @@ BROKER_VHOST = AWS_QUEUE_PREFIX
 
 EMAIL_BCC_LIST = EMAIL_BCC_LIST.append('hwilson+notifications@gmail.com')
 
-try:
-    from commit import LAST_COMMIT_GUID
-except ImportError:
-    LAST_COMMIT_GUID = ''
-
-
 
 try:
     from settings_local import *
 except ImportError:
     pass
+
+if USE_AMAZON_S3:
+    AWS_BUCKET_NAME = AWS_STORAGE_BUCKET_NAME
+USE_BUNDLED_MEDIA = not DEBUG
+if USE_BUNDLED_MEDIA:
+    MEDIA_URL += "%s/%s/" % (COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID.split("/")[1])
+

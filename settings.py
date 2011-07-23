@@ -111,6 +111,7 @@ ALL_LANGUAGES['bo'] = gettext_noop(u'Tibetan')
 ALL_LANGUAGES['ast'] = gettext_noop(u'Asturian')
 ALL_LANGUAGES['ay'] = gettext_noop(u'Aymara')
 ALL_LANGUAGES['ps'] = gettext_noop(u'Pashto')
+ALL_LANGUAGES['lkt'] = gettext_noop(u'Lakota')
 
 del ALL_LANGUAGES['no']
 ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())
@@ -155,6 +156,7 @@ PREVIOUS_EMBED_JS_VERSIONS = []
 CSS_USE_COMPILED = True
 JS_USE_COMPILED = False
 
+USE_BUNDLED_MEDIA = not DEBUG
 
 COMPRESS_YUI_BINARY = "java -jar ./css-compression/yuicompressor-2.4.6.jar"
 COMPRESS_OUTPUT_DIRNAME = "static-cache"
@@ -163,126 +165,127 @@ COMPRESS_OUTPUT_DIRNAME = "static-cache"
 USER_LANGUAGES_COOKIE_NAME = 'unisub-languages-cookie'
 
 # paths provided relative to media/js
-JS_CORE = ['mirosubs.js', 
-           'rpc.js',
-           'unitofwork.js', 
-           'clippy.js',
-           'flash.js',
-           'spinner.js',
-           'sliderbase.js',
-           'closingwindow.js',
-           'loadingdom.js',
-           'tracker.js',
-           'subtracker.js',
-           'srtwriter.js',
-           'style.js',
-           'messaging/simplemessage.js',
-           'video/video.js',
-           'video/captionview.js',
-           'video/abstractvideoplayer.js',
-           'video/flashvideoplayer.js',
-           'video/html5videoplayer.js',
-           'video/youtubevideoplayer.js',
-           'video/jwvideoplayer.js',
-           'video/flvvideoplayer.js',
-           'video/videosource.js',
-           'video/html5videosource.js',
-           'video/youtubevideosource.js',
-           'video/brightcovevideosource.js',
-           'video/brightcovevideoplayer.js',
-           'video/flvvideosource.js',
-           'video/bliptvplaceholder.js',
-           'video/controlledvideoplayer.js',
-           'video/vimeovideosource.js',
-           'video/vimeovideoplayer.js',
-           'video/dailymotionvideosource.js',
-           'video/dailymotionvideoplayer.js',
-           'requestdialog.js',
-           'startdialog/model.js',
-           'startdialog/videolanguage.js',
-           'startdialog/videolanguages.js',
-           'startdialog/tolanguage.js',
-           'startdialog/tolanguages.js',
-           'startdialog/dialog.js',
-           'widget/droplockdialog.js',
-           'finishfaildialog/dialog.js',
-           'finishfaildialog/errorpanel.js',
-           'finishfaildialog/reattemptuploadpanel.js',
-           'finishfaildialog/copydialog.js',
-           'widget/usersettings.js',
-           'widget/logindialog.js',
-           'widget/videotab.js',
-           'widget/howtovideopanel.js',
-           'widget/dialog.js',
-           'widget/captionmanager.js',
-           'widget/brokenwarning.js',
-           'widget/rightpanel.js',
-           'widget/basestate.js',
-           'widget/subtitlestate.js',
-           'widget/dropdowncontents.js',
-           'widget/playcontroller.js',
-           'widget/subtitlecontroller.js',
-           'widget/subtitledialogopener.js',
-           'widget/chooselanguagedialog.js',
-           'widget/unsavedwarning.js',
-           'widget/resumeeditingrecord.js',
-           'widget/opendialogargs.js',
-           'widget/dropdown.js',
-           'widget/requestdialog.js',
-           'widget/subtitle/dialog.js',
-           'widget/subtitle/msservermodel.js',
-           'widget/subtitle/editablecaption.js',
-           'widget/subtitle/editablecaptionset.js',
-           'widget/subtitle/subtitlewidget.js',
-           'widget/subtitle/addsubtitlewidget.js',
-           'widget/subtitle/subtitlelist.js',
-           'widget/subtitle/transcribeentry.js',
-           'widget/subtitle/transcribepanel.js',
-           'widget/subtitle/transcriberightpanel.js',
-           'widget/subtitle/syncpanel.js',
-           'widget/subtitle/reviewpanel.js',
-           'widget/subtitle/reviewrightpanel.js',
-           'widget/subtitle/sharepanel.js',
-           'widget/subtitle/completeddialog.js',
-           'widget/subtitle/editpanel.js',
-           'widget/subtitle/editrightpanel.js',
-           'widget/subtitle/bottomfinishedpanel.js',
-           'widget/subtitle/logger.js',
-           'widget/subtitle/savedsubtitles.js',
-           'widget/timeline/timerow.js',
-           'widget/timeline/timerowul.js',
-           'widget/timeline/timelinesub.js',
-           'widget/timeline/timelinesubs.js',
-           'widget/timeline/timelineinner.js',
-           'widget/timeline/timeline.js',
-           'widget/timeline/subtitle.js',
-           'widget/timeline/subtitleset.js',
-           'widget/controls/bufferedbar.js',
-           'widget/controls/playpause.js',
-           'widget/controls/progressbar.js',
-           'widget/controls/progressslider.js',
-           'widget/controls/timespan.js',
-           'widget/controls/videocontrols.js',
-           'widget/controls/volumecontrol.js',
-           'widget/controls/volumeslider.js',
-           'widget/translate/googletranslator.js',
-           'widget/translate/dialog.js',
-           'widget/translate/translationpanel.js',
-           'widget/translate/translationlist.js',
-           'widget/translate/translationwidget.js',
-           'widget/translate/translationrightpanel.js',
-           'widget/translate/forkdialog.js',
-           'widget/translate/titletranslationwidget.js',
-           'widget/play/manager.js',
-           'widget/widgetcontroller.js',
-           'widget/widget.js']
+JS_CORE = \
+    ['mirosubs.js', 
+     'rpc.js',
+     'clippy.js',
+     'flash.js',
+     'spinner.js',
+     'sliderbase.js',
+     'closingwindow.js',
+     'loadingdom.js',
+     'tracker.js',
+     'style.js',
+     'messaging/simplemessage.js',
+     'video/video.js',
+     'video/captionview.js',
+     'video/abstractvideoplayer.js',
+     'video/flashvideoplayer.js',
+     'video/html5videoplayer.js',
+     'video/youtubevideoplayer.js',
+     'video/jwvideoplayer.js',
+     'video/flvvideoplayer.js',
+     'video/videosource.js',
+     'video/html5videosource.js',
+     'video/youtubevideosource.js',
+     'video/brightcovevideosource.js',
+     'video/brightcovevideoplayer.js',
+     'video/flvvideosource.js',
+     'video/bliptvplaceholder.js',
+     'video/controlledvideoplayer.js',
+     'video/vimeovideosource.js',
+     'video/vimeovideoplayer.js',
+     'video/dailymotionvideosource.js',
+     'video/dailymotionvideoplayer.js',
+     'startdialog/model.js',
+     'startdialog/videolanguage.js',
+     'startdialog/videolanguages.js',
+     'startdialog/tolanguage.js',
+     'startdialog/tolanguages.js',
+     'startdialog/dialog.js',
+     'requestdialog.js',
+     'widget/subtitle/editablecaption.js',
+     "widget/subtitle/editablecaptionset.js",
+     'widget/usersettings.js',
+     'widget/logindialog.js',
+     'widget/videotab.js',
+     'widget/howtovideopanel.js',
+     'widget/dialog.js',
+     'widget/captionmanager.js',
+     'widget/rightpanel.js',
+     'widget/basestate.js',
+     'widget/subtitlestate.js',
+     'widget/dropdowncontents.js',
+     'widget/playcontroller.js',
+     'widget/subtitlecontroller.js',
+     'widget/subtitledialogopener.js',
+     'widget/opendialogargs.js',
+     'widget/dropdown.js',
+     'widget/play/manager.js',
+     'widget/widgetcontroller.js',
+     'widget/widget.js'
+]
+
+JS_DIALOG = \
+    ['subtracker.js',
+     'srtwriter.js',
+     'widget/unsavedwarning.js',
+     'widget/resumeeditingrecord.js',
+     'widget/droplockdialog.js',
+     'finishfaildialog/dialog.js',
+     'finishfaildialog/errorpanel.js',
+     'finishfaildialog/reattemptuploadpanel.js',
+     'finishfaildialog/copydialog.js',
+     'widget/subtitle/dialog.js',
+     'widget/subtitle/msservermodel.js',
+     'widget/subtitle/subtitlewidget.js',
+     'widget/subtitle/addsubtitlewidget.js',
+     'widget/subtitle/subtitlelist.js',
+     'widget/subtitle/transcribeentry.js',
+     'widget/subtitle/transcribepanel.js',
+     'widget/subtitle/transcriberightpanel.js',
+     'widget/subtitle/syncpanel.js',
+     'widget/subtitle/reviewpanel.js',
+     'widget/subtitle/reviewrightpanel.js',
+     'widget/subtitle/sharepanel.js',
+     'widget/subtitle/completeddialog.js',
+     'widget/subtitle/editpanel.js',
+     'widget/subtitle/editrightpanel.js',
+     'widget/subtitle/bottomfinishedpanel.js',
+     'widget/subtitle/logger.js',
+     'widget/subtitle/savedsubtitles.js',
+     'widget/timeline/timerow.js',
+     'widget/timeline/timerowul.js',
+     'widget/timeline/timelinesub.js',
+     'widget/timeline/timelinesubs.js',
+     'widget/timeline/timelineinner.js',
+     'widget/timeline/timeline.js',
+     'widget/timeline/subtitle.js',
+     'widget/timeline/subtitleset.js',
+     'widget/controls/bufferedbar.js',
+     'widget/controls/playpause.js',
+     'widget/controls/progressbar.js',
+     'widget/controls/progressslider.js',
+     'widget/controls/timespan.js',
+     'widget/controls/videocontrols.js',
+     'widget/controls/volumecontrol.js',
+     'widget/controls/volumeslider.js',
+     'widget/translate/googletranslator.js',
+     'widget/translate/dialog.js',
+     'widget/translate/translationpanel.js',
+     'widget/translate/translationlist.js',
+     'widget/translate/translationwidget.js',
+     'widget/translate/translationrightpanel.js',
+     'widget/translate/forkdialog.js',
+     'widget/translate/titletranslationwidget.js']
 
 JS_OFFSITE = list(JS_CORE)
 JS_OFFSITE.append('widget/crossdomainembed.js')
 
 JS_ONSITE = list(JS_CORE)
 JS_ONSITE.extend(
-    ['widget/samedomainembed.js',
+    ['srtwriter.js',
+     'widget/samedomainembed.js',
      "widget/api/servermodel.js",
      "widget/api/api.js"])
 
@@ -302,6 +305,7 @@ JS_EXTENSION = list(JS_WIDGETIZER_CORE)
 JS_EXTENSION.append('widgetizer/extension.js')
 
 JS_API = list(JS_CORE)
+JS_API.extend(JS_DIALOG)
 JS_API.extend([
         "widget/api/servermodel.js",
         "widget/api/api.js"])
@@ -448,7 +452,7 @@ LOCALE_INDEPENDENT_PATHS = (
     re.compile('^/api'),
     re.compile('^/jstest'),
     re.compile('^/sitemap.*.xml'),
-    re.compile('^/crossdomain.xml'),
+    #re.compile('^/crossdomain.xml'),
 )
 
 #Haystack configuration
@@ -515,7 +519,8 @@ MIXPANEL_TOKEN = '44205f56e929f08b602ccc9b4605edc3'
 try:
     from commit import LAST_COMMIT_GUID
 except ImportError:
-    LAST_COMMIT_GUID = ''
+    print "deploy/create_commit_file must be ran before boostrapping django"
+    raise
 
 AWS_ACCESS_KEY_ID = ''
 AWS_SECRET_ACCESS_KEY = ''
@@ -592,12 +597,44 @@ MEDIA_BUNDLES = {
             "css/mirosubs-widget.css",
 
          ),
-        }
+        },
+    "mirosubs-offsite-compiled":{
+        "type": "js",
+        "files": JS_OFFSITE,
+        },
 
+    "mirosubs-onsite-compiled":{
+        "type": "js",
+        "files": JS_ONSITE,
+     },
+     "mirosubs-widgetizer":{
+        "type": "js",
+        "files": ["config.js"] + JS_WIDGETIZER,
+     },
+    "mirosubs-widgetizer-debug":{
+        "type": "js",
+        "files": ["config.js" ] + JS_WIDGETIZER,
+        "debug": True,
+     },
+    "mirosubs-extension":{
+        "type": "js",
+        "files": ["config.js" ] + JS_EXTENSION,
+     },
+
+    "mirosubs-statwidget":{
+        "type": "js",
+        "closure_deps": "closure-stat-dependencies.js",
+        "include_flash_deps": False,
+        "files": [
+            'mirosubs.js',
+            'rpc.js',
+            'loadingdom.js',
+            'statwidget/statwidgetconfig.js',
+            'statwidget/statwidget.js'],
+     },
+
+    "mirosubs-api":{
+        "type": "js",
+        "files": ["config.js"] + JS_API,
+     },
 }
-
-
-try:
-    from mediabundles_list import MEDIA_BUNDLE_URLS
-except ImportError:
-    MEDIA_BUNDLE_URLS = {} 

@@ -206,6 +206,7 @@ def _git_pull():
     run('git pull --rebase')
     run('chgrp pcf-web -R .git 2> /dev/null; /bin/true')
     run('chmod g+w -R .git 2> /dev/null; /bin/true')
+    run('python deploy/create_commit_file.py')
     _clear_permissions('.')
 
 def add_disabled():
@@ -236,8 +237,6 @@ def update_web():
             env.warn_only = False
             with cd('{0}/mirosubs/deploy'.format(env.web_dir)):
                 run('. ../../env/bin/activate && pip install -q -r requirements.txt')
-            run('{0} deploy/create_commit_file.py'.format(python_exe))
-            run('{0} manage.py update_compiled_urls --settings=unisubs_settings'.format(python_exe))
             run('touch deploy/unisubs.wsgi')
     if env.admin_dir is not None:
         env.host_string = ADMIN_HOST
@@ -295,22 +294,29 @@ def _update_static(dir):
                 python_exe, media_dir))
         run('{0} manage.py compile_statwidgetconfig {1} --settings=unisubs_settings'.format(
                 python_exe, media_dir))
-        run('{0} closure/compile.py'.format(python_exe))
         run('{0} manage.py compile_embed {1} --settings=unisubs_settings'.format(
                 python_exe, media_dir))
-
+        # we need to remove whatever was left on static-cache
+        static_cache_path = "./media/static-cache/*"
+        sudo("rm -fr {0}".format(static_cache_path))
         run('{0} manage.py  compile_media --settings=unisubs_settings'.format(python_exe))
         
 def update_static():
     env.host_string = DEV_HOST
+
+    # we need to run this, as media settings will use the lastest commit guid
+    # to prefix static media 
+    with cd(os.path.join(env.static_dir, 'mirosubs')):
+        run('python deploy/create_commit_file.py')
+
     if env.s3_bucket is not None:
-        _update_static(env.static_dir)
-        media_dir = '{0}/mirosubs/media/'.format(env.static_dir)
-        run('/usr/local/s3sync/s3sync.rb -r -p -v {0} {1}:'.format(
-                media_dir, env.s3_bucket))
+        with cd(os.path.join(env.static_dir, 'mirosubs')):
+            _update_static(env.static_dir)
+            media_dir = '{0}/mirosubs/media/'.format(env.static_dir)
+            python_exe = '{0}/env/bin/python'.format(env.static_dir)
+            run('{0} manage.py  send_to_s3 --settings=unisubs_settings'.format(python_exe))
     else:
         _update_static(env.web_dir)
-    
 
 def update():
     update_static()

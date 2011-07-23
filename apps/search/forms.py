@@ -1,3 +1,21 @@
+# Universal Subtitles, universalsubtitles.org
+# 
+# Copyright (C) 2010 Participatory Culture Foundation
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+# 
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see 
+# http://www.gnu.org/licenses/agpl-3.0.html.
+
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
@@ -41,8 +59,27 @@ class SearchForm(forms.Form):
             self.fields['langs'].choices = self._make_choices_from_faceting(langs_data)
         else:
             choices = list(get_simple_languages_list())
+            choices.insert(0, ('', _('All Languages')))
             self.fields['langs'].choices = choices
             self.fields['video_lang'].choices = choices
+    
+    def get_display_views(self):
+        if not hasattr(self, 'cleaned_data'):
+            return 
+        
+        sort = self.cleaned_data.get('sort')
+        
+        if not sort:
+            return
+        
+        if sort == 'today_views':
+            return 'today'
+        elif sort == 'week_views':
+            return 'week'
+        elif sort == 'month_views':
+            return 'month'
+        elif sort == 'total_views':
+            return 'total'
     
     def _make_choices_from_faceting(self, data):
         choices = []
@@ -52,13 +89,14 @@ class SearchForm(forms.Form):
         for lang, val in data:
             lang = LanguageField.convert(lang)
             try:
-                choices.append((lang, ALL_LANGUAGES_NAMES[lang], val))
+                choices.append((lang, u'%s(%s)' % (ALL_LANGUAGES_NAMES[lang], val), val))
             except KeyError:
                 pass
 
         choices.sort(key=lambda item: item[-1], reverse=True)
-        
+        choices = list((item[0], item[1]) for item in choices)
         choices.insert(0, ('', _('All Languages')))
+
         return choices
     
     @classmethod
@@ -75,10 +113,10 @@ class SearchForm(forms.Form):
         
         #aplly filtering
         if video_language:
-            qs = qs.filter(video_language__exact=video_language)
+            qs = qs.filter(video_language_exact=LanguageField.prepare_lang(video_language))
         
         if langs:
-            qs = qs.filter(languages=langs)
+            qs = qs.filter(languages_exact=LanguageField.prepare_lang(langs))
         
         if ordering:
             qs = qs.order_by('-' + ordering)

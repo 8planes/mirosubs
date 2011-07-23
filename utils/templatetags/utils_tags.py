@@ -53,7 +53,7 @@ def form_field_as_list(request, bounded_field, count=0):
 
     content = [u'<ul>']
     for item in output:
-        content.append(u'<li %(attrs)s><a href="%(href)s" name="%(fname)s" value="%(value)s">%(name)s</a></li>' % item) 
+        content.append(u'<li %(attrs)s><a href="%(href)s" name="%(fname)s" value="%(value)s"><span>%(name)s</span></a></li>' % item) 
     content.append(u'</ul>')
     
     return u''.join(content)

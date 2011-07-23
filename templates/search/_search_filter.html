@@ -1,19 +1,9 @@
-{% load i18n utils_tags %}
+{% load i18n %}
 
-<div id="sidebar">
-    <h2>{{ form.sort.label }}</h2>
-    {% form_field_as_list request form.sort %}
-
-    <h2>{{ form.video_lang.label }}</h2>
-    {% form_field_as_list request form.video_lang 6 %}
-
-    <h2>{{ form.langs.label }}</h2>
-    {% form_field_as_list request form.langs 6 %}
-
-</div><!-- // sidebar -->
+<div id="sidebar"></div><!-- // sidebar -->
 <script type="text/javascript">
     (function($){
-        $('#sidebar .more-link').click(function(){
+        $('.more-link', $('#sidebar')).live('click', function(){
             var $ul = $(this).parents('ul');
             
             if ($ul.find('li:hidden').length){
