@@ -303,13 +303,17 @@ def _update_static(dir):
         
 def update_static():
     env.host_string = DEV_HOST
+
+    # we need to run this, as media settings will use the lastest commit guid
+    # to prefix static media 
+    run('python deploy/create_commit_file.py')
     if env.s3_bucket is not None:
-        
-        #_update_static(env.static_dir)
+        _update_static(env.static_dir)
         media_dir = '{0}/mirosubs/media/'.format(env.static_dir)
         with cd(os.path.join(env.static_dir, 'mirosubs')):
+
             python_exe = '{0}/env/bin/python'.format(env.static_dir)
-            run('{0} manage.py  send_to_s3 --settings=unisusbs_settings'.format(python_exe))
+            run('{0} manage.py  send_to_s3 --settings=unisubs_settings'.format(python_exe))
     else:
         _update_static(env.web_dir)
 
