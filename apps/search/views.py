@@ -16,11 +16,8 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 from haystack.query import SearchQuerySet
-from django.views.generic.list_detail import object_list
-from videos.models import Video, SubtitleLanguage
+from videos.models import Video
 from search.forms import SearchForm
-from django.conf import settings
-from videos.search_indexes import VideoSearchResult
 from search.rpc import SearchApiClass
 from utils.rpc import RpcRouter
 from utils import render_to
