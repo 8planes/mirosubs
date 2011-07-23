@@ -515,7 +515,11 @@ EDIT_END_THRESHOLD = 120
 GOOGLE_ANALYTICS_NUMBER = 'UA-163840-22'
 MIXPANEL_TOKEN = '44205f56e929f08b602ccc9b4605edc3'
 
-from commit import LAST_COMMIT_GUID
+try:
+    from commit import LAST_COMMIT_GUID
+except ImportError:
+    print "deploy/create_commit_file must be ran before boostrapping django"
+    raise
 
 AWS_ACCESS_KEY_ID = ''
 AWS_SECRET_ACCESS_KEY = ''
