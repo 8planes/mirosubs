@@ -68,11 +68,14 @@ class VideosApiClass(object):
         
         try:
             c = Video.objects.filter(pk=video_id).update(featured=datetime.datetime.today())
-        except (ValueError, TypeError):
+        except (ValueError, TypeError, Video.DoesNotExist):
             raise RpcExceptionEvent(_(u'Incorrect video ID'))
                 
         if not c:
             raise RpcExceptionEvent(_(u'Video does not exist'))
+
+        from utils.celery_search_index import update_search_index
+        update_search_index.delay(Video, video_id)  
         
         return {}
     
