@@ -58,6 +58,7 @@ from videos.tasks import video_changed_tasks
 from haystack.query import SearchQuerySet
 from videos.search_indexes import VideoSearchResult
 from utils.celery_search_index import update_search_index
+import datetime
 
 rpc_router = RpcRouter('videos:rpc_router', {
     'VideosApi': VideosApiClass()
@@ -76,7 +77,8 @@ def watch_page(request):
         
     #featured videos
     featured_videos = SearchQuerySet().result_class(VideoSearchResult) \
-        .models(Video).load_all().order_by('-featured')[:5]
+        .models(Video).filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
+        .load_all().order_by('-featured')[:5]
     
     latest_videos = SearchQuerySet().result_class(VideoSearchResult) \
         .models(Video).load_all().order_by('-edited')[:15]

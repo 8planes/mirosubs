@@ -94,7 +94,8 @@ class VideosApiClass(object):
     @add_request_to_kwargs
     def load_featured_page(self, page, request, user):
         sqs = SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).order_by('-featured')
+            .models(Video).filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
+            .order_by('-featured')
         
         return render_page(page, sqs, request=request)    
 
@@ -143,7 +144,8 @@ class VideosApiClass(object):
     @add_request_to_kwargs
     def load_featured_page_volunteer(self, page, request, user):
         relevent = self._get_volunteer_sqs(request, user)
-        sqs = relevent.order_by('-featured')
+        sqs = relevent.filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
+            .order_by('-featured')
 
         return render_page(page, sqs, request=request)    
 
