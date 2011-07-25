@@ -405,5 +405,8 @@ def test_memcached():
             if output.find(random_string) == -1:
                 raise Exception('Machines {0} and {1} are using different memcached instances'.format(
                         host, other_host))
-                
 
+def generate_docs():
+    env.host_string = DEV_HOST
+    with cd(os.path.join(env.static_dir, 'mirosubs')):
+         sphinx-build docs/ media/docs

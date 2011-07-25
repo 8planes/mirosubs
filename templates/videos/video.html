@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body_attrs %}id="video_profile"{% endblock %}
 
-{% load escapejs widget comments recent_activity paginator i18n subtitles_tags teams_tags videos_tags %}
+{% load escapejs widget comments recent_activity paginator i18n subtitles_tags teams_tags videos_tags media_compressor %}
 
 {% block css %}
     {% if video.thumbnail %}
@@ -46,7 +46,11 @@
 {% endblock %}
 
 {% block scripts %}
-    {% include "widget/_js_onsite_dependencies.html" %}
+<script type="text/javascript">
+  window.MEDIA_URL = '{{MEDIA_URL}}';
+</script>
+     {% include_bundle "video_history" %}
+    
     {{ block.super }}
     <script src="{% url videos:rpc_api %}" type="text/javascript"></script>    
     {% with write_video_type_js as jsinclude %}{% if jsinclude %}{% write_video_type_js video %}{% endif %}{% endwith %}    
