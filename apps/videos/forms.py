@@ -416,7 +416,10 @@ class AddFromFeedForm(forms.Form, AjaxForm):
                     break  
 
             if feed_parser.feed.version:
-                self.feed_urls.append((url, entry and entry['link']))
+                try:
+                    self.feed_urls.append((url, entry and entry['link']))
+                except KeyError:
+                    raise forms.ValidationError(_(u'Sorry, we could not find a valid feed at the URL you provided. Please check the URL and try again.'))
                 
         except FeedParserError, e:
             raise forms.ValidationError(e) 

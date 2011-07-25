@@ -1232,6 +1232,14 @@ class TestFeedsSubmit(TestCase):
         self.assertRedirects(response, reverse('videos:create'))
         self.assertNotEqual(old_count, Video.objects.count())
 
+    def test_inorrect_video_feed_submit(self):
+        data = {
+            'feed_url': u'http://blip.tv/anyone-but-he/?skin=rss'
+        }
+        response = self.client.post(reverse('videos:create_from_feed'), data)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context['youtube_form'].errors['feed_url'])
+
     def test_empty_feed_submit(self):
         import urllib2
         import feedparser
