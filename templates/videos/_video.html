@@ -17,7 +17,9 @@
         <span class="views">
             <strong>
                 {{ video_views }}
-            </strong> {% trans "Views" %} | <strong>{% trans "Added" %} {{ video.created|date:"M j" }}</strong>
+            </strong> 
+            {% blocktrans count video_views as views %}View{% plural %}Views{% endblocktrans %} 
+            | <strong>{% trans "Added" %} {{ video.created|date:"M j" }}</strong>
             <br/>
             {% trans "Last edited" %}: {{ video.edited|date:"M j Y" }}
         </span>
