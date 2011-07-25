@@ -40,6 +40,17 @@ mirosubs.widget.SubtitleController = function(
                 videoTab.stopLoading();
         },
         goog.bind(playController.stopForDialog, playController));
+
+    /**
+     * Show a request subtitles button as a nudge.
+     * It will get overwritten by the Improve Subtitles button.
+     */
+    this.videoTab_.updateNudge(
+        'Request Subtitles',
+        goog.bind(this.openRequestSubtitlesDialog,
+                  this));
+    this.videoTab_.showNudge(true);
+
     this.handler_.listenOnce(
         this.dialogOpener_,
         goog.ui.Dialog.EventType.AFTER_HIDE,
@@ -54,7 +65,11 @@ mirosubs.widget.SubtitleController = function(
             dropDown,
             s.IMPROVE_SUBTITLES,
             this.improveSubtitles_).
-        listen(
+       listen(
+            dropDown,
+            s.REQUEST_SUBTITLES,
+            this.requestSubtitles_).
+       listen(
             videoTab.getAnchorElem(), 'click',
             this.videoAnchorClicked_
         );
@@ -79,6 +94,13 @@ mirosubs.widget.SubtitleController.prototype.improveSubtitles_ = function() {
             null,
             state.LANGUAGE_PK,
             state.BASE_LANGUAGE_PK));
+};
+
+/**
+ * Corresponds to "request subtitles" in menu.
+ */
+mirosubs.widget.SubtitleController.prototype.requestSubtitles_ = function() {
+    this.openRequestSubtitlesDialog();
 };
 
 /**
@@ -110,3 +132,20 @@ mirosubs.widget.SubtitleController.prototype.subtitleDialogClosed_ = function(e)
         this.dropDown_.updateContents(dropDownContents);
     }
 };
+
+/**
+ * Opens the request subtitles dialog.
+ */
+mirosubs.widget.SubtitleController.prototype.openRequestSubtitlesDialog = function()
+{
+    mirosubs.login();
+    if (mirosubs.isLoginAttemptInProgress()) {
+        //Logging in
+        return;
+    }
+    else{
+        // Create a new request Dialog
+        var dialog = new mirosubs.RequestDialog(this.videoID_);
+        dialog.setVisible(true);
+    }
+}

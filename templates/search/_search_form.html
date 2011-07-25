@@ -4,30 +4,43 @@
     <div id="watch_search">
         <span class="icon"></span>
         {{ form.q }}
+        {% if not simple %}
+        <a id="advanced_search" class="btn_active" href=""></a>
+        {% endif %}
         <script type="text/javascript">
             jQuery('#id_q').input_replacement({
                 text: '{% trans "Search videos" %}',
                 prefocus_class: 'prefocus'
             });
+            jQuery('#advanced_search').click(function(){
+                jQuery('#advanced_menu').toggleClass('open');
+                return false;
+            });
+            /*
+            jQuery('#advanced_search').mouseover(function(){
+                jQuery('#advanced_menu').addClass('open');
+            }).mouseout(function(e){
+                jQuery('#advanced_menu').removeClass('open');
+            }).click(function(){
+                return false;
+            });
+            */
         </script>
-        <a id="advanced_search" href="">
-        <div id="advanced_menu_closed">
+        {% if not simple %} 
+        <div id="advanced_menu">
+            <div class="clearfix"></div>
             <div class="menu_item videos_in">
-                <h3>Videos In</h3>
-                <select>
-                    <option>English (US)</option>
-                </select>
+                <h3>{% trans "Videos In" %}</h3>
+                {{ form.video_lang }}
             </div><!-- // menu_item -->
             <div class="menu_item">
-                <h3>Subtitles into</h3>
-                <select>
-                    <option>English (US)</option>
-                </select>
+                <h3>{% trans "Subtitles into" %}</h3>
+                {{ form.langs }}
                 <button>
-                    Search
+                    {% trans "Search" %}
                 </button>
             </div><!-- // menu_item -->
         </div><!-- // advanced_menu -->
-        </a>
+        {% endif %}
     </div><!-- // watch_search -->
 </form>

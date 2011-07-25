@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django import forms
-from videos.models import Video, UserTestResult, SubtitleVersion, Subtitle, SubtitleLanguage, VideoFeed
+from videos.models import Video, UserTestResult, SubtitleLanguage, VideoFeed
 from django.core.mail import EmailMessage, send_mail
 from django.conf import settings
 from datetime import datetime
@@ -25,10 +25,9 @@ from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 import re
 from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, SubtitleParserError, SbvSubtitleParser, TxtSubtitleParser
-import random
+from utils.subtitles import save_subtitle
 from django.utils.encoding import force_unicode, DjangoUnicodeDecodeError
 import chardet
-from uuid import uuid4
 from math_captcha.forms import MathCaptchaForm
 from django.utils.safestring import mark_safe
 from django.db.models import ObjectDoesNotExist
@@ -38,7 +37,7 @@ from utils.forms import AjaxForm, EmailListField, UsernameListField
 from gdata.youtube.service import YouTubeService
 from videos.tasks import video_changed_tasks
 from utils.translation import get_languages_list
-from utils.forms import StripURLField, StripRegexField, FeedURLField
+from utils.forms import StripRegexField, FeedURLField
 from videos.feed_parser import FeedParser, FeedParserError
 from utils.forms import ReCaptchaField
 
@@ -155,23 +154,6 @@ class SubtitlesUploadBaseForm(forms.Form):
         if video.is_writelocked:
             raise forms.ValidationError(_(u'Somebody is subtitling this video right now. Try later.'))
         return video
-    
-    def is_version_same(self, version, parser):
-        if not version:
-            return False
-        
-        subtitles = list(parser)
-        
-        if version.subtitle_set.count() != len(subtitles):
-            return False
-        
-        for item in zip(subtitles, version.subtitle_set.all()):
-            if item[0]['subtitle_text'] != item[1].subtitle_text or \
-                item[0]['start_time'] != item[1].start_time or \
-                item[0]['end_time'] != item[1].end_time:
-                    return False
-                
-        return True
 
     def _save_original_language(self, video, video_language):
         original_language = video.subtitle_language()
@@ -244,50 +226,13 @@ class SubtitlesUploadBaseForm(forms.Form):
     def save_subtitles(self, parser, video=None, language=None, update_video=True):
         video = video or self.cleaned_data['video']
         
-        key = str(uuid4()).replace('-', '')
-
-        video._make_writelock(self.user, key)
-        video.save()
-
         if not video.has_original_language():
             self._save_original_language(
                 video, self.cleaned_data['video_language'])
         
         language = language or self._find_appropriate_language(video, self.cleaned_data['language'])
-        
-        try:
-            old_version = language.subtitleversion_set.all()[:1].get()    
-            version_no = old_version.version_no + 1
-        except ObjectDoesNotExist:
-            old_version = None
-            version_no = 0
-        version = None
-        if not self.is_version_same(old_version, parser):
-            version = SubtitleVersion(
-                language=language, version_no=version_no,
-                datetime_started=datetime.now(), user=self.user,
-                note=u'Uploaded', is_forked=True, time_change=1, text_change=1)
-            version.save()
-    
-            ids = []
-    
-            for i, item in enumerate(parser):
-                id = int(random.random()*10e12)
-                while id in ids:
-                    id = int(random.random()*10e12)
-                ids.append(id)
-                caption = Subtitle(**item)
-                caption.version = version
-                caption.subtitle_id = str(id)
-                caption.subtitle_order = i+1
-                caption.save()
-                
-        language.video.release_writelock()
-        language.video.save()
-        translations = video.subtitlelanguage_set.filter(standard_language=language)
-        [t.fork(from_version=old_version, user=self.user) for t in translations]
-        if update_video:
-            video_changed_tasks.delay(video.id, None if version is None else version.id)        
+        language = save_subtitle(video, language, parser, self.user, update_video)
+   
         return language
 
     def get_errors(self):
@@ -471,7 +416,10 @@ class AddFromFeedForm(forms.Form, AjaxForm):
                     break  
 
             if feed_parser.feed.version:
-                self.feed_urls.append((url, entry and entry['link']))
+                try:
+                    self.feed_urls.append((url, entry and entry['link']))
+                except KeyError:
+                    raise forms.ValidationError(_(u'Sorry, we could not find a valid feed at the URL you provided. Please check the URL and try again.'))
                 
         except FeedParserError, e:
             raise forms.ValidationError(e) 

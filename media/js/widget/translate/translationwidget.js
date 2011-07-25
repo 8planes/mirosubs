@@ -61,7 +61,7 @@ mirosubs.translate.TranslationWidget.prototype.createDom = function() {
            this.translateInput_ = $d('textarea', 'mirosubs-translateField')
         )
     );
-
+    
     this.getHandler()
         .listen(
             this.translateInput_, goog.events.EventType.BLUR,

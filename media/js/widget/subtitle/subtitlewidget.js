@@ -184,8 +184,9 @@ mirosubs.subtitle.SubtitleWidget.prototype.switchToEditMode = function() {
             }
         });
     goog.dom.removeNode(this.titleElemInner_);
-    this.textareaElem_ = this.getDomHelper().createElement('textarea');
-    this.titleElem_.appendChild(this.textareaElem_);
+    this.textareaElem_ = this.getDomHelper().createDom(
+        'textarea', 'mirosubs-subedit');
+    goog.dom.append(this.titleElem_, this.textareaElem_);
     this.textareaElem_.value = this.subtitle_.getText();
     this.textareaElem_.focus();
     this.keyHandler_ = new goog.events.KeyHandler(this.textareaElem_);

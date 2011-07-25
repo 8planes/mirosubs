@@ -293,7 +293,8 @@ class UserLanguage(models.Model):
     user = models.ForeignKey(CustomUser)
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES, verbose_name='languages')
     proficiency = models.IntegerField(choices=PROFICIENCY_CHOICES, default=1)
-    
+    follow_requests = models.BooleanField(verbose_name=_('follow requests in language'))
+
     class Meta:
         unique_together = ['user', 'language']
 

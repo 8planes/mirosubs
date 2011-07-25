@@ -20,12 +20,15 @@ from django import template
 from django.db.models.query import QuerySet
 from django.db.models import Model
 from search.forms import SearchForm
+from haystack.query import SearchQuerySet
+from videos.models import Video
 
 register = template.Library()
 
 @register.inclusion_tag('search/_search_form.html', takes_context=True)
-def search_form(context, form=None):
+def search_form(context, form=None, simple=False):
     return {
+        'simple': simple,
         'form': form or SearchForm(context['request'])
     }
 

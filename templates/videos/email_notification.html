@@ -5,15 +5,17 @@
 {% block content %}
     <p style="font-size: 12px;">
         {% if user_url %}
-            {% blocktrans with video_url|rmlocale as video_url and version.user as u and user_url|rmlocale as user_url and video as v and version.time_change_display as time_change and version.text_change_display as text_change %}
-            Subtitles you contributed to <b><a href="http://{{ domain }}{{ video_url }}">{{ v }}</a></b> 
+            {% blocktrans with language_url|rmlocale as language_url and language.language_display as lang and video_url|rmlocale as video_url and version.user as u and user_url|rmlocale as user_url and video as v and version.time_change_display as time_change and version.text_change_display as text_change %}
+            <b><a href="http://{{ domain }}{{ language_url }}">{{ lang }} subtitles</a></b> 
+            you contributed to <b><a href="http://{{ domain }}{{ video_url }}">{{ v }}</a></b> 
             were changed by <b><a href="http://{{ domain }}{{ user_url }}">{{ u }}</a></b>. 
             These changes went live immediately.  {{ text_change }} of the text and
             {{ time_change }} of the timing was changed.
             {% endblocktrans %}<br/>
         {% else %}
-            {% blocktrans with video_url|rmlocale as video_url and version.user as u and video as v and version.time_change_display as time_change and version.text_change_display as text_change %}
-            Subtitles you contributed to <b><a href="http://{{ domain }}{{ video_url }}">{{ v }}</a></b> 
+            {% blocktrans with language_url|rmlocale as language_url and language.language_display as lang and video_url|rmlocale as video_url and version.user as u and video as v and version.time_change_display as time_change and version.text_change_display as text_change %}
+            <b><a href="http://{{ domain }}{{ language_url }}">{{ lang }} subtitles</a></b> 
+            you contributed to <b><a href="http://{{ domain }}{{ video_url }}">{{ v }}</a></b> 
             were changed. These changes went live immediately. {{ text_change }} of the text and 
             {{ time_change }} of the timing was changed.
             {% endblocktrans %}<br/>        

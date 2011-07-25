@@ -1,40 +1,35 @@
 # Universal Subtitles, universalsubtitles.org
-# 
+#
 # Copyright (C) 2010 Participatory Culture Foundation
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
 # published by the Free Software Foundation, either version 3 of the
 # License, or (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Affero General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see 
+# along with this program.  If not, see
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-import os
-from httplib2 import Http
-import logging
-logger = logging.getLogger(__name__)
-
-from django.conf import settings
-from django.core.management.base import BaseCommand
-
-
-class Command(BaseCommand):
+#  Based on: http://www.djangosnippets.org/snippets/73/
+#
+#  Modified by Sean Reifschneider to be smarter about surrounding page
+#  link context.  For usage documentation see:
+#
+#     http://www.tummy.com/Community/Articles/django-pagination/
 
 
+from django.contrib import admin
+from subrequests.models import SubtitleRequest
 
-    def handle(self, *args, **kwargs):
-        http = Http()
-        url = "%s%s/compresses.py" % (settings.MEDIA_URL , settings.COMPRESS_OUTPUT_DIRNAME)
-        res, content = http.request(url)
-        if res.status >= 400:
-            logger.warning("Could not download media bundle description at %s" % url)
-        fpath = os.path.join(settings.PROJECT_ROOT, "mediabundles_list.py")
-        open(fpath, 'w').write(content)
-        
+class SubtitleRequestAdmin(admin.ModelAdmin):
+    list_display = ['video', 'language', 'user', 'done']
+    raw_id_fields = ['video', 'user']
+
+admin.site.register(SubtitleRequest, SubtitleRequestAdmin)
+

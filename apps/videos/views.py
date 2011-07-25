@@ -58,6 +58,7 @@ from videos.tasks import video_changed_tasks
 from haystack.query import SearchQuerySet
 from videos.search_indexes import VideoSearchResult
 from utils.celery_search_index import update_search_index
+import datetime
 
 from apps.teams.moderation import user_can_moderate
 
@@ -78,7 +79,8 @@ def watch_page(request):
         
     #featured videos
     featured_videos = SearchQuerySet().result_class(VideoSearchResult) \
-        .models(Video).load_all().order_by('-featured')[:5]
+        .models(Video).filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
+        .load_all().order_by('-featured')[:5]
     
     latest_videos = SearchQuerySet().result_class(VideoSearchResult) \
         .models(Video).load_all().order_by('-edited')[:15]
@@ -86,7 +88,8 @@ def watch_page(request):
     context = {
         'featured_videos': featured_videos,
         'popular_videos': popular_videos,
-        'latest_videos': latest_videos
+        'latest_videos': latest_videos,
+        'popular_display_views': 'week'
     }
     return render_to_response('videos/watch.html', context,
                               context_instance=RequestContext(request)) 

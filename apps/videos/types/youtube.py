@@ -18,7 +18,7 @@
 from urlparse import urlparse
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('youtube')
 
 from gdata.youtube.service import YouTubeService
 from gdata.service import RequestError
@@ -118,7 +118,7 @@ class YoutubeVideoType(VideoType):
         resp, content = h.request(url, "GET")
         resp.status = 500
         if resp.status < 200 or resp.status >= 400:
-            logger.info("Youtube subtitles error", extra={
+            logger.warning("Youtube subtitles error", extra={
                     'data': {
                         "url": url,
                         "video_id": self.videoid,

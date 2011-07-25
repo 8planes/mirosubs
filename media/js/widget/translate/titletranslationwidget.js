@@ -22,9 +22,10 @@ goog.provide('mirosubs.translate.TitleTranslation');
  * @constructor
  * @param {string} video title
  */
-mirosubs.translate.TitleTranslationWidget = function(videoTitle) {
+mirosubs.translate.TitleTranslationWidget = function(videoTitle, captionSet) {
     goog.ui.Component.call(this);
     this.originalVideoTitle_ = videoTitle || '';
+    this.captionSet_ = captionSet;
 };
 goog.inherits(mirosubs.translate.TitleTranslationWidget, goog.ui.Component);
 
@@ -70,5 +71,5 @@ mirosubs.translate.TitleTranslationWidget.prototype.setTranslationContent =
     mirosubs.translate.TitleTranslationWidget.prototype.setTranslation;
 
 mirosubs.translate.TitleTranslationWidget.prototype.inputLostFocus_ = function(event) {
-
+    this.captionSet_.title = this.translateInput_.value;
 };

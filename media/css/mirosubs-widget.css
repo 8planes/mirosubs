@@ -3005,6 +3005,11 @@ background: url("../images/dropdown_icons.png") 19px -29px no-repeat !important;
 color: #42bce9 !important;
 }
 
+.mirosubs-dropdown .mirosubs-requestSubtitles{
+/*background: url("../images/dropdown_icons.png") 19px -29px no-repeat !important;*/
+color: #42bce9 !important;
+}
+
 .mirosubs-dropdown .mirosubs-improveSubtitles{
 background: url("../images/dropdown_icons.png") 19px -29px no-repeat !important;
 color: #42bce9 !important;
@@ -3125,3 +3130,30 @@ border: 1px solid !important;
   margin: 7px 0 0 0;
 }
 
+.mirosubs-request-div{
+    width:400px;
+}
+
+.mirosubs-request-div select{
+  margin: 10px 10px;
+}
+
+.mirosubs-request-addlang{
+  font-size:small;
+  margin: 0 10px 20px;
+}
+
+#mirosubs-request-track{
+  margin: 10px;
+  clear:both;
+}
+
+label[for="mirosubs-request-track"]{
+  margin: 3px 0 0;
+}
+
+#mirosubs-request-description{
+  width: 370px;
+  height: 60px;
+  margin: 10px 10px;
+}

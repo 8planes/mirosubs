@@ -369,11 +369,21 @@ mirosubs.getSubtitleHomepageURL = function(videoID) {
     return [mirosubs.siteURL(), "/videos/", videoID].join('');
 };
 
+mirosubs.getVolunteerPageURL = function(){
+    return [mirosubs.siteURL(), "/videos/volunteer/"].join('');
+}
+
 mirosubs.createLinkButton = function($d, text, opt_className) {
     var atts = { 'href': 'javascript:void(0);' };
     if (opt_className)
         atts['className'] = opt_className;
     return $d('a', atts, text);
+};
+
+mirosubs.storage_ = window['localStorage'];
+
+mirosubs.supportsLocalStorage = function() {
+    return !!(mirosubs.storage_ && mirosubs.storage_['getItem']);
 };
 
 mirosubs.saveInLocalStorage = function(key, value) {
@@ -382,7 +392,7 @@ mirosubs.saveInLocalStorage = function(key, value) {
             "Saving local storage, key: " + key + 
                 " and value " + value);
     }
-    window['localStorage']['setItem'](key, value);
+    mirosubs.storage_['setItem'](key, value);
 };
 
 mirosubs.fetchFromLocalStorage = function(key) {
@@ -390,16 +400,16 @@ mirosubs.fetchFromLocalStorage = function(key) {
         mirosubs.logger_.info(
             "Fetching local storage, key: " + key + 
                 " and value " + 
-                window['localStorage']['getItem'](key));
+                mirosubs.storage_['getItem'](key));
     }
-    return window['localStorage']['getItem'](key);
+    return mirosubs.storage_['getItem'](key);
 };
 
 mirosubs.removeFromLocalStorage = function(key) {
     if (goog.DEBUG) {
         mirosubs.logger_.info("Removing " + key + " from localStorage.");
     }
-    window['localStorage']['removeItem'](key);
+    mirosubs.storage_['removeItem'](key);
 };
 
 if (goog.DEBUG) {

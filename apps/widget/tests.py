@@ -1031,6 +1031,24 @@ class TestRpc(TestCase):
         response = null_rpc.start_editing(request, 'sadfdsf', 'en')
         self.assertEquals(True, response['can_edit'])
 
+    #def test_fetch_request_dialog_contents(self):
+        #request = RequestMockup(self.user_0)
+        #request.COOKIES = {settings.USER_LANGUAGES_COOKIE_NAME: ['en']}
+        #video = Video.objects.get(id=self.video_pk)
+        #response = rpc.fetch_request_dialog_contents(request,
+                                                     #video.video_id)
+        #self.assertEquals(True, response['all_languages'] or False)
+
+    def test_submit_subtitle_request(self):
+        request = RequestMockup(self.user_0)
+        video_id = Video.objects.get(id=self.video_pk).video_id
+        request_langs = ['en', 'hi', 'fr']
+        response = rpc.submit_subtitle_request(request, video_id, request_langs, 
+                                               True, '')
+        self.assertEqual(True, response.get('status'))
+        self.assertEqual(len(request_langs), response.get('count'))
+
+
     def _create_basic_version(self, request):
         return_value = rpc.show_widget(
             request,

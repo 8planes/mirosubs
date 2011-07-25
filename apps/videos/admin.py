@@ -17,7 +17,8 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.contrib import admin
-from videos.models import Video, SubtitleLanguage, SubtitleVersion, Subtitle, VideoFeed
+from videos.models import Video, SubtitleLanguage, SubtitleVersion, Subtitle, \
+    VideoFeed
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from utils.livesettings_values import EmailListValue

@@ -154,12 +154,7 @@ mirosubs.translate.Dialog.prototype.forkAndClose = function() {
 mirosubs.translate.Dialog.prototype.forkImpl_ = function() {
     this.subtitleState_.fork();
     this.serverModel_.fork(this.standardSubState_);
-    // ugh, hack alert
-    var oldReturnURL = mirosubs.returnURL;
-    mirosubs.returnURL = null;
-    this.saved_ = true;
     this.hideToFork();
-    mirosubs.returnURL = oldReturnURL;
     this.opener_.openSubtitlingDialog(
         this.serverModel_,
         this.subtitleState_);

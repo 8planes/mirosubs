@@ -94,7 +94,8 @@ class VideosApiClass(object):
     @add_request_to_kwargs
     def load_featured_page(self, page, request, user):
         sqs = SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).order_by('-featured')
+            .models(Video).filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
+            .order_by('-featured')
         
         return render_page(page, sqs, request=request)    
 
@@ -120,7 +121,7 @@ class VideosApiClass(object):
         sqs = SearchQuerySet().result_class(VideoSearchResult) \
             .models(Video).order_by('-%s' % sort_field)
         
-        return render_page(page, sqs, request=request)
+        return render_page(page, sqs, request=request, display_views=sort)
 
     def _get_volunteer_sqs(self, request, user):
         '''
@@ -143,7 +144,8 @@ class VideosApiClass(object):
     @add_request_to_kwargs
     def load_featured_page_volunteer(self, page, request, user):
         relevent = self._get_volunteer_sqs(request, user)
-        sqs = relevent.order_by('-featured')
+        sqs = relevent.filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
+            .order_by('-featured')
 
         return render_page(page, sqs, request=request)    
 
@@ -182,12 +184,18 @@ class VideosApiClass(object):
             'total': 'total_views'
         }
         
-        sort_field = sort_types.get(sort, 'week_views')
-        
+        if sort in sort_types:
+            display_views = sort
+            sort_field = sort_types[sort]
+        else:
+            display_views = 'week'
+            sort_field = 'week_views'            
+
         popular_videos = SearchQuerySet().result_class(VideoSearchResult) \
             .models(Video).order_by('-%s' % sort_field)[:5]
 
         context = {
+            'display_views': display_views,
             'video_list': popular_videos
         }
         
@@ -302,7 +310,8 @@ class VideosApiClass(object):
         return Msg(_(u'You stopped following this subtitles now.'))
     
 def render_page(page, qs, on_page=VIDEOS_ON_PAGE, request=None,
-                 template='videos/_watch_page.html', extra_context={}):
+                 template='videos/_watch_page.html', extra_context={},
+                 display_views='total'):
     paginator = Paginator(qs, on_page)
 
     try:
@@ -317,7 +326,8 @@ def render_page(page, qs, on_page=VIDEOS_ON_PAGE, request=None,
     
     context = {
         'video_list': page_obj.object_list,
-        'page': page_obj
+        'page': page_obj,
+        'display_views': display_views
     }
     context.update(extra_context)
 

@@ -1231,6 +1231,14 @@ class TestFeedsSubmit(TestCase):
         self.assertRedirects(response, reverse('videos:create'))
         self.assertNotEqual(old_count, Video.objects.count())
 
+    def test_inorrect_video_feed_submit(self):
+        data = {
+            'feed_url': u'http://blip.tv/anyone-but-he/?skin=rss'
+        }
+        response = self.client.post(reverse('videos:create_from_feed'), data)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context['youtube_form'].errors['feed_url'])
+
     def test_empty_feed_submit(self):
         import urllib2
         import feedparser
@@ -1365,10 +1373,11 @@ class TestTasks(TestCase):
         s.save()        
 
         result = video_changed_tasks.delay(v.video.id, v.id)
-        self.assertEqual(len(mail.outbox), 1)
 
         if result.failed():
             self.fail(result.traceback)
+            
+        self.assertEqual(len(mail.outbox), 1)
 
 class TestPercentComplete(TestCase):
     
@@ -1766,7 +1775,7 @@ class TestTemplateTags(TestCase):
         l = SubtitleLanguage.objects.filter(video__title="b", language='pt')[0]
         self.assertEqual("60 %", complete_indicator(l))
         
-        
+
 def _create_trans( video, latest_version=None, lang_code=None, forked=False):
         translation = SubtitleLanguage()
         translation.video = video
@@ -1786,5 +1795,5 @@ def _create_trans( video, latest_version=None, lang_code=None, forked=False):
         if latest_version is not None:
             for s in latest_version.subtitle_set.all():
                 s.duplicate_for(v).save()
-        return translation         
-                              
+        return translation
+

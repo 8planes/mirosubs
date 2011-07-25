@@ -291,6 +291,7 @@ mirosubs.subtitle.Dialog.prototype.onWorkSaved = function(closeAfterSave, isComp
 mirosubs.subtitle.Dialog.prototype.saveWorkImpl_ = function(closeAfterSave, isComplete) {
     this.doneButtonEnabled_ = false;
     this.getRightPanelInternal().showLoading(true);
+    this.captionSet_.completed = isComplete;
     var that = this;
     this.serverModel_.finish(
         function(serverMsg){
@@ -311,8 +312,7 @@ mirosubs.subtitle.Dialog.prototype.saveWorkImpl_ = function(closeAfterSave, isCo
         function() {
             that.doneButtonEnabled_ = true;
             that.getRightPanelInternal().showLoading(false);
-        },
-        isComplete);
+        });
 };
 
 mirosubs.subtitle.Dialog.prototype.enterState_ = function(state) {

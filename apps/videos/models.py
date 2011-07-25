@@ -1085,6 +1085,9 @@ class ActionRenderer(object):
             info = self.redner_ADD_VIDEO_URL(item)
         elif item.action_type == Action.ADD_TRANSLATION:
             info = self.render_ADD_TRANSLATION(item)
+        elif item.action_type == Action.SUBTITLE_REQUEST:
+            info = self.render_SUBTITLE_REQUEST(item)
+
         else:
             info = ''
         
@@ -1172,7 +1175,20 @@ class ActionRenderer(object):
             msg = _(u'New URL added for <a href="%(video_url)s">%(video_name)s</a>') 
         
         return msg % self._base_kwargs(item)
-        
+
+    def render_SUBTITLE_REQUEST(self, item):
+        requests = item.subtitlerequests.all()
+        languages = [request.get_language_display() for request in requests]
+        kwargs = self._base_kwargs(item)
+        kwargs['languages'] = ', '.join(languages)
+
+        if item.user:
+            msg = _(u'requested subtitles for <a href="%(video_url)s">%(video_name)s</a> in %(languages)s.')
+        else:
+            msg = _(u'New subtitles requested for <a href="%(video_url)s">%(video_name)s</a> in %(languages)s.')
+
+        return msg % kwargs
+
 class Action(models.Model):
     ADD_VIDEO = 1
     CHANGE_TITLE = 2
@@ -1180,7 +1196,8 @@ class Action(models.Model):
     ADD_VERSION = 4
     ADD_VIDEO_URL = 5
     ADD_TRANSLATION = 6
-    APPROVE_VERSION = 7
+    SUBTITLE_REQUEST = 7
+    APPROVE_VERSION = 8
     TYPES = (
         (ADD_VIDEO, _(u'add video')),
         (CHANGE_TITLE, _(u'change title')),
@@ -1188,6 +1205,7 @@ class Action(models.Model):
         (ADD_VERSION, _(u'add version')),
         (ADD_TRANSLATION, _(u'add translation')),
         (ADD_VIDEO_URL, _(u'add video url')),
+        (SUBTITLE_REQUEST, _(u'request subtitles')),
         (APPROVE_VERSION, _(u'approve version'))
     )
     
@@ -1393,5 +1411,3 @@ class VideoFeed(models.Model):
             checked_entries += 1
         
         return checked_entries
-
-

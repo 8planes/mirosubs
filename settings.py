@@ -111,6 +111,7 @@ ALL_LANGUAGES['bo'] = gettext_noop(u'Tibetan')
 ALL_LANGUAGES['ast'] = gettext_noop(u'Asturian')
 ALL_LANGUAGES['ay'] = gettext_noop(u'Aymara')
 ALL_LANGUAGES['ps'] = gettext_noop(u'Pashto')
+ALL_LANGUAGES['lkt'] = gettext_noop(u'Lakota')
 
 del ALL_LANGUAGES['no']
 ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())
@@ -155,6 +156,7 @@ PREVIOUS_EMBED_JS_VERSIONS = []
 CSS_USE_COMPILED = True
 JS_USE_COMPILED = False
 
+USE_BUNDLED_MEDIA = not DEBUG
 
 COMPRESS_YUI_BINARY = "java -jar ./css-compression/yuicompressor-2.4.6.jar"
 COMPRESS_OUTPUT_DIRNAME = "static-cache"
@@ -163,7 +165,6 @@ COMPRESS_OUTPUT_DIRNAME = "static-cache"
 USER_LANGUAGES_COOKIE_NAME = 'unisub-languages-cookie'
 
 # paths provided relative to media/js
-
 JS_CORE = \
     ['mirosubs.js', 
      'rpc.js',
@@ -202,6 +203,7 @@ JS_CORE = \
      'startdialog/tolanguage.js',
      'startdialog/tolanguages.js',
      'startdialog/dialog.js',
+     'requestdialog.js',
      'widget/subtitle/editablecaption.js',
      "widget/subtitle/editablecaptionset.js",
      'widget/usersettings.js',
@@ -420,7 +422,7 @@ INSTALLED_APPS = (
     'rosetta',
     'testhelpers',
     'unisubs_compressor',
-    'guardian',
+    'subrequests',
     'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 ,
 )
 
@@ -481,7 +483,6 @@ AUTHENTICATION_BACKENDS = (
    'auth.backends.TwitterBackend',
    'auth.backends.FacebookBackend',
    'django.contrib.auth.backends.ModelBackend',
-   'guardian.backends.ObjectPermissionBackend',
 )
 
 SKIP_SOUTH_TESTS = True
@@ -522,7 +523,8 @@ MIXPANEL_TOKEN = '44205f56e929f08b602ccc9b4605edc3'
 try:
     from commit import LAST_COMMIT_GUID
 except ImportError:
-    LAST_COMMIT_GUID = ''
+    print "deploy/create_commit_file must be ran before boostrapping django"
+    raise
 
 AWS_ACCESS_KEY_ID = ''
 AWS_SECRET_ACCESS_KEY = ''
@@ -600,12 +602,44 @@ MEDIA_BUNDLES = {
             "css/mirosubs-widget.css",
 
          ),
-        }
+        },
+    "mirosubs-offsite-compiled":{
+        "type": "js",
+        "files": JS_OFFSITE,
+        },
 
+    "mirosubs-onsite-compiled":{
+        "type": "js",
+        "files": JS_ONSITE,
+     },
+     "mirosubs-widgetizer":{
+        "type": "js",
+        "files": ["config.js"] + JS_WIDGETIZER,
+     },
+    "mirosubs-widgetizer-debug":{
+        "type": "js",
+        "files": ["config.js" ] + JS_WIDGETIZER,
+        "debug": True,
+     },
+    "mirosubs-extension":{
+        "type": "js",
+        "files": ["config.js" ] + JS_EXTENSION,
+     },
+
+    "mirosubs-statwidget":{
+        "type": "js",
+        "closure_deps": "closure-stat-dependencies.js",
+        "include_flash_deps": False,
+        "files": [
+            'mirosubs.js',
+            'rpc.js',
+            'loadingdom.js',
+            'statwidget/statwidgetconfig.js',
+            'statwidget/statwidget.js'],
+     },
+
+    "mirosubs-api":{
+        "type": "js",
+        "files": ["config.js"] + JS_API,
+     },
 }
-
-
-try:
-    from mediabundles_list import MEDIA_BUNDLE_URLS
-except ImportError:
-    MEDIA_BUNDLE_URLS = {} 

@@ -32,10 +32,8 @@ def include_css_bundle(bundle_name):
     if should_compress is None:
         should_compress = getattr(settings, "CSS_USE_COMPILED",
                                   not getattr(settings, "DEBUG", False))
-    mbu = getattr(settings, "MEDIA_BUNDLE_URLS", {})
-    url = mbu.get( bundle_name, None)
-    if url is not None and should_compress == True:
-        urls = ["%s/%s" % (settings.COMPRESS_OUTPUT_DIRNAME, url)]
+    if  should_compress == True:
+        urls = ["css-compressed/%s.css" % ( bundle_name)]
     else:
         urls = settings.MEDIA_BUNDLES.get(bundle_name)["files"]
         if should_compress:
