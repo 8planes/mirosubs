@@ -353,7 +353,7 @@ class Rpc(BaseRpc):
                     end_time=s['end_time'],
                     subtitle_order=s['sub_order'])
 
-    def _create_version_from_session(self, session, user=None):
+    def _create_version_from_session(self, session, user=None, forked=False):
         latest_version = session.language.version()
         return models.SubtitleVersion(
             language=session.language,
