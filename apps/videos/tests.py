@@ -590,38 +590,6 @@ class VideoTest(TestCase):
         self.failIf(created)
         self.failUnlessEqual(video, more_video)
 
-    def test_youtube_subs_response(self):
-        import os
-        from videos.types.youtube import YoutubeVideoType
-        import urllib
-        
-        def urlopen_mockup(url, *args, **kwargs):
-            path = os.path.join(os.path.dirname(__file__), 'fixtures/youtube_subs_response.json')
-            return open(path)
-        
-        _urlopen = urllib.urlopen
-        urllib.urlopen = urlopen_mockup
-        
-        vt = YoutubeVideoType('http://www.youtube.com/watch?v=GcjgWov7mTM')
-        video, create = Video.get_or_create_for_url('http://www.youtube.com/watch?v=GcjgWov7mTM', vt)
-        res = vt._get_subtitles_from_youtube(video)
-        if res is None:
-            # api might be down or error
-            return
-            
-        video = Video.objects.get(pk=video.pk)
-        version = video.version()
-        self.assertFalse(version is None)
-        self.assertTrue(len(version.subtitles()))
-        self.assertEqual(version.subtitles()[0].text, 'I think what is probably the most misunderstood\nconcept in all of science and as we all know')
-        subs = version.subtitles()
-        subs.sort(key=lambda s: s.start_time)
-        for i in range(1, len(subs)):
-            self.assertTrue(subs[i].sub_order > subs[i - 1].sub_order)
-
-        urllib.urlopen = _urlopen
-
-
     def test_video_cache_busted_on_delete(self):
         start_url = 'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv'
         video, created = Video.get_or_create_for_url(start_url)
