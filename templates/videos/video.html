@@ -46,7 +46,11 @@
 {% endblock %}
 
 {% block scripts %}
-    {% include "widget/_js_onsite_dependencies.html" %}
+<script type="text/javascript">
+  window.MEDIA_URL = '{{MEDIA_URL}}';
+</script>
+     {% include_bundle %}
+    
     {{ block.super }}
     <script src="{% url videos:rpc_api %}" type="text/javascript"></script>    
     {% with write_video_type_js as jsinclude %}{% if jsinclude %}{% write_video_type_js video %}{% endif %}{% endwith %}    

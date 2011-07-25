@@ -1,10 +1,11 @@
-{% load webdesign widget%}
+{% load webdesign widget media_compressor %}
 <!doctype html>
 <html lang="en">
 <head><script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
 	<title>Boing Boing TV - Boing Boing</title>
   <script type="text/javascript">
     window.usStartTime = (new Date()).getTime();
+    window.MEDIA_URL = '{{MEDIA_URL}}';
   </script>	
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<link rel="stylesheet" href="http://tv.boingboing.net/stylesheet112010.css?r=4" type="text/css">
@@ -18,7 +19,8 @@
 	
     <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js" type="text/javascript"></script>
-
+    <script type="text/javascript" src="{{MEDIA_URL}}js/widgetizer/widgetizerprimer.js"></script>
+    
 {% ifequal type "widgetizerasync" %}
     <script type="text/javascript">
       function onYouTubePlayerReady(apiID) {
