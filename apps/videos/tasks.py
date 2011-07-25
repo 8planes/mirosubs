@@ -13,6 +13,7 @@ from sentry.client.models import client
 from celery.decorators import periodic_task
 from celery.schedules import crontab
 from videos.types.youtube import save_subtitles_for_lang
+from urllib import urlopen
 
 @task
 def save_thumbnail_in_s3(video_id):
@@ -20,6 +21,10 @@ def save_thumbnail_in_s3(video_id):
         video = Video.objects.get(pk=video_id)
     except Video.DoesNotExist:
         return
+    
+    if video.thumbnail:
+        content = urlopen(video.thumbnail)
+        video.s3_thumbnail.save(video.thumbnail.split('/')[-1], content)
 
 @periodic_task(run_every=crontab(minute=0, hour=1))
 def update_from_feed(*args, **kwargs):
