@@ -1002,6 +1002,12 @@ margin-right: 20px !important;
    margin-bottom: 30px !important;
 }
 
+.mirosubs-widget span.mirosubs-videoplayer {
+   width: 480px;
+   height: 360px;
+   background-color: black;
+}
+
 span.mirosubs-videoplayer {
    display: block !important;
 }
