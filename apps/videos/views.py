@@ -186,9 +186,12 @@ def create(request):
             context['vidscraper_error'] = True
             return render_to_response('videos/create.html', context,
                           context_instance=RequestContext(request))
-        messages.info(request, message=_(u'''Here is the subtitle workspace for your video.  You can
+        messages.info(request, message=_(u'''Here is the subtitle workspace for your video. You can
 share the video with friends, or get an embed code for your site.  To add or
-improve subtitles, click the button below the video'''))
+improve subtitles, click the button below the video.'''))
+        
+        if video_form.created:
+            messages.info(request, message=_(u'''Existing subtitles will be imported in a few minutes.'''))            
         return redirect(video.video_link())
     return render_to_response('videos/create.html', context,
                               context_instance=RequestContext(request))

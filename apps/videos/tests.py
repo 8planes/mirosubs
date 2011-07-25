@@ -1036,6 +1036,22 @@ class YoutubeVideoTypeTest(TestCase):
         self.assertTrue(vt)
         self.assertEqual(vt.video_id , self.shorter_url.split("/")[-1])
     
+    def test_subtitle_saving(self):
+        url = u'http://www.youtube.com/watch?v=63c5p_8hiho'
+        
+        vt = self.vt(url)
+        
+        video, created = Video.get_or_create_for_url(url)
+        
+        langs = video.subtitlelanguage_set.all()
+        self.assertEqual(len(langs), 8)
+        
+        for sl in langs:
+            if sl.language:
+                subtitles = sl.latest_subtitles()
+                self.assertTrue(len(subtitles))
+                self.assertTrue(subtitles[5].start_time and subtitles[5].end_time)
+    
 from videos.types.htmlfive import HtmlFiveVideoType
 
 class HtmlFiveVideoTypeTest(TestCase):
