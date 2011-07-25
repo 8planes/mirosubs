@@ -409,4 +409,5 @@ def test_memcached():
 def generate_docs():
     env.host_string = DEV_HOST
     with cd(os.path.join(env.static_dir, 'mirosubs')):
-         sphinx-build docs/ media/docs
+        python_exe = '{0}/env/bin/python'.format(env.static_dir)
+        run('{0} manage.py  sphinx-build docs/ media/docs --settings=unisubs_settings'.format(python_exe))
