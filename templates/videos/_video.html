@@ -18,8 +18,9 @@
             <strong>
                 {{ video_views }}
             </strong> 
-            {% blocktrans count video_views as views %}View{% plural %}Views{% endblocktrans %} 
-            | <strong>{% trans "Added" %} {{ video.created|date:"M j" }}</strong>
+            {% blocktrans count video_views as views %}View{% plural %}Views{% endblocktrans %}
+            <br/>
+            {% trans "Added" %}: {{ video.created|date:"M j Y" }}
             <br/>
             {% trans "Last edited" %}: {{ video.edited|date:"M j Y" }}
         </span>
