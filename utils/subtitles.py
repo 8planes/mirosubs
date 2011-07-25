@@ -28,6 +28,8 @@ from datetime import datetime
 import re
 import random
 from uuid import uuid4
+from lxml import etree
+from utils.clean_xml import htmlentitydecode
 
 # see video.models.Subtitle..start_time
 MAX_SUB_TIME = (60 * 60 * 99) -1 
@@ -144,6 +146,32 @@ class TxtSubtitleParser(SubtitleParser):
             output['subtitle_text'] = item      
             yield output  
 
+class YoutubeXMLParser(SubtitleParser):
+    
+    def __init__(self, xml):
+        if not isinstance(xml, etree._Element):
+            xml = etree.fromstring(xml)
+        
+        self.xml = xml
+        self.subtitles = xml.xpath('text')
+
+    def __len__(self):
+        return len(self.subtitles)
+    
+    def __nonzero__(self):
+        return bool(self.subtitles)
+    
+    def _result_iter(self):
+        for item in self.subtitles:
+            yield self._get_data(item)
+
+    def _get_data(self, item):
+        output = {}
+        output['start_time'] = float(item.get('start'))
+        output['end_time'] = output['start_time'] + float(item.get('dur'))
+        output['subtitle_text'] = htmlentitydecode(item.text)
+        return output
+        
 class YoutubeSubtitleParser(SubtitleParser):
     
     def __init__(self, data):

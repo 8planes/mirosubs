@@ -16,26 +16,97 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 from urlparse import urlparse
-import logging
-
-logger = logging.getLogger('youtube')
-
 from gdata.youtube.service import YouTubeService
 from gdata.service import RequestError
 import re
 import httplib2
-from utils import YoutubeSubtitleParser
+from utils import YoutubeSubtitleParser, YoutubeXMLParser
 from base import VideoType, VideoTypeError
 from auth.models import CustomUser as User
 from datetime import datetime
 import random
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import ugettext_lazy as _
+from lxml import etree
+from django.conf import settings
+from django.utils.http import urlquote
+import logging
+from utils.celery_utils import task
+
+logger = logging.getLogger('youtube')
+
+SUPPORTED_LANGUAGES_DICT = dict(settings.ALL_LANGUAGES)
 
 yt_service = YouTubeService()
 yt_service.ssl = False
 
 _('Private video')
 _('Undefined error')
+
+@task
+def save_subtitles_for_lang(lang, video_pk, youtube_id):
+    from videos.models import Video
+    
+    lc = lang.get('lang_code')
+
+    if not lc in SUPPORTED_LANGUAGES_DICT:
+        return
+    
+    try:
+        video = Video.objects.get(pk=video_pk)
+    except Video.DoesNotExist:
+        return
+    
+    from videos.models import SubtitleLanguage, SubtitleVersion, Subtitle
+
+    url = u'http://www.youtube.com/api/timedtext?v=%s&lang=%s&name=%s'
+    url = url % (youtube_id, lc, urlquote(lang.get('name', u'')))
+
+    xml = YoutubeVideoType._get_response_from_youtube(url)
+
+    if not xml:
+        return
+
+    parser = YoutubeXMLParser(xml)
+
+    if not parser:
+        return
+    
+    language, create = SubtitleLanguage.objects.get_or_create(video=video, language=lc)
+    language.is_original = False
+    language.is_forked = True
+    language.save()
+    
+    try:
+        version_no = language.subtitleversion_set.order_by('-version_no')[:1] \
+            .get().version_no + 1
+    except SubtitleVersion.DoesNotExist:
+        version_no = 0
+        
+    version = SubtitleVersion(language=language)
+    version.version_no = version_no
+    version.datetime_started = datetime.now()
+    version.user = User.get_youtube_anonymous()
+    version.note = u'From youtube'
+    version.is_forked = True
+    version.save()
+
+    for i, item in enumerate(parser):
+        subtitle = Subtitle()
+        subtitle.subtitle_text = item['subtitle_text']
+        subtitle.start_time = item['start_time']
+        subtitle.end_time = item['end_time']
+        subtitle.version = version
+        subtitle.subtitle_id = int(random.random()*10e12)
+        subtitle.subtitle_order = i+1
+        subtitle.save()
+        assert subtitle.start_time or subtitle.end_time, item['subtitle_text']
+    version.finished = True
+    version.save()
+    
+    language.has_version = True
+    language.had_version = True
+    language.is_complete = True
+    language.save()
 
 class YoutubeVideoType(VideoType):
     
@@ -87,10 +158,12 @@ class YoutubeVideoType(VideoType):
             video_obj.thumbnail = self.entry.media.thumbnail[-1].url
         video_obj.small_thumbnail = 'http://i.ytimg.com/vi/%s/default.jpg' % self.video_id   
         video_obj.save()
+        
         try:
-            self._get_subtitles_from_youtube(video_obj)
-        except:
-            logger.exception("Error getting subs from youtube")
+            self.get_subtitles(video_obj)
+        except Exception, e:
+            logger.error("Error getting subs from youtube: %s" % e)
+            
         return video_obj
     
     def _get_entry(self, video_id):
@@ -108,58 +181,53 @@ class YoutubeVideoType(VideoType):
             if bool(video_id):
                 return video_id
         return False    
-
-    def _get_subtitles_from_youtube(self, video_obj):
-        from videos.models import SubtitleLanguage, SubtitleVersion, Subtitle
-        
-        url = 'http://www.youtube.com/watch_ajax?action_get_caption_track_all&v=%s' % self.videoid
-
+    
+    @classmethod
+    def _get_response_from_youtube(cls, url):
         h = httplib2.Http()
         resp, content = h.request(url, "GET")
-        resp.status = 500
+
         if resp.status < 200 or resp.status >= 400:
-            logger.warning("Youtube subtitles error", extra={
+            logger.error("Youtube subtitles error", extra={
                     'data': {
                         "url": url,
-                        "video_id": self.videoid,
                         "status_code": resp.status,
                         "response": content
                         }
                     })
             return
-        parser = YoutubeSubtitleParser(content)
-
-        if not parser:
-            return
-        
-        language, create = SubtitleLanguage.objects.get_or_create(video=video_obj, language = parser.language)
-        language.is_original = False
-        language.is_forked = True
-        language.save()
         
         try:
-            version_no = language.subtitleversion_set.order_by('-version_no')[:1] \
-                .get().version_no + 1
-        except SubtitleVersion.DoesNotExist:
-            version_no = 0
+            return etree.fromstring(content)
+        except etree.XMLSyntaxError:
+            print url
+            logger.error("Youtube subtitles error. Failed to parse response.", extra={
+                    'data': {
+                        "url": url,
+                        "response": content
+                        }
+                    })            
+            return
             
-        version = SubtitleVersion(language=language)
-        version.version_no = version_no
-        version.datetime_started = datetime.now()
-        version.user = User.get_youtube_anonymous()
-        version.note = u'From youtube'
-        version.is_forked = True
-        version.save()
+    def get_subtitled_languages(self):
+        url = "http://www.youtube.com/api/timedtext?type=list&v=%s" % self.video_id
+        xml = self._get_response_from_youtube(url)
 
-        for i, item in enumerate(parser):
-            subtitle = Subtitle(**item)
-            subtitle.version = version
-            subtitle.subtitle_id = int(random.random()*10e12)
-            subtitle.subtitle_order = i+1
-            subtitle.save()
-        version.finished = True
-        version.save()
-
-        language.had_version = True
-        language.is_complete = True
-        language.save()
+        if not xml:
+            return []
+        
+        output = []
+        for lang in xml.xpath('track'):
+            item = dict(
+                lang_code=lang.get('lang_code'),
+                name=lang.get('name', u'')
+            )
+            output.append(item)
+            
+        return output
+    
+    def get_subtitles(self, video_obj):
+        langs = self.get_subtitled_languages()
+        
+        for item in langs:
+            save_subtitles_for_lang.delay(item, video_obj.pk, self.video_id)
