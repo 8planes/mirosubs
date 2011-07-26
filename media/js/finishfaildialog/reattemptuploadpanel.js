@@ -25,12 +25,12 @@ goog.provide('mirosubs.finishfaildialog.ReattemptUploadPanel');
 
 /**
  * @constructor
- * @param {mirosubs.subtitles.Logger} logger
+ * @param {mirosubs.subtitle.EditableCaptionSet} captionSet
  * @param {function()} saveFn function to reattempt the sub save.
  */
-mirosubs.finishfaildialog.ReattemptUploadPanel = function(logger, saveFn) {
+mirosubs.finishfaildialog.ReattemptUploadPanel = function(captionSet, saveFn) {
     goog.ui.Component.call(this);
-    this.logger_ = logger;
+    this.captionSet_ = captionSet;
     this.saveFn_ = saveFn;
 };
 goog.inherits(mirosubs.finishfaildialog.ReattemptUploadPanel, goog.ui.Component);
@@ -46,11 +46,7 @@ mirosubs.finishfaildialog.ReattemptUploadPanel.prototype.createDom = function() 
         this.getElement(),
         $d('p', null, 'We failed to save your subtitles. Don\'t worry, your work is not lost. We\'re not totally sure, but it looks like your network connection is not great.'),
         this.saveContainer_,
-        $d('p', null, this.downloadLink_),
-        $d('p', null,
-           goog.dom.createTextNode('If you\'re pretty sure that this isn\'t because your network connection is bad, please send us your '),
-           this.logLink_,
-           goog.dom.createTextNode('.')));
+        $d('p', null, this.downloadLink_));
 };
 
 mirosubs.finishfaildialog.ReattemptUploadPanel.prototype.enterDocument = function() {
@@ -61,10 +57,7 @@ mirosubs.finishfaildialog.ReattemptUploadPanel.prototype.enterDocument = functio
             this.saveAgainClicked_)
         .listen(
             this.downloadLink_, 'click',
-            this.downloadClicked_)
-        .listen(
-            this.logLink_, 'click',
-            this.logClicked_);
+            this.downloadClicked_);
 };
 
 mirosubs.finishfaildialog.ReattemptUploadPanel.prototype.saveAgainClicked_ = function(e) {
@@ -76,13 +69,7 @@ mirosubs.finishfaildialog.ReattemptUploadPanel.prototype.saveAgainClicked_ = fun
 mirosubs.finishfaildialog.ReattemptUploadPanel.prototype.downloadClicked_ = function(e) {
     e.preventDefault();
     mirosubs.finishfaildialog.CopyDialog.showForSubs(
-        this.logger_.getJsonSubs());
-};
-
-mirosubs.finishfaildialog.ReattemptUploadPanel.prototype.logClicked_ = function(e) {
-    e.preventDefault();
-    mirosubs.finishfaildialog.CopyDialog.showForErrorLog(
-        this.logger_.getContents());
+        this.captionSet_.makeJsonSubs());
 };
 
 mirosubs.finishfaildialog.ReattemptUploadPanel.prototype.showTryAgain = function() {
