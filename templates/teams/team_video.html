@@ -1,6 +1,6 @@
 {% extends "settings.html" %}
 
-{% load i18n teams_tags widget %}
+{% load i18n teams_tags widget media_compressor %}
 
 {% block body_attrs %}id="teams"{% endblock %}
 
@@ -15,7 +15,7 @@
 
 {% block scripts %}
     {{ block.super }}
-    {% include "widget/_js_onsite_dependencies.html" %}
+    {% include_bundle "mirosubs-onsite-compiled" %}
 {% endblock %}
 
 {% block settings_content %}

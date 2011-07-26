@@ -47,11 +47,7 @@
 {% endifequal %}
 
 {% ifequal type "embed" %}
-     {% if not js_use_compiled %}
-         {% include "widget/_js_base_dependencies.html" %}
-      {% endif %}
-      {% include "widget/_js_onsite_dependencies.html" %}
-
+    {% include_bundle "mirosubs-onsite-compiled" %}
 {% endifequal %}
 </head>
 

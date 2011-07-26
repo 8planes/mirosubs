@@ -1,8 +1,9 @@
+{% load media_compressor %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-{% include "widget/_js_onsite_dependencies.html" %}
+{% include_bundle "mirosubs-onsite-compiled" %}
 <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
 </head>
 <body>
