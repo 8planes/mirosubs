@@ -663,6 +663,6 @@ MEDIA_BUNDLES = {
             ],
         "optimizations": "SIMPLE_OPTIMIZATIONS",
         "closure_deps": "",
-        "include_flash_deps":False,
+        "include_flash_deps": False,
         }
 }

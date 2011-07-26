@@ -348,11 +348,16 @@ mirosubs.isReturnURLInDifferentDomain = function() {
         return false;
     var uri = new goog.Uri(mirosubs.returnURL);
     var myURI = new goog.Uri(window.location);
+    if (goog.DEBUG) {
+        console.log(uri.getDomain());
+        console.log(myURI.getDomain());
+    }
     return uri.getDomain().toLowerCase() != 
         myURI.getDomain().toLowerCase();
 };
 
 mirosubs.isFromDifferentDomain = function() {
+    
     return mirosubs.isEmbeddedInDifferentDomain() || 
         mirosubs.isReturnURLInDifferentDomain();
 };

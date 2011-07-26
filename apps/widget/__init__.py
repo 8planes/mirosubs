@@ -25,7 +25,7 @@ import simplejson as json
 LANGUAGES_MAP = dict(LANGUAGES)
 
 def full_path(js_file):
-    return "{0}js/{1}".format(settings.MEDIA_URL, js_file)
+    return "{0}{1}".format(settings.MEDIA_URL, js_file)
 
 def add_offsite_js_files(context):
     """ Adds variables necessary for _js_dependencies.html """
