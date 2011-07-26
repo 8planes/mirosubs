@@ -27,7 +27,7 @@ from django.template import RequestContext
 
 class SearchApiClass(object):
     
-    def search(self, rdata, user):
+    def search(self, rdata, user, testing=False):
         sqs = SearchQuerySet().result_class(VideoSearchResult) \
                 .models(Video)
                 
@@ -52,6 +52,9 @@ class SearchApiClass(object):
         display_views = form.get_display_views()
         output = render_page(rdata.get('page', 1), qs, 20, display_views=display_views)
         output['sidebar'] = render_to_string('search/_sidebar.html', dict(form=form, rdata=rdata))
+        
+        if testing:
+            output['sqs'] = qs
         
         return output
     
