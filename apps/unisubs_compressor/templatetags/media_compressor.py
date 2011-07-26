@@ -34,16 +34,18 @@ def include_bundle(bundle_name):
                                   not getattr(settings, "DEBUG", False))
     bundle_type = settings.MEDIA_BUNDLES.get(bundle_name)["type"]
 
+    urls = []
     if  should_compress == True:
         base = ""
         if bundle_type == "css":
             base =  "css-compressed/"
         elif bundle_type == "js":
             base = "js/"
-        
-        urls = ["%s%s.%s" % ( base, bundle_name, bundle_type)]
+        urls += ["%s%s.%s" % ( base, bundle_name, bundle_type)]
     else:
-        urls = settings.MEDIA_BUNDLES.get(bundle_name)["files"]
+        if bundle_type == "js":
+            urls = list(settings.JS_BASE_DEPENDENCIES)
+        urls += settings.MEDIA_BUNDLES.get(bundle_name)["files"]
         
         if should_compress:
             logger.warning("could not find final url for %s" % bundle_name)

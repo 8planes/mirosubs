@@ -310,6 +310,12 @@ JS_API.extend([
         "js/widget/api/servermodel.js",
         "js/widget/api/api.js"])
 
+JS_BASE_DEPENDENCIES = (
+    'js/closure-library/closure/goog/base.js',
+    'js/closure-dependencies.js',
+    'js/swfobject.js',
+    'flowplayer/flowplayer-3.2.2.min.js',
+)
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
