@@ -22,11 +22,10 @@
 
 
 {% ifequal type "widgetizer" %}
-        <script>
-          goog.require('goog.debug.FancyWindow');
-        </script>
-    <script type="text/javascript" src="{{MEDIA_URL}}js/widgetizer/widgetizerprimer.js"></script>
-    <script type="text/javascript" src="{{MEDIA_URL}}js/mirosubs-widgetizer.js"></script>
+    {% include_bundle "mirosubs-widetizer" %}
+{% endifequal %}
+{% ifequal type "embed" %}
+    {% include_bundle "mirosubs-onsite-compiled" %}
 {% endifequal %}
 
 

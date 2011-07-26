@@ -349,10 +349,13 @@ mirosubs.isReturnURLInDifferentDomain = function() {
     var uri = new goog.Uri(mirosubs.returnURL);
     var myURI = new goog.Uri(window.location);
     if (goog.DEBUG) {
-        console.log(uri.getDomain());
-        console.log(myURI.getDomain());
+        mirosubs.logger_.info("mirosubs.returnURL is " + mirosubs.returnURL);
+        mirosubs.logger_.info(
+            "isReturnURLInDifferentDomain call: comparing " + 
+                uri.getDomain() + " against " + myURI.getDomain());
     }
-    return uri.getDomain().toLowerCase() != 
+    return uri.hasDomain() && 
+        uri.getDomain().toLowerCase() != 
         myURI.getDomain().toLowerCase();
 };
 

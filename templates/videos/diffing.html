@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body_attrs %}id="video"{% endblock %}
 
-{% load widget i18n %}
+{% load widget i18n media_compressor %}
 
 {% block css %}
   {{ block.super }}
@@ -66,7 +66,7 @@
             });
         });
     </script>
-    {% include "widget/_js_onsite_dependencies.html" %}
+    {% include_bundle "mirosubs-onsite-compiled" %}
 {% endblock %}
 
 {% block main_content %}

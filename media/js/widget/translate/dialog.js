@@ -106,12 +106,12 @@ mirosubs.translate.Dialog.prototype.saveWorkInternal = function(closeAfterSave) 
             that.saved_ = true;
             that.setVisible(false);
         },
-        function(logger, opt_status) {
+        function(opt_status) {
             if (that.finishFailDialog_)
                 that.finishFailDialog_.failedAgain(opt_status);
             else
                 that.finishFailDialog_ = mirosubs.finishfaildialog.Dialog.show(
-                    logger, opt_status,
+                    that.serverModel_.getCaptionSet(), opt_status,
                     goog.bind(that.saveWorkInternal, that, closeAfterSave));
         });
 };

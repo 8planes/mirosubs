@@ -56,9 +56,7 @@ def widget_public_demo(request):
                               context_instance=RequestContext(request))
 
 def onsite_widget(request):
-    """Used for onsite subtitling
-
-    Temporary kludge for http://bugzilla.pculture.org/show_bug.cgi?id=13694"""
+    """Used for subtitle dialog"""
     context = widget.add_config_based_js_files(
         {}, settings.JS_API, 'mirosubs-api.js')
     config = request.GET.get('config', '{}')
