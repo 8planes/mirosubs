@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 # Django settings for mirosubs project.
-import os
+import os, sys
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
@@ -525,7 +525,7 @@ MIXPANEL_TOKEN = '44205f56e929f08b602ccc9b4605edc3'
 try:
     from commit import LAST_COMMIT_GUID
 except ImportError:
-    print "deploy/create_commit_file must be ran before boostrapping django"
+    sys.stderr.write("deploy/create_commit_file must be ran before boostrapping django")
     LAST_COMMIT_GUID = "dev/dev"
 
 AWS_ACCESS_KEY_ID = ''
