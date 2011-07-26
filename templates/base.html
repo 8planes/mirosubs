@@ -153,30 +153,29 @@
   {% if messages %}
   <div id="messages">
     {% for message in messages %}
-      <h2 class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</h2>
+    <h2 class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</h2>
     {% endfor %}
     <a href="#" id="closeBut" style="display: block; float: right;">&nbsp;</a>
     <br style="clear: both"/>                
   </div><!-- // messages -->
-    {% endif %}
-    
-    {% block main_content %}
-    {% endblock %}
-  </div><!-- // content -->
-  <div class="footer">
-    <div class="floatleft">
+  {% endif %}
+  
+  {% block main_content %}
+  {% endblock %}
+</div><!-- // content -->
+<div class="footer">
+  <div class="floatleft">
     {% trans 'Universal Subtitles is a project of <a href="http://participatoryculture.org/">PCF</a>.' %}  
   </div><!-- // floatleft -->
   <div class="floatright">
-  <a href="/about">{% trans 'About' %}</a>
-  <a href="http://www.facebook.com/pages/Universal-Subtitles/112574762094219">Facebook</a> 
-  <a href="http://twitter.com/universalsubs">Twitter</a>
-  <a href="mailto:universalsubtitles@pculture.org">{% trans 'Contact Us' %}</a>
-  <a href="http://www.pculture.org/pcf/websites-privacy/">{% trans 'Privacy Policy' %}</a>
-  <a href="{% url terms_page %}">{% trans 'Terms of Service' %}</a>
+    <a href="/about">{% trans 'About' %}</a>
+    <a href="http://www.facebook.com/pages/Universal-Subtitles/112574762094219">Facebook</a> 
+    <a href="http://twitter.com/universalsubs">Twitter</a>
+    <a href="mailto:universalsubtitles@pculture.org">{% trans 'Contact Us' %}</a>
+    <a href="http://www.pculture.org/pcf/websites-privacy/">{% trans 'Privacy Policy' %}</a>
+    <a href="{% url terms_page %}">{% trans 'Terms of Service' %}</a>
   </div><!-- // float_right -->
 </div><!-- // footer -->
-</div><!-- // wrapper -->
 
  {% block feedback_form %}
         {% feedback_form %}
