@@ -60,6 +60,8 @@ class VideosApiClass(object):
         if not c:
             raise RpcExceptionEvent(_(u'Video does not exist'))
         
+        update_search_index.delay(Video, video_id)  
+        
         return {}    
     
     def feature_video(self, video_id, user):
@@ -74,7 +76,6 @@ class VideosApiClass(object):
         if not c:
             raise RpcExceptionEvent(_(u'Video does not exist'))
 
-        from utils.celery_search_index import update_search_index
         update_search_index.delay(Video, video_id)  
         
         return {}
