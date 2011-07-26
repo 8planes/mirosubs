@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
 "Report-Msgid-Bugs-To: https://www.pivotaltracker.com/projects/224127\n"
-"POT-Creation-Date: 2011-07-25 23:01-0500\n"
-"PO-Revision-Date: 2011-07-26 04:12+0000\n"
+"POT-Creation-Date: 2011-07-26 05:01-0500\n"
+"PO-Revision-Date: 2011-07-26 10:11+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -3139,7 +3139,7 @@ msgstr ""
 #: templates/teams/edit_members.html:134
 #: templates/videos/_feedback_form.html:40
 #: templates/videos/_paste_transcription.html:113
-#: templates/videos/_upload_subtitles.html:7 templates/videos/video.html:113
+#: templates/videos/_upload_subtitles.html:7 templates/videos/video.html:114
 msgid "Close"
 msgstr ""
 
@@ -4743,7 +4743,7 @@ msgid ""
 "            "
 msgstr ""
 
-#: templates/videos/diffing.html:93 templates/videos/history.html:186
+#: templates/videos/diffing.html:93 templates/videos/history.html:187
 #: templates/videos/revision.html:72
 msgid "Subtitles"
 msgstr ""
@@ -4775,7 +4775,7 @@ msgid "Roll back to version"
 msgstr ""
 
 #: templates/videos/diffing.html:151 templates/videos/diffing.html.py:208
-#: templates/videos/history.html:237
+#: templates/videos/history.html:238
 msgid "Not Synced"
 msgstr ""
 
@@ -4972,15 +4972,15 @@ msgstr ""
 msgid "Featured Videos"
 msgstr ""
 
-#: templates/videos/history.html:82
+#: templates/videos/history.html:83
 msgid "Select two revisions for compare, please"
 msgstr ""
 
-#: templates/videos/history.html:114
+#: templates/videos/history.html:115
 msgid "Enter new title.  Note: this is for editing of translating the title."
 msgstr ""
 
-#: templates/videos/history.html:134
+#: templates/videos/history.html:135
 #, python-format
 msgid ""
 "\n"
@@ -4988,7 +4988,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: templates/videos/history.html:138
+#: templates/videos/history.html:139
 #, python-format
 msgid ""
 "\n"
@@ -4996,41 +4996,41 @@ msgid ""
 "        "
 msgstr ""
 
-#: templates/videos/history.html:148 templates/videos/video.html:104
+#: templates/videos/history.html:149 templates/videos/video.html:105
 msgid "edit title"
 msgstr ""
 
-#: templates/videos/history.html:165 templates/videos/video.html:129
-#: templates/videos/video.html.py:158
+#: templates/videos/history.html:166 templates/videos/video.html:130
+#: templates/videos/video.html.py:159
 msgid "Video Info"
 msgstr ""
 
-#: templates/videos/history.html:168 templates/videos/history.html.py:199
-#: templates/videos/video.html:139
+#: templates/videos/history.html:169 templates/videos/history.html.py:200
+#: templates/videos/video.html:140
 msgid "Add Translation"
 msgstr ""
 
-#: templates/videos/history.html:184
+#: templates/videos/history.html:185
 msgid "Original Language Subtitles"
 msgstr ""
 
-#: templates/videos/history.html:192 templates/videos/video.html:161
+#: templates/videos/history.html:193 templates/videos/video.html:162
 msgid "Comments"
 msgstr ""
 
-#: templates/videos/history.html:194
+#: templates/videos/history.html:195
 msgid "History"
 msgstr ""
 
-#: templates/videos/history.html:199
+#: templates/videos/history.html:200
 msgid "Edit Subtitles"
 msgstr ""
 
-#: templates/videos/history.html:204
+#: templates/videos/history.html:205
 msgid "Download Subtitles"
 msgstr ""
 
-#: templates/videos/history.html:246
+#: templates/videos/history.html:247
 msgid ""
 "\n"
 "                        The most recent revision for this language is blank, but there are older\n"
@@ -5038,47 +5038,47 @@ msgid ""
 "                        "
 msgstr ""
 
-#: templates/videos/history.html:250
+#: templates/videos/history.html:251
 msgid "View revision history"
 msgstr ""
 
-#: templates/videos/history.html:253
+#: templates/videos/history.html:254
 msgid "No subtitles yet."
 msgstr ""
 
-#: templates/videos/history.html:253
+#: templates/videos/history.html:254
 msgid "Make some!"
 msgstr ""
 
-#: templates/videos/history.html:267
+#: templates/videos/history.html:268
 msgid "Compare Revisions"
 msgstr ""
 
-#: templates/videos/history.html:276
+#: templates/videos/history.html:277
 msgid "Most Recent"
 msgstr ""
 
-#: templates/videos/history.html:279
+#: templates/videos/history.html:280
 msgid "User"
 msgstr ""
 
-#: templates/videos/history.html:282
+#: templates/videos/history.html:283
 msgid "Note"
 msgstr ""
 
-#: templates/videos/history.html:285
+#: templates/videos/history.html:286
 msgid "Time"
 msgstr ""
 
-#: templates/videos/history.html:288
+#: templates/videos/history.html:289
 msgid "Text"
 msgstr ""
 
-#: templates/videos/history.html:323
+#: templates/videos/history.html:324
 msgid "No subtitles for this language."
 msgstr ""
 
-#: templates/videos/history.html:324
+#: templates/videos/history.html:325
 msgid "Either no subtitles have been entered, or they were deleted."
 msgstr ""
 
@@ -5228,40 +5228,40 @@ msgstr ""
 msgid "That’s it!"
 msgstr ""
 
-#: templates/videos/video.html:80
+#: templates/videos/video.html:81
 msgid ""
 "Enter new title.  Note: this is for editing the original video title, not "
 "translating the title."
 msgstr ""
 
-#: templates/videos/video.html:110
+#: templates/videos/video.html:111
 msgid ""
 "Subtitles saved!  You can share the video with friends, \n"
 "          or get an embed code for your site.  To add a\n"
 "          translation, click the button below."
 msgstr ""
 
-#: templates/videos/video.html:135
+#: templates/videos/video.html:136
 msgid "Add Subtitles"
 msgstr ""
 
-#: templates/videos/video.html:149
+#: templates/videos/video.html:150
 msgid "Edit in Admin Interface"
 msgstr ""
 
-#: templates/videos/video.html:164
+#: templates/videos/video.html:165
 msgid "Video URLS"
 msgstr ""
 
-#: templates/videos/video.html:167
+#: templates/videos/video.html:168
 msgid "Activity Stream"
 msgstr ""
 
-#: templates/videos/video.html:169
+#: templates/videos/video.html:170
 msgid "Video URLs"
 msgstr ""
 
-#: templates/videos/video.html:183
+#: templates/videos/video.html:184
 msgid "all activity"
 msgstr ""
 
