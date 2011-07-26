@@ -284,7 +284,7 @@ ul.video_list li span.languages a.lang_arrow {
 }
 
 ul.video_list li span.languages a.lang_arrow div.lang_menu {
-	display: none;
+
 }
 
 ul.video_list li span.languages a.lang_arrow div.lang_menu.menu_active {
@@ -548,12 +548,19 @@ body#watch_results #sidebar ul li a:hover {
 
 body#watch_results #sidebar ul li.active a {
 	color: #31879f;
-	padding: 7px 10px 7px 30px;
-	background: transparent url(../images/icon_results_active.png) 10% center no-repeat;
+	padding: 7px 10px 7px 10px;
 }
 
-body#watch_results #sidebar ul li.active a:hover {
-	background: #dce5e7 url(../images/icon_results_active.png) 10% center no-repeat;
+body#watch_results #sidebar ul li.active a span {
+	background: transparent url(../images/icon_results_active.png) left center no-repeat;
+	padding: 0 0 0 20px;
+}
+
+
+
+body#watch_results #sidebar ul li.active a:hover span {
+	background: #dce5e7 url(../images/icon_results_active.png) left center no-repeat;
+	padding: 0 0 0 20px;
 }
 
 body#watch_results #main_col {
