@@ -13,7 +13,7 @@ from sentry.client.models import client
 from celery.decorators import periodic_task
 from celery.schedules import crontab
 from videos.types.youtube import save_subtitles_for_lang
-from django.core.files import File
+from django.core.files.base import ContentFile
 from urllib import urlopen
 
 @task
@@ -24,7 +24,7 @@ def save_thumbnail_in_s3(video_id):
         return
     
     if video.thumbnail:
-        content = File(urlopen(video.thumbnail))
+        content = ContentFile(urlopen(video.thumbnail))
         video.s3_thumbnail.save(video.thumbnail.split('/')[-1], content)
 
 @periodic_task(run_every=crontab(minute=0, hour=1))
