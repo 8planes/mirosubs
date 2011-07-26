@@ -287,7 +287,7 @@ ul.video_list li span.languages a.lang_arrow div.lang_menu {
 
 }
 
-ul.video_list li span.languages a.lang_arrow div.lang_menu.menu_active {
+ul.video_list li span.languages a.lang_arrow div.lang_menu {
 	display: block;
 	background: #FFF;
 	position: absolute;
