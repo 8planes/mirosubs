@@ -53,7 +53,8 @@ class TestSearch(TestCase):
             u"Hans Rosling's 200 Countries, 200 Years, 4 Minutes - The Joy of Stats - BBC Four",
             u"HD: Grizzly Bears Catching Salmon - Nature's Great Events: The Great Salmon Run - BBC One",
             u"My Blackberry Is Not Working! - The One Ronnie, Preview - BBC One",
-            u"Cher and Dawn French's Lookalikes - The Graham Norton Show preview - BBC One"
+            u"Cher and Dawn French's Lookalikes - The Graham Norton Show preview - BBC One",
+            u"Cute cheetah cub attacked by wild warthog - Cheetahs - BBC Earth"
         )
         
         for title in titles:
