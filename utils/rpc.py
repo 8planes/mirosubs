@@ -4,6 +4,8 @@ from django.core.urlresolvers import reverse
 from inspect import getargspec
 from Cookie import SimpleCookie
 from django.utils.datastructures import MultiValueDict
+from urllib import urlencode, quote
+from django.utils.encoding import smart_str
 
 class RpcMultiValueDict(MultiValueDict):
     """
@@ -16,6 +18,18 @@ class RpcMultiValueDict(MultiValueDict):
                 key_to_list_mapping[key] = [value]
             
         super(MultiValueDict, self).__init__(key_to_list_mapping)    
+
+    def urlencode(self, safe=None):
+        output = []
+        if safe:
+            encode = lambda k, v: '%s=%s' % ((quote(k, safe), quote(v, safe)))
+        else:
+            encode = lambda k, v: urlencode({k: v})
+        for k, list_ in self.lists():
+            k = smart_str(k)
+            output.extend([encode(k, smart_str(v))
+                           for v in list_])
+        return '&'.join(output)
 
 class RpcExceptionEvent(Exception):
     """

@@ -40,7 +40,7 @@ class SearchForm(forms.Form):
     video_lang = forms.ChoiceField(choices=ALL_LANGUAGES, required=False, label=_(u'Video In'),
                               help_text=_(u'Left blank for any language'), initial='')
     
-    def __init__(self, request, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         if 'sqs' in kwargs:
             sqs = kwargs['sqs']
             del kwargs['sqs']
@@ -48,7 +48,6 @@ class SearchForm(forms.Form):
             sqs = None
             
         super(SearchForm, self).__init__(*args, **kwargs)
-        self.user_langs = get_user_languages_from_request(request)
         
         if sqs:
             facet_data = sqs.facet('video_language').facet('languages').facet_counts()

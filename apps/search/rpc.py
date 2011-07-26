@@ -27,17 +27,16 @@ from django.template import RequestContext
 
 class SearchApiClass(object):
     
-    @add_request_to_kwargs
-    def search(self, rdata, request, user):
+    def search(self, rdata, user):
         sqs = SearchQuerySet().result_class(VideoSearchResult) \
                 .models(Video)
                 
         q = rdata.get('q')
         if q:
             sqs = SearchForm.apply_query(q, sqs)
-            form = SearchForm(request, rdata, sqs=sqs)
+            form = SearchForm(rdata, sqs=sqs)
         else:
-            form = SearchForm(request, rdata)
+            form = SearchForm(rdata)
         
         if form.is_valid():
             qs = form.search_qs(sqs)
@@ -51,8 +50,8 @@ class SearchApiClass(object):
         #        print o.title
         
         display_views = form.get_display_views()
-        output = render_page(rdata.get('page', 1), qs, 20, request, display_views=display_views)
-        output['sidebar'] = render_to_string('search/_sidebar.html', dict(form=form), RequestContext(request))
+        output = render_page(rdata.get('page', 1), qs, 20, display_views=display_views)
+        output['sidebar'] = render_to_string('search/_sidebar.html', dict(form=form, rdata=rdata))
         
         return output
     

@@ -29,7 +29,7 @@ register = template.Library()
 def search_form(context, form=None, simple=False):
     return {
         'simple': simple,
-        'form': form or SearchForm(context['request'])
+        'form': form or SearchForm()
     }
 
 @register.simple_tag

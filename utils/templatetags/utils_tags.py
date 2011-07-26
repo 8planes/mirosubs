@@ -5,10 +5,9 @@ from django.utils.translation import ugettext
 register = template.Library()
 
 @register.simple_tag
-def form_field_as_list(request, bounded_field, count=0):
+def form_field_as_list(GET_vars, bounded_field, count=0):
     getvars = '?'
     
-    GET_vars = request.GET.copy()
     if bounded_field.name in GET_vars:
         del GET_vars[bounded_field.name]
     

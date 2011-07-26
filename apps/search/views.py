@@ -35,5 +35,5 @@ def index(request):
         return HttpResponseRedirect('%s#/?%s' % (reverse('search:index'), urlencode(request.GET)))
             
     return {
-        'form': SearchForm(request, sqs=SearchQuerySet().models(Video))
+        'form': SearchForm(sqs=SearchQuerySet().models(Video))
     }
