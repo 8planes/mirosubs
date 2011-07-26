@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
 "Report-Msgid-Bugs-To: https://www.pivotaltracker.com/projects/224127\n"
-"POT-Creation-Date: 2011-07-26 05:01-0500\n"
-"PO-Revision-Date: 2011-07-26 10:12+0000\n"
+"POT-Creation-Date: 2011-07-26 11:01-0500\n"
+"PO-Revision-Date: 2011-07-26 16:14+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -559,7 +559,7 @@ msgstr ""
 msgid "Video In"
 msgstr ""
 
-#: apps/search/forms.py:62 apps/search/forms.py:98
+#: apps/search/forms.py:61 apps/search/forms.py:97
 msgid "All Languages"
 msgstr ""
 
@@ -1160,55 +1160,55 @@ msgid ""
 "system. You can't add it as a secondary URL."
 msgstr ""
 
-#: apps/videos/rpc.py:53 apps/videos/rpc.py:67
+#: apps/videos/rpc.py:53 apps/videos/rpc.py:69
 msgid "You have not permission"
 msgstr ""
 
-#: apps/videos/rpc.py:58 apps/videos/rpc.py:72
+#: apps/videos/rpc.py:58 apps/videos/rpc.py:74
 msgid "Incorrect video ID"
 msgstr ""
 
-#: apps/videos/rpc.py:61 apps/videos/rpc.py:75
+#: apps/videos/rpc.py:61 apps/videos/rpc.py:77
 msgid "Video does not exist"
 msgstr ""
 
-#: apps/videos/rpc.py:242
+#: apps/videos/rpc.py:243
 msgid "Title can't be empty"
 msgstr ""
 
-#: apps/videos/rpc.py:247
+#: apps/videos/rpc.py:248
 msgid "Subtitle language does not exist"
 msgstr ""
 
-#: apps/videos/rpc.py:253
+#: apps/videos/rpc.py:254
 msgid "Title was changed success"
 msgstr ""
 
-#: apps/videos/rpc.py:255
+#: apps/videos/rpc.py:256
 msgid "This is not forked translation"
 msgstr ""
 
-#: apps/videos/rpc.py:264 apps/videos/rpc.py:280
+#: apps/videos/rpc.py:265 apps/videos/rpc.py:281
 msgid "Video does not exist."
 msgstr ""
 
-#: apps/videos/rpc.py:271
+#: apps/videos/rpc.py:272
 msgid "You are following this video now."
 msgstr ""
 
-#: apps/videos/rpc.py:287
+#: apps/videos/rpc.py:288
 msgid "You stopped following this video now."
 msgstr ""
 
-#: apps/videos/rpc.py:296 apps/videos/rpc.py:309
+#: apps/videos/rpc.py:297 apps/videos/rpc.py:310
 msgid "Subtitles does not exist."
 msgstr ""
 
-#: apps/videos/rpc.py:300
+#: apps/videos/rpc.py:301
 msgid "You are following this subtitles now."
 msgstr ""
 
-#: apps/videos/rpc.py:313
+#: apps/videos/rpc.py:314
 msgid "You stopped following this subtitles now."
 msgstr ""
 
@@ -1664,95 +1664,95 @@ msgid ""
 "    "
 msgstr ""
 
-#: templates/base.html:38 templates/base_masterbranch.html:34
+#: templates/base.html:39 templates/base_masterbranch.html:34
 #: templates/bug.html:5 templates/index_masterbranch.html:7
 msgid "Make subtitles, translations, and captions for almost any video."
 msgstr ""
 
-#: templates/base.html:87 templates/base_masterbranch.html:92
+#: templates/base.html:88 templates/base_masterbranch.html:92
 #: templates/bug.html:77 templates/index_masterbranch.html:72
 msgid "Feedback"
 msgstr ""
 
-#: templates/base.html:92 templates/base_masterbranch.html:97
+#: templates/base.html:93 templates/base_masterbranch.html:97
 msgid ""
 "Universal Subtitles does not support your browser. Upgrade your browser or "
 "<a href=\"http://getfirefox.com\">Try Firefox</a>."
 msgstr ""
 
-#: templates/base.html:103
+#: templates/base.html:104
 msgid "Admin"
 msgstr ""
 
-#: templates/base.html:106
+#: templates/base.html:107
 msgid "Sentry"
 msgstr ""
 
-#: templates/base.html:109
+#: templates/base.html:110
 msgid "Rosetta"
 msgstr ""
 
-#: templates/base.html:126 templates/teams/_team_video_lang_detail.html:34
+#: templates/base.html:127 templates/teams/_team_video_lang_detail.html:34
 msgid "Create"
 msgstr ""
 
-#: templates/base.html:127 templates/base_masterbranch.html:129
+#: templates/base.html:128 templates/base_masterbranch.html:129
 #: templates/bug.html:94 templates/index_masterbranch.html:89
 msgid "Watch"
 msgstr ""
 
-#: templates/base.html:129
+#: templates/base.html:130
 msgid "Contribute"
 msgstr ""
 
-#: templates/base.html:130
+#: templates/base.html:131
 msgid "Solutions"
 msgstr ""
 
-#: templates/base.html:131 templates/videos/_follow_video_button.html:46
+#: templates/base.html:132 templates/videos/_follow_video_button.html:46
 msgid "Follow"
 msgstr ""
 
-#: templates/base.html:133
+#: templates/base.html:134
 msgid "Volunteer"
 msgstr ""
 
-#: templates/base.html:134
+#: templates/base.html:135
 msgid "Services"
 msgstr ""
 
-#: templates/base.html:135
+#: templates/base.html:136
 msgid "Help"
 msgstr ""
 
-#: templates/base.html:139
+#: templates/base.html:140
 msgid "Sign In"
 msgstr ""
 
-#: templates/base.html:168 templates/base_masterbranch.html:168
+#: templates/base.html:169 templates/base_masterbranch.html:168
 #: templates/bug.html:317 templates/index_masterbranch.html:306
 msgid ""
 "Universal Subtitles is a project of <a "
 "href=\"http://participatoryculture.org/\">PCF</a>."
 msgstr ""
 
-#: templates/base.html:171 templates/base_masterbranch.html:171
+#: templates/base.html:172 templates/base_masterbranch.html:171
 #: templates/index_masterbranch.html:310
 #: templates/profiles/view_profile.html:46
 msgid "About"
 msgstr ""
 
-#: templates/base.html:174 templates/base_masterbranch.html:174
+#: templates/base.html:175 templates/base_masterbranch.html:174
 #: templates/bug.html:323 templates/index_masterbranch.html:313
 msgid "Contact Us"
 msgstr ""
 
-#: templates/base.html:175 templates/base_masterbranch.html:175
+#: templates/base.html:176 templates/base_masterbranch.html:175
 #: templates/bug.html:324 templates/index_masterbranch.html:314
 msgid "Privacy Policy"
 msgstr ""
 
-#: templates/base.html:176 templates/base_masterbranch.html:176
+#: templates/base.html:177 templates/base_masterbranch.html:176
 #: templates/bug.html:325 templates/index_masterbranch.html:315
 msgid "Terms of Service"
 msgstr ""
@@ -5886,7 +5886,7 @@ msgid ""
 "A-Z and 0-9."
 msgstr ""
 
-#: utils/templatetags/utils_tags.py:45
+#: utils/templatetags/utils_tags.py:44
 msgid "more..."
 msgstr ""
 
