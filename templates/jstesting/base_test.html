@@ -1,7 +1,9 @@
+{% load media_compressor %}
+
 <!DOCTYPE html>
 <html>
   <head>
-    {% include "widget/_js_onsite_dependencies.html" %}
+    {% include_bundle "mirosubs-onsite-compiled" %}
     <script type="text/javascript" src="{{MEDIA_URL}}js/testing/testing.js"></script>
     <script type="text/javascript" src="{{MEDIA_URL}}js/testing/timerstub.js"></script>
     <script>

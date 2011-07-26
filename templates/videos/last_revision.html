@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load widget %}
+{% load widget media_compressor %}
 
 {% block css %}
   {{ block.super }}
@@ -26,7 +26,7 @@
 
 {% block scripts %}
     {{ block.super }}
-    {% include "widget/_js_onsite_dependencies.html" %}
+    {% include_bundle "mirosubs-onsite-compiled" %}
 {% endblock %}
 
 {% block main_content %}
