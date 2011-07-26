@@ -65,6 +65,7 @@ mirosubs.translate.TitleTranslationWidget.prototype.isEmpty = function(){
 
 mirosubs.translate.TitleTranslationWidget.prototype.setTranslation = function(value){
     this.translateInput_.value = value;
+    this.inputLostFocus_();
 };
 
 mirosubs.translate.TitleTranslationWidget.prototype.setTranslationContent = 
