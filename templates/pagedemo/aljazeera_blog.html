@@ -1,3 +1,4 @@
+{% load media_compressor %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
 
@@ -6,6 +7,9 @@
 	
   <title>Syria Live Blog - March 25 | Al Jazeera Blogs</title>
   <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
+  <script type="text/javascript">
+    window.MEDIA_URL = '{{MEDIA_URL}}';
+  </script>
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="alternate" type="application/rss+xml" title="Al Jazeera Blogs" href="http://feeds.aljazeera.net/blogs/recent" />
@@ -77,15 +81,11 @@
 jQuery.extend(Drupal.settings, {"basePath":"\/","googleanalytics":{"trackOutgoing":1,"trackMailto":1,"trackDownload":1,"trackDownloadExtensions":"7z|aac|arc|arj|asf|asx|avi|bin|csv|doc|exe|flv|gif|gz|gzip|hqx|jar|jpe?g|js|mp(2|3|4|e?g)|mov(ie)?|msi|msp|pdf|phps|png|ppt|qtm?|ra(m|r)?|sea|sit|tar|tgz|torrent|txt|wav|wma|wmv|wpd|xls|xml|z|zip"},"imagebrowser":{"basepath":"\/","filepath":"sites\/default\/files","modulepath":"sites\/all\/modules\/imagebrowser"},"lightbox2":{"rtl":0,"file_path":"\/(\\w\\w\/)sites\/default\/files","default_image":"\/sites\/all\/modules\/lightbox2\/images\/brokenimage.jpg","border_size":10,"font_color":"000","box_color":"fff","top_position":"","overlay_opacity":"0.8","overlay_color":"000","disable_close_click":1,"resize_sequence":0,"resize_speed":400,"fade_in_speed":400,"slide_down_speed":600,"use_alt_layout":0,"disable_resize":0,"disable_zoom":0,"force_show_nav":0,"show_caption":true,"loop_items":0,"node_link_text":"","node_link_target":0,"image_count":"Image !current of !total","video_count":"Video !current of !total","page_count":"Page !current of !total","lite_press_x_close":"press \u003ca href=\"#\" onclick=\"hideLightbox(); return FALSE;\"\u003e\u003ckbd\u003ex\u003c\/kbd\u003e\u003c\/a\u003e to close","download_link_text":"","enable_login":false,"enable_contact":false,"keys_close":"c x 27","keys_previous":"p 37","keys_next":"n 39","keys_zoom":"z","keys_play_pause":"32","display_image_size":"","image_node_sizes":"()","trigger_lightbox_classes":"","trigger_lightbox_group_classes":"","trigger_slideshow_classes":"","trigger_lightframe_classes":"","trigger_lightframe_group_classes":"","custom_class_handler":"lightshow","custom_trigger_classes":"img.lightbox-image","disable_for_gallery_lists":1,"disable_for_acidfree_gallery_lists":true,"enable_acidfree_videos":true,"slideshow_interval":2000,"slideshow_automatic_start":1,"slideshow_automatic_exit":1,"show_play_pause":1,"pause_on_next_click":0,"pause_on_previous_click":1,"loop_slides":1,"iframe_width":600,"iframe_height":400,"iframe_border":1,"enable_video":0}});
 //--><!]]>
 </script>
-{% if not js_use_compiled %}
-{% include "widget/_js_base_dependencies.html" %}
-<script>
-  goog.require('goog.debug.FancyWindow');
-</script>
-{% endif %}
-{% for dep in js_dependencies %}
-  <script type="text/javascript" src="{{dep|safe}}"></script>
-{% endfor %} 
+
+<script type="text/javascript" src="{{MEDIA_URL}}js/widgetizer/widgetizerprimer.js"></script>
+{% include_bundle "mirosubs-widgetizer" %}
+
+
  </head>
 <body class="not-front not-logged-in node-type-live-event page-live-middle-east-syria-live-blog-march-25 section-live one-sidebar sidebar-second">
 
