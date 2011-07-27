@@ -91,7 +91,7 @@ def build_queryset(index, model, age=DEFAULT_AGE, verbosity=1):
     
     # `.select_related()` seems like a good idea here but can fail on
     # nullable `ForeignKey` as well as what seems like other cases.
-    return index_qs.filter(**extra_lookup_kwargs).order_by(model._meta.pk.name)
+    return index_qs.filter(**extra_lookup_kwargs)
 
 
 def do_update(index, qs, start, end, total, verbosity=1):
