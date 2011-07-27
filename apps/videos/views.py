@@ -109,15 +109,15 @@ def volunteer_page(request):
     # Get the user comfort languages list 
     user_langs = get_user_languages_from_request(request)
 
-    relevevent = SearchQuerySet().result_class(VideoSearchResult) \
+    relevant = SearchQuerySet().result_class(VideoSearchResult) \
         .models(Video).filter(video_language__in=user_langs) \
         .filter_or(languages__in=user_langs)
 
-    featured_videos =  relevevent.order_by('-featured')[:5]
+    featured_videos =  relevant.order_by('-featured')[:5]
 
-    popular_videos = relevevent.order_by('-week_views')[:5]
+    popular_videos = relevant.order_by('-week_views')[:5]
 
-    latest_videos = relevevent.order_by('-edited')[:15]
+    latest_videos = relevant.order_by('-edited')[:15]
 
     context = {
         'featured_videos': featured_videos,
