@@ -129,34 +129,34 @@ class VideosApiClass(object):
 
     def _get_volunteer_sqs(self, request, user):
         '''
-        Return the search query set for videos which would be relevent to
+        Return the search query set for videos which would be relevant to
         volunteer for writing subtitles.
         '''
         user_langs = get_user_languages_from_request(request)
 
-        relevent = SearchQuerySet().result_class(VideoSearchResult) \
+        relevant = SearchQuerySet().result_class(VideoSearchResult) \
             .models(Video).filter(video_language__in=user_langs) \
             .filter_or(languages__in=user_langs)
 
-        ## The rest of videos which are NOT relevent
+        ## The rest of videos which are NOT relevant
         #rest = SearchQuerySet().result_class(VideoSearchResult) \
             #.models(Video).filter(video_language__in=user_langs) \
             #.filter_or(languages__in=user_langs)
 
-        return relevent
+        return relevant
 
     @add_request_to_kwargs
     def load_featured_page_volunteer(self, page, request, user):
-        relevent = self._get_volunteer_sqs(request, user)
-        sqs = relevent.filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
+        relevant = self._get_volunteer_sqs(request, user)
+        sqs = relevant.filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
             .order_by('-featured')
 
         return render_page(page, sqs, request=request)    
 
     @add_request_to_kwargs
     def load_latest_page_volunteer(self, page, request, user):
-        relevent = self._get_volunteer_sqs(request, user)
-        sqs = relevent.order_by('-edited')
+        relevant = self._get_volunteer_sqs(request, user)
+        sqs = relevant.order_by('-edited')
 
         return render_page(page, sqs, request=request)
 
@@ -173,8 +173,8 @@ class VideosApiClass(object):
 
         sort_field = sort_types.get(sort, 'week_views')
 
-        relevent = self._get_volunteer_sqs(request, user)
-        sqs = relevent.order_by('-%s' % sort_field)
+        relevant = self._get_volunteer_sqs(request, user)
+        sqs = relevant.order_by('-%s' % sort_field)
 
         return render_page(page, sqs, request=request)
 
@@ -221,9 +221,9 @@ class VideosApiClass(object):
 
         sort_field = sort_types.get(sort, 'week_views')
 
-        relevent = self._get_volunteer_sqs(request, user)
+        relevant = self._get_volunteer_sqs(request, user)
 
-        popular_videos = relevent.order_by('-%s' % sort_field)[:5]
+        popular_videos = relevant.order_by('-%s' % sort_field)[:5]
 
         context = {
             'video_list': popular_videos
