@@ -39,6 +39,7 @@ from utils.forms import AjaxForm
 from localeurl.utils import strip_path
 import re
 from utils.translation import get_languages_list
+from utils.forms.unisub_video_form import UniSubBoundVideoField
 
 class EditLogoForm(forms.ModelForm, AjaxForm):
     logo = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)], required=False)
@@ -69,55 +70,8 @@ class EditTeamVideoForm(forms.ModelForm):
             self.fields['completed_languages'].queryset = SubtitleLanguage.objects.none()
 
 class BaseVideoBoundForm(forms.ModelForm):
-    video_url = UniSubURLField(label=_('Video URL'), verify_exists=True, 
+    video_url = UniSubBoundVideoField(label=_('Video URL'), verify_exists=True, 
         help_text=_("Enter the URL of any compatible video or any video on our site. You can also browse the site and use the 'Add Video to Team' menu."))
-
-    def format_url(self, url):
-        parsed_url = urlparse(url)
-        return '%s://%s%s' % (parsed_url.scheme or 'http', parsed_url.netloc, parsed_url.path)  
-    
-    def clean_video_url(self):
-        video_url = self.cleaned_data['video_url']
-        
-        if not video_url:
-            self.video = None
-            return video_url
-
-        host = Site.objects.get_current().domain
-        url_start = 'http://'+host
-        
-        if video_url.startswith(url_start):
-            #UniSub URL
-            locale, path = strip_path(video_url[len(url_start):])
-            video_url = url_start+path
-            try:
-                video_url = self.format_url(video_url)
-                func, args, kwargs = resolve(video_url.replace(url_start, ''))
-                
-                if not 'video_id' in kwargs:
-                    raise forms.ValidationError(_('This URL does not contain video id.'))
-                
-                try:
-                    self.video = Video.objects.get(video_id=kwargs['video_id'])
-                except Video.DoesNotExist:
-                    raise forms.ValidationError(_('Videos does not exist.'))
-                
-            except Http404:
-                raise forms.ValidationError(_('Incorrect URL.'))
-        else:
-            #URL from other site
-            try:
-                self.video, created = Video.get_or_create_for_url(video_url)
-            except VideoTypeError, e:
-                raise forms.ValidationError(e)
-
-            if not self.video:
-                raise forms.ValidationError(mark_safe(_(u"""Universal Subtitles does not support that website or video format.
-If you'd like to us to add support for a new site or format, or if you
-think there's been some mistake, <a
-href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))
-             
-        return video_url
     
 class AddTeamVideoForm(BaseVideoBoundForm):
     language = forms.ChoiceField(label=_(u'Video language'), choices=settings.ALL_LANGUAGES,
@@ -133,10 +87,10 @@ class AddTeamVideoForm(BaseVideoBoundForm):
         self.fields['language'].choices = get_languages_list(True)
     
     def clean_video_url(self):
-        video_url = super(AddTeamVideoForm, self).clean_video_url()
-        
+        video_url = self.cleaned_data['video_url']
+        video = self.fields['video_url'].video
         try:
-            tv = TeamVideo.objects.get(team=self.team, video=self.video)
+            tv = TeamVideo.objects.get(team=self.team, video=video)
             raise forms.ValidationError(mark_safe(u'Team has this <a href="%s">video</a>' % tv.get_absolute_url()))
         except TeamVideo.DoesNotExist:
             pass
@@ -145,15 +99,16 @@ class AddTeamVideoForm(BaseVideoBoundForm):
     
     def save(self, commit=True):
         video_language = self.cleaned_data['language']
+        video = self.fields['video_url'].video
         if video_language:
-            original_language = self.video.subtitle_language()
+            original_language = video.subtitle_language()
             if original_language and not original_language.language and \
-                not self.video.subtitlelanguage_set.filter(language=video_language).exists():
+                not video.subtitlelanguage_set.filter(language=video_language).exists():
                 original_language.language = video_language
                 original_language.save()
             
         obj = super(AddTeamVideoForm, self).save(False)
-        obj.video = self.video
+        obj.video = video
         obj.team = self.team
         commit and obj.save()
         return obj
