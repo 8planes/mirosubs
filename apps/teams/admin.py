@@ -27,6 +27,7 @@ from teams.models import Team, TeamMember, TeamVideo
 from videos.models import SubtitleLanguage
 from django.utils.translation import ugettext_lazy as _
 from messages.forms import TeamAdminPageMessageForm
+from django import forms
 
 class TeamMemberInline(admin.TabularInline):
     model = TeamMember
@@ -64,7 +65,7 @@ class TeamAdmin(admin.ModelAdmin):
 
 class TeamMemberAdmin(admin.ModelAdmin):
     search_fields = ('team__name', 'user__username', 'user__first_name', 'user__last_name')
-    list_display = ('team', 'user', 'is_manager')
+    list_display = ('team', 'user', 'role')
 
 class TeamVideoForm(forms.ModelForm):
     

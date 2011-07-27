@@ -12,10 +12,7 @@
     window.usStartTime = (new Date()).getTime();
     window.MEDIA_URL = '{{MEDIA_URL}}';
   </script>
-{% block css %}
-
-
-{% include_bundle "base" %}
+{% block css %}{% include_bundle "base" %}{% endblock %}
 
 <!--[if gte IE 8]>
 <link href="{{ MEDIA_URL }}css/ie8.css" media="all" type="text/css" rel="stylesheet" />
