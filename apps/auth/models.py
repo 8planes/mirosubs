@@ -169,7 +169,7 @@ class CustomUser(BaseUser):
 
     def managed_teams(self):
         from apps.teams.models import TeamMember
-        return self.teams.filter(members__role=TeamMember.MANAGER)
+        return self.teams.filter(members__role=TeamMember.ROLE_MANAGER)
 
     def _get_gravatar(self, size):
         url = "http://www.gravatar.com/avatar/" + hashlib.md5(self.email.lower()).hexdigest() + "?"
