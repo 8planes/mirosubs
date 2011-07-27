@@ -105,7 +105,7 @@ def do_update(index, qs, start, end, total, verbosity=1):
             print "  indexed %s - %d of %d." % (start+1, end, total)
         else:
             print "  indexed %s - %d of %d (by %s)." % (start+1, end, total, os.getpid())
-    print current_qs[0], current_qs[0].pk
+    print current_qs[0].pk
     index.backend.update(index, current_qs)
     
     # Clear out the DB connections queries because it bloats up RAM.
