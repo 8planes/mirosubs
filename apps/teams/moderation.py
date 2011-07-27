@@ -6,8 +6,6 @@ from django.db import models
 from django.core.exceptions import SuspiciousOperation
 from django.contrib.sites.models import Site
 
-from guardian.shortcuts import assign
-
 from haystack import site
 
 from utils.db import require_lock
