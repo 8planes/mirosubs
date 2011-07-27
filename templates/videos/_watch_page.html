@@ -14,15 +14,22 @@
     (function($){
         var lang_arrow_click_handler = function(){
             var $this = $(this);
-            if ( ! $(this).find('.lang_menu').length){
+            var $lang_menu = $(this).find('.lang_menu');
+            if ( ! $lang_menu.length){
                 VideosApi.load_video_languages($this.attr('video_id'), function(r){
                     $this.html(r.content);
                 });
+            }else{
+                $lang_menu.show();
             }
             return false;
         };
         
-        $('.video_list .lang_arrow').unbind('click')
-            .bind('click', lang_arrow_click_handler);
+        $('.video_list .lang_arrow').unbind('click').bind('click', lang_arrow_click_handler);
+        
+        $('.video_list .lang_arrow .lang_menu').live('mouseleave', function(){
+            $(this).hide();
+        });
+        
     })(jQuery);
 </script>

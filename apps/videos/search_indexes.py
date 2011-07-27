@@ -114,7 +114,9 @@ class VideoIndex(CelerySearchIndex):
     def _teardown_save(self, model):
         pass
 
-
+    def index_queryset(self):
+        return self.model.objects.order_by('-id')
+    
 class VideoSearchResult(SearchResult):
     title_for_url = Video.__dict__['title_for_url']
     get_absolute_url = Video.__dict__['_get_absolute_url']

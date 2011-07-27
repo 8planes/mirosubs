@@ -68,7 +68,9 @@ mirosubs.api.openUnisubsDialogWithSettings =
     if (goog.DEBUG) {
         var debugWindow = new goog.debug.FancyWindow('main');
         debugWindow.setEnabled(true);
-        debugWindow.init(); 
+        debugWindow.init();             
+
+
         mirosubs.DEBUG = true;
     }
     mirosubs.widget.WidgetController.makeGeneralSettings(generalSettings);

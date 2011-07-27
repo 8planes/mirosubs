@@ -8,14 +8,12 @@ register = template.Library()
 def form_field_as_list(GET_vars, bounded_field, count=0):
     getvars = '?'
     
-    if bounded_field.name in GET_vars:
-        del GET_vars[bounded_field.name]
-    
     if len(GET_vars.keys()) > 0:
         getvars = "?%s&" % GET_vars.urlencode()
     
     output = []
-    data = bounded_field.data or bounded_field.field.initial and bounded_field.field.initial
+    
+    data = bounded_field.data or bounded_field.field.initial
 
     for i, choice in enumerate(bounded_field.field.choices):
         if choice[0] == data:
@@ -28,7 +26,7 @@ def form_field_as_list(GET_vars, bounded_field, count=0):
             'attrs': li_attrs,
             'href': href,
             'value': choice[0],
-            'fname': bounded_field.name,
+            'fname': bounded_field.html_name,
             'name': choice[1]
         }
         

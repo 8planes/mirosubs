@@ -51,6 +51,20 @@ class TestSearch(TestCase):
     def setUp(self):
         self.user = User.objects.all()[0]
     
+    def test_search_index_updating(self):
+        reset_solr()
+        rpc = SearchApiClass()
+        
+        for title in self.titles:
+            rdata = RpcMultiValueDict(dict(q=title))
+            video = Video.objects.all()[0]
+            video.title = title
+            video.save()
+            video.update_search_index()
+            
+            result = rpc.search(rdata, self.user, testing=True)['sqs']
+            self.assertTrue(video in [item.object for item in result], title)
+    
     def test_rpc(self):
         rpc = SearchApiClass()
         rdata = RpcMultiValueDict(dict(q=u'BBC'))
