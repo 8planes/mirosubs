@@ -3,13 +3,14 @@
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
+
+  {% include_bundle "mirosubs-api" %}
   <script type="text/javascript">
     window.MEDIA_URL = '{{MEDIA_URL}}';
     {% if DEBUG %}
     goog.require('goog.debug.FancyWindow');
     {% endif %}
   </script>
-  {% include_bundle "mirosubs-api" %}
   <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
 </head>
 
