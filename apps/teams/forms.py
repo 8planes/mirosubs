@@ -175,8 +175,9 @@ Enter a link to any compatible video, or to any video page on our site.''')
     
     def save(self):
         team = super(EditTeamForm, self).save(False)
-        if self.video:
-            team.video = self.video
+        video = self.fields['video_url'].video
+        if video:
+            team.video = video
         team.save()
 
         if team.is_open():
