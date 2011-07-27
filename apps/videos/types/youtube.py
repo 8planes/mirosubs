@@ -63,7 +63,7 @@ def save_subtitles_for_lang(lang, video_pk, youtube_id):
 
     xml = YoutubeVideoType._get_response_from_youtube(url)
 
-    if not xml:
+    if xml is None:
         return
 
     parser = YoutubeXMLParser(xml)
@@ -213,7 +213,7 @@ class YoutubeVideoType(VideoType):
         url = "http://www.youtube.com/api/timedtext?type=list&v=%s" % self.video_id
         xml = self._get_response_from_youtube(url)
 
-        if not xml:
+        if  xml is None:
             return []
         
         output = []
