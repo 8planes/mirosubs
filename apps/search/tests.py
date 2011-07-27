@@ -21,6 +21,9 @@ from django.core.management import call_command
 from haystack.query import SearchQuerySet
 from videos.models import Video
 from search.forms import SearchForm
+from search.rpc import SearchApiClass
+from auth.models import CustomUser as User
+from utils.rpc import RpcMultiValueDict
 
 def reset_solr():
     # cause the default site to load
@@ -32,7 +35,49 @@ def reset_solr():
     
 class TestSearch(TestCase):
     fixtures = ['staging_users.json', 'staging_videos.json']
+    titles = (
+        u"Kisses in Romania's Food Market - Hairy Bikers Cookbook - BBC",
+        u"Don't believe the hype - A Bit of Stephen Fry & Hugh Laurie - BBC comedy sketch",
+        u"David Attenborough - Animal behaviour of the Australian bowerbird - BBC wildlife",
+        u"JayZ talks about Beyonce - Friday Night with Jonathan Ross - BBC One",
+        u"Amazing! Bird sounds from the lyre bird - David Attenborough  - BBC wildlife",
+        u"Hans Rosling's 200 Countries, 200 Years, 4 Minutes - The Joy of Stats - BBC Four",
+        u"HD: Grizzly Bears Catching Salmon - Nature's Great Events: The Great Salmon Run - BBC One",
+        u"My Blackberry Is Not Working! - The One Ronnie, Preview - BBC One",
+        u"Cher and Dawn French's Lookalikes - The Graham Norton Show preview - BBC One",
+        u"Cute cheetah cub attacked by wild warthog - Cheetahs - BBC Earth"
+    )    
     
+    def setUp(self):
+        self.user = User.objects.all()[0]
+    
+    def test_search_index_updating(self):
+        reset_solr()
+        rpc = SearchApiClass()
+        
+        for title in self.titles:
+            rdata = RpcMultiValueDict(dict(q=title))
+            video = Video.objects.all()[0]
+            video.title = title
+            video.save()
+            video.update_search_index()
+            
+            result = rpc.search(rdata, self.user, testing=True)['sqs']
+            self.assertTrue(video in [item.object for item in result], title)
+    
+    def test_rpc(self):
+        rpc = SearchApiClass()
+        rdata = RpcMultiValueDict(dict(q=u'BBC'))
+        
+        for title in self.titles:
+            video = Video.objects.all()[0]
+            video.title = title
+            video.save()
+            reset_solr()
+            
+            result = rpc.search(rdata, self.user, testing=True)['sqs']
+            self.assertTrue(video in [item.object for item in result], title)
+        
     def test_search(self):
         reset_solr()
         sqs = SearchQuerySet().models(Video)
@@ -44,19 +89,7 @@ class TestSearch(TestCase):
             self.assertTrue(video in [item.object for item in result])
             
     def test_search1(self):
-        titles = (
-            u"Kisses in Romania's Food Market - Hairy Bikers Cookbook - BBC",
-            u"Don't believe the hype - A Bit of Stephen Fry & Hugh Laurie - BBC comedy sketch",
-            u"David Attenborough - Animal behaviour of the Australian bowerbird - BBC wildlife",
-            u"JayZ talks about Beyonce - Friday Night with Jonathan Ross - BBC One",
-            u"Amazing! Bird sounds from the lyre bird - David Attenborough  - BBC wildlife",
-            u"Hans Rosling's 200 Countries, 200 Years, 4 Minutes - The Joy of Stats - BBC Four",
-            u"HD: Grizzly Bears Catching Salmon - Nature's Great Events: The Great Salmon Run - BBC One",
-            u"My Blackberry Is Not Working! - The One Ronnie, Preview - BBC One",
-            u"Cher and Dawn French's Lookalikes - The Graham Norton Show preview - BBC One"
-        )
-        
-        for title in titles:
+        for title in self.titles:
             video = Video.objects.all()[0]
             sqs = SearchQuerySet().models(Video)
             video.title = title

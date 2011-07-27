@@ -25,19 +25,19 @@ import simplejson as json
 LANGUAGES_MAP = dict(LANGUAGES)
 
 def full_path(js_file):
-    return "{0}js/{1}".format(settings.MEDIA_URL, js_file)
+    return "{0}{1}".format(settings.MEDIA_URL, js_file)
 
 def add_offsite_js_files(context):
     """ Adds variables necessary for _js_dependencies.html """
     return add_js_files(context, settings.JS_USE_COMPILED, 
                         settings.JS_OFFSITE, 
-                        'mirosubs-offsite-compiled.js')
+                        'js/mirosubs-offsite-compiled.js')
 
 def add_onsite_js_files(context):
     """ Adds variables necessary for _js_onsite_dependencies.html """
     return add_js_files(context, settings.JS_USE_COMPILED, 
                         settings.JS_ONSITE, 
-                        'mirosubs-onsite-compiled.js')
+                        'js/mirosubs-onsite-compiled.js')
 
 def add_config_based_js_files(context, files, compiled_file_name):
     js_files = []

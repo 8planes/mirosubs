@@ -160,6 +160,9 @@ mirosubs.subtitle.MSServerModel.prototype.makeFinishArgs_ = function() {
         // a fork alone isn't sufficient to trigger a save, 
         // so not setting atLeastOneThingChanged.
     }
+    if (window['UNISUBS_THROW_EXCEPTION']) {
+        args['throw_exception'] = true;
+    }
     return atLeastOneThingChanged ? args : null;
 };
 

@@ -60,6 +60,8 @@ class VideosApiClass(object):
         if not c:
             raise RpcExceptionEvent(_(u'Video does not exist'))
         
+        update_search_index.delay(Video, video_id)  
+        
         return {}    
     
     def feature_video(self, video_id, user):
@@ -68,11 +70,13 @@ class VideosApiClass(object):
         
         try:
             c = Video.objects.filter(pk=video_id).update(featured=datetime.datetime.today())
-        except (ValueError, TypeError):
+        except (ValueError, TypeError, Video.DoesNotExist):
             raise RpcExceptionEvent(_(u'Incorrect video ID'))
                 
         if not c:
             raise RpcExceptionEvent(_(u'Video does not exist'))
+
+        update_search_index.delay(Video, video_id)  
         
         return {}
     
@@ -334,6 +338,7 @@ def render_page(page, qs, on_page=VIDEOS_ON_PAGE, request=None,
     if request:
         content = render_to_string(template, context, RequestContext(request))
     else:
+        context['MEDIA_URL'] = settings.MEDIA_URL
         content = render_to_string(template, context)
         
     total = qs.count()

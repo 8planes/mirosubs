@@ -28,6 +28,7 @@ DEBUG = False
 ADMINS = (
     ('Adam Duston', 'adam@8planes.com'),
     ('Holmes Wilson', 'hwilson@gmail.com'),
+    ('Craig Zheng', 'craig@pculture.org'),
     ('universalsubtitles-errors', 'universalsubtitles-errors@pculture.org')
 )
 
@@ -126,7 +127,9 @@ except ImportError:
 
 if USE_AMAZON_S3:
     AWS_BUCKET_NAME = AWS_STORAGE_BUCKET_NAME
-USE_BUNDLED_MEDIA = not DEBUG
-if USE_BUNDLED_MEDIA:
+
+
+COMPRESS_MEDIA = not DEBUG
+if COMPRESS_MEDIA:
     MEDIA_URL += "%s/%s/" % (COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID.split("/")[1])
 

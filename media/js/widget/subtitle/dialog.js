@@ -300,12 +300,12 @@ mirosubs.subtitle.Dialog.prototype.saveWorkImpl_ = function(closeAfterSave, isCo
             })
             
         },
-        function(logger, opt_status) {
+        function(opt_status) {
             if (that.finishFailDialog_)
                 that.finishFailDialog_.failedAgain(opt_status);
             else
                 that.finishFailDialog_ = mirosubs.finishfaildialog.Dialog.show(
-                    logger, opt_status,
+                    that.captionSet_, opt_status,
                     goog.bind(that.saveWorkImpl_, that, 
                               closeAfterSave, isComplete));
         },

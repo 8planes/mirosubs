@@ -1,4 +1,4 @@
-{% load webdesign widget%}
+{% load webdesign widget media_compressor %}
 <!doctype html>
 <html lang="en">
 <head><script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
@@ -22,18 +22,13 @@
 
 
 {% ifequal type "widgetizer" %}
-        <script>
-          goog.require('goog.debug.FancyWindow');
-        </script>
-    <script type="text/javascript" src="{{MEDIA_URL}}js/widgetizer/widgetizerprimer.js"></script>
-    <script type="text/javascript" src="{{MEDIA_URL}}js/mirosubs-widgetizer.js"></script>
+    {% include_bundle "mirosubs-widetizer" %}
+{% endifequal %}
+{% ifequal type "embed" %}
+    {% include_bundle "mirosubs-onsite-compiled" %}
 {% endifequal %}
 
-{% ifequal type "embed" %}
-     {% if not js_use_compiled %}
-         {% include "widget/_js_base_dependencies.html" %}
-      {% endif %}
-{% endifequal %}
+
 </head>
 
 

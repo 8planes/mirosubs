@@ -2,7 +2,7 @@
 <html>
   <head>
     <link href="{{MEDIA_URL}}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
-    {% include "widget/_js_onsite_dependencies.html" %}
+    {% include_bundle "mirosubs-onsite-compiled" %}
     {% block script %}{% endblock %}
     <script>
       goog.require('goog.debug.DivConsole');

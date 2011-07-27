@@ -590,38 +590,6 @@ class VideoTest(TestCase):
         self.failIf(created)
         self.failUnlessEqual(video, more_video)
 
-    def test_youtube_subs_response(self):
-        import os
-        from videos.types.youtube import YoutubeVideoType
-        import urllib
-        
-        def urlopen_mockup(url, *args, **kwargs):
-            path = os.path.join(os.path.dirname(__file__), 'fixtures/youtube_subs_response.json')
-            return open(path)
-        
-        _urlopen = urllib.urlopen
-        urllib.urlopen = urlopen_mockup
-        
-        vt = YoutubeVideoType('http://www.youtube.com/watch?v=GcjgWov7mTM')
-        video, create = Video.get_or_create_for_url('http://www.youtube.com/watch?v=GcjgWov7mTM', vt)
-        res = vt._get_subtitles_from_youtube(video)
-        if res is None:
-            # api might be down or error
-            return
-            
-        video = Video.objects.get(pk=video.pk)
-        version = video.version()
-        self.assertFalse(version is None)
-        self.assertTrue(len(version.subtitles()))
-        self.assertEqual(version.subtitles()[0].text, 'I think what is probably the most misunderstood\nconcept in all of science and as we all know')
-        subs = version.subtitles()
-        subs.sort(key=lambda s: s.start_time)
-        for i in range(1, len(subs)):
-            self.assertTrue(subs[i].sub_order > subs[i - 1].sub_order)
-
-        urllib.urlopen = _urlopen
-
-
     def test_video_cache_busted_on_delete(self):
         start_url = 'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv'
         video, created = Video.get_or_create_for_url(start_url)
@@ -753,6 +721,13 @@ class ViewsTest(WebUseTest):
         self.video.save()
         response = self.client.get(self.video.get_absolute_url('en'))
         self.assertEqual(response.status_code, 200)
+
+# FIXME: Dmitriy, please fix.
+#    def test_video_absolute_url(self):
+#        # absolute urls should start with http://
+#        # if the urls returned from this method don't start with http,
+#        # then the method should be renamed to get_relative_url.
+#        self.assertEquals('http', self.video.get_absolute_url()[:4])
         
     def test_video_list(self):
         self._simple_test('videos:list')
@@ -1034,6 +1009,22 @@ class YoutubeVideoTypeTest(TestCase):
         vt = self.vt(self.shorter_url)
         self.assertTrue(vt)
         self.assertEqual(vt.video_id , self.shorter_url.split("/")[-1])
+    
+    def test_subtitle_saving(self):
+        url = u'http://www.youtube.com/watch?v=63c5p_8hiho'
+        
+        vt = self.vt(url)
+        
+        video, created = Video.get_or_create_for_url(url)
+        
+        langs = video.subtitlelanguage_set.all()
+        self.assertEqual(len(langs), 8)
+        
+        for sl in langs:
+            if sl.language:
+                subtitles = sl.latest_subtitles()
+                self.assertTrue(len(subtitles))
+                self.assertTrue(subtitles[5].start_time and subtitles[5].end_time)
     
 from videos.types.htmlfive import HtmlFiveVideoType
 

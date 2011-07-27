@@ -1,7 +1,8 @@
+{% load media_compressor %}
 <!DOCTYPE html>
 <html>
   <head>
-    {% include "widget/_js_onsite_dependencies.html" %}
+    {% include_bundle "mirosubs-onsite-compiled" %}
     <script>
       goog.require('goog.userAgent.product');
       goog.require('goog.testing.MultiTestRunner');

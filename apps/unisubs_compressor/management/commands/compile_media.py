@@ -31,8 +31,8 @@ logging.basicConfig(level=logging.INFO,
 MEDIA_ROOT = settings.MEDIA_ROOT
 def to_media_root(*paths):
     return os.path.join(settings.MEDIA_ROOT, *paths)
-JS_LIB = os.path.join(settings.PROJECT_ROOT, "media/js")
-CLOSURE_LIB = os.path.join(JS_LIB, "closure-library")
+JS_LIB = os.path.join(settings.PROJECT_ROOT, "media")
+CLOSURE_LIB = os.path.join(JS_LIB, "js", "closure-library")
 FLOWPLAYER_JS = os.path.join(settings.PROJECT_ROOT, "media/flowplayer/flowplayer-3.2.2.min.js")
 COMPILER_PATH = os.path.join(settings.PROJECT_ROOT,  "closure", "compiler.jar")
 
@@ -57,7 +57,7 @@ def call_command(command):
     return process.communicate()
 
 def get_cache_dir():
-    commit_hash = get_current_commit_hash()
+    commit_hash = settings.LAST_COMMIT_GUID.split("/")[1]
     return os.path.join(settings.MEDIA_ROOT, settings.COMPRESS_OUTPUT_DIRNAME, commit_hash)
 
 def get_cache_base_url():
@@ -106,12 +106,13 @@ class Command(BaseCommand):
         bundle_settings = settings.MEDIA_BUNDLES[bundle_name]
         debug = bundle_settings.get("debug", False)
         include_flash_deps = bundle_settings.get("include_flash_deps", True)
-        closure_dep_file = bundle_settings.get("closure_deps",'closure-dependencies.js' )        
+        closure_dep_file = bundle_settings.get("closure_deps",'js/closure-dependencies.js' )
+        optimization_type = bundle_settings.get("optimizations", "ADVANCED_OPTIMIZATIONS")
 
         logging.info("Starting {0}".format(output_file_name))
 
         deps = [" --js %s " % os.path.join(JS_LIB, file) for file in files]
-        calcdeps_js = os.path.join(JS_LIB, 'mirosubs-calcdeps.js')
+        calcdeps_js = os.path.join(JS_LIB, 'js', 'mirosubs-calcdeps.js')
         compiled_js = os.path.join(settings.MEDIA_ROOT, "js" , output_file_name)
         compiler_jar = COMPILER_PATH
 
@@ -119,7 +120,7 @@ class Command(BaseCommand):
 
         js_debug_dep_file = ''
         if debug:
-            js_debug_dep_file = '-i {0}/{1}'.format(JS_LIB, 'closure-debug-dependencies.js')
+            js_debug_dep_file = '-i {0}/{1}'.format(JS_LIB, 'js/closure-debug-dependencies.js')
 
         output,_ = call_command(("%s/closure/bin/calcdeps.py -i %s/%s %s " +
                                  "-p %s/ -o script") % 
@@ -148,16 +149,16 @@ class Command(BaseCommand):
                                    "%s "
                                    "--define goog.NATIVE_ARRAY_PROTOTYPES=false "
                                    "--output_wrapper (function(){%%output%%})(); "
-                                   "--compilation_level ADVANCED_OPTIMIZATIONS") % 
+                                   "--compilation_level %s") % 
                                   (compiler_jar, calcdeps_js, deps, compiled_js,
-                                   debug_arg))
+                                   debug_arg, optimization_type))
 
         with open(compiled_js, 'r') as compiled_js_file:
             compiled_js_text = compiled_js_file.read()
 
         with open(compiled_js, 'w') as compiled_js_file:
             if include_flash_deps:
-                with open(os.path.join(JS_LIB, 'swfobject.js'), 'r') as swfobject_file:
+                with open(os.path.join(JS_LIB, 'js', 'swfobject.js'), 'r') as swfobject_file:
                     compiled_js_file.write(swfobject_file.read())
                 with open(FLOWPLAYER_JS, 'r') as flowplayerjs_file:
                     compiled_js_file.write(flowplayerjs_file.read())

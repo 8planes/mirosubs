@@ -111,6 +111,14 @@ urlpatterns = patterns(
      url(r'^sitemap-(?P<section>.+)\.xml$', sitemap_view, {'sitemaps': sitemaps}, name="sitemap"),
 )
 
+try:
+    from services import urls
+    urlpatterns += patterns('',
+        (r'^unisubservices/', include('services.urls', namespace='services')),
+    )
+except ImportError:
+    pass
+
 if settings.DEBUG:
     urlpatterns += patterns('',
         (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',

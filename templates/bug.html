@@ -31,7 +31,7 @@
     <script src="{{ MEDIA_URL }}js/jquery.form.js" type="text/javascript"></script>  
     <script src="{{ MEDIA_URL }}js/jquery.mod.js" type="text/javascript"></script>  
     <script src="{{ MEDIA_URL }}js/messages.js" type="text/javascript"></script>    
-    {% include "widget/_js_onsite_dependencies.html" %}
+    {% include_bundle "mirosubs-onsite-compiled" %}
     <script type="text/javascript">
         jQuery(function($){
             $.mod();

@@ -23,7 +23,7 @@ goog.provide('mirosubs.Rpc');
  * In milliseconds
  * @type {number}
  */
-mirosubs.Rpc.TIMEOUT_ = 15000;
+mirosubs.Rpc.TIMEOUT_ = 30000;
 
 if (goog.DEBUG) {
     mirosubs.Rpc.logger_ =

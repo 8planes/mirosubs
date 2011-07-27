@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load i18n teams_tags paginator profiles_tags widget markup %}
+{% load i18n teams_tags paginator profiles_tags widget markup media_compressor %}
 
 {% block title %}
     {{ team }} | Universal Subtitles
@@ -15,7 +15,7 @@
 
 {% block scripts %}
     {{ block.super }}
-    {% include "widget/_js_onsite_dependencies.html" %}
+    {% include_bundle "mirosubs-onsite-compiled" %}    
     <script src="{% url teams:rpc_api %}" type="text/javascript"></script>
 {% endblock %}
 

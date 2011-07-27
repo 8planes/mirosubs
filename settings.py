@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 # Django settings for mirosubs project.
-import os
+import os, sys
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
@@ -166,151 +166,157 @@ USER_LANGUAGES_COOKIE_NAME = 'unisub-languages-cookie'
 
 # paths provided relative to media/js
 JS_CORE = \
-    ['mirosubs.js', 
-     'rpc.js',
-     'clippy.js',
-     'flash.js',
-     'spinner.js',
-     'sliderbase.js',
-     'closingwindow.js',
-     'loadingdom.js',
-     'tracker.js',
-     'style.js',
-     'messaging/simplemessage.js',
-     'video/video.js',
-     'video/captionview.js',
-     'video/abstractvideoplayer.js',
-     'video/flashvideoplayer.js',
-     'video/html5videoplayer.js',
-     'video/youtubevideoplayer.js',
-     'video/jwvideoplayer.js',
-     'video/flvvideoplayer.js',
-     'video/videosource.js',
-     'video/html5videosource.js',
-     'video/youtubevideosource.js',
-     'video/brightcovevideosource.js',
-     'video/brightcovevideoplayer.js',
-     'video/flvvideosource.js',
-     'video/bliptvplaceholder.js',
-     'video/controlledvideoplayer.js',
-     'video/vimeovideosource.js',
-     'video/vimeovideoplayer.js',
-     'video/dailymotionvideosource.js',
-     'video/dailymotionvideoplayer.js',
-     'startdialog/model.js',
-     'startdialog/videolanguage.js',
-     'startdialog/videolanguages.js',
-     'startdialog/tolanguage.js',
-     'startdialog/tolanguages.js',
-     'startdialog/dialog.js',
-     'requestdialog.js',
-     'widget/subtitle/editablecaption.js',
-     "widget/subtitle/editablecaptionset.js",
-     'widget/usersettings.js',
-     'widget/logindialog.js',
-     'widget/videotab.js',
-     'widget/howtovideopanel.js',
-     'widget/dialog.js',
-     'widget/captionmanager.js',
-     'widget/rightpanel.js',
-     'widget/basestate.js',
-     'widget/subtitlestate.js',
-     'widget/dropdowncontents.js',
-     'widget/playcontroller.js',
-     'widget/subtitlecontroller.js',
-     'widget/subtitledialogopener.js',
-     'widget/opendialogargs.js',
-     'widget/dropdown.js',
-     'widget/play/manager.js',
-     'widget/widgetcontroller.js',
-     'widget/widget.js',
-     'widget/subtitle/onsaveddialog.js',
+    ['js/mirosubs.js', 
+     'js/rpc.js',
+     'js/clippy.js',
+     'js/flash.js',
+     'js/spinner.js',
+     'js/sliderbase.js',
+     'js/closingwindow.js',
+     'js/loadingdom.js',
+     'js/tracker.js',
+     'js/style.js',
+     'js/messaging/simplemessage.js',
+     'js/video/video.js',
+     'js/video/captionview.js',
+     'js/video/abstractvideoplayer.js',
+     'js/video/flashvideoplayer.js',
+     'js/video/html5videoplayer.js',
+     'js/video/youtubevideoplayer.js',
+     'js/video/jwvideoplayer.js',
+     'js/video/flvvideoplayer.js',
+     'js/video/videosource.js',
+     'js/video/html5videosource.js',
+     'js/video/youtubevideosource.js',
+     'js/video/brightcovevideosource.js',
+     'js/video/brightcovevideoplayer.js',
+     'js/video/flvvideosource.js',
+     'js/video/bliptvplaceholder.js',
+     'js/video/controlledvideoplayer.js',
+     'js/video/vimeovideosource.js',
+     'js/video/vimeovideoplayer.js',
+     'js/video/dailymotionvideosource.js',
+     'js/video/dailymotionvideoplayer.js',
+     'js/startdialog/model.js',
+     'js/startdialog/videolanguage.js',
+     'js/startdialog/videolanguages.js',
+     'js/startdialog/tolanguage.js',
+     'js/startdialog/tolanguages.js',
+     'js/startdialog/dialog.js',
+     'js/requestdialog.js',
+     'js/widget/subtitle/editablecaption.js',
+     "js/widget/subtitle/editablecaptionset.js",
+     'js/widget/usersettings.js',
+     'js/widget/logindialog.js',
+     'js/widget/videotab.js',
+     'js/widget/howtovideopanel.js',
+     'js/widget/dialog.js',
+     'js/widget/captionmanager.js',
+     'js/widget/rightpanel.js',
+     'js/widget/basestate.js',
+     'js/widget/subtitlestate.js',
+     'js/widget/dropdowncontents.js',
+     'js/widget/playcontroller.js',
+     'js/widget/subtitlecontroller.js',
+     'js/widget/subtitledialogopener.js',
+     'js/widget/opendialogargs.js',
+     'js/widget/dropdown.js',
+     'js/widget/play/manager.js',
+     'js/widget/widgetcontroller.js',
+     'js/widget/widget.js',
+     'js/widget/subtitle/onsaveddialog.js',
 ]
 
 JS_DIALOG = \
-    ['subtracker.js',
-     'srtwriter.js',
-     'widget/unsavedwarning.js',
-     'widget/resumeeditingrecord.js',
-     'widget/droplockdialog.js',
-     'finishfaildialog/dialog.js',
-     'finishfaildialog/errorpanel.js',
-     'finishfaildialog/reattemptuploadpanel.js',
-     'finishfaildialog/copydialog.js',
-     'widget/subtitle/dialog.js',
-     'widget/subtitle/msservermodel.js',
-     'widget/subtitle/subtitlewidget.js',
-     'widget/subtitle/addsubtitlewidget.js',
-     'widget/subtitle/subtitlelist.js',
-     'widget/subtitle/transcribeentry.js',
-     'widget/subtitle/transcribepanel.js',
-     'widget/subtitle/transcriberightpanel.js',
-     'widget/subtitle/syncpanel.js',
-     'widget/subtitle/reviewpanel.js',
-     'widget/subtitle/reviewrightpanel.js',
-     'widget/subtitle/sharepanel.js',
-     'widget/subtitle/completeddialog.js',
-     'widget/subtitle/editpanel.js',
-     'widget/subtitle/editrightpanel.js',
-     'widget/subtitle/bottomfinishedpanel.js',
-     'widget/subtitle/logger.js',
-     'widget/subtitle/savedsubtitles.js',
-     'widget/timeline/timerow.js',
-     'widget/timeline/timerowul.js',
-     'widget/timeline/timelinesub.js',
-     'widget/timeline/timelinesubs.js',
-     'widget/timeline/timelineinner.js',
-     'widget/timeline/timeline.js',
-     'widget/timeline/subtitle.js',
-     'widget/timeline/subtitleset.js',
-     'widget/controls/bufferedbar.js',
-     'widget/controls/playpause.js',
-     'widget/controls/progressbar.js',
-     'widget/controls/progressslider.js',
-     'widget/controls/timespan.js',
-     'widget/controls/videocontrols.js',
-     'widget/controls/volumecontrol.js',
-     'widget/controls/volumeslider.js',
-     'widget/translate/googletranslator.js',
-     'widget/translate/dialog.js',
-     'widget/translate/translationpanel.js',
-     'widget/translate/translationlist.js',
-     'widget/translate/translationwidget.js',
-     'widget/translate/translationrightpanel.js',
-     'widget/translate/forkdialog.js',
-     'widget/translate/titletranslationwidget.js']
+    ['js/subtracker.js',
+     'js/srtwriter.js',
+     'js/widget/unsavedwarning.js',
+     'js/widget/resumeeditingrecord.js',
+     'js/widget/droplockdialog.js',
+     'js/finishfaildialog/dialog.js',
+     'js/finishfaildialog/errorpanel.js',
+     'js/finishfaildialog/reattemptuploadpanel.js',
+     'js/finishfaildialog/copydialog.js',
+     'js/widget/subtitle/dialog.js',
+     'js/widget/subtitle/msservermodel.js',
+     'js/widget/subtitle/subtitlewidget.js',
+     'js/widget/subtitle/addsubtitlewidget.js',
+     'js/widget/subtitle/subtitlelist.js',
+     'js/widget/subtitle/transcribeentry.js',
+     'js/widget/subtitle/transcribepanel.js',
+     'js/widget/subtitle/transcriberightpanel.js',
+     'js/widget/subtitle/syncpanel.js',
+     'js/widget/subtitle/reviewpanel.js',
+     'js/widget/subtitle/reviewrightpanel.js',
+     'js/widget/subtitle/sharepanel.js',
+     'js/widget/subtitle/completeddialog.js',
+     'js/widget/subtitle/editpanel.js',
+     'js/widget/subtitle/editrightpanel.js',
+     'js/widget/subtitle/bottomfinishedpanel.js',
+     'js/widget/subtitle/logger.js',
+     'js/widget/subtitle/savedsubtitles.js',
+     'js/widget/timeline/timerow.js',
+     'js/widget/timeline/timerowul.js',
+     'js/widget/timeline/timelinesub.js',
+     'js/widget/timeline/timelinesubs.js',
+     'js/widget/timeline/timelineinner.js',
+     'js/widget/timeline/timeline.js',
+     'js/widget/timeline/subtitle.js',
+     'js/widget/timeline/subtitleset.js',
+     'js/widget/controls/bufferedbar.js',
+     'js/widget/controls/playpause.js',
+     'js/widget/controls/progressbar.js',
+     'js/widget/controls/progressslider.js',
+     'js/widget/controls/timespan.js',
+     'js/widget/controls/videocontrols.js',
+     'js/widget/controls/volumecontrol.js',
+     'js/widget/controls/volumeslider.js',
+     'js/widget/translate/googletranslator.js',
+     'js/widget/translate/dialog.js',
+     'js/widget/translate/translationpanel.js',
+     'js/widget/translate/translationlist.js',
+     'js/widget/translate/translationwidget.js',
+     'js/widget/translate/translationrightpanel.js',
+     'js/widget/translate/forkdialog.js',
+     'js/widget/translate/titletranslationwidget.js']
 
 JS_OFFSITE = list(JS_CORE)
-JS_OFFSITE.append('widget/crossdomainembed.js')
+JS_OFFSITE.append('js/widget/crossdomainembed.js')
 
 JS_ONSITE = list(JS_CORE)
 JS_ONSITE.extend(
-    ['srtwriter.js',
-     'widget/samedomainembed.js',
-     "widget/api/servermodel.js",
-     "widget/api/api.js"])
+    ['js/srtwriter.js',
+     'js/widget/samedomainembed.js',
+     "js/widget/api/servermodel.js",
+     "js/widget/api/api.js"])
 
 JS_WIDGETIZER_CORE = list(JS_CORE)
 JS_WIDGETIZER_CORE.extend([
-    "widget/widgetdecorator.js",
-    "widgetizer/videoplayermaker.js",
-    "widgetizer/widgetizer.js",
-    "widgetizer/youtube.js",
-    "widgetizer/html5.js",
-    "widgetizer/jwplayer.js"])
+    "js/widget/widgetdecorator.js",
+    "js/widgetizer/videoplayermaker.js",
+    "js/widgetizer/widgetizer.js",
+    "js/widgetizer/youtube.js",
+    "js/widgetizer/html5.js",
+    "js/widgetizer/jwplayer.js"])
 
 JS_WIDGETIZER = list(JS_WIDGETIZER_CORE)
-JS_WIDGETIZER.append('widgetizer/dowidgetize.js')
+JS_WIDGETIZER.append('js/widgetizer/dowidgetize.js')
 
 JS_EXTENSION = list(JS_WIDGETIZER_CORE)
-JS_EXTENSION.append('widgetizer/extension.js')
+JS_EXTENSION.append('js/widgetizer/extension.js')
 
 JS_API = list(JS_CORE)
 JS_API.extend(JS_DIALOG)
 JS_API.extend([
-        "widget/api/servermodel.js",
-        "widget/api/api.js"])
+        "js/widget/api/servermodel.js",
+        "js/widget/api/api.js"])
 
+JS_BASE_DEPENDENCIES = [
+    'js/closure-library/closure/goog/base.js',
+    'js/closure-dependencies.js',
+    'js/swfobject.js',
+    'flowplayer/flowplayer-3.2.2.min.js',
+]
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -523,8 +529,8 @@ MIXPANEL_TOKEN = '44205f56e929f08b602ccc9b4605edc3'
 try:
     from commit import LAST_COMMIT_GUID
 except ImportError:
-    print "deploy/create_commit_file must be ran before boostrapping django"
-    raise
+    sys.stderr.write("deploy/create_commit_file must be ran before boostrapping django")
+    LAST_COMMIT_GUID = "dev/dev"
 
 AWS_ACCESS_KEY_ID = ''
 AWS_SECRET_ACCESS_KEY = ''
@@ -534,7 +540,8 @@ USE_AMAZON_S3 = AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and DEFAULT_BUCKET
 AVATAR_MAX_SIZE = 500*1024
 THUMBNAILS_SIZE = (
     (100, 100),
-    (50, 50)
+    (50, 50),
+    (120, 90)
 )
 
 EMAIL_BCC_LIST = []
@@ -614,32 +621,61 @@ MEDIA_BUNDLES = {
      },
      "mirosubs-widgetizer":{
         "type": "js",
-        "files": ["config.js"] + JS_WIDGETIZER,
+        "closure_deps": "js/closure-dependencies.js",
+        "files": ["js/config.js"] + JS_WIDGETIZER,
      },
     "mirosubs-widgetizer-debug":{
         "type": "js",
-        "files": ["config.js" ] + JS_WIDGETIZER,
+        "files": ["js/config.js" ] + JS_WIDGETIZER,
+        "closure_deps": "js/closure-dependencies.js",
         "debug": True,
      },
     "mirosubs-extension":{
         "type": "js",
-        "files": ["config.js" ] + JS_EXTENSION,
+        "files": ["js/config.js" ] + JS_EXTENSION,
      },
 
     "mirosubs-statwidget":{
         "type": "js",
-        "closure_deps": "closure-stat-dependencies.js",
+        "closure_deps": "js/closure-stat-dependencies.js",
         "include_flash_deps": False,
         "files": [
-            'mirosubs.js',
-            'rpc.js',
-            'loadingdom.js',
-            'statwidget/statwidgetconfig.js',
-            'statwidget/statwidget.js'],
+            'js/mirosubs.js',
+            'js/rpc.js',
+            'js/loadingdom.js',
+            'js/statwidget/statwidgetconfig.js',
+            'js/statwidget/statwidget.js'],
      },
 
     "mirosubs-api":{
         "type": "js",
-        "files": ["config.js"] + JS_API,
+        "files": ["js/config.js"] + JS_API,
      },
+    "js-base-dependencies":{
+        "type":"js",
+        "files": JS_BASE_DEPENDENCIES,
+     },
+    "js-onsite-dialog": {
+        "type":"js",
+        "files": ["js/config.js"]  + JS_DIALOG  ,
+    },
+    "site_base_js":{
+        "type":"js",
+        "files":[
+              "js/jquery-1.4.3.js",
+              "js/jquery-ui-1.8.13.custom.min.js",
+              "js/jgrowl/jquery.jgrowl.js",
+              "js/jalerts/jquery.alerts.js",
+              "js/jquery.form.js",
+              "js/jquery.metadata.js",
+              "js/jquery.mod.js",
+              "js/jquery.rpc.js",
+              "js/jquery.input_replacement.min.js",
+              "js/messages.js",
+
+            ],
+        "optimizations": "SIMPLE_OPTIMIZATIONS",
+        "closure_deps": "",
+        "include_flash_deps": False,
+        }
 }

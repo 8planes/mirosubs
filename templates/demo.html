@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 
-{% load i18n %}
+{% load i18n media_compressor %}
 
 {% block body_attrs %}id="demo"{% endblock %}
 
 {% block scripts %}
-    {% include "widget/_js_onsite_dependencies.html" %}
+{% include_bundle "mirosubs-onsite-compiled" %}
+
 {% endblock %}
 
 {% block css %}
