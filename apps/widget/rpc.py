@@ -354,7 +354,7 @@ class Rpc(BaseRpc):
                     subtitle_order=s['sub_order'])
 
     def _create_version_from_session(self, session, user=None, forked=False):
-        latest_version = session.language.version((public_only=False)
+        latest_version = session.language.version(public_only=False)
         return models.SubtitleVersion(
             language=session.language,
             version_no=(0 if latest_version is None 
