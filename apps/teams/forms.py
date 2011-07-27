@@ -140,8 +140,9 @@ Enter a link to any compatible video, or to any video page on our site.''')
             
     def save(self, user):
         team = super(CreateTeamForm, self).save(False)
-        if self.video:
-            team.video = self.video
+        video = self.fields['video_url'].video
+        if video:
+            team.video = video
         team.save()
         TeamMember(team=team, user=user, is_manager=True).save()
         return team
