@@ -48,9 +48,9 @@ class BlipTvVideoType(VideoType):
         }
 
     def set_values(self, video_obj):
-        video_obj.title = blip.scrape_title(self.url, self.shortmem)
+        video_obj.title = unicode(blip.scrape_title(self.url, self.shortmem))
         video_obj.thumbnail = blip.get_thumbnail_url(self.url, self.shortmem)
-        video_obj.description = strip_tags(blip.scrape_description(self.url, self.shortmem))
+        #video_obj.description = strip_tags(blip.scrape_description(self.url, self.shortmem))
         return video_obj
 
     def _get_file_id(self, video_url):
