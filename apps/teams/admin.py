@@ -27,6 +27,7 @@ from teams.models import Team, TeamMember, TeamVideo
 from videos.models import SubtitleLanguage
 from django.utils.translation import ugettext_lazy as _
 from messages.forms import TeamAdminPageMessageForm
+from django.core.urlresolvers import reverse
 from django import forms
 
 class TeamMemberInline(admin.TabularInline):
@@ -65,7 +66,19 @@ class TeamAdmin(admin.ModelAdmin):
 
 class TeamMemberAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'team__name', 'user__first_name', 'user__last_name')
-    list_display = ('team', 'user', 'role')
+    list_display = ('role', 'team_link', 'user_link')
+    
+    def team_link(self, obj):
+        url = reverse('admin:teams_team_change', args=[obj.team_id])
+        return u'<a href="%s">%s</a>' % (url, obj.team)
+    team_link.short_description = _('Team')
+    team_link.allow_tags = True
+
+    def user_link(self, obj):
+        url = reverse('admin:auth_customuser_change', args=[obj.user_id])
+        return u'<a href="%s">%s</a>' % (url, obj.user)
+    user_link.short_description = _('User')
+    user_link.allow_tags = True
 
 class TeamVideoForm(forms.ModelForm):
     
