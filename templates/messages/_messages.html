@@ -2,7 +2,7 @@
 {% if msg_count %}
 <div class="note">
     {% blocktrans %}
-        You have {{ msg_count }} messages.
+        You have {{ msg_count }} new messages.
     {% endblocktrans %}
     <a href="{% url messages:index %}">{% trans 'View all' %}</a>
 </div>
