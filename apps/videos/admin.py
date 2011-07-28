@@ -74,7 +74,7 @@ class SubtitleLanguageAdmin(admin.ModelAdmin):
     versions.allow_tags = True
     
 class SubtitleVersionAdmin(admin.ModelAdmin):
-    list_display = ['video', 'language', 'version_no', 'note', 'timeline_changes', 'text_changes']
+    list_display = ['video', 'language', 'version_no', 'note', 'timeline_changes', 'text_changes', 'datetime_started']
     list_filter = []
     raw_id_fields = ['language', 'user']
     search_fields = ['language__video__title', 'language__video__video_id', 'language__language']
