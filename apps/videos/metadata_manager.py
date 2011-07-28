@@ -121,6 +121,10 @@ def _update_percent_done(video):
             percent_done = int(100.0 * float(translation_count) / 
                                float(subtitle_count))
             percent_done = max(0, min(percent_done, 100))
+        
+        if percent_done < 1 and percent_done > 0:
+            percent_done = 1
+        
         if percent_done != sl.percent_done:
             sl.percent_done = percent_done
             sl.is_complete = percent_done == 100
