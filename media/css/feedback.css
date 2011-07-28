@@ -13,13 +13,9 @@
 }
 
 #feedback_email {
-  width: 300px;
-  margin: 2px;
 }
     
 #feedback_message {
-  width: 368px;
-  height: 150px;
 }
     
 #feedback_form div {
@@ -76,20 +72,23 @@ div.recaptcha-field #recaptcha_widget_div {
   border: 5px solid rgba(0,0,0,0.3);
   width: 900px;
   -webkit-background-clip: padding-box;
-   }
+}
    
 #feedback_container { 
   padding: 0;
-  border-radius: 9px; }
+  border-radius: 9px;
+	text-align: left !important;
+	width: 815px;
+}
 
 .feedback_bg, .modal-window-bg {
-  background: #D3E9ED url(../images/cloud.png) center top no-repeat;
+  background: #FFF !important;
   border-radius: 7px;
   -webkit-background-clip: padding-box;
 }
 
 #feedback_form {
-  background: url(../images/watercolor3.png) center 0px repeat-x;
+  background: transparent !important;
   border-radius: 7px;
   padding: 20px 0 20px 0;
   clear: both;
@@ -105,36 +104,73 @@ div.recaptcha-field #recaptcha_widget_div {
 
 
 #feedback_form p {
-	float: none;
-  margin: 0 auto !important;
-  font-size: 15px;
-  width: 900px;
+	color: #999;
+	line-height: 20px;
+	font-size: 14px;
 }
 
+#feedback_form label {
+	font-weight: bold;
+	font-size: 14px;
+	color: #333;
+	display: block;
+	text-align: left;
+	margin: 10px 0 5px 0;
+}
 
 #feedback_form textarea {
-  width: 600px;
-  margin: 0 auto;
+	width: 400px !important;
+	float: none !important;
+	margin: 0 !important;
+	text-align: left !important;
+	padding: 10px;
+	font-size: 14px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	background: #FFF !important;
+	border: 1px #BBB solid !important;
 }
 
-#feedback_form p input {
-	width: 250px;
-	margin: 0px auto 20px;
+#feedback_form input {
+	width: 400px !important;
+	float: none !important;
+	margin: 0 !important;
+	text-align: left !important;
+	padding: 10px;
+	font-size: 14px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	background: #FFF !important;
+	border: 1px #BBB solid !important;
 }
 
 
 #feedback_form button {
-	width: 200px;
-	margin: 20px auto !important;
-	float: none;  
-}
-
-#feedback_form div#feedback_email_field p  {
-	width: 280px;
 	float: left;
+	display: block;
+	width: 150px;
+	margin: 0 !important;
 }
 
-#feedback_form #recaptcha-field {
+#feedback_form a.btn_cancel {
+	display: block;
+	float: left;
+	width: 100px;
+	background: #DDD;
+	padding: 10px 15px 10px 15px;
+	color: #555;
+	font-weight: bold;
+	font-size: 12px;
+	text-decoration: none;
+	position: relative;
+	top: 0;
+	margin: 0 10px 0 0 !important;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+}
+
+#feedback_form .recaptcha-field {
 	width: 315px;
 	float: left;
+	margin: 105px 10px 10px 30px;
 }

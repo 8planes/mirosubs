@@ -1,54 +1,48 @@
 {% load i18n %}
-   
-    <div style="{% if not error %}display: none{% endif %}" class="feedback-form-container" id="feedback_container">
-        <div class="feedback_bg">
-            <form method="post" action="{% block action %}{% url videos:feedback %}{% endblock %}" id="feedback_form">
-            {% csrf_token %}
-                <h2>
-                    {% block form_title %}
-                        {% trans 'How are you using Universal Subtitles?  What would make it better?' %}
-                    {% endblock %}
-                </h2>
-                {% block hidden_fields %}{% endblock %}
-                <p>{% trans 'Please let us know if you have any comments, questions, or suggestions!' %}</p>
-                <p>{% trans 'Note: we read/speak English best, but try to read/respond to anything we can.' %}</p>
-                <div class="global-errors">
-                    
-                </div>
-                <p>
-                    <label for="feedback_email">{% trans 'Your email:' %} </label>{{ form.email }}
-                </p>
-                <div class="recaptcha-field">
-                    {{ form.captcha }}
-                </div>
-                <p>
-                    <label>{% trans 'Your Feedback' %}</label>
-                    {{ form.message }}
-                </p>
-                <button type="submit" value="{% trans 'Send feedback' %}" class="green_button big">{% trans 'Send Feedback' %}</button>
-                {% if not error %}
-                    <p><a href="#close" class="">{% trans "Cancel" %}</a></p>
-                {% endif %}
-            </form>
+<div style="{% if not error %}display: none{% endif %}" class="feedback-form-container" id="feedback_container">
+  <div class="feedback_bg">
+  <form method="post" action="{% block action %}{% url videos:feedback %}{% endblock %}" id="feedback_form">
+      {% csrf_token %}
+  <h2>{% block form_title %}{% trans 'How are you using Universal Subtitles?  What would make it better?' %}{% endblock %}</h2>
+  {% block hidden_fields %}{% endblock %}
+  <p>{% trans 'Please let us know if you have any comments, questions, or suggestions!' %}</p>
+  <p>{% trans 'Note: we read/speak English best, but try to read/respond to anything we can.' %}</p>
+  <div class="global-errors"></div>
 
-            <div class="clear"></div>
-          </div><!-- // feedback_bg -->
+  <div style="float: left; width: 400px; margin: 10px 10px 10px 30px;">
+  <label for="feedback_email">{% trans 'Your email:' %}</label>
+  {{ form.email }}
+  
+  <label>{% trans 'Your Feedback' %}</label>
+  {{ form.message }}
+  </div>
+  
+  <div class="recaptcha-field">
+    {{ form.captcha }}
+  </div>
+  
+  <div style="width: 300px; float: right; position: relative; right: 100px;">
+    {% if not error %}<a href="#close" class="btn_cancel">{% trans "Cancel" %}</a>{% endif %}
+    <button type="submit" value="{% trans 'Send feedback' %}" class="green_button big">{% trans 'Send Feedback' %}</button>
+  </div>
+  </form>
+
+  <div class="clearfix"></div>
+  </div><!-- // feedback_bg -->
    
-        <div style="display: none;" id="feedback_success">
-          <div class="feedback_bg">
-            {% if not error %}
-              <a  class="red_button small" href="#close">{% trans "Close" %}</a>
-            {% endif %}
-            <div style="padding: 20px;">
-            <h3>{% trans 'Thank you for your feedback.' %}</h3>
-            <p>{% trans 'If you would like to perform some additional testing' %}</p>
-            <p>{% trans 'please go to our' %} <a href="http://litmus.pculture.org/run_tests.cgi">{% trans 'Litmus regression tests' %}</a></p>
-            <p>{% trans 'For new testers, we have' %} <a href="http://pculture.org/devblogs/mirotesting/getting-started-guide-for-new-testers/">{% trans 'a getting started guide' %}</a></p>
-            </div>
-            <div class="clear"></div>
-          </div><!-- // feedback_bg -->
-          </div><!-- // feedback_success -->
-        </div><!-- // feedback_container -->
+  <div style="display: none;" id="feedback_success">
+    <div class="feedback_bg">
+      {% if not error %}<a  class="red_button small" href="#close">{% trans "Close" %}</a>{% endif %}
+      <div style="padding: 20px;">
+        <h3>{% trans 'Thank you for your feedback.' %}</h3>
+        <p>{% trans 'If you would like to perform some additional testing' %}</p>
+        <p>{% trans 'please go to our' %} <a href="http://litmus.pculture.org/run_tests.cgi">{% trans 'Litmus regression tests' %}</a></p>
+        <p>{% trans 'For new testers, we have' %} <a href="http://pculture.org/devblogs/mirotesting/getting-started-guide-for-new-testers/">{% trans 'a getting started guide' %}</a></p>
+      </div><!-- // padding -->
+      <div class="clearfix"></div>
+      </div><!-- // padding -->
+    </div><!-- // feedback_success -->
+</div><!-- // feedback_container -->
     
 <script type="text/javascript">
     jQuery(document).ready(function($){
