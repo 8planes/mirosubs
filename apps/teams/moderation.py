@@ -44,19 +44,19 @@ def is_moderated(version_lang_or_video):
 
 #@require_lock
 def add_moderation( video, team, user):
-   """
-   Adds moderation and approves all 
-   """
-   if video.moderated_by :
-       raise AlreadyModeratedException("Video is already moderated")
-   if not team.can_add_moderation(user) :       
-       raise SuspiciousOperation("User cannot set this video as moderated")
-   video.moderated_by = team
-   video.save()
-   SubtitleVersion.objects.filter(language__video__id = video.pk, moderation_status=UNMODERATED).update(moderation_status=APPROVED)
-   video_cache.invalidate_cache(video.video_id)
-   _update_search_index(video)
-   return True
+    """
+    Adds moderation and approves all 
+    """
+    if video.moderated_by :
+        raise AlreadyModeratedException("Video is already moderated")
+    if not team.can_add_moderation(user) :       
+        raise SuspiciousOperation("User cannot set this video as moderated")
+    video.moderated_by = team
+    video.save()
+    SubtitleVersion.objects.filter(language__video__id = video.pk, moderation_status=UNMODERATED).update(moderation_status=APPROVED)
+    video_cache.invalidate_cache(video.video_id)
+    _update_search_index(video)
+    return True
 
 
 #@require_lock
