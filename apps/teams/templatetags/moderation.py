@@ -120,6 +120,8 @@ def render_reject_button(version_or_language, label=None, confirms=False):
 
 @register.inclusion_tag("moderation/_approval_toolbar.html")
 def render_approval_toolbar( user, version):
+    if version is None:
+        return {}
     team = version.video.moderated_by        
     can_moderate = _user_can_moderate(version.language.video,  user)
     if not team or not  can_moderate:
