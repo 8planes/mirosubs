@@ -16,12 +16,15 @@ from django.db.models import ObjectDoesNotExist
 from auth.models import CustomUser as User
 from django.contrib.contenttypes.models import ContentType
 from apps.teams import tasks
+from widget.rpc import Rpc
 from datetime import datetime, timedelta
 from django.core.management import call_command
 from django.core import mail
-from django.test.client import Client
 from apps.videos import metadata_manager 
 import re
+rpc = Rpc()
+
+from widget.tests import create_two_sub_session, RequestMockup
 
 LANGUAGEPAIR_RE = re.compile(r"([a-zA-Z\-]+)_([a-zA-Z\-]+)_(.*)")
 LANGUAGE_RE = re.compile(r"S_([a-zA-Z\-]+)")
@@ -271,7 +274,7 @@ class TeamsTest(TestCase):
         }
         self.user = User.objects.get(username=self.auth["username"])
         reset_solr()
-        self.client = Client()
+
 
     def _add_team_video(self, team, language, video_url):
         mail.outbox = []
@@ -292,7 +295,7 @@ class TeamsTest(TestCase):
         
         if Video.objects.count() > old_video_count:
             created_video = Video.objects.order_by('-created')[0]
-            self.assertEqual(self.user, created_video.video.user)
+            self.assertEqual(self.user, created_video.user)
         
     def _set_my_languages(self, *args):
         from auth.models import UserLanguage
@@ -384,7 +387,6 @@ class TeamsTest(TestCase):
             pass
 
     def test_complete_contents(self):
-        from widget.tests import create_two_sub_session, RequestMockup
         request = RequestMockup(User.objects.all()[0])
         create_two_sub_session(request, completed=True)
 
@@ -914,7 +916,6 @@ class TeamsDetailQueryTest(TestCase):
         self.team, created = Team.objects.get_or_create(name="test-team", slug="test-team")
         self.tvs = _create_team_videos( self.team, self.videos, [self.user])
         reset_solr()
-        self.client = Client()
 
     def _set_my_languages(self, *args):
         from auth.models import UserLanguage
@@ -1199,8 +1200,6 @@ class TestModerationViews(BaseTestModeration):
     fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
      
     def setUp(self):
-        from utils.requestfactory import Client
-        self.client = Client()
         self.auth = dict(username='admin', password='admin')
         self.team  = Team.objects.all()[0]
         self.video = self.team.videos.all()[0]
@@ -1243,13 +1242,7 @@ class TestModerationViews(BaseTestModeration):
             self.client.login(**self.auth)
         
     def _call_rpc_method(self, method_name,  *args, **kwargs):
-        from utils.requestfactory import Client
-        rf = Client()
-        rf.login(username='admin', password='admin')
-        request = rf.get("/en/", follow=True)
-        request.user = self.user
-        from apps.widget.rpc import Rpc
-        rpc = Rpc()
+        request = RequestMockup(self.user)
         return  getattr(rpc, method_name)(request, *args, **kwargs)
     
     def test_moderated_subs_pending_count(self):
@@ -1422,7 +1415,6 @@ class TestSubtitleVersions(BaseTestModeration):
         
         
         #self.bad_user = User.objects.all().exclude(self.user)[0]
-        self.client = Client()
 
         
     def _make_subs(self, lang, num=10):
@@ -1475,13 +1467,9 @@ class TestSubtitleVersions(BaseTestModeration):
         self.assertEquals(version, v1)
 
     def _get_widget_moderation_status(self, video_url):
-        from utils.requestfactory import Client
-        rf = Client()
-        rf.login(username='admin', password='admin')
-        request = rf.get("/en/", follow=True)
+
+        request = RequestMockup(self.user)
         request.user = self.user
-        from apps.widget.rpc import Rpc
-        rpc = Rpc()
         res = rpc.show_widget(request, video_url, is_remote=False)
         return res
     
