@@ -27,11 +27,12 @@ logger = logging.getLogger(__name__)
 should_compress = None
 
 @register.simple_tag
-def include_bundle(bundle_name):
-    global should_compress
-    if should_compress is None:
+def include_bundle(bundle_name, should_compress=None):
+    if should_compress is None :
         should_compress = getattr(settings, "COMPRESS_MEDIA",
                                   not getattr(settings, "DEBUG", False))
+    else:
+        should_compress = bool(should_compress)
     bundle_type = settings.MEDIA_BUNDLES.get(bundle_name)["type"]
 
     urls = []
