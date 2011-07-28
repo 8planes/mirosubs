@@ -360,7 +360,8 @@ def email_friend(request):
             
             form.send()
             messages.info(request, 'Email Sent!')
-            return redirect('videos:email_friend')
+            
+            return redirect(request.get_full_path())
     else:
         form = EmailFriendForm(auto_id="email_friend_id_%s", initial=initial, label_suffix="")
     context = {
