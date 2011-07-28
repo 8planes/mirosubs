@@ -28,11 +28,16 @@ should_compress = None
 
 @register.simple_tag
 def include_bundle(bundle_name, should_compress=None):
+    # if we want to turn off compilation at runtime (eg/ on javascript unit tests)
+    # then we need to know the media url prior the the unique mungling
+    media_url = settings.MEDIA_URL
     if should_compress is None :
         should_compress = getattr(settings, "COMPRESS_MEDIA",
                                   not getattr(settings, "DEBUG", False))
     else:
         should_compress = bool(should_compress)
+        if bool(should_compress) is False:
+            media_url = settings.MEDIA_URL_BASE
     bundle_type = settings.MEDIA_BUNDLES.get(bundle_name)["type"]
 
     urls = []
@@ -53,7 +58,7 @@ def include_bundle(bundle_name, should_compress=None):
 
     return template.loader.render_to_string("uni_compressor/%s_links.html" % bundle_type,{
         "urls":urls,
-        "MEDIA_URL": settings.MEDIA_URL,
+        "adapted_media_url": media_url,
         "bundle_type": bundle_type,
     })
                            

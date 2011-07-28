@@ -3,7 +3,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    {% include_bundle "mirosubs-onsite-compiled" %}
+    {% include_bundle "js-base-dependencies" 0 %}
+    {% include_bundle "mirosubs-onsite-compiled" 0 %}
     <script type="text/javascript" src="{{MEDIA_URL}}js/testing/testing.js"></script>
     <script type="text/javascript" src="{{MEDIA_URL}}js/testing/timerstub.js"></script>
     <script>
