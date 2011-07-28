@@ -328,8 +328,8 @@ class Rpc(BaseRpc):
             user_message = "Thank you for uploading. It will take a minute or so for your subtitles to appear."
         elif new_version and is_moderated(new_version):
             
-             if user_can_moderate(language.video, request.user) is False:
-                 user_message = """This video is moderated by %s. 
+            if user_can_moderate(language.video, request.user) is False:
+                user_message = """This video is moderated by %s. 
 
 # You will not see your subtitles in our widget when you leave this page-- they will only appear on our site. We have saved your work for the team moderator to review. After they approve your subtitles they will show up on our site and in the widget.""" % (new_version.video.moderated_by.name)
 
