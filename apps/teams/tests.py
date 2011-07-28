@@ -283,14 +283,16 @@ class TeamsTest(TestCase):
             "thumbnail": u"",
         }
         old_count = TeamVideo.objects.count()
+        old_video_count = Video.objects.count()
         
         url = reverse("teams:add_video", kwargs={"slug": team.slug})
-        self.client.post(url, data)
-        
+        response = self.client.post(url, data)
         new_count = TeamVideo.objects.count()
         self.assertEqual(old_count+1, new_count)
-        created_tv = TeamVideo.objects.order_by('-created')[0]
-        self.assertEqual(self.user, created_tv.video.user)
+        
+        if Video.objects.count() > old_video_count:
+            created_video = Video.objects.order_by('-created')[0]
+            self.assertEqual(self.user, created_video.video.user)
         
     def _set_my_languages(self, *args):
         from auth.models import UserLanguage
@@ -541,6 +543,7 @@ class TeamsTest(TestCase):
         team = Team.objects.get(slug=data['slug'])
         self.assertTrue(team.video)
         self.assertEqual(team.video.user, self.user)
+        self.assertTrue(team.video.title)
         
     def test_views(self):
         self.client.login(**self.auth)

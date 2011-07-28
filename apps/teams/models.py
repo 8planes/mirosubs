@@ -673,8 +673,6 @@ class TeamMember(models.Model):
         if saves:
             self.save()
 
-
-
     def promote_to_member(self, saves=True):
         self.role = TeamMember.ROLE_MEMBER
         if saves:

@@ -64,7 +64,7 @@ class TeamAdmin(admin.ModelAdmin):
     unhighlight.short_description = _('Unfeature teams')
 
 class TeamMemberAdmin(admin.ModelAdmin):
-    search_fields = ('team__name', 'user__username', 'user__first_name', 'user__last_name')
+    search_fields = ('user__username', 'team__name', 'user__first_name', 'user__last_name')
     list_display = ('team', 'user', 'role')
 
 class TeamVideoForm(forms.ModelForm):
