@@ -150,6 +150,7 @@ class BaseVideoBoundForm(forms.ModelForm):
     
 class AddTeamVideoForm(BaseVideoBoundForm):
     language = forms.ChoiceField(label=_(u'Video language'), choices=settings.ALL_LANGUAGES,
+                                 required=False,
                                  help_text=_(u'It will be saved only if video does not exist in our database.'))
     
     
@@ -173,6 +174,18 @@ class AddTeamVideoForm(BaseVideoBoundForm):
             pass
         
         return video_url
+    
+    def clean(self):
+        language = self.cleaned_data['language']
+        video = self.fields['video_url'].video
+        
+        original_language = video.subtitle_language()
+        
+        if not original_language.language and not language:
+            msg = _(u'Set original language for this video.')
+            self._errors['language'] = self.error_class([msg])
+            
+        return self.cleaned_data
     
     def save(self, commit=True):
         video_language = self.cleaned_data['language']
