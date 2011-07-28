@@ -282,8 +282,15 @@ class TeamsTest(TestCase):
             "video_url": video_url,
             "thumbnail": u"",
         }
+        old_count = TeamVideo.objects.count()
+        
         url = reverse("teams:add_video", kwargs={"slug": team.slug})
         self.client.post(url, data)
+        
+        new_count = TeamVideo.objects.count()
+        self.assertEqual(old_count+1, new_count)
+        created_tv = TeamVideo.objects.order_by('-created')[0]
+        self.assertEqual(self.user, created_tv.video.user)
         
     def _set_my_languages(self, *args):
         from auth.models import UserLanguage
@@ -513,7 +520,28 @@ class TeamsTest(TestCase):
         url = reverse("teams:detail", kwargs={"slug": team.slug})
         response = self.client.get(url)
         self.assertEqual(1, len(response.context['team_video_md_list']))
-
+    
+    def test_team_create_with_video(self):
+        self.client.login(**self.auth)
+        
+        response = self.client.get(reverse("teams:create"))
+        self.failUnlessEqual(response.status_code, 200)
+        
+        data = {
+            "description": u"",
+            "video_url": u"http://www.youtube.com/watch?v=OFaWxcH6I9E",
+            "membership_policy": u"4",
+            "video_policy": u"1",
+            "logo": u"",
+            "slug": u"new-team-with-video",
+            "name": u"New team with video"
+        }
+        response = self.client.post(reverse("teams:create"), data)
+        self.failUnlessEqual(response.status_code, 302)
+        team = Team.objects.get(slug=data['slug'])
+        self.assertTrue(team.video)
+        self.assertEqual(team.video.user, self.user)
+        
     def test_views(self):
         self.client.login(**self.auth)
         

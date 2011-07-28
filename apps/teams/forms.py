@@ -143,6 +143,11 @@ class BaseVideoBoundForm(forms.ModelForm):
     video_url = UniSubBoundVideoField(label=_('Video URL'), verify_exists=True, 
         help_text=_("Enter the URL of any compatible video or any video on our site. You can also browse the site and use the 'Add Video to Team' menu."))
     
+    def __init__(self, *args, **kwargs):
+        super(BaseVideoBoundForm, self).__init__(*args, **kwargs)
+        if hasattr(self, 'user'):
+            self.fields['video_url'].user = self.user
+    
 class AddTeamVideoForm(BaseVideoBoundForm):
     language = forms.ChoiceField(label=_(u'Video language'), choices=settings.ALL_LANGUAGES,
                                  help_text=_(u'It will be saved only if video does not exist in our database.'))
@@ -152,11 +157,11 @@ class AddTeamVideoForm(BaseVideoBoundForm):
         model = TeamVideo
         fields = ('video_url', 'language', 'title', 'description', 'thumbnail')
         
-    def __init__(self, team, *args, **kwargs):
+    def __init__(self, team, user, *args, **kwargs):
         self.team = team
+        self.user = user
         super(AddTeamVideoForm, self).__init__(*args, **kwargs)
         self.fields['language'].choices = get_languages_list(True)
-
 
     def clean_video_url(self):
         video_url = self.cleaned_data['video_url']
@@ -193,7 +198,8 @@ class CreateTeamForm(BaseVideoBoundForm):
         fields = ('name', 'slug', 'description', 'logo', 'membership_policy', 'is_moderated', 'video_policy', 
                   'is_visible', 'video_url')
     
-    def __init__(self, *args, **kwargs):
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
         super(CreateTeamForm, self).__init__(*args, **kwargs)
         self.fields['video_url'].label = _(u'Team intro video URL')
         self.fields['video_url'].required = False

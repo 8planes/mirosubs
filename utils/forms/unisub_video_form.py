@@ -69,7 +69,13 @@ class UniSubBoundVideoField(UniSubURLField):
             #URL from other site
             try:
                 self.vt = video_type_registrar.video_type_for_url(video_url)
-                self.video, created = Video.get_or_create_for_url(vt=self.vt)
+                
+                if hasattr(self, 'user'):
+                    user = self.user
+                else:
+                    user = None
+
+                self.video, created = Video.get_or_create_for_url(vt=self.vt, user=user)
             except VideoTypeError, e:
                 self.video = None
                 raise forms.ValidationError(e)

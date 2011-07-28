@@ -271,13 +271,13 @@ def create(request):
         raise Http404 
     
     if request.method == 'POST':
-        form = CreateTeamForm(request.POST, request.FILES)
+        form = CreateTeamForm(request.user, request.POST, request.FILES)
         if form.is_valid():
             team = form.save(user)
             messages.success(request, _('Your team has been created. Review or edit its information below.'))
             return redirect(team.get_edit_url())
     else:
-        form = CreateTeamForm()
+        form = CreateTeamForm(request.user)
     return {
         'form': form
     }
@@ -352,7 +352,7 @@ def add_video(request, slug):
         'title': request.GET.get('title', '')
     }
     
-    form = AddTeamVideoForm(team, request.POST or None, request.FILES or None, initial=initial)
+    form = AddTeamVideoForm(team, request.user, request.POST or None, request.FILES or None, initial=initial)
     
     if form.is_valid():
         obj =  form.save(False)
