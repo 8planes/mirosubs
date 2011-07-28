@@ -233,15 +233,18 @@ ul.video_list li a span.video_thumb span.clip {
 	position: relative;
 	overflow: hidden;
 	display: block;
-	width: 128px;
-	height: 72px;
+	width: 120px;
+	height: 90px;
+	background: #000;
 }
 
 ul.video_list li a span.video_thumb span.clip img {
-	top: -12px;
+	top: 0;
 	position: absolute;
 	display: block;
 	left: 0;
+	width: 120px;
+	height: 90px;
 }
 
 ul.video_list li a h4 {
