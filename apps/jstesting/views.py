@@ -22,13 +22,6 @@ from django.shortcuts import render_to_response
 import widget
 import simplejson as json
 
-
-def js_dependencies():
-    js_files = list(settings.JS_API)
-    js_files.append('widget/testing/stubvideoplayer.js')
-    js_files.append('widget/testing/events.js')
-    return js_files
-
 def jstest(request, file_name):
     if file_name == 'alltests':
         template = 'jstesting/alltests.html'
@@ -38,5 +31,4 @@ def jstest(request, file_name):
         'languages': json.dumps(settings.ALL_LANGUAGES) }
     return render_to_response(
         template,
-        widget.add_js_files(context, False, js_dependencies()),
         context_instance=RequestContext(request))

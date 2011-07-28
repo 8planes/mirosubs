@@ -676,5 +676,17 @@ MEDIA_BUNDLES = {
         "optimizations": "SIMPLE_OPTIMIZATIONS",
         "closure_deps": "",
         "include_flash_deps": False,
-        }
+        },
+    "js-testing-base":{
+        "type":"js",
+        "files": [
+                 'js/widget/testing/stubvideoplayer.js',
+                 'js/widget/testing/events.js',
+                 "js/widget/test",
+                "js/subtracker.js" ,
+                "js/unitofwork.js",
+                "js/testing/testing.js",
+                "js/testing/timerstub.js",
+            ]
+    },
 }
