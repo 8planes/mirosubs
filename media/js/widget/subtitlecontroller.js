@@ -45,11 +45,13 @@ mirosubs.widget.SubtitleController = function(
      * Show a request subtitles button as a nudge.
      * It will get overwritten by the Improve Subtitles button.
      */
+/*
     this.videoTab_.updateNudge(
         'Request Subtitles',
         goog.bind(this.openRequestSubtitlesDialog,
                   this));
     this.videoTab_.showNudge(true);
+*/
 
     this.handler_.listenOnce(
         this.dialogOpener_,

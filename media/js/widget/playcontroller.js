@@ -72,9 +72,7 @@ mirosubs.widget.PlayController.prototype.dialogClosed = function() {
 mirosubs.widget.PlayController.prototype.turnOffSubs = function() {
     this.dropDown_.setCurrentSubtitleState(null);
     this.dropDown_.hide();
-    /* Don't hide the Request Subtitles nudge
-     * this.videoTab_.showNudge(false);
-     */
+    this.videoTab_.showNudge(false);
     this.disposeComponents_();
     this.videoPlayer_.showCaptionText('');
     this.subtitleState_ = null;

@@ -174,7 +174,7 @@ mirosubs.widget.DropDown.prototype.createActionLinks_ = function($d) {
     this.improveSubtitlesLink_ =
         $d('li', 'mirosubs-improveSubtitles',
            $d('a', {'href': '#'}, 'Improve These Subtitles'));
-    this.requestSubtitlesLink_ =
+   this.requestSubtitlesLink_ =
         $d('li', 'mirosubs-requestSubtitles',
            $d('a', {'href': '#'}, 'Request Subtitles'));
    this.subtitleHomepageLink_ =
@@ -208,9 +208,10 @@ mirosubs.widget.DropDown.prototype.updateActions_ = function() {
     this.getDomHelper().removeChildren(this.videoActions_);
     this.getDomHelper().removeChildren(this.settingsActions_);
 
+    // FIXME: this should use goog.dom.append and turn into one line.
     this.videoActions_.appendChild(this.addLanguageLink_);
     this.videoActions_.appendChild(this.improveSubtitlesLink_);
-    this.videoActions_.appendChild(this.requestSubtitlesLink_);
+//    this.videoActions_.appendChild(this.requestSubtitlesLink_);
     this.videoActions_.appendChild(this.subtitleHomepageLink_);
     this.videoActions_.appendChild(this.getEmbedCodeLink_);    
     this.videoActions_.appendChild(this.downloadSubtitlesLink_);
