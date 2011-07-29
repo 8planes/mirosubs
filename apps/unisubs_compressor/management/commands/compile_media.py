@@ -42,7 +42,7 @@ SKIP_COPING_ON = DIRS_TO_COMPILE + [
     "*closure-lib*" ,
     settings.COMPRESS_OUTPUT_DIRNAME,
     "teams",
-    "test" ]
+     ]
 
 NO_UNIQUE_URL = (
     #"js/embed.js", -> embed is actually a dinamic url
