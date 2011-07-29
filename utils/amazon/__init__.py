@@ -19,6 +19,7 @@ from django.core.files.storage import FileSystemStorage
 from django.core.files import File
 from fields import S3EnabledImageField, S3EnabledFileField
 from django.core.mail import mail_admins
+from sentry.client.models import client
 import os
 
 __all__ = ['S3EnabledImageField', 'S3EnabledFileField', 'S3Storage']
@@ -74,7 +75,7 @@ class S3Storage(FileSystemStorage):
             key.make_public()
             return name
         except (BotoClientError, BotoServerError), e:
-            settings.DEBUG or mail_admins('Amazon S3 Store error', self._get_traceback())
+            client.create_from_exception()
             raise S3StorageError(*e.args)
 
     def _get_traceback(self):
@@ -108,9 +109,9 @@ class S3Storage(FileSystemStorage):
     
     @classmethod
     def create_default_storage(cls):
-        if settings.USE_AMAZON_S3 and settings.AWS_ACCESS_KEY_ID and \
-                settings.AWS_SECRET_ACCESS_KEY and settings.DEFAULT_BUCKET:
+        if settings.USE_AMAZON_S3:
             connection = S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
+
             if not connection.lookup(settings.DEFAULT_BUCKET):
                 connection.create_bucket(settings.DEFAULT_BUCKET)
             bucket = connection.get_bucket(settings.DEFAULT_BUCKET)

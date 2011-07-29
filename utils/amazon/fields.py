@@ -99,13 +99,20 @@ class S3EnabledImageField(models.ImageField):
         self.bucket_name = bucket
         
         if settings.USE_AMAZON_S3:
-            from utils.amazon import S3Storage
-            
             self.connection = S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
-            if not self.connection.lookup(bucket):
-                self.connection.create_bucket(bucket)
-            self.bucket = self.connection.get_bucket(bucket)
-            kwargs['storage'] = S3Storage(self.bucket)
+            
+            if self.bucket_name == settings.DEFAULT_BUCKET:
+                from utils.amazon import default_s3_store
+                storage = default_s3_store
+                self.bucket = storage.bucket
+            else:            
+                from utils.amazon import S3Storage
+                if not self.connection.lookup(bucket):
+                    self.connection.create_bucket(bucket)
+                self.bucket = self.connection.get_bucket(bucket)
+                storage = S3Storage(self.bucket)
+                
+            kwargs['storage'] = storage
         super(S3EnabledImageField, self).__init__(verbose_name, name, width_field, height_field, **kwargs)
     
 class S3EnabledFileField(models.FileField):
@@ -114,14 +121,19 @@ class S3EnabledFileField(models.FileField):
         self.bucket_name = bucket
         
         if settings.USE_AMAZON_S3:
-            from utils.amazon import S3Storage
-            
             self.connection = S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
-            if not self.connection.lookup(bucket):
-                self.connection.create_bucket(bucket)
-            self.bucket = self.connection.get_bucket(bucket)
-            storage = S3Storage(self.bucket)
-            upload_to=''
+            
+            if self.bucket_name == settings.DEFAULT_BUCKET:
+                from utils.amazon import default_s3_store
+                storage = default_s3_store
+                self.bucket = storage.bucket
+            else:
+                from utils.amazon import S3Storage
+                
+                if not self.connection.lookup(bucket):
+                    self.connection.create_bucket(bucket)
+                self.bucket = self.connection.get_bucket(bucket)
+                storage = S3Storage(self.bucket)
         super(S3EnabledFileField, self).__init__(verbose_name, name, upload_to, storage, **kwargs)    
 
 from south.modelsinspector import add_introspection_rules
