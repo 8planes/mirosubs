@@ -107,13 +107,12 @@ def popular_videos(request):
                               context_instance=RequestContext(request)) 
 
 def volunteer_page(request):
-    user = request.user
     # Get the user comfort languages list 
     user_langs = get_user_languages_from_request(request)
 
     relevant = SearchQuerySet().result_class(VideoSearchResult) \
-        .models(Video).filter(video_language__in=user_langs) \
-        .filter_or(languages__in=user_langs)
+        .models(Video).filter(video_language_exact__in=user_langs) \
+        .filter_or(languages_exact__in=user_langs)
 
     featured_videos =  relevant.order_by('-featured')[:5]
 

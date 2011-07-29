@@ -135,8 +135,8 @@ class VideosApiClass(object):
         user_langs = get_user_languages_from_request(request)
 
         relevant = SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).filter(video_language__in=user_langs) \
-            .filter_or(languages__in=user_langs)
+            .models(Video).filter(video_language_exact__in=user_langs) \
+            .filter_or(languages_exact__in=user_langs)
 
         ## The rest of videos which are NOT relevant
         #rest = SearchQuerySet().result_class(VideoSearchResult) \
