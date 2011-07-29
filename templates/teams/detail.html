@@ -26,10 +26,6 @@
 	{% select_language_dialog 'force' %}
 {% endblock %}
 
-{% block analytics %}
-mpq.push(['track', 'Arrives_at_teams_page']);
-{% endblock %}
-
 {% block main_content %}
 
 {% if team.header_html_text %}

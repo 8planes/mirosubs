@@ -39,9 +39,6 @@
     _gaq.push(['_setAccount', '{{ GOOGLE_ANALYTICS_NUMBER }}']);
     _gaq.push(['_trackPageview']);
 
-    var mpq = [];
-    mpq.push(['init', '{{ MIXPANEL_TOKEN }}']);
-
     {% block analytics %}{% endblock %}
     
     (function() {
