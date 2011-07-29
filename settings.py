@@ -316,6 +316,12 @@ JS_BASE_DEPENDENCIES = [
     'js/swfobject.js',
     'flowplayer/flowplayer-3.2.2.min.js',
 ]
+
+JS_MODERATION_DASHBOARD = JS_BASE_DEPENDENCIES + [
+    "js/jquery.address-1.4.fixed.js",
+    "js/jquery.ajax-paginator.js",
+    "js/moderation/simplewarning.js",
+    ]
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -689,4 +695,8 @@ MEDIA_BUNDLES = {
                 "js/testing/timerstub.js",
             ]
     },
+    "js-moderation-dashboard":{
+        "type":"js",
+        "files": JS_MODERATION_DASHBOARD,
+        }
 }
