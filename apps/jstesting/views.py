@@ -31,4 +31,4 @@ def jstest(request, file_name):
         'languages': json.dumps(settings.ALL_LANGUAGES) }
     return render_to_response(
         template,
-        context_instance=RequestContext(request))
+        context_instance=RequestContext(request, context))
