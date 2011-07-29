@@ -308,6 +308,7 @@ JS_API = list(JS_CORE)
 JS_API.extend(JS_DIALOG)
 JS_API.extend([
         "js/widget/api/servermodel.js",
+        "js/subtitle/servermodel.js",
         "js/widget/api/api.js"])
 
 JS_BASE_DEPENDENCIES = [
@@ -631,7 +632,7 @@ MEDIA_BUNDLES = {
      },
     "mirosubs-widgetizer-debug":{
         "type": "js",
-        "files": ["js/config.js" ] + JS_WIDGETIZER,
+        "files": ["js/config.js" ] + JS_WIDGETIZER  ,
         "closure_deps": "js/closure-dependencies.js",
         "debug": True,
      },

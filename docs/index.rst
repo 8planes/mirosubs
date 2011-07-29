@@ -12,6 +12,8 @@ Contents:
    :maxdepth: 1
 
    static-files
+   video-models
+   demos
 
 
 Indices and tables

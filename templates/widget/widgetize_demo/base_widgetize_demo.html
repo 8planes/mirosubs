@@ -1,21 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+{% load media_compressor %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 
+1.0 Strict//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-{% block scripts %}
-{% endblock %}
-{% if not js_use_compiled %}
-<script type="text/javascript">
-  window.DEBUG_UNISUBS = true;
-</script>
-  {% include "widget/_js_base_dependencies.html" %}
+  {% include_bundle "js-base-dependencies" %}
+
+  {% if not js_use_compiled %}
+  <script type="text/javascript">
+    window.DEBUG_UNISUBS = true;
+  </script>
   <script>
     goog.require('goog.debug.FancyWindow');
   </script>
-{% endif %}
-{% for dep in js_dependencies %}
-  <script type="text/javascript" src="{{dep|safe}}"></script>
-{% endfor %}
+  {% endif %}
+  {% include_bundle "mirosubs-widgetizer" %}
 </head>
 <body>
 {% block contents %}
