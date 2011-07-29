@@ -9,7 +9,7 @@ Demos
    /widget_demo/, Yes, Ok
    /widget/widgetize_demo/html5,Yes,Ok
    /widget/widgetize_demo/ie_problem_demo, No, No
-   /widget/widgetize_demo/jwplayer, Yes, Ok
+   /widget/widgetize_demo/jwplayer, Ok, Ok
    /widget/widgetize_demo/multihtml5,?, Does not work in production
    /widget/widgetize_demo/youtube_js,Ok, Ok
    /widget/widgetize_demo/youtube_nojs,Ok, Ok
