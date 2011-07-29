@@ -1453,7 +1453,7 @@ class TestPercentComplete(TestCase):
 
     def test_many_subtitles(self):
         latest_version = self.original_language.latest_version()
-        for i in range(5, 450):
+        for i in range(2, 450):
             s = Subtitle()
             s.version = latest_version
             s.subtitle_id = 'sadfdasf%s' % i
@@ -1466,7 +1466,8 @@ class TestPercentComplete(TestCase):
         from videos.tasks import video_changed_tasks
         video_changed_tasks.delay(self.translation.video.id)
         translation = SubtitleLanguage.objects.get(id=self.translation.id)
-        self.assertEqual(translation.percent_done, 0)
+        # 1% reflects https://www.pivotaltracker.com/story/show/16013319
+        self.assertEqual(translation.percent_done, 1)
 
     def test_count_as_complete(self):
         self.assertFalse(self.video.complete_date)
