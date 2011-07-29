@@ -10,10 +10,7 @@
     {{ block.super }}
     <script src="{% url videos:rpc_api %}" type="text/javascript"></script>
     <script src="{% url search:rpc_api %}" type="text/javascript"></script> 
-    <script src="{{ MEDIA_URL }}js/jquery.address-1.4.fixed.js" type="text/javascript"></script>
-    <script src="{{ MEDIA_URL }}js/jquery.ajax-paginator.js" type="text/javascript"></script>
-    {% include "widget/_js_onsite_dependencies.html" %}
-    <script src="{{ MEDIA_URL }}js/moderation/simplewarning.js" type="text/javascript"></script>
+    {% include_bundle "js-moderation-dashboard" %}
 
 {% endblock %}
 
