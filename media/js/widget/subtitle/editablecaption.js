@@ -143,7 +143,12 @@ mirosubs.subtitle.EditableCaption.prototype.setStartTime_ =
          this.previousCaption_.setEndTime(startTime);
 };
 mirosubs.subtitle.EditableCaption.prototype.getStartTime = function() {
-    return this.json['start_time'] || mirosubs.subtitle.EditableCaption.TIME_UNDEFINED; 
+    if (goog.isDefAndNotNull(this.json['start_time'])) {
+        return this.json['start_time'];
+    }
+    else {
+        return mirosubs.subtitle.EditableCaption.TIME_UNDEFINED;
+    }
 };
 mirosubs.subtitle.EditableCaption.prototype.setEndTime =
     function(endTime)
@@ -176,7 +181,12 @@ mirosubs.subtitle.EditableCaption.prototype.clearTimes = function() {
     }
 };
 mirosubs.subtitle.EditableCaption.prototype.getEndTime = function() {
-    return this.json['end_time'] || mirosubs.subtitle.EditableCaption.TIME_UNDEFINED;
+    if (goog.isDefAndNotNull(this.json['end_time'])) {
+        return this.json['end_time'];
+    }
+    else {
+        return mirosubs.subtitle.EditableCaption.TIME_UNDEFINED;
+    }
 };
 mirosubs.subtitle.EditableCaption.prototype.getMinStartTime = function() {
     return this.previousCaption_ ?

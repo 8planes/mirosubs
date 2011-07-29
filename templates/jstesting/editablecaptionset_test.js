@@ -280,4 +280,16 @@ function testClearAll() {
     assertTrue(MS_cleared);
 }
 
+function testWithNullTimes() {
+    var editableCaption = new mirosubs.subtitle.EditableCaption(
+        1, 
+        { 'subtitle_id': 'a', 
+          'text': 'whatever',
+          'start_time': null,
+          'end_time': null,
+          'sub_order': 1.0 });
+    assertEquals(-1, editableCaption.getStartTime());
+    assertEquals(-1, editableCaption.getEndTime());
+}
+
 {% endblock %}
