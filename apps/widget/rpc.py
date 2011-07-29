@@ -229,7 +229,8 @@ class Rpc(BaseRpc):
             version_no = 0
         else:
             version_no = version_for_subs.version_no + 1
-        subtitles = self._subtitles_dict(version_for_subs, version_no)
+        subtitles = self._subtitles_dict(
+            version_for_subs, version_no, base_language_pk is None)
         return_dict = { "can_edit" : True,
                         "session_pk" : session.pk,
                         "subtitles" : subtitles }
@@ -492,10 +493,10 @@ class Rpc(BaseRpc):
             cache['language_pk'] = cache['language'].pk
         return cache
 
-    def _subtitles_dict(self, version, forced_version_no=None):
+    def _subtitles_dict(self, version, forced_version_no=None, force_forked=False):
         language = version.language
         base_language = None
-        if language.is_dependent() and not version.is_forked:
+        if language.is_dependent() and not version.is_forked and not force_forked:
             base_language = language.real_standard_language()
         version_no = version.version_no if forced_version_no is None else forced_version_no
         is_latest = False
@@ -510,7 +511,7 @@ class Rpc(BaseRpc):
             None if base_language is not None else language.is_complete,
             version_no,
             is_latest,
-            version.is_forked,
+            version.is_forked or force_forked,
             base_language,
             language.get_title())
 

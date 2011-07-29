@@ -657,7 +657,12 @@ class TestRpc(TestCase):
         response = rpc.start_editing(
             request, session.video.video_id, 'es', 
             subtitle_language_pk=language.pk)
-        subtitles = response['subtitles']['subtitles']
+        sub_state = response['subtitles']
+        self.assertEquals(True, sub_state['forked'])
+        self.assertTrue(
+            ('base_language_pk' not in sub_state) or 
+            sub_state['base_language_pk'] is None)
+        subtitles = sub_state['subtitles']
         self.assertEquals(2, len(subtitles))
         self.assertEquals('a_es', subtitles[0]['text'])
         self.assertEquals(2.3, subtitles[0]['start_time'])
