@@ -308,7 +308,6 @@ JS_API = list(JS_CORE)
 JS_API.extend(JS_DIALOG)
 JS_API.extend([
         "js/widget/api/servermodel.js",
-        "js/subtitle/servermodel.js",
         "js/widget/api/api.js"])
 
 JS_BASE_DEPENDENCIES = [
