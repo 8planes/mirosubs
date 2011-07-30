@@ -1,6 +1,8 @@
 This repository is the code for the universal subtitles project 
 (http://universalsubtitles.org)
 
+The full documentation can be found at http://universal-subtitles.readthedocs.org/
+
 To run the development version:
 
 1. Git clone the repository:
