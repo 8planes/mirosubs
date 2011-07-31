@@ -70,4 +70,6 @@ To run the development version:
       list of haystack commands at 
       http://docs.haystacksearch.org/dev/management_commands.html
    * If you want to install SOLR as a daemon on your Mac, please see
-     https://github.com/8planes/mirosubs/wiki/Running-SOLR-as-a-daemon-on-Mac
+     https://github.com/8planes/mirosubs/wiki/Running-SOLR-as-a-daemon-on-Mac  
+   * For the setup relating linux distributions see
+     https://github.com/8planes/mirosubs/wiki/Setting-up-solr-on-linux
