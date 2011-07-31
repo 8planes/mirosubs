@@ -29,19 +29,19 @@ def full_path(js_file):
 
 def add_offsite_js_files(context):
     """ Adds variables necessary for _js_dependencies.html """
-    return add_js_files(context, settings.JS_USE_COMPILED, 
+    return add_js_files(context, settings.COMPRESS_MEDIA, 
                         settings.JS_OFFSITE, 
                         'js/mirosubs-offsite-compiled.js')
 
 def add_onsite_js_files(context):
     """ Adds variables necessary for _js_onsite_dependencies.html """
-    return add_js_files(context, settings.JS_USE_COMPILED, 
+    return add_js_files(context, settings.COMPRESS_MEDIA, 
                         settings.JS_ONSITE, 
                         'js/mirosubs-onsite-compiled.js')
 
 def add_config_based_js_files(context, files, compiled_file_name):
     js_files = []
-    if settings.JS_USE_COMPILED:
+    if settings.COMPRESS_MEDIA:
         js_files.append(full_path(compiled_file_name))
     else:
         js_files.append('http://{0}/widget/config.js'.format(
@@ -50,7 +50,7 @@ def add_config_based_js_files(context, files, compiled_file_name):
             [full_path(js_file) for js_file 
              in files])
 
-    context['js_use_compiled'] = settings.JS_USE_COMPILED
+    context['js_use_compiled'] = settings.COMPRESS_MEDIA
     context['js_dependencies'] = js_files
     return context
 

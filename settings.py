@@ -154,7 +154,6 @@ EMBED_JS_VERSION = ''
 PREVIOUS_EMBED_JS_VERSIONS = []
 
 CSS_USE_COMPILED = True
-JS_USE_COMPILED = False
 
 USE_BUNDLED_MEDIA = not DEBUG
 
@@ -250,6 +249,7 @@ JS_DIALOG = \
      'js/widget/subtitle/sharepanel.js',
      'js/widget/subtitle/completeddialog.js',
      'js/widget/subtitle/editpanel.js',
+     'js/widget/subtitle/onsaveddialog.js',
      'js/widget/subtitle/editrightpanel.js',
      'js/widget/subtitle/bottomfinishedpanel.js',
      'js/widget/subtitle/logger.js',
@@ -316,6 +316,23 @@ JS_BASE_DEPENDENCIES = [
     'js/swfobject.js',
     'flowplayer/flowplayer-3.2.2.min.js',
 ]
+
+JS_MODERATION_DASHBOARD =  [
+    "js/jquery-1.4.3.js",
+    "js/jquery-ui-1.8.13.custom.min.js",
+    "js/jgrowl/jquery.jgrowl.js",
+    "js/jalerts/jquery.alerts.js",
+    "js/jquery.form.js",
+    "js/jquery.metadata.js",
+    "js/jquery.mod.js",
+    "js/jquery.rpc.js",
+    "js/jquery.input_replacement.min.js",
+    "js/messages.js",
+
+    "js/jquery.address-1.4.fixed.js",
+    "js/jquery.ajax-paginator.js",
+    "js/moderation/simplewarning.js",
+    ]
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -625,7 +642,7 @@ MEDIA_BUNDLES = {
      },
     "mirosubs-widgetizer-debug":{
         "type": "js",
-        "files": ["js/config.js" ] + JS_WIDGETIZER,
+        "files": ["js/config.js" ] + JS_WIDGETIZER  ,
         "closure_deps": "js/closure-dependencies.js",
         "debug": True,
      },
@@ -652,6 +669,7 @@ MEDIA_BUNDLES = {
      },
     "js-base-dependencies":{
         "type":"js",
+        "optimizations": "WHITESPACE_ONLY",
         "files": JS_BASE_DEPENDENCIES,
      },
     "js-onsite-dialog": {
@@ -660,6 +678,7 @@ MEDIA_BUNDLES = {
     },
     "site_base_js":{
         "type":"js",
+        "optimizations": "WHITESPACE_ONLY",
         "files":[
               "js/jquery-1.4.3.js",
               "js/jquery-ui-1.8.13.custom.min.js",
@@ -682,11 +701,16 @@ MEDIA_BUNDLES = {
         "files": [
                  'js/widget/testing/stubvideoplayer.js',
                  'js/widget/testing/events.js',
-                 "js/widget/test",
                 "js/subtracker.js" ,
                 "js/unitofwork.js",
                 "js/testing/testing.js",
                 "js/testing/timerstub.js",
             ]
     },
+    "js-moderation-dashboard":{
+        "type":"js",
+        "optimizations": "WHITESPACE_ONLY",
+        "files": JS_MODERATION_DASHBOARD,
+        "include_flash_deps": False,
+        }
 }

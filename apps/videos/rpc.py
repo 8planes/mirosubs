@@ -138,11 +138,6 @@ class VideosApiClass(object):
             .models(Video).filter(video_language_exact__in=user_langs) \
             .filter_or(languages_exact__in=user_langs)
 
-        ## The rest of videos which are NOT relevant
-        #rest = SearchQuerySet().result_class(VideoSearchResult) \
-            #.models(Video).filter(video_language__in=user_langs) \
-            #.filter_or(languages__in=user_langs)
-
         return relevant
 
     @add_request_to_kwargs
@@ -152,6 +147,15 @@ class VideosApiClass(object):
             .order_by('-featured')
 
         return render_page(page, sqs, request=request)    
+
+    @add_request_to_kwargs
+    def load_requested_page_volunteer(self, page, request, user):
+        user_langs = get_user_languages_from_request(request)
+        relevant = self._get_volunteer_sqs(request, user)
+        sqs = relevant.filter(requests_exact__in=user_langs) \
+            .order_by('-edited')
+
+        return render_page(page, sqs, request=request)
 
     @add_request_to_kwargs
     def load_latest_page_volunteer(self, page, request, user):

@@ -2,13 +2,9 @@
 
 {% for status in sub_statuses.items %}
     <span>
-        {% if status.percent_done or status.is_complete %}
-            <a href="{{ status.language_url }}">
-          {% endif %}
-          {{ status.language_display }} 
-          {% if status.percent_done or status.is_complete %}</a> {% endif %}
-          ({% if status.is_dependent %}{{ status.percent_done }}%{% else %}{% if status.is_complete %}{% trans "complete"%}{% else %}{% trans "incomplete"  %}{% endif %}{% endif %})
-          {% if not forloop.last %},{% endif %}
+        <a href="{{ status.language_url }}">{{ status.language_display }}</a>
+      ({% if status.is_dependent %}{{ status.percent_done }}%{% else %}{% if status.is_complete %}{% trans "complete"%}{% else %}{% trans "incomplete"  %}{% endif %}{% endif %})
+      {% if not forloop.last %},{% endif %}
     </span>
 {% endfor %}
 

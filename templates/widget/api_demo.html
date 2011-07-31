@@ -1,22 +1,21 @@
+{% load media_compressor %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <link rel="stylesheet" href="{{MEDIA_URL}}css/mirosubs-widget.css" type="text/css"/>
-{% if not js_use_compiled %}
-{% include "widget/_js_base_dependencies.html" %}
-{% else %}
-<script type="text/javascript" src="{{MEDIA_URL}}js/closure-library/closure/goog/base.js"></script>
-{% endif %}
+
+{% include_bundle "js-base-dependencies" %}
+{% include_bundle "mirosubs-api" %}
+
+
 <script>
 goog.require('goog.debug.Logger');
 goog.require('goog.debug.FancyWindow');
 goog.require('goog.debug.LogManager');
 goog.require('goog.json');
 </script>
-{% for dep in js_dependencies %}
-  <script type="text/javascript" src="{{dep|safe}}"></script>
-{% endfor %}
+
 </head>
 <body>
   <a href="#" onclick="openDialog(); return false;">Open dialog (wikipedia)</a>

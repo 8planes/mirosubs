@@ -21,9 +21,8 @@
 from settings import *
 from server_local_settings import *
 
-JS_USE_COMPILED = True
 
-DEBUG = False
+DEBUG = True
 
 ADMINS = (
     ('Adam Duston', 'adam@8planes.com'),
