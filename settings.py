@@ -327,8 +327,9 @@ JS_MODERATION_DASHBOARD =  [
     "js/jquery.mod.js",
     "js/jquery.rpc.js",
     "js/jquery.input_replacement.min.js",
+    'js/closure-library/closure/goog/base.js',    
+    'js/closure-dependencies.js',    
     "js/messages.js",
-
     "js/jquery.address-1.4.fixed.js",
     "js/jquery.ajax-paginator.js",
     "js/moderation/simplewarning.js",
@@ -710,7 +711,8 @@ MEDIA_BUNDLES = {
     "js-moderation-dashboard":{
         "type":"js",
         "optimizations": "WHITESPACE_ONLY",
+        "closure_deps": "js/closure-dependencies.js",
         "files": JS_MODERATION_DASHBOARD,
-        "include_flash_deps": False,
+
         }
 }
