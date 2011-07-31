@@ -154,7 +154,6 @@ EMBED_JS_VERSION = ''
 PREVIOUS_EMBED_JS_VERSIONS = []
 
 CSS_USE_COMPILED = True
-JS_USE_COMPILED = False
 
 USE_BUNDLED_MEDIA = not DEBUG
 
@@ -317,7 +316,18 @@ JS_BASE_DEPENDENCIES = [
     'flowplayer/flowplayer-3.2.2.min.js',
 ]
 
-JS_MODERATION_DASHBOARD = JS_BASE_DEPENDENCIES + [
+JS_MODERATION_DASHBOARD =  [
+    "js/jquery-1.4.3.js",
+    "js/jquery-ui-1.8.13.custom.min.js",
+    "js/jgrowl/jquery.jgrowl.js",
+    "js/jalerts/jquery.alerts.js",
+    "js/jquery.form.js",
+    "js/jquery.metadata.js",
+    "js/jquery.mod.js",
+    "js/jquery.rpc.js",
+    "js/jquery.input_replacement.min.js",
+    "js/messages.js",
+
     "js/jquery.address-1.4.fixed.js",
     "js/jquery.ajax-paginator.js",
     "js/moderation/simplewarning.js",
@@ -658,6 +668,7 @@ MEDIA_BUNDLES = {
      },
     "js-base-dependencies":{
         "type":"js",
+        "optimizations": "WHITESPACE_ONLY",
         "files": JS_BASE_DEPENDENCIES,
      },
     "js-onsite-dialog": {
@@ -666,6 +677,7 @@ MEDIA_BUNDLES = {
     },
     "site_base_js":{
         "type":"js",
+        "optimizations": "WHITESPACE_ONLY",
         "files":[
               "js/jquery-1.4.3.js",
               "js/jquery-ui-1.8.13.custom.min.js",
@@ -688,7 +700,6 @@ MEDIA_BUNDLES = {
         "files": [
                  'js/widget/testing/stubvideoplayer.js',
                  'js/widget/testing/events.js',
-                 "js/widget/test",
                 "js/subtracker.js" ,
                 "js/unitofwork.js",
                 "js/testing/testing.js",
@@ -697,6 +708,8 @@ MEDIA_BUNDLES = {
     },
     "js-moderation-dashboard":{
         "type":"js",
+        "optimizations": "WHITESPACE_ONLY",
         "files": JS_MODERATION_DASHBOARD,
+        "include_flash_deps": False,
         }
 }

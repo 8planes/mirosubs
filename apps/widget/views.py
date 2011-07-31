@@ -93,7 +93,7 @@ def onsite_widget(request):
 
 def widget_demo(request):
     context = {}
-    context['js_use_compiled'] = settings.JS_USE_COMPILED
+    context['js_use_compiled'] = settings.COMPRESS_MEDIA
     context['site_url'] = 'http://{0}'.format(
         request.get_host())
     if 'video_url' not in request.GET:
@@ -136,7 +136,7 @@ def statwidget_demo(request):
             Site.objects.get_current().domain)]
     js_files.append('{0}js/statwidget/statwidget.js'.format(
             settings.MEDIA_URL))
-    context = widget.add_js_files({}, settings.JS_USE_COMPILED,
+    context = widget.add_js_files({}, settings.COMPRESS_MEDIA,
                                settings.JS_OFFSITE,
                                'mirosubs-statwidget.js',
                                full_path_js_files=js_files)
