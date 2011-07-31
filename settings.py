@@ -249,6 +249,7 @@ JS_DIALOG = \
      'js/widget/subtitle/sharepanel.js',
      'js/widget/subtitle/completeddialog.js',
      'js/widget/subtitle/editpanel.js',
+     'js/widget/subtitle/onsaveddialog.js',
      'js/widget/subtitle/editrightpanel.js',
      'js/widget/subtitle/bottomfinishedpanel.js',
      'js/widget/subtitle/logger.js',
