@@ -21,6 +21,8 @@ import sys, os, shutil, subprocess, logging, time
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
+import optparse
+
 from deploy.git_helpers import get_current_commit_hash
 
 
@@ -66,6 +68,12 @@ def get_cache_base_url():
 
 class Command(BaseCommand):
 
+
+
+
+    help = 'Compiles all bundles in settings.py (css and js).'
+    args = 'media_bundles'
+
     def create_cache_dir(self):
         dir_path = get_cache_dir()
         if os.path.exists(dir_path) is True:
@@ -92,6 +100,8 @@ class Command(BaseCommand):
         if bundle_type == "css":
             filename = "%s.css" % ( bundle_name)
             cmd_str = "%s --type=%s %s" % (settings.COMPRESS_YUI_BINARY, bundle_type, concatenated_path)
+        if self.verbosity > 1:
+            logging.info( "calling %s" % cmd_str)
         output, err_data  = call_command(cmd_str)
 
             
@@ -122,10 +132,15 @@ class Command(BaseCommand):
         if debug:
             js_debug_dep_file = '-i {0}/{1}'.format(JS_LIB, 'js/closure-debug-dependencies.js')
 
-        output,_ = call_command(("%s/closure/bin/calcdeps.py -i %s/%s %s " +
-                                 "-p %s/ -o script") % 
-                                (CLOSURE_LIB, JS_LIB, closure_dep_file, 
-                                 js_debug_dep_file, CLOSURE_LIB))
+        cmd_str = "%s/closure/bin/calcdeps.py -i %s/%s %s -p %s/ -o script"  % (
+            CLOSURE_LIB,
+            JS_LIB,
+            closure_dep_file, 
+            js_debug_dep_file,
+            CLOSURE_LIB)
+        if self.verbosity > 1:
+            logging.info( "calling %s" % cmd_str)    
+        output,_ = call_command(cmd_str)
 
         # This is to reduce the number of warnings in the code.
         # The mirosubs-calcdeps.js file is a concatenation of a bunch of Google Closure
@@ -143,15 +158,11 @@ class Command(BaseCommand):
         debug_arg = ''
         if not debug:
             debug_arg = '--define goog.DEBUG=false'
+        cmd_str =  "java -jar %s --js %s %s --js_output_file %s %s --define goog.NATIVE_ARRAY_PROTOTYPES=false --output_wrapper (function(){%%output%%})(); --compilation_level %s" % ( compiler_jar, calcdeps_js, deps, compiled_js,debug_arg, optimization_type)
 
-        output,err = call_command(("java -jar %s --js %s %s "
-                                   "--js_output_file %s "
-                                   "%s "
-                                   "--define goog.NATIVE_ARRAY_PROTOTYPES=false "
-                                   "--output_wrapper (function(){%%output%%})(); "
-                                   "--compilation_level %s") % 
-                                  (compiler_jar, calcdeps_js, deps, compiled_js,
-                                   debug_arg, optimization_type))
+        if self.verbosity > 1:
+            logging.info( "calling %s" % cmd_str)    
+        output,err = call_command(cmd_str)
 
         with open(compiled_js, 'r') as compiled_js_file:
             compiled_js_text = compiled_js_file.read()
@@ -196,12 +207,17 @@ class Command(BaseCommand):
                 os.makedirs(target_dir)
             shutil.copy( source_path, target_path)
                 
-    def handle(self, *args, **kwargs):
+    def handle(self, *args, **options):
+        self.verbosity = int(options.get('verbosity'))
+        restrict_bundles = bool(args)
+
         os.chdir(settings.PROJECT_ROOT)
         self.base_dir = self.create_cache_dir()
         bundles = settings.MEDIA_BUNDLES
-
+        
         for bundle_name, data in bundles.items():
+            if restrict_bundles and bundle_name not in args:
+                continue
             self.compile_media_bundle( bundle_name, data['type'], data["files"])
         self.copy_dirs()
         

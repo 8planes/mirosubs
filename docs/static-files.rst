@@ -56,7 +56,11 @@ Compiling
 ===========================
 Compiling should be done with ::
 
-  $manage.py compile_media --settings=[settings file]
+  $manage.py compile_media --settings=[settings file] [bundle-name(s)]
+
+If you pass one or more bundle names as arguments to the command it will only compile those bundles (useful for testing / debugging), else all bundles will be compiles.
+
+When the --verbosity param is set to 2, `compile_media` will output the cmd_strings passed to the compilers.
 
 Dir layout
 ===========================
@@ -110,7 +114,7 @@ TODOS
 ====
     
 - Join all the compile_config... commands with compile media
-- Remove all lingering instances of `include _js_onsite... ` and `JS_USE_COMPRESSES`.
+- Remove all lingering instances of `include _js_onsite... ` 
 - Make compilation fail on any error.
 - Find out how to fix warnings for jQuery and others
 - Put all binaries that deal with media compression (closure compiler, yui compressor) on the same place
