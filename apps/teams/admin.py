@@ -96,7 +96,13 @@ class TeamVideoForm(forms.ModelForm):
         self.fields['completed_languages'].queryset = qs
 
 class TeamVideoAdmin(admin.ModelAdmin):
-    list_display = ('title', 'description')
+    list_display = ('__unicode__', 'team_link', 'created')
+
+    def team_link(self, obj):
+        url = reverse('admin:teams_team_change', args=[obj.team_id])
+        return u'<a href="%s">%s</a>' % (url, obj.team)
+    team_link.short_description = _('Team')
+    team_link.allow_tags = True
 
 admin.site.register(TeamMember, TeamMemberAdmin)
 admin.site.register(Team, TeamAdmin)
