@@ -109,3 +109,29 @@ def zip_longest(parser, token):
         kwargs['varname'] = varname
 
     return ZipLongestNode(*args, **kwargs)
+
+# from http://djangosnippets.org/snippets/1518/
+# watchout, if you change the site domain this value will get stale
+domain = "http://%s" % Site.objects.get_current().domain
+
+class AbsoluteURLNode(URLNode):
+    def render(self, context):
+        if self.asvar:  
+            context[self.asvar]= urlparse.urljoin(domain, context[self.asvar])  
+            return ''  
+        else:  
+            return urlparse.urljoin(domain, path)
+        path = super(AbsoluteURLNode, self).render(context)
+        domain = "http://%s" % Site.objects.get_current().domain
+        return urlparse.urljoin(domain, path)
+
+def absurl(parser, token, node_cls=AbsoluteURLNode):
+    """Just like {% url %} but ads the domain of the current site."""
+    node_instance = url(parser, token)
+    return node_cls(view_name=node_instance.view_name,
+        args=node_instance.args,
+        kwargs=node_instance.kwargs,
+        asvar=node_instance.asvar)
+absurl = register.tag(absurl)        
+
+
