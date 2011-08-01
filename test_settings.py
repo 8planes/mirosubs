@@ -12,7 +12,7 @@ DATABASES = {
 }
 
 
-HAYSTACK_SOLR_URL = 'http://localhost:8983/solr/core1'
+HAYSTACK_SOLR_URL = 'http://localhost:38983/solr/testing'
 
 CELERY_ALWAYS_EAGER = True
 
