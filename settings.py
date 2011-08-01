@@ -398,13 +398,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.auth',
     'django.core.context_processors.debug',
     'django.core.context_processors.request',
-    'django.core.context_processors.media',
     'context_processors.current_site',
     'context_processors.current_commit',
     'context_processors.custom',
     'context_processors.user_languages',
     'django.contrib.messages.context_processors.messages',
-    'django.core.context_processors.i18n'
+    'django.core.context_processors.i18n',
+    'utils.context_processors.media',
 )
 
 INSTALLED_APPS = (
