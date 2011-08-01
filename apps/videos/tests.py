@@ -526,11 +526,35 @@ class UploadSubtitlesTest(WebUseTest):
         language = self.video.subtitlelanguage_set.get(language='ru')
         subs = Subtitle.objects.filter(version=language.version())
 
+        for sub in subs[8:]:
+            self.assertEquals(None, sub.start_time)
+            self.assertEquals(None, sub.end_time)
+
         num_subs = len(subs)
         num_unsynced = len(Subtitle.objects.unsynced().filter(version=language.version()))
         self.assertEquals(10, num_subs)
         self.assertEquals(2 , num_unsynced)
         
+    def test_upload_from_widget_last_end_unsynced(self):
+        self._login()
+
+        data = self._make_altered_data(video=self.video, language_code='en', subs_filename='subs-last-unsynced.srt')
+
+        response = self.client.post(reverse('videos:upload_subtitles'), data)
+        self.assertEqual(response.status_code, 200)
+
+        language = self.video.subtitle_language('en')
+        subs = language.latest_version().subtitles()
+        self.assertEquals(7.071, subs[2].start_time)
+
+        from widget.rpc import Rpc
+        from widget.tests import RequestMockup, NotAuthenticatedUser
+        request = RequestMockup(NotAuthenticatedUser())
+        rpc = Rpc()
+        subs = rpc.fetch_subtitles(request, self.video.video_id, language.pk)
+        last_sub = subs['subtitles'][2]
+        self.assertEquals(7.071, last_sub['start_time'])
+        self.assertEquals(-1, last_sub['end_time'])        
 
 
 class Html5ParseTest(TestCase):

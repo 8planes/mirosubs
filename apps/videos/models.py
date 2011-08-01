@@ -974,8 +974,9 @@ class Subtitle(models.Model):
     subtitle_id = models.CharField(max_length=32, blank=True)
     subtitle_order = models.FloatField(null=True)
     subtitle_text = models.CharField(max_length=1024, blank=True)
-    # in seconds
+    # in seconds. if no start time is set, should be null.
     start_time = models.FloatField(null=True)
+    # in seconds. if no end time is set, should be null.
     end_time = models.FloatField(null=True)
 
     objects = SubtitleManager()
@@ -1027,6 +1028,8 @@ class Subtitle(models.Model):
     def save(self, *args, **kwargs):
         if not self.is_synced:
             self.start_time = self.end_time = None
+        elif not is_synced_value(self.end_time):
+            self.end_time = None
         return super(Subtitle, self).save(*args, **kwargs)
         
     def __unicode__(self):
