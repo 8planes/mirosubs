@@ -45,6 +45,8 @@ null_rpc_views = NullRpc()
 
 def embed(request, version_no=''):
     context = widget.add_offsite_js_files({})
+    if bool(version_no) is False:
+        version_no = ""
     return render_to_response('widget/embed{0}.js'.format(version_no), 
                               context,
                               context_instance=RequestContext(request),

@@ -53,7 +53,7 @@ urlpatterns = patterns(
     (r'socialauth/', include('socialauth.urls')),
     (r'^admin/settings/', include('livesettings.urls')),
     (r'^admin/', include(admin.site.urls)),
-    (r'^embed(\d*).js$', 'widget.views.embed'),
+    url(r'^embed(?P<version_no>\d+)?.js$', 'widget.views.embed', name="widget-embed"),
     (r'^widget_demo/$', 'widget.views.widget_demo'),
     (r'^widget_public_demo/$', 'widget.views.widget_public_demo'),
     url(r'^onsite_widget/$', 'widget.views.onsite_widget', name='onsite_widget'),
