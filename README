@@ -52,11 +52,11 @@ To run the development version:
 8. From the mirosubs directory created in step 1, first create the 
    database with
 
-       python manage.py syncdb
+       python manage.py syncdb --all
 
-   Then update the database with
+   Then update the south migrations with
 
-       python manage.py migrate
+       python manage.py migrate --fake
 
    SQLLite warnings are okay. Then run the site with:
 
