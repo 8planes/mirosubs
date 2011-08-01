@@ -16,10 +16,10 @@ HAYSTACK_SOLR_URL = 'http://localhost:8983/solr/core1'
 
 CELERY_ALWAYS_EAGER = True
 
-# INSTALLED_APPS += ('django_nose', )
-# INSTALLED_APPS = list(INSTALLED_APPS)
-# INSTALLED_APPS.remove('mirosubs')
-# TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+INSTALLED_APPS += ('django_nose', )
+INSTALLED_APPS = list(INSTALLED_APPS)
+INSTALLED_APPS.remove('mirosubs')
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 
 SITE_ID = 4
