@@ -51,7 +51,7 @@ class DailymotionVideoType(VideoType):
         video_id = cls.get_video_id(url)
         if video_id:
             metadata = cls.get_metadata(video_id)
-            stream_flv_mini_url = metadata.get('stream_flv_mini_url', '')
+            stream_flv_mini_url = metadata.get('url', '')
             return bool(stream_flv_mini_url)
             
         return False
