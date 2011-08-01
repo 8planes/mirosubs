@@ -324,7 +324,10 @@ class Rpc(BaseRpc):
         else:
             video_changed_tasks.delay(language.video.id)
 
-        user_message = None
+        # we have a default user message, since the UI lets users save non
+        # changed subs, but the backend will realize and will not save that
+        # version. In those cases, we want to show the defatul user message.
+        user_message = "Thank you for uploading. It will take a minute or so for your subtitles to appear."
         if new_version is not None and new_version.version_no == 0:
             user_message = "Thank you for uploading. It will take a minute or so for your subtitles to appear."
         elif new_version and is_moderated(new_version):
@@ -333,9 +336,6 @@ class Rpc(BaseRpc):
                 user_message = """This video is moderated by %s. 
 
 # You will not see your subtitles in our widget when you leave this page-- they will only appear on our site. We have saved your work for the team moderator to review. After they approve your subtitles they will show up on our site and in the widget.""" % (new_version.video.moderated_by.name)
-
-                
-                
         return {
             'user_message': user_message,
             'response': 'ok' }
