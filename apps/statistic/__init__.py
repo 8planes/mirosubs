@@ -103,8 +103,16 @@ class WidgetViewStatistic(VideoViewStatistic):
     def post_migrate(self, updated_objects, updated_keys):
         from utils.celery_search_index import update_search_index_for_qs
         from videos.models import Video
+
+        def chunks(l, n):
+            """ Yield successive n-sized chunks from l.
+            """
+            for i in xrange(0, len(l), n):
+                yield l[i:i+n]
         
-        update_search_index_for_qs.delay(Video, [item.video_id for item in updated_objects])
+        for chunk in chunks(updated_objects, 200):
+            print len(chunk)
+            update_search_index_for_qs.delay(Video, [item.video_id for item in chunk])
             
 st_widget_view_statistic = WidgetViewStatistic()
 
