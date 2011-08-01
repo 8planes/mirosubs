@@ -33,7 +33,8 @@ def _add_share_panel_context(context, facebook_url, twitter_url, embed_params,
     ec_context = {
         'embed_version': settings.EMBED_JS_VERSION,
         'embed_params': json(embed_params),
-        'MEDIA_URL': settings.MEDIA_URL
+        'MEDIA_URL': settings.MEDIA_URL,
+        'MEDIA_URL_BASE': settings.MEDIA_URL_BASE,
     }
     
     context["share_panel_embed_code"] = render_to_string('videos/_offsite_widget.html', ec_context)

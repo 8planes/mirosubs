@@ -1,6 +1,8 @@
 from django import template
 from django.db import connection
 from django.utils.translation import ugettext
+from django.contrib.sites.models import Site
+from django.template.defaulttags import URLNode, url
 
 register = template.Library()
 

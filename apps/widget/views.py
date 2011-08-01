@@ -44,6 +44,11 @@ rpc_views = Rpc()
 null_rpc_views = NullRpc()
 
 def embed(request, version_no=''):
+    """
+    This is for serving embed when in development since the compilation
+    with the media url hasn't taken place.
+    Public clients will use the url : SITE_MEDIA/js/embed.js
+    """
     context = widget.add_offsite_js_files({})
     if bool(version_no) is False:
         version_no = ""

@@ -88,7 +88,11 @@ COMPRESS_OUTPUT_NAME
 """"""""""""""""""""
 The directory that holds the root to the static cache, i.e. where all compiled and version specific media will be copyed to (see dir layout above). Defaults to 'static-cache'.
 
-********************
+MEDIA_URL_BASE
+--------------
+
+This is the media url before appending the commit hash. This is useful in places where you need the media base to an external stable url , for example on the embed and widgetizer (which never change).
+
 Serving Media
 ********************
 On the local development machine or the dev environment media is stored locally in the file disk. Staging and production with Amazon's s3, so in those environments media needs to be copied to s3.

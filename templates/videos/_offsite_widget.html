@@ -1,5 +1,5 @@
 {% load utils_tags %}
-<script type="text/javascript" src="{% absurl mbed version_no-embed_version %}">
+<script type="text/javascript" src="{{MEDIA_URL_BASE}}js/embed.js">
 (
   {{ embed_params|safe }}
 )
