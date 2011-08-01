@@ -114,7 +114,8 @@ def volunteer_page(request):
         .models(Video).filter(video_language_exact__in=user_langs) \
         .filter_or(languages_exact__in=user_langs)
 
-    featured_videos =  relevant.filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
+    featured_videos =  relevant.filter(
+        featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
         .order_by('-featured')[:5]
 
     popular_videos = relevant.order_by('-week_views')[:5]
@@ -122,7 +123,7 @@ def volunteer_page(request):
     latest_videos = relevant.order_by('-edited')[:15]
 
     requested_videos = relevant.filter(requests_exact__in=user_langs) \
-       .order_by('-edited')[:5]
+       .order_by('-requests_count')[:5]
 
     context = {
         'featured_videos': featured_videos,

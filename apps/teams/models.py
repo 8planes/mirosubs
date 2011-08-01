@@ -378,7 +378,7 @@ class TeamVideo(models.Model):
         unique_together = (('team', 'video'),)
     
     def __unicode__(self):
-        return self.title or self.video.__unicode__()
+        return self.title or unicode(self.video)
 
     def can_remove(self, user):
         return self.team.can_remove_video(user, self)

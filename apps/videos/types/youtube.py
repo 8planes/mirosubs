@@ -107,7 +107,10 @@ def save_subtitles_for_lang(lang, video_pk, youtube_id):
     language.had_version = True
     language.is_complete = True
     language.save()
-
+    
+    from videos.tasks import video_changed_tasks
+    video_changed_tasks.delay(video.pk, version.pk)
+    
 class YoutubeVideoType(VideoType):
     
     _url_patterns = [re.compile(x) for x in [

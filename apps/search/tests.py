@@ -24,6 +24,7 @@ from search.forms import SearchForm
 from search.rpc import SearchApiClass
 from auth.models import CustomUser as User
 from utils.rpc import RpcMultiValueDict
+from django.core.urlresolvers import reverse
 
 def reset_solr():
     # cause the default site to load
@@ -51,6 +52,15 @@ class TestSearch(TestCase):
     def setUp(self):
         self.user = User.objects.all()[0]
     
+    def test_views(self):
+        url = reverse('search:index')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        
+        url = reverse('search:rpc_api')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)        
+    
     def test_search_index_updating(self):
         reset_solr()
         rpc = SearchApiClass()
@@ -65,6 +75,15 @@ class TestSearch(TestCase):
             result = rpc.search(rdata, self.user, testing=True)['sqs']
             self.assertTrue(video in [item.object for item in result], title)
     
+    def test_empty_query(self):
+        rpc = SearchApiClass()
+        
+        rdata = RpcMultiValueDict(dict(q=u''))
+        rpc.search(rdata, self.user, testing=True)['sqs']
+
+        rdata = RpcMultiValueDict(dict(q=u' '))
+        rpc.search(rdata, self.user, testing=True)['sqs']
+        
     def test_rpc(self):
         rpc = SearchApiClass()
         rdata = RpcMultiValueDict(dict(q=u'BBC'))
