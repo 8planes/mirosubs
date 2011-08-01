@@ -73,6 +73,7 @@ class VideoIndex(CelerySearchIndex):
     requests = LanguagesField(faceted=True)
     video_language = LanguageField(faceted=True)
     languages_count = IntegerField()
+    requests_count = IntegerField()
     video_id = CharField(model_attr='video_id', indexed=False)
     thumbnail_url = CharField(model_attr='get_thumbnail', indexed=False)
     small_thumbnail = CharField(model_attr='small_thumbnail', indexed=False)
@@ -105,6 +106,7 @@ class VideoIndex(CelerySearchIndex):
         self.prepared_data['requests'] = [LanguageField.prepare_lang(request.language) for request in requests]
         self.prepared_data['contributors_count'] = User.objects.filter(subtitleversion__language__video=obj).distinct().count()
         self.prepared_data['activity_count'] = obj.action_set.count()
+        self.prepared_data['requests_count'] = requests.count()
         self.prepared_data['week_views'] = obj.views['week']
         self.prepared_data['month_views'] = obj.views['month']
         self.prepared_data['year_views'] = obj.views['year']

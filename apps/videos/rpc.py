@@ -153,7 +153,7 @@ class VideosApiClass(object):
         user_langs = get_user_languages_from_request(request)
         relevant = self._get_volunteer_sqs(request, user)
         sqs = relevant.filter(requests_exact__in=user_langs) \
-            .order_by('-edited')
+            .order_by('-requests_count')
 
         return render_page(page, sqs, request=request)
 
