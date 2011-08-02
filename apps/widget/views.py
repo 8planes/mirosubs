@@ -151,13 +151,6 @@ def statwidget_demo(request):
                               context,
                               context_instance=RequestContext(request))
 
-def api_demo(request):
-    context = widget.add_config_based_js_files(
-        {}, settings.JS_API, 'mirosubs-api.js')
-    return render_to_response('widget/api_demo.html',
-                              context,
-                              context_instance=RequestContext(request))
-
 @staff_member_required
 def save_emailed_translations(request):
     if request.method == "GET":

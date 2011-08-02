@@ -30,7 +30,6 @@ urlpatterns = patterns(
     url(r'^widgetize_demo/(\w+)$', 'widgetize_demo'),
     url(r'^statwidget_demo.html$', 'statwidget_demo'),
     url(r'^video_demo/(\w+)$', 'video_demo'),
-    url(r'^api_demo.html$', 'api_demo'),
     url(r'^download_srt/$', 'download_subtitles', 
         {'handler': SRTSubtitles}, name='download_srt'),
     url(r'^download_ssa/$', 'download_subtitles', name='download_ssa'),
