@@ -1090,6 +1090,8 @@ class ActionRenderer(object):
             info = self.render_ADD_TRANSLATION(item)
         elif item.action_type == Action.SUBTITLE_REQUEST:
             info = self.render_SUBTITLE_REQUEST(item)
+        elif item.action_type == Action.APPROVE_VERSION:
+            info = self.render_APPROVE_VERSION(item)    
 
         else:
             info = ''
@@ -1102,11 +1104,27 @@ class ActionRenderer(object):
         return render_to_string(self.template_name, context)
     
     def _base_kwargs(self, item):
-        return {
+        data = {
             'video_url': item.video.get_absolute_url(),
-            'video_name': unicode(item.video)                  
-        }
+            'video_name': unicode(item.video)
             
+        }
+        if item.language:
+            data['language'] = item.language.language_display()
+            data['language_url'] = item.language.get_absolute_url()
+        if item.user:
+            data["user_url"] = reverse("profiles:profile", kwargs={"user_id":item.user.id})
+            data["user"] = item.user
+        return data    
+                    
+
+
+    def render_APPROVE_VERSION(self, item):
+        kwargs = self._base_kwargs(item)
+        msg = _('  approved <a href="%(language_url)s">%(language)s</a> subtitles for <a href="%(video_url)s">%(video_name)s</a>') % kwargs
+        print msg
+        return msg
+        
     def redner_ADD_VIDEO(self, item):
         if item.user:
             msg = _(u'added video <a href="%(video_url)s">%(video_name)s</a>') 
@@ -1148,8 +1166,6 @@ class ActionRenderer(object):
     def render_ADD_TRANSLATION(self, item):
         kwargs = self._base_kwargs(item)
         
-        kwargs['language'] = item.language.language_display()
-        kwargs['language_url'] = item.language.get_absolute_url()
         
         if item.user:
             msg = _(u'started <a href="%(language_url)s">%(language)s subtitles</a> for <a href="%(video_url)s">%(video_name)s</a>')
@@ -1201,6 +1217,7 @@ class Action(models.Model):
     ADD_TRANSLATION = 6
     SUBTITLE_REQUEST = 7
     APPROVE_VERSION = 8
+    ADD_CONTRIBUTOR = 9
     TYPES = (
         (ADD_VIDEO, _(u'add video')),
         (CHANGE_TITLE, _(u'change title')),
@@ -1210,6 +1227,7 @@ class Action(models.Model):
         (ADD_VIDEO_URL, _(u'add video url')),
         (SUBTITLE_REQUEST, _(u'request subtitles')),
         (APPROVE_VERSION, _(u'approve version')),
+        (ADD_CONTRIBUTOR, _(u'add contributor')),
     )
     
     renderer = ActionRenderer('videos/_action_tpl.html')
@@ -1245,6 +1263,9 @@ class Action(models.Model):
     
     def is_add_version(self):
         return self.action_type == self.ADD_VERSION
+
+    def is_add_contributor(self):
+        return self.action_type == self.ADD_CONTRIBUTOR
     
     def is_comment(self):
         return self.action_type == self.COMMENT
@@ -1337,6 +1358,17 @@ class Action(models.Model):
         obj.action_type = cls.APPROVE_VERSION
         obj.created = datetime.now()
         obj.save()
+
+
+    @classmethod
+    def create_approved_video_handler(cls, version, moderator,  **kwargs):
+        obj = cls(video=version.video)
+        obj.language = version.language
+        obj.user = moderator
+        obj.action_type = cls.APPROVE_VERSION
+        obj.created = datetime.now()
+        obj.save()        
+        
 
                 
 post_save.connect(Action.create_comment_handler, Comment)        
