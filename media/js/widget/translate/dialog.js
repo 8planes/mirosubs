@@ -57,9 +57,8 @@ mirosubs.translate.Dialog.prototype.createRightPanel_ = function() {
         "Editing Translation" : "Adding a New Translation";
     var helpContents = new mirosubs.RightPanel.HelpContents(
         title,
-        [["Thanks for volunteering to translate! As soon as you submit ",
-          "your translation, it will be available to everyone watching the ",
-          "video in our widget."].join(''),
+        [["Thanks for volunteering to translate! Your translation will be available to ",
+"everyone  watching the video in our widget."].join(''),
          ["Please translate each line, one by one, in the white  ", 
           "space below each line."].join(''),
          ["If you need to rearrange the order of words or split a phrase ",
