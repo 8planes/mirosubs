@@ -1,86 +1,51 @@
 {% extends "base.html" %}
+
 {% block body_attrs %}id="video_profile"{% endblock %}
 
 {% load escapejs widget comments recent_activity paginator i18n subtitles_tags teams_tags videos_tags media_compressor %}
 
 {% block css %}
     {% if video.thumbnail %}
-        <meta property="og:image" content="{{ video.get_thumbnail }}" />
+    <meta property="og:image" content="{{ video.get_thumbnail }}" />
     {% else %}
-        <meta property="og:image" content="http://{{ current_site.domain }}{{ MEDIA_URL }}images/small_logo.png" />
+    <meta property="og:image" content="http://{{ current_site.domain }}{{ MEDIA_URL }}images/small_logo.png" />
     {% endif %}
     
     {{ block.super }}
     {% include_bundle "video_history" %}
-
+    
     <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
-    <style>
-        div.mirosubs-widget {
-            position: relative;
-        }
-        
-        .mirosubs-videoDiv {
-            text-align: center;
-        }
-        
-        .mirosubs-widget video {
-            width: 480px;
-        }
-        
-        #embed {
-            white-space: pre;
-            background: #eee;
-            border: #666;
-        }
-    </style>
-
-    <link href="{{ MEDIA_URL }}css/nyroModal.css" media="all" type="text/css" rel="stylesheet" />
-    <style>
-        .error_list {
-            color: #fa6343;
-        }
-        
-        .success-message {
-            color: #5ae26b;
-            margin: 5px 0 0;
-        }
-    </style>
 {% endblock %}
 
 {% block scripts %}
-
-        {% include_bundle "mirosubs-onsite-compiled" %}
-
-    <script src="{{ MEDIA_URL }}js/jquery.nyroModal-1.6.2.pack.js" type="text/javascript"></script>
-    <script src="{{ MEDIA_URL }}js/jquery.tablesorter.min.js" type="text/javascript"></script>
-    <script src="{{ MEDIA_URL }}js/jquery.tabs.js" type="text/javascript"></script>    
     {{ block.super }}
-    <script src="{% url videos:rpc_api %}" type="text/javascript"></script>    
-    {% with write_video_type_js as jsinclude %}{% if jsinclude %}{% write_video_type_js video %}{% endif %}{% endwith %}    
-
+    {% include_bundle "mirosubs-onsite-compiled" %}
+    <script src="{{ MEDIA_URL }}js/jquery.tablesorter.min.js" type="text/javascript"></script>
+    <script src="{{ MEDIA_URL }}js/jquery.tabs.js" type="text/javascript"></script>
+    <script src="{% url videos:rpc_api %}" type="text/javascript"></script>
+    {% with write_video_type_js as jsinclude %}{% if jsinclude %}{% write_video_type_js video %}{% endif %}{% endwith %}
+    
     <script type="text/javascript">
-        jQuery(document).ready(function($){
+        jQuery(document).ready( function($) {
             $('.inline_tabs').tabs();
-
-            $('#add_subtitles').click(function() {
+    
+            $('#add_subtitles').click( function() {
                 widget_widget_div.selectMenuItem(
-                    mirosubs.widget.DropDown.Selection.IMPROVE_SUBTITLES);
+                mirosubs.widget.DropDown.Selection.IMPROVE_SUBTITLES);
                 return false;
             });
-
-            $('.add-translation-behavior').click(function() {
+            $('.add-translation-behavior').click( function() {
                 widget_widget_div.selectMenuItem(
-                    mirosubs.widget.DropDown.Selection.ADD_LANGUAGE);
+                mirosubs.widget.DropDown.Selection.ADD_LANGUAGE);
                 return false;
             });
-            
             var CHANGE_TITLE_LINK = '{% url videos:ajax_change_video_title %}';
             var VIDEO_ID = '{{ video.video_id }}';
-
-            $('.edit-title').click(function(){
+    
+            $('.edit-title').click( function() {
                 var msg = '{% trans "Enter new title.  Note: this is for editing the original video title, not translating the title." %}'
                 var title = prompt(msg, $('.title-container').html());
-                if (title){
+                if (title) {
                     $('.title-container').html(title);
                     $.post(CHANGE_TITLE_LINK, {
                         video_id: VIDEO_ID,
@@ -88,10 +53,9 @@
                     });
                 }
                 return false;
-            }); 
+            });
         });
-    </script>  
-
+    </script>
 {% endblock %}
 
 {% block title %}
@@ -102,100 +66,104 @@
     <h2 class="main-title">
         <span class="title-container" style="float: none;">{{ video }}</span>
         {% if not video.title or video.is_html5 or user.is_superuser %}
-            <a class="edit-title" href="#">{% trans 'edit title' %}</a>
-        {% endif %}        
+        <a class="edit-title" href="#">{% trans 'edit title' %}</a>
+        {% endif %}
     </h2>
-
     {% if saved %}
-        <div id="messages">
-          <h2>{% blocktrans %}Subtitles saved!  You can share the video with friends, 
-          or get an embed code for your site.  To add a
-          translation, click the button below.{% endblocktrans %}</h2>
-            <a href="#" id="closeBut">{% trans "Close" %}</a>
-        </div>
+    <div id="messages">
+        <h2>{% blocktrans %}Subtitles saved!  You can share the video with friends,
+        or get an embed code for your site.  To add a
+        translation, click the button below.{% endblocktrans %}</h2>
+        <a href="#" id="closeBut">{% trans "Close" %}</a>
+    </div>
     {% endif %}
-
+    
     <div class="grid_6 alpha left_column">
         {% widget widget_params %}
     </div>
-    
     <div class="grid_6 omega right_column">
         {% include '_sharing_widget.html' %}
     </div>
-
     <hr />
-
+    
     <div class="grid_3 left_nav_wrapper alpha">
-      <ul class="left_nav">
-        <li class="active"><a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a></li>
-        {% include 'videos/_left_navigation.html' %}
-      </ul>      
-
-      {% if not video.subtitle_language %}
-        <a href="#" id="add_subtitles" class="green_button small">
-            {% trans 'Add Subtitles' %}
-        </a>
+        <ul class="left_nav">
+            <li class="active">
+                <a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a>
+            </li>
+            {% include 'videos/_left_navigation.html' %}
+        </ul>
+        {% if not video.subtitle_language %}
+            <a href="#" id="add_subtitles" class="green_button small"> {% trans 'Add Subtitles' %}</a><br /><br />
+        {% else %}
+            <a class="green_button small add-translation-behavior" id="add_translation "   href="#">{% trans 'Add Translation' %}</a>
+        {% endif %}
         <br /><br />
-      {% else %}  
-         <a class="green_button small add-translation-behavior" id="add_translation "   href="#">{% trans 'Add Translation' %}</a>
-      {% endif %}
-      <br /><br />
-      {% upload_subtitles video %}
-      <br /><br />
-      {% paste_transcription %}
-      
-      {% if user.is_staff and perms.videos.edit_video %}
-        <a href="{% url videos:video_debug video.video_id %}"  class="green_button small" target="blank"> View debug info </a><br /><br />
-        <a href="{% url admin:videos_video_change video.pk %}"  class="green_button small" target="blank">
-            {% trans 'Edit in Admin Interface' %}
-        </a>
-        {% feature_video video %}
-      {% endif %}
-        
+        {% upload_subtitles video %}
+        <br /><br />
+        {% paste_transcription %}
+    
+        {% if user.is_staff and perms.videos.edit_video %}
+            <a href="{% url videos:video_debug video.video_id %}"  class="green_button small" target="blank"> View debug info </a>
+            <br /><br />
+            <a href="{% url admin:videos_video_change video.pk %}"  class="green_button small" target="blank"> {% trans 'Edit in Admin Interface' %}</a>
+            {% feature_video video %}
+        {% endif %}
+    
         {% team_add_video_select %}
         {% render_belongs_to_team_list video %}
-  </div>
-
-  <div class="wrap grid_9 omega">
-      <h4 class="inline">{% trans 'Video Info' %}</h4>      
-
-      <ul class="inline_tabs">
-        <li><a href="#comments-tab"><span class="inline_text">{% trans 'Comments' %}</span> <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
-        <li class="bull">&bull;</li>
-        {% comment %}
-        <li><a href="#comments-tab"><span class="inline_text">{% trans 'Video URLS' %}</span> <span class="badgy_out"><span class="badgy">{% get_comment_count video %}</span></span></a></li>
-        <li class="bull">&bull;</li>
-        {% endcomment %}
-        <li class="active"><a href="#activity-tab"><span class="inline_text">{% trans 'Activity Stream' %}</span></a></li>
-        <li class="bull">&bull;</li>
-        <li><a href="#urls-tab"><span class="inline_text">{% trans 'Video URLs' %}</span> <span class="badgy_out"><span class="badgy">{% video_url_count video %}</span></span></a></li>
-      </ul>
-
-      <div id="comments-tab" style="display: none">
-          <div class="grid_9 alpha omega">
-            {% render_comment_form video %}
-            {% render_comment_list video %}
-            <div style="clear: both"></div>        
-          </div>
-      </div>
-      
-      <div id="activity-tab">
-          <div class="grid_9 alpha omega">
-          {% video_activity video %}
-          <a href="{% url videos:actions_list video.video_id %}" style="margin: 10px">{% trans 'all activity' %}</a>
-          </div>
-      </div>
-      
-      <div id="urls-tab" style="display: none">
-        {% video_url_panel %}
-      </div>      
-  </div>  
+    </div>
+    <div class="wrap grid_9 omega">
+        <h4 class="inline">{% trans 'Video Info' %}</h4>
+        <ul class="inline_tabs">
+            <li>
+                <a href="#comments-tab">
+                <span class="inline_text">{% trans 'Comments' %}</span>
+                <span class="badgy_out">
+                    <span class="badgy">{% get_comment_count video %}</span>
+                </span>
+                </a>
+            </li>
+            <li class="bull">&bull;</li>
+            <li class="active">
+                <a href="#activity-tab">
+                <span class="inline_text">{% trans 'Activity Stream' %}</span>
+                </a>
+            </li>
+            <li class="bull">&bull;</li>
+            <li>
+                <a href="#urls-tab">
+                <span class="inline_text">{% trans 'Video URLs' %}</span>
+                <span class="badgy_out">
+                    <span class="badgy">{% video_url_count video %}</span>
+                </span>
+                </a>
+            </li>
+        </ul>
+        <div id="comments-tab" style="display: none">
+            <div class="grid_9 alpha omega">
+                {% render_comment_form video %}
+                {% render_comment_list video %}
+                <div style="clear: both">
+                </div>
+            </div>
+        </div>
+        <div id="activity-tab">
+            <div class="grid_9 alpha omega">
+                {% video_activity video %}
+                <a href="{% url videos:actions_list video.video_id %}" style="margin: 10px">{% trans 'all activity' %}</a>
+            </div>
+        </div>
+        <div id="urls-tab" style="display: none">
+            {% video_url_panel %}
+        </div>
+    </div>
 {% endblock %}
 
 {% block bottom_scripts %}
-<script>
-  $(window).load(function(){
-    mirosubs.messaging.simplemessage.displayPendingMessages();
-  });
-</script>
+    <script>
+        $(window).load( function() {
+            mirosubs.messaging.simplemessage.displayPendingMessages();
+        });
+    </script>
 {% endblock %}
