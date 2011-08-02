@@ -282,3 +282,5 @@ def render_approve_all_button(video, user):
                 }),
         "label": _("Approve all"),
         }
+
+

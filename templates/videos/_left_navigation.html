@@ -5,6 +5,7 @@
                 <span class="done_indicator"></span>
                 {{ video.subtitle_language.language_display }}
                 <span class="done_percentage">({% complete_indicator video.subtitle_language %})</span>
+                <span class="moderation_pending_cound">({{video.subtitle_language.pending_moderation_count}})</span>
             </a>
         </li>
     {% endif %}
@@ -15,6 +16,7 @@
                  <span class="done_indicator"></span>
                  {{ item.get_language_display }}
                  <span class="done_percentage">({% complete_indicator item %})</span>
+                <span class="moderation_pending_cound" title="Video has pending moderation">({{item.pending_moderation_count}})</span>
              </a>
          </li>
       {% endfor %} 

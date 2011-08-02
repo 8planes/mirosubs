@@ -60,7 +60,7 @@ from videos.search_indexes import VideoSearchResult
 from utils.celery_search_index import update_search_index
 import datetime
 
-from apps.teams.moderation import user_can_moderate
+from apps.teams.moderation import user_can_moderate, get_pending_count
 
 rpc_router = RpcRouter('videos:rpc_router', {
     'VideosApi': VideosApiClass()
@@ -237,11 +237,20 @@ def video(request, video_id, video_url=None, title=None):
     # TODO: make this more pythonic, prob using kwargs
     context = widget.add_onsite_js_files({})
     context['video'] = video
+
+    video.subtitle_language().pending_moderation_count =  get_pending_count(video.subtitle_language())
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
     translations = list(video.subtitlelanguage_set.filter(had_version=True) \
         .filter(is_original=False).select_related('video'))
     translations.sort(key=lambda f: f.get_language_display())
     context['translations'] = translations
+
+    context["user_can_moderate"] = user_can_moderate(video, request.user)
+    if context["user_can_moderate"]:
+        # FIXME: use  amore efficient count
+        for l in translations:
+            l.pending_moderation_count = get_pending_count(l)
+            
     context['widget_params'] = _widget_params(request, video, language=None, video_url=video_url and video_url.effective_url)
     _add_share_panel_context_for_video(context, video)
     context['lang_count'] = video.subtitlelanguage_set.filter(has_version=True).count()
@@ -439,15 +448,24 @@ def history(request, video_id, lang=None, lang_id=None):
         context['ordering'], context['order_type'] = ordering, order_type
 
     context['video'] = video
+    video.subtitle_language().pending_moderation_count =  get_pending_count(video.subtitle_language())
     translations = list(video.subtitlelanguage_set.filter(is_original=False) \
         .filter(had_version=True).select_related('video'))
+    context["user_can_moderate"] = user_can_moderate(video, request.user)
+    if context["user_can_moderate"]:
+        # FIXME: use  amore efficient count
+        for l in translations:
+            l.pending_moderation_count = get_pending_count(l)
+            print l, l.pending_moderation_count
+            
+        
     translations.sort(key=lambda f: f.get_language_display())
     context['translations'] = translations    
     context['last_version'] = language.latest_version(public_only=False)
     context['widget_params'] = _widget_params(request, video, version_no=None, language=language)
     context['language'] = language
     context['edit_url'] = language.get_widget_url()
-    context["user_can_moderate"] = user_can_moderate(video, request.user)
+    
     _add_share_panel_context_for_history(context, video, lang)
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 

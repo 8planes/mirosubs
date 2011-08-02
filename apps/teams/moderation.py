@@ -123,4 +123,5 @@ def create_comment_for_rejection(version, msg, sender):
     return comment
     
 
-
+def get_pending_count(lang):
+    return SubtitleVersion.objects.filter(language=lang).filter(moderation_status=WAITING_MODERATION).count()

@@ -2,7 +2,7 @@
 
 {% block body_attrs %}id="video_profile"{% endblock %}
 
-{% load escapejs widget comments recent_activity paginator i18n subtitles_tags teams_tags videos_tags media_compressor %}
+{% load escapejs widget comments recent_activity paginator i18n subtitles_tags teams_tags videos_tags media_compressor moderation %}
 
 {% block css %}
     {% if video.thumbnail %}
@@ -98,6 +98,8 @@
         {% else %}
             <a class="green_button small add-translation-behavior" id="add_translation "   href="#">{% trans 'Add Translation' %}</a>
         {% endif %}
+
+       {% render_approve_all_button video user %}    
         <br /><br />
         {% upload_subtitles video %}
         <br /><br />
