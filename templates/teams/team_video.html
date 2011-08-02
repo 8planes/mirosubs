@@ -32,7 +32,10 @@
             {% if form.is_moderated_by_other_team %}
                 {% blocktrans %} This video is being moderated by team {% endblocktrans %} <a href="{% url teams:detail slug=form.is_moderated_by_other.slug %}">{{form.is_moderated_by_other_team}}</a>.
 }
+
+
             {% endif %}
+
             <p>
                 <br/>
                 <button class="green_button small"><span>{% trans 'Save' %}</span></button>
@@ -42,4 +45,8 @@
         </div>
         <div class="clearfix"></div>
     </div>
+    <script type="text/javascript"> 
+      {% include "teams/team_video.js" %}
+    </script>
+
 {% endblock %}

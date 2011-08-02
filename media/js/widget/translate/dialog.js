@@ -97,14 +97,10 @@ mirosubs.translate.Dialog.prototype.saveWorkInternal = function(closeAfterSave) 
     var that = this;
     this.getRightPanelInternal().showLoading(true);
     this.serverModel_.finish(
-        function() {
-            if (that.finishFailDialog_) {
-                that.finishFailDialog_.setVisible(false);
-                that.finishFailDialog_ = null;
-            }
-            that.getRightPanelInternal().showLoading(false);
-            that.saved_ = true;
-            that.setVisible(false);
+        function(serverMsg){
+            mirosubs.subtitle.OnSavedDialog.show(serverMsg, function(){
+                that.onWorkSaved(closeAfterSave);
+            })
         },
         function(opt_status) {
             if (that.finishFailDialog_)
@@ -115,6 +111,16 @@ mirosubs.translate.Dialog.prototype.saveWorkInternal = function(closeAfterSave) 
                     goog.bind(that.saveWorkInternal, that, closeAfterSave));
         });
 };
+mirosubs.translate.Dialog.prototype.onWorkSaved = function() {
+    if (this.finishFailDialog_) {
+        this.finishFailDialog_.setVisible(false);
+        this.finishFailDialog_ = null;
+    }
+    this.getRightPanelInternal().showLoading(false);
+    this.saved_ = true;
+    this.setVisible(false);
+}
+
 mirosubs.translate.Dialog.prototype.disposeInternal = function() {
     mirosubs.translate.Dialog.superClass_.disposeInternal.call(this);
     this.serverModel_.dispose();
