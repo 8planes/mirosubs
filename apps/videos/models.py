@@ -1077,15 +1077,15 @@ class ActionRenderer(object):
 
     def render(self, item):
         if item.action_type == Action.ADD_VIDEO:
-            info = self.redner_ADD_VIDEO(item)
+            info = self.render_ADD_VIDEO(item)
         elif item.action_type == Action.CHANGE_TITLE:
-            info = self.redner_CHANGE_TITLE(item)
+            info = self.render_CHANGE_TITLE(item)
         elif item.action_type == Action.COMMENT:
-            info = self.redner_COMMENT(item)
+            info = self.render_COMMENT(item)
         elif item.action_type == Action.ADD_VERSION:
             info = self.render_ADD_VERSION(item)
         elif item.action_type == Action.ADD_VIDEO_URL:
-            info = self.redner_ADD_VIDEO_URL(item)
+            info = self.render_ADD_VIDEO_URL(item)
         elif item.action_type == Action.ADD_TRANSLATION:
             info = self.render_ADD_TRANSLATION(item)
         elif item.action_type == Action.SUBTITLE_REQUEST:
@@ -1131,7 +1131,7 @@ class ActionRenderer(object):
         msg = _('  approved <a href="%(language_url)s">%(language)s</a> subtitles for <a href="%(video_url)s">%(video_name)s</a>') % kwargs
         return msg
         
-    def redner_ADD_VIDEO(self, item):
+    def render_ADD_VIDEO(self, item):
         if item.user:
             msg = _(u'added video <a href="%(video_url)s">%(video_name)s</a>') 
         else:
@@ -1139,7 +1139,7 @@ class ActionRenderer(object):
         
         return msg % self._base_kwargs(item)
         
-    def redner_CHANGE_TITLE(self, item):
+    def render_CHANGE_TITLE(self, item):
         if item.user:
             msg = _(u'changed title for <a href="%(video_url)s">%(video_name)s</a>') 
         else:
@@ -1147,7 +1147,7 @@ class ActionRenderer(object):
         
         return msg % self._base_kwargs(item)
     
-    def redner_COMMENT(self, item):
+    def render_COMMENT(self, item):
         kwargs = self._base_kwargs(item)
         
         if item.language:
@@ -1193,7 +1193,7 @@ class ActionRenderer(object):
         
         return msg % kwargs
     
-    def redner_ADD_VIDEO_URL(self, item):
+    def render_ADD_VIDEO_URL(self, item):
         if item.user:
             msg = _(u'added new URL for <a href="%(video_url)s">%(video_name)s</a>') 
         else:
