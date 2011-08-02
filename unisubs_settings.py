@@ -22,7 +22,7 @@ from settings import *
 from server_local_settings import *
 
 
-DEBUG = True
+DEBUG = False
 
 ADMINS = (
     ('Adam Duston', 'adam@8planes.com'),
