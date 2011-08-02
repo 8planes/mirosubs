@@ -33,6 +33,7 @@
             var sort = $.address.parameter('sort');
             $('li[val='+sort+']', $sort_menu).click();
             
+            {% block pagination_script %}
             $('.ajax-pagination').ajaxPaginator({
                 container: $('.watch-page-content'),
                 onPageChange: function(page, callback){
@@ -41,15 +42,17 @@
                     }, this);
                 },
             });                
+            {% endblock %}
         });
     </script>
+
 {% endblock %}
 
 {% block main_content %}
 
 {% search_form %}
 
-<h1><a href="{% url videos:watch_page %}">{% trans "Watch Subtitled Videos" %}</a></h1>
+<h1>{% block heading %}<a href="{% url videos:watch_page %}">{% trans "Watch Subtitled Videos" %}</a>{% endblock %}</h1>
 
 <div class="pod" id="popular_videos">
     <div class="hd clearfix">
