@@ -1,7 +1,9 @@
+{% comment %} This has to be included in a onLoad handler ! {% endcomment %}
 var APPROVE_MARKER = "moderation-set-button";
 var LOADING_TEXT = "wait ...";
 var batchURLS = [];
-
+var rejectionMarkerClass = "reject-version";
+var showsRejectionNotification = false;
 
 
 
@@ -60,10 +62,10 @@ function showMessageFromResponse(response){
  * and recrement the moderation pending notice.
  * 
  */
-function onApproveDone(el, response){
+function onApproveDone(el, response, isRejection){
     if (response.success){
+        if (!isRejection || showsRejectionNotification)
         showMessageFromResponse(response);
-
     }
     if (el){
         var parentContainer = $(el).parents("tr.moderation-row");
@@ -84,6 +86,7 @@ function sendModeration(el, extra){
     var url = $(el).attr('href');
     $(el).attr('#');
     var btn = $(el);
+    var isRejection = $(el).hasClass(rejectionMarkerClass);
     $.ajax( {
         url: url,
         dataType: 'json',
@@ -92,7 +95,7 @@ function sendModeration(el, extra){
         success: function(response){
             btn.text(previousLabel);
             btn.removeClass("disabled");
-            onApproveDone(el, response);
+            onApproveDone(el, response, isRejection);
         },
         error: function(response){
             onApproveDone(null, response);

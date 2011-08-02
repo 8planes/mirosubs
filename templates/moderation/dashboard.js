@@ -15,6 +15,7 @@ var sellectedIds = new goog.structs.Set();
 var sellectedLangIds = new goog.structs.Set();
 var sellectedEles = new goog.structs.Set();
 var disabledClassName = "disabled";
+var showsRejectionNotification = false;
 
 function refreshBatchButtonState(){
     batchRejectBt.unbind("click");
@@ -31,8 +32,11 @@ function refreshBatchButtonState(){
     }
 }
 
-function onBatchReturned(response, dialog){
-    showMessageFromResonse(response)
+function onBatchReturned(response, dialog, action){
+    if (action != ACTION_REJECTED || showsRejectionNotification){
+        showMessageFromResonse(response);
+    }
+    
     updatePendingCount(response.data.pending_count, true);
     dialog.setVisible(false);
     sellectedIds = new goog.structs.Set();
@@ -56,7 +60,7 @@ function onBatchConfirmed(action, dialog){
             action: action
         },
         success: function(response){
-            onBatchReturned(response, dialog);
+            onBatchReturned(response, dialog, action);
         }
     });
     dialog.setVisible(false);
