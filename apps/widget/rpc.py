@@ -335,7 +335,8 @@ class Rpc(BaseRpc):
             if user_can_moderate(language.video, request.user) is False:
                 user_message = """This video is moderated by %s. 
 
-# You will not see your subtitles in our widget when you leave this page-- they will only appear on our site. We have saved your work for the team moderator to review. After they approve your subtitles they will show up on our site and in the widget.""" % (new_version.video.moderated_by.name)
+You will not see your subtitles in our widget when you leave this page, they will only appear on our site. We have saved your work for the team moderator to review. After they approve your subtitles, they will show up on our site and in the widget.
+""" % (new_version.video.moderated_by.name)
         return {
             'user_message': user_message,
             'response': 'ok' }

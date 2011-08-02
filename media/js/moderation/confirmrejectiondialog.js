@@ -45,7 +45,7 @@ mirosubs.subtitle.ConfirmRejectiondDialog.prototype.createDom = function() {
            $d('p', null, 
               this.checkboxSpan_,
               goog.dom.createTextNode(
-                  ["You have chosen to decline this version. This version will be rolled back to the last approved version."  + "Please offer some words of encouragement to your contributors. Tell them why you have not approved this version and give them some points to improve on. Your comments will be displayed in the comments area."].join("</p")
+                  ["You have chosen to decline this version. This version will be rolled back to the last approved version."  + "Please offer some words of encouragement to your contributors. Tell them why you have not approved this version and give them some points to improve on. Your comments will be displayed in the comments area."].join("</p>")
                   ))));
     this.commentContent_ = 
         $d('textarea', 
