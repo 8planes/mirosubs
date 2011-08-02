@@ -18,8 +18,7 @@
             {% with lang.subtitle_count as lines_count %}
                 {% if lines_count %}  
                     <a href="{{ lang.get_absolute_url }}" class="{% complete_color lang %}">
-                        <span class="done_indicator">{% complete_indicator lang %}</span>
-                        {{ lang.language_display }}
+                        <span>{% complete_indicator lang %}{{ lang.language_display }}</span>
                     </a>
                 {% endif %}
             {% endwith %}
