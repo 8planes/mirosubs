@@ -29,7 +29,7 @@
 
 {% search_form %}
 
-<h1><a href="{% url videos:watch_page %}">{% trans "Watch Subtitled Videos" %}</a></h1>
+<h1>{% block heading %}<a href="{% url videos:watch_page %}">{% trans "Watch Subtitled Videos" %}</a>{% endblock %}</h1>
 
 <div class="pod" id="featured_videos">
     <div class="hd">

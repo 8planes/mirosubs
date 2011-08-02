@@ -15,7 +15,7 @@
 
 {% search_form %}
 
-<h1>{% trans "Watch Subtitled Videos" %}</h1>
+<h1>{% block heading %}{% trans "Watch Subtitled Videos" %}{% endblock %}</h1>
 
 <div class="pod" id="featured_videos">
     <div class="hd">
@@ -96,6 +96,8 @@
     </div><!-- // bd -->
 </div><!-- // pod -->
 <br/>
+
+{% block extra_videos %}{% endblock %}
 
 <div class="pod" id="latest_videos">
     <div class="hd">
