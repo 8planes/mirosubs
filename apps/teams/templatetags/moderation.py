@@ -158,7 +158,7 @@ def render_moderation_togggle_button(version):
     
     if approved:
         template_name = "moderation/_reject_button.html"
-        label = _("Reject")
+        label = _("Unapprove")
         url = reverse("moderation:revision-reject", kwargs={'team_id':version.video.moderated_by_id, "version_id":version.pk})
     else:
         template_name = "moderation/_approve_button.html"
