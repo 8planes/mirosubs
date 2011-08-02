@@ -131,6 +131,7 @@
         {% if user.is_staff and perms.videos.edit_video %}
             {% feature_video video %}
         {% endif %}
+        {% render_approve_all_button video user %}
         {% team_add_video_select %}
         {% render_belongs_to_team_list video %}
     </div>

@@ -1,4 +1,6 @@
 import json
+import datetime
+import time
 
 from django.shortcuts import get_object_or_404, render_to_response
 from django.contrib.auth.decorators import login_required
@@ -20,7 +22,7 @@ from apps.teams.moderation import approve_version as core_approve_version
 from apps.teams.moderation import reject_version as core_reject_version
 from apps.teams.templatetags.moderation import render_moderation_togggle_button, render_moderation_icon
 
-from apps.videos.models import SubtitleVersion
+from apps.videos.models import SubtitleVersion, Video
 from apps.teams.models import Team, TeamVideo
 from apps.teams.moderation_forms import ModerationListSearchForm
 from haystack.query import SearchQuerySet
@@ -173,3 +175,17 @@ def affect_selected(request, team):
             res["pending_count"] = team.get_pending_moderation().count()
             res["msg"] = "Subs moderated"
             return res
+
+@to_json
+@_check_moderate_permission
+@require_POST
+def approve_all_for_video(request, team, video_id, timestamp):
+    pending = team.get_pending_moderation(video=Video.objects.get(video_id=video_id)).filter(datetime_started__lte=datetime.datetime.fromtimestamp(float(timestamp)))
+    res = {
+        "count":pending.count(),
+        'msg':  "Version approved, well done!",
+        }
+    for version in list(pending):
+        _set_moderation(request, team, version.id, APPROVED)
+    return res
+    

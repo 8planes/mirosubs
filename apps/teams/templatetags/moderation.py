@@ -16,7 +16,9 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
+import datetime
 import json
+import time
 
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -256,3 +258,27 @@ def render_moderation_search_results(result_list):
         "result_list": result_list
     }
 
+@register.inclusion_tag("moderation/_approve_all_for_video.html")
+def render_approve_all_button(video, user):
+    """
+    Renders a `approve all` button that when clicked, will approve all
+    languages for the given video
+    If the video not under moderation or the user does not have
+    authorization to moderate, no button will be rendered.
+    We pass the time this list was generated so that moderators do not
+    moderate recently submitted content they haven't had a chance
+    to view.
+    """
+    if not video.moderated_by or not _user_can_moderate(video, user):
+        return {}
+    pending = video.moderated_by.get_pending_moderation()
+    if not pending.exists():
+        return {}
+    return {
+        "url": reverse("moderation:approve-all-for-video", kwargs={
+                'team_id':video.moderated_by.pk,
+                "video_id":video.video_id,
+                "timestamp": int(time.mktime(datetime.datetime.now().timetuple())),
+                }),
+        "label": _("Approve all"),
+        }

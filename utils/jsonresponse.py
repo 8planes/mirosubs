@@ -8,6 +8,7 @@ import datetime
 from django.db import models
 from django.core.serializers.json import DateTimeAwareJSONEncoder
 from django.conf import settings
+from django.core.exceptions import SuspiciousOperation
 from django.utils.functional import Promise, wraps
 from django.utils.encoding import force_unicode
 from django.http import HttpResponse

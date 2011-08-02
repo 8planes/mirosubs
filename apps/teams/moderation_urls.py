@@ -34,4 +34,5 @@ urlpatterns = patterns(
     url(r'team/(?P<team_id>\d+)//lang/(?P<lang_id>\d+)/revisions/reject-before/(?P<before_rev>\d+)/$', 'batch_reject_version', name='revision-reject-batch-until'),
     url(r'team/(?P<team_id>\d+)/revision/(?P<version_id>\d+)/remove-moderation/$', 'remove_moderation_version', name='revision-remove-moderation'),
     url(r'team/(?P<team_id>\d+)/affect-selected/$', 'affect_selected', name='affect-selected'),
+    url(r'team/(?P<team_id>\d+)/approve-all-for-video/(?P<video_id>\w+)/before/(?P<timestamp>\d+)/$', 'approve_all_for_video', name='approve-all-for-video'),
 )
