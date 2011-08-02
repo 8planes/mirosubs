@@ -85,14 +85,14 @@ def reject_version(request, team, version_id):
         REJECTED,
         rejection_message=rejection_message,
         sender=request.user)
-    res['msg'] = "Version approved, well done!"
+    res['msg'] = "Version rejected!"
     return res
 
 @to_json
 @_check_moderate_permission
 @require_POST
 def remove_moderation_version(request, team, version_id):
-    return _set_moderation(request, team, version_id, WAITING_MODERATION, msg="Moderation data deleted")
+    return _set_moderation(request, team, version_id, WAITING_MODERATION, msg="Moderation data removed")
 
 def _batch_set_moderation(request, team, status, before_rev=None, lang_id= None):
     if before_rev is not None:
@@ -112,7 +112,7 @@ def _batch_set_moderation(request, team, status, before_rev=None, lang_id= None)
         "lang_id":language_id,
         "count": len(versions),
         "pending_count" : team.get_pending_moderation().count(),
-        "msg":"Moderation statuses approved",
+        "msg":"Versions approved, well done!",
     }
 
 @to_json
@@ -120,7 +120,7 @@ def _batch_set_moderation(request, team, status, before_rev=None, lang_id= None)
 @require_POST
 def batch_approve_version(request, team, before_rev=None, lang_id=None):
     s = _batch_set_moderation(request, team, APPROVED, before_rev, lang_id)
-    s["msg"] = "Subs approved."
+    s["msg"] = "Versions approved, well done!"
     return s
 
 @to_json
@@ -128,7 +128,7 @@ def batch_approve_version(request, team, before_rev=None, lang_id=None):
 @require_POST
 def batch_reject_version(request, team, before_rev=None, lang_id=None):
     s = _batch_set_moderation(request, team, REJECTED, before_rev, lang_id)
-    s["msg"] = "Subs rejected."
+    s["msg"] = "Versions rejected."
     return s
 
 def _get_moderation_results(request, team):
@@ -172,5 +172,4 @@ def affect_selected(request, team):
             res = {}
             res["pending_count"] = team.get_pending_moderation().count()
             res["msg"] = "Subs moderated"
-            return res                    
-                    
+            return res
