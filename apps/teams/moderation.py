@@ -100,7 +100,6 @@ def approve_version( version, team, user, updates_meta=True):
 
 def reject_version(version, team, user, rejection_message=None, sender=None, updates_meta=True, ):
     v = _set_version_moderation_status(version, team, user, REJECTED, updates_meta)
-
     latest = version.language.latest_version(public_only=False)
     if latest and latest.moderation_status == REJECTED:
         # rollback to the last moderated status
@@ -110,6 +109,7 @@ def reject_version(version, team, user, rejection_message=None, sender=None, upd
     if bool(rejection_message) and bool(sender):
         comment = create_comment_for_rejection(version, rejection_message, sender)
         notify_comment_by_email(comment, version.language, moderator = sender, is_rejection=True )
+    Action.create_rejected_video_handler(version, user)    
     return v
 
 def create_comment_for_rejection(version, msg, sender):

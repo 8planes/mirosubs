@@ -1091,7 +1091,9 @@ class ActionRenderer(object):
         elif item.action_type == Action.SUBTITLE_REQUEST:
             info = self.render_SUBTITLE_REQUEST(item)
         elif item.action_type == Action.APPROVE_VERSION:
-            info = self.render_APPROVE_VERSION(item)    
+            info = self.render_APPROVE_VERSION(item)
+        elif item.action_type == Action.REJECT_VERSION:
+            info = self.render_REJECT_VERSION(item)                
 
         else:
             info = ''
@@ -1119,10 +1121,14 @@ class ActionRenderer(object):
                     
 
 
+    def render_REJECT_VERSION(self, item):
+        kwargs = self._base_kwargs(item)
+        msg = _('  rejected <a href="%(language_url)s">%(language)s</a> subtitles for <a href="%(video_url)s">%(video_name)s</a>') % kwargs
+        return msg
+    
     def render_APPROVE_VERSION(self, item):
         kwargs = self._base_kwargs(item)
         msg = _('  approved <a href="%(language_url)s">%(language)s</a> subtitles for <a href="%(video_url)s">%(video_name)s</a>') % kwargs
-        print msg
         return msg
         
     def redner_ADD_VIDEO(self, item):
@@ -1218,6 +1224,7 @@ class Action(models.Model):
     SUBTITLE_REQUEST = 7
     APPROVE_VERSION = 8
     ADD_CONTRIBUTOR = 9
+    REJECT_VERSION = 10
     TYPES = (
         (ADD_VIDEO, _(u'add video')),
         (CHANGE_TITLE, _(u'change title')),
@@ -1228,6 +1235,7 @@ class Action(models.Model):
         (SUBTITLE_REQUEST, _(u'request subtitles')),
         (APPROVE_VERSION, _(u'approve version')),
         (ADD_CONTRIBUTOR, _(u'add contributor')),
+        (REJECT_VERSION, _(u'reject version')),
     )
     
     renderer = ActionRenderer('videos/_action_tpl.html')
@@ -1359,6 +1367,16 @@ class Action(models.Model):
         obj.created = datetime.now()
         obj.save()
 
+
+    @classmethod
+    def create_rejected_video_handler(cls, version, moderator,  **kwargs):
+        obj = cls(video=version.video)
+        obj.language = version.language
+        obj.user = moderator
+        obj.action_type = cls.REJECT_VERSION
+        obj.created = datetime.now()
+        obj.save()
+        
 
     @classmethod
     def create_approved_video_handler(cls, version, moderator,  **kwargs):

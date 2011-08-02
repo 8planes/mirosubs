@@ -1194,6 +1194,18 @@ class TestBusinessLogic( BaseTestModeration):
         self.assertEquals(count + 1, Action.objects.all().count())
         act  = Action.objects.all().order_by("-created")[0]
         act.action_type == Action.APPROVE_VERSION
+
+
+    def test_rejection_activity_stream(self):
+        member = TeamMember(user=self.user, team=self.team, role=TeamMember.ROLE_MANAGER)
+        member.save()
+        add_moderation(self.video, self.team, self.user)
+        v1 = self._create_versions(self.video.subtitle_language(), num_versions=1)[0]
+        count = Action.objects.all().count()
+        reject_version(v1, self.team, self.user)
+        self.assertEquals(count + 1, Action.objects.all().count())
+        act  = Action.objects.all().order_by("-created")[0]
+        act.action_type == Action.REJECT_VERSION
         
 
 class TestModerationViews(BaseTestModeration):
