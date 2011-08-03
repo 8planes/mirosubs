@@ -97,6 +97,7 @@ class TestSearch(TestCase):
         rdata = RpcMultiValueDict(dict(q=u' ', video_lang='en'))
         result = rpc.search(rdata, self.user, testing=True)['sqs']
         
+        self.assertTrue(len(result))
         for video in SearchQuerySet().models(Video):
             if video.video_language == 'en':
                 self.assertTrue(video.object in [item.object for item in result])
@@ -104,9 +105,9 @@ class TestSearch(TestCase):
         rdata = RpcMultiValueDict(dict(q=u' ', langs='en'))
         result = rpc.search(rdata, self.user, testing=True)['sqs']
         
+        self.assertTrue(len(result))
         for video in SearchQuerySet().models(Video):
             if video.languages and 'en' in video.languages:
-                print video.languages
                 self.assertTrue(video.object in [item.object for item in result])        
             
     def test_rpc(self):
