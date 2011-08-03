@@ -228,7 +228,6 @@ def remove_disabled():
         sudo('/etc/init.d/cron start')
 
 def update_web():
-    #update_translations()
     for host in env.web_hosts:
         env.host_string = host
         with cd('{0}/mirosubs'.format(env.web_dir)):
