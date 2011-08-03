@@ -168,7 +168,7 @@
         "model": "videos.subtitlelanguage", 
         "fields": {
             "writelock_owner": null, 
-            "language": "", 
+            "language": "en", 
             "writelock_session_key": "", 
             "is_original": true, 
             "is_forked": false, 
@@ -183,7 +183,7 @@
         "model": "videos.subtitlelanguage", 
         "fields": {
             "writelock_owner": null, 
-            "language": "", 
+            "language": "ru", 
             "writelock_session_key": "", 
             "is_original": true, 
             "is_forked": false, 
