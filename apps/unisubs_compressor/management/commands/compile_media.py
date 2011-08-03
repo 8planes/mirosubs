@@ -59,7 +59,7 @@ def call_command(command):
     return process.communicate()
 
 def get_cache_dir():
-    commit_hash = settings.LAST_COMMIT_GUID.split("/")[1]
+    commit_hash = get_current_commit_hash()
     return os.path.join(settings.MEDIA_ROOT, settings.COMPRESS_OUTPUT_DIRNAME, commit_hash)
 
 def get_cache_base_url():
