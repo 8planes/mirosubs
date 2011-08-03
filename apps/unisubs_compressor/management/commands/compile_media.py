@@ -67,15 +67,11 @@ def get_cache_base_url():
 class Command(BaseCommand):
 
     def create_cache_dir(self):
-        dir_path = get_cache_dir()
-        if os.path.exists(dir_path) is True:
-            # we need to move this to a unique place, since on some environments
-            # (namely dev) differene users with different permissions will compile
-            # (and therefore move the old artifac ).
-            to_name = os.path.join("/tmp", "static-%s-%s" % (get_current_commit_hash(), int(time.time()))) 
-            shutil.move(dir_path, to_name )
-        os.makedirs(dir_path)
-        return dir_path
+        commit_hash = settings.LAST_COMMIT_GUID.split("/")[1]
+        temp = os.path.join("/tmp", "static-%s-%s" % (commit_hash, time.time()))
+        os.makedirs(temp)
+
+        return temp
 
     def compile_css_bundle(self, bundle_name, bundle_type, files):
         file_list = [os.path.join(settings.MEDIA_ROOT, x) for x in files]
@@ -113,7 +109,9 @@ class Command(BaseCommand):
 
         deps = [" --js %s " % os.path.join(JS_LIB, file) for file in files]
         calcdeps_js = os.path.join(JS_LIB, 'js', 'mirosubs-calcdeps.js')
-        compiled_js = os.path.join(settings.MEDIA_ROOT, "js" , output_file_name)
+        compiled_js = os.path.join(self.base_dir, "js" , output_file_name)
+        if not os.path.exists(os.path.dirname(compiled_js)):
+            os.makedirs(os.path.dirname(compiled_js))
         compiler_jar = COMPILER_PATH
 
         logging.info("Calculating closure dependencies")
@@ -169,8 +167,8 @@ class Command(BaseCommand):
 
         if len(err) > 0:
             logging.info("stderr: %s" % err)
-
-        logging.info("Successfully compiled {0}".format(output_file_name))        
+        else:
+            logging.info("Successfully compiled {0}".format(output_file_name))        
         return
     
     def compile_media_bundle(self, bundle_name, bundle_type, files):
@@ -181,14 +179,17 @@ class Command(BaseCommand):
         for dirname in os.listdir(mr):
             original_path = os.path.join(mr, dirname)
             if os.path.isdir(original_path) and dirname not in SKIP_COPING_ON :
+                dest =  os.path.join(self.base_dir, dirname)
+                if os.path.exists(dest):
+                    shutil.rmtree(dest)
                 shutil.copytree(original_path,
-                        os.path.join(self.base_dir, dirname),
+                         dest,
                          ignore=shutil.ignore_patterns(*SKIP_COPING_ON))
          # we need to copy all js, ideally this can be refactored in other libs
 
         for filename in NO_UNIQUE_URL:
             
-            target_base = os.path.join(settings.MEDIA_ROOT, settings.COMPRESS_OUTPUT_DIRNAME)
+            target_base = self.base_dir
             source_path = os.path.join(mr,  filename)
             target_path = os.path.join(target_base,  filename)
             target_dir = os.path.dirname(target_path)
@@ -204,5 +205,9 @@ class Command(BaseCommand):
         for bundle_name, data in bundles.items():
             self.compile_media_bundle( bundle_name, data['type'], data["files"])
         self.copy_dirs()
+
+        # we now move the old temp dir to it's final destination
+        final_path = get_cache_dir()
+        shutil.move(self.base_dir, final_path)
         
 
