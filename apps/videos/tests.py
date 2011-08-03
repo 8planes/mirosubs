@@ -35,6 +35,8 @@ import os
 from django.db.models import ObjectDoesNotExist 
 from django.core.management import call_command
 from django.core import mail
+from videos.rpc import VideosApiClass
+from widget.tests import RequestMockup
 
 math_captcha.forms.math_clean = lambda form: None
 
@@ -996,6 +998,37 @@ class ViewsTest(WebUseTest):
             response = self.client.post(url)
             self.assertEqual(response.status_code, 200)
 
+class VolunteerRpcTest(TestCase):
+
+    fixtures = ['staging_users.json', 'staging_videos.json',
+                'test-userlangs.json']
+
+    def setUp(self):
+        from teams.tests import reset_solr
+        from utils.translation import get_user_languages_from_request
+
+        self.user = User.objects.all()[0]
+        self.request = RequestMockup(self.user)
+        self.user_langs = get_user_languages_from_request(self.request)
+        reset_solr()
+        ## FIXME: Add fixtures which have some subtitles, so that they are included
+        ## in the solr index
+        ## This should yield a non empty queryset
+        #from videos.models import SubtitleLanguage
+        #print SubtitleLanguage.objects.filter(subtitle_count__gt=0)
+
+
+    def test_get_volunteer_sqs(self):
+
+        rpc = VideosApiClass()
+        response = rpc._get_volunteer_sqs(self.request, self.user)
+        response_db =  Video.objects.filter(
+                subtitlelanguage__language__in=self.user_langs,
+                subtitlelanguage__subtitle_count__gt=0)
+
+        # The number of videos resulting from database search should be same
+        # as that from the solr search
+        self.assertEqual(response_db.count(), len(response))
 
 #Testings VideoType classes
 from videos.types.youtube import YoutubeVideoType
