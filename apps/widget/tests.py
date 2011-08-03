@@ -51,6 +51,8 @@ class RequestMockup(object):
         self.user = user
         self.session = {}
         self.browser_id = browser_id
+        self.COOKIES = {}
+        self.META = {}
 
 class NotAuthenticatedUser:
     def __init__(self):
@@ -1036,13 +1038,14 @@ class TestRpc(TestCase):
         response = null_rpc.start_editing(request, 'sadfdsf', 'en')
         self.assertEquals(True, response['can_edit'])
 
-    #def test_fetch_request_dialog_contents(self):
-        #request = RequestMockup(self.user_0)
-        #request.COOKIES = {settings.USER_LANGUAGES_COOKIE_NAME: ['en']}
-        #video = Video.objects.get(id=self.video_pk)
-        #response = rpc.fetch_request_dialog_contents(request,
-                                                     #video.video_id)
-        #self.assertEquals(True, response['all_languages'] or False)
+    def test_fetch_request_dialog_contents(self):
+        request = RequestMockup(self.user_0)
+        request.COOKIES = {settings.USER_LANGUAGES_COOKIE_NAME: ['en']}
+        video = Video.objects.get(id=self.video_pk)
+        response = rpc.fetch_request_dialog_contents(request,
+                                                     video.video_id)
+        self.assertEquals(len(settings.ALL_LANGUAGES),
+                          len(response['all_languages']) or False)
 
     def test_submit_subtitle_request(self):
         request = RequestMockup(self.user_0)
