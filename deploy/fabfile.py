@@ -115,7 +115,6 @@ def migrate(app_name=''):
                     env.static_dir))
         run('yes no | {0}/env/bin/python manage.py migrate {1} --settings=unisubs_settings'.format(
                 env.static_dir, app_name))
-    bounce_memcached()
 
 def run_command(command):
     env.host_string = DEV_HOST
@@ -206,9 +205,12 @@ def _git_pull():
     run('git pull --rebase')
     run('chgrp pcf-web -R .git 2> /dev/null; /bin/true')
     run('chmod g+w -R .git 2> /dev/null; /bin/true')
-    run('python deploy/create_commit_file.py')
     _clear_permissions('.')
 
+def _reload_app_server():
+    run('python deploy/create_commit_file.py')
+    run('touch deploy/unisubs.wsgi')
+    
 def add_disabled():
     for host in env.web_hosts:
         env.host_string = host
@@ -237,12 +239,13 @@ def update_web():
             env.warn_only = False
             with cd('{0}/mirosubs/deploy'.format(env.web_dir)):
                 run('. ../../env/bin/activate && pip install -q -r requirements.txt')
-            run('touch deploy/unisubs.wsgi')
+            _reload_app_server()
     if env.admin_dir is not None:
         env.host_string = ADMIN_HOST
         with cd(os.path.join(env.admin_dir, 'mirosubs')):
             _git_pull()
     _bounce_celeryd()
+    bounce_memcached()
     test_services()
 
 def bounce_memcached():
@@ -302,12 +305,6 @@ def _update_static(dir):
         
 def update_static():
     env.host_string = DEV_HOST
-
-    # we need to run this, as media settings will use the lastest commit guid
-    # to prefix static media 
-    with cd(os.path.join(env.static_dir, 'mirosubs')):
-        run('python deploy/create_commit_file.py')
-
     if env.s3_bucket is not None:
         with cd(os.path.join(env.static_dir, 'mirosubs')):
             _update_static(env.static_dir)
