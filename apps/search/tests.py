@@ -105,7 +105,8 @@ class TestSearch(TestCase):
         result = rpc.search(rdata, self.user, testing=True)['sqs']
         
         for video in SearchQuerySet().models(Video):
-            if 'en' in video.languages:
+            if video.languages and 'en' in video.languages:
+                print video.languages
                 self.assertTrue(video.object in [item.object for item in result])        
             
     def test_rpc(self):
