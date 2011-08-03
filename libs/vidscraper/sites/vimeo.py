@@ -223,7 +223,7 @@ def scrape_publish_date(url, shortmem={}):
     return datetime.datetime.strptime(
         shortmem['api_data']['upload_date'], '%Y-%m-%d %H:%M:%S')
 
-VIMEO_REGEX = re.compile(r'https?://([^/]+\.)?vimeo.com/(channels/[\w]+#)?(?P<video_id>\d+)')
+VIMEO_REGEX = re.compile(r'https?://([^/]+\.)?vimeo.com/(channels/[\w]+[#|/])?(?P<video_id>\d+)')
 SUITE = {
     'regex': VIMEO_REGEX,
     'funcs': {
