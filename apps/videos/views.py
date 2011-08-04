@@ -237,8 +237,9 @@ def video(request, video_id, video_url=None, title=None):
     # TODO: make this more pythonic, prob using kwargs
     context = widget.add_onsite_js_files({})
     context['video'] = video
-
-    video.subtitle_language().pending_moderation_count =  get_pending_count(video.subtitle_language())
+    original = video.subtitle_language()
+    if original:
+        original.pending_moderation_count =  get_pending_count(video.subtitle_language())
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
     translations = list(video.subtitlelanguage_set.filter(had_version=True) \
         .filter(is_original=False).select_related('video'))
@@ -448,7 +449,9 @@ def history(request, video_id, lang=None, lang_id=None):
         context['ordering'], context['order_type'] = ordering, order_type
 
     context['video'] = video
-    video.subtitle_language().pending_moderation_count =  get_pending_count(video.subtitle_language())
+    original = video.subtitle_language()
+    if original:
+        original.pending_moderation_count =  get_pending_count(video.subtitle_language())
     translations = list(video.subtitlelanguage_set.filter(is_original=False) \
         .filter(had_version=True).select_related('video'))
     context["user_can_moderate"] = user_can_moderate(video, request.user)
@@ -456,8 +459,6 @@ def history(request, video_id, lang=None, lang_id=None):
         # FIXME: use  amore efficient count
         for l in translations:
             l.pending_moderation_count = get_pending_count(l)
-            print l, l.pending_moderation_count
-            
         
     translations.sort(key=lambda f: f.get_language_display())
     context['translations'] = translations    
