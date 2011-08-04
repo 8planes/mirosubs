@@ -247,7 +247,7 @@ class VideosApiClass(object):
             return Error(_(u'Title can\'t be empty'))
         
         try:
-            sl = SubtitleLanguage.objects.get(id=language_id)
+            sl = SubtitleLanguage.objects.filter(is_original=False).get(id=language_id)
         except SubtitleLanguage.DoesNotExist:
             return Error(_(u'Subtitle language does not exist'))
         

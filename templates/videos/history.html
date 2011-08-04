@@ -105,7 +105,7 @@
 {% block main_content %}
     <h2 class="main-title">
         <a href="{{ video.get_absolute_url }}" class="title-container">{{ language.get_title_display }}</a>
-        {% if not language.standard_language and user.is_authenticated %}
+        {% if not language.standard_language and not language.is_original and user.is_authenticated %}
         <a class="edit-title" href="#" style="color: #3196AD !important; text-decoration: underline;">{% trans 'edit title' %}</a>
         {% endif %}
     </h2>
