@@ -1,0 +1,90 @@
+
+ [
+    {
+        "pk": 2, 
+        "model": "teams.team", 
+        "fields": {
+            "is_visible": true, 
+            "video": null, 
+            "description": "Team for testing", 
+            "created": "2010-11-11 10:52:09", 
+            "points": 0, 
+            "membership_policy": 4, 
+            "video_policy": 1, 
+            "highlight": false, 
+            "logo": "", 
+            "slug": "volunteer2", 
+            "name": "Volunteer2"
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "teams.teammember", 
+        "fields": {
+            "user": 9998, 
+            "role": "manager", 
+            "team": 2
+        }
+    },  
+    {
+        "pk": 5, 
+        "model": "teams.teammember", 
+        "fields": {
+            "user": 9999, 
+            "role": "manager", 
+            "team": 2
+        }
+    },      
+    {
+        "pk": 5, 
+        "model": "teams.teammember", 
+        "fields": {
+            "user": 2, 
+            "role": "member", 
+            "team": 2
+        }
+    },         
+    {
+        "pk": 3, 
+        "model": "teams.teamvideo", 
+        "fields": {
+            "all_languages": false, 
+            "description": "", 
+            "title": "", 
+            "video": 5, 
+            "team": 2, 
+            "thumbnail": "", 
+            "added_by": 9999,
+            "created": "2010-11-11 10:52:09"
+        }
+    },
+    {
+        "pk": 4, 
+        "model": "teams.teamvideo", 
+        "fields": {
+            "all_languages": false, 
+            "description": "", 
+            "title": "", 
+            "video": 6, 
+            "team": 2, 
+            "thumbnail": "", 
+            "added_by": 9999,
+            "created": "2010-11-11 10:52:09"
+        }
+    },
+    {
+        "pk": 5, 
+        "model": "teams.teamvideo", 
+        "fields": {
+            "all_languages": false, 
+            "description": "", 
+            "title": "", 
+            "video": 7, 
+            "team": 2, 
+            "thumbnail": "", 
+            "added_by": 9999,
+            "created": "2010-11-11 10:52:09"
+        }
+    }            
+]
+

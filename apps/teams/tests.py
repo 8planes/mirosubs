@@ -1209,7 +1209,7 @@ class TestBusinessLogic( BaseTestModeration):
         
 
 class TestModerationViews(BaseTestModeration):
-    fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
+    fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json", "moderation.json"]
      
     def setUp(self):
         self.auth = dict(username='admin', password='admin')
@@ -1266,6 +1266,19 @@ class TestModerationViews(BaseTestModeration):
         lang.save()
         [ self._make_subs(lang, 5) for x in xrange(0, 3)]
         self.assertEquals(self.team.get_pending_moderation().count(), 6)
+        # make sure pending count is for only one team
+        tv = TeamVideo.objects.exclude(team=self.team).filter(video__moderated_by__isnull=True)[0]
+        o, c = TeamMember.objects.get_or_create(user=self.auth_user, team=tv.team)
+        o.role=TeamMember.ROLE_MANAGER
+        o.save()
+        new_team = tv.team
+        add_moderation(tv.video, tv.team, self.auth_user)
+
+        lang = SubtitleLanguage(video=tv.video, language="pt", title="a")
+        lang.save()
+        [ self._make_subs(lang, 5) for x in xrange(0, 3)]
+        self.assertEquals(self.team.get_pending_moderation().count(), 6)
+        self.assertEquals(tv.team.get_pending_moderation().count(), 3)
 
     def test_moderated_subs_approve_one(self):
         video = Video.objects.get(pk=4)
@@ -1366,7 +1379,7 @@ class TestModerationViews(BaseTestModeration):
 
         version2 = self._create_versions(self.video.subtitle_language() , num_versions=1)[0]
         self.reject_url = reverse("moderation:revision-reject", kwargs={
-                "team_id": tv.pk,
+                "team_id": tv.team.pk,
                 "version_id": version2.pk,
         })
         response = self.client.post(self.reject_url, {"message": "bad version"}, HTTP_X_REQUESTED_WITH= "XMLHttpRequest", follow=True)
