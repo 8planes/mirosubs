@@ -91,6 +91,17 @@ def add(a, b):
     return (a, b, a+b)
 
 @task
+def test_task(n):
+    if not n:
+        print '.'
+    
+    from time import sleep
+    
+    for i in xrange(n):
+        print '.',
+        sleep(0.5)
+
+@task
 def raise_exception(msg, **kwargs):
     print "TEST TASK FOR CELERY. RAISE EXCEPTION WITH MESSAGE: %s" % msg
     logger = raise_exception.get_logger()

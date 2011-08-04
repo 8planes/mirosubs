@@ -25,6 +25,7 @@ from search.rpc import SearchApiClass
 from auth.models import CustomUser as User
 from utils.rpc import RpcMultiValueDict
 from django.core.urlresolvers import reverse
+from videos.tasks import video_changed_tasks
 
 def reset_solr():
     # cause the default site to load
@@ -83,7 +84,32 @@ class TestSearch(TestCase):
 
         rdata = RpcMultiValueDict(dict(q=u' '))
         rpc.search(rdata, self.user, testing=True)['sqs']
+    
+    def test_filtering(self):
+        self.assertTrue(Video.objects.count())
+        for video in Video.objects.all():
+            video_changed_tasks.delay(video.pk)
         
+        reset_solr()
+        
+        rpc = SearchApiClass()
+        
+        rdata = RpcMultiValueDict(dict(q=u' ', video_lang='en'))
+        result = rpc.search(rdata, self.user, testing=True)['sqs']
+        
+        self.assertTrue(len(result))
+        for video in SearchQuerySet().models(Video):
+            if video.video_language == 'en':
+                self.assertTrue(video.object in [item.object for item in result])
+        
+        rdata = RpcMultiValueDict(dict(q=u' ', langs='en'))
+        result = rpc.search(rdata, self.user, testing=True)['sqs']
+        
+        self.assertTrue(len(result))
+        for video in SearchQuerySet().models(Video):
+            if video.languages and 'en' in video.languages:
+                self.assertTrue(video.object in [item.object for item in result])        
+            
     def test_rpc(self):
         rpc = SearchApiClass()
         rdata = RpcMultiValueDict(dict(q=u'BBC'))
