@@ -138,6 +138,7 @@
                     <option {% ifequal choice.0  member.role %}selected="selected" {% endifequal %} value="{{choice.0}}">{{choice.1}}</option>
                     {% endfor %}
                   </select>
+                  <img class="role-change-help" src="{{MEDIA_URL}}images/brain.gif" title="{% trans '* Manager: This role has access to all team management functions including managing team members and approving moderated subtitles.&#13;* Contributor: This is the typical subtitle contributor role that applies to most members.&#13;* Member: This a special role is for team members with a high level of accuracy. When a trusted member adds subtitles to a moderated video the subtitles are automatically approved without review by the team manager.' %}"/>
                   {% else %}
                   {% trans member.role %}
                   {% endif %}
