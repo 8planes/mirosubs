@@ -9,8 +9,8 @@ from django.db.models import F
 from django.utils.translation import ugettext_lazy as _
 from haystack import site
 
-#@periodic_task(run_every=crontab(minute=0, hour=6))
-@periodic_task(run_every=timedelta(seconds=60))
+@periodic_task(run_every=crontab(minute=0, hour=6))
+#@periodic_task(run_every=timedelta(seconds=60))
 def add_videos_notification(*args, **kwargs):
     from teams.models import TeamVideo, Team
     
