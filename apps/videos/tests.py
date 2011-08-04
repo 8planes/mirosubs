@@ -1005,11 +1005,9 @@ class VolunteerRpcTest(TestCase):
 
     def setUp(self):
         from teams.tests import reset_solr
-        from utils.translation import get_user_languages_from_request
 
         self.user = User.objects.all()[0]
         self.request = RequestMockup(self.user)
-        self.user_langs = get_user_languages_from_request(self.request)
         reset_solr()
         ## FIXME: Add fixtures which have some subtitles, so that they are included
         ## in the solr index
@@ -1022,14 +1020,6 @@ class VolunteerRpcTest(TestCase):
 
         rpc = VideosApiClass()
         response = rpc._get_volunteer_sqs(self.request, self.user)
-
-        ## A completely analogus db query to the search query
-        # TODO: Take into account video_language analogy.
-        #db_query = Q(subtitlelanguage__subtitle_count__gt=0) | Q(
-            #subtitlelanguage__is_original=True)
-        #response_db =  Video.objects.filter(
-            #subtitlelanguage__language__in=self.user_langs). \
-            #filter(db_query)
 
         self.assertEqual(1, len(response))
 
