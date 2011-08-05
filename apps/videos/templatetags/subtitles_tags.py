@@ -68,7 +68,10 @@ def complete_indicator(language):
 @register.simple_tag
 def complete_color(language):
     if language.is_original or language.is_forked:
-        return 'full'
+        if language.is_complete:
+            return 'eighty'
+        else:
+            return 'full'
     
     val = language.percent_done
     if val >= 95:
