@@ -29,7 +29,7 @@ import re
 import random
 from uuid import uuid4
 from lxml import etree
-from utils.clean_xml import htmlentitydecode
+from utils.html import unescape as unescape_html
 
 # see video.models.Subtitle..start_time
 MAX_SUB_TIME = (60 * 60 * 99) -1 
@@ -169,7 +169,7 @@ class YoutubeXMLParser(SubtitleParser):
         output = {}
         output['start_time'] = float(item.get('start'))
         output['end_time'] = output['start_time'] + float(item.get('dur'))
-        output['subtitle_text'] = htmlentitydecode(item.text)
+        output['subtitle_text'] = unescape_html(item.text)
         return output
         
 class YoutubeSubtitleParser(SubtitleParser):
@@ -208,7 +208,6 @@ class YoutubeSubtitleParser(SubtitleParser):
 from xml.dom.minidom import parseString
 from xml.parsers.expat import ExpatError
 from django.utils.html import strip_tags
-from utils.clean_xml import htmlentitydecode
 
 class STSubtitleParser(SubtitleParser):
 
@@ -234,7 +233,7 @@ class STSubtitleParser(SubtitleParser):
     def _get_data(self, node):
 
         output = {
-            'subtitle_text': htmlentitydecode(strip_tags(node.toxml()).strip())
+            'subtitle_text': unescape_html(strip_tags(node.toxml()).strip())
         }
         output['start_time'] = self._get_time(node.getAttribute('timestamp'))
         output['end_time'] = self._get_time(node.getAttribute('end_timestamp'))
