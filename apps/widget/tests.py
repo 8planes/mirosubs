@@ -53,6 +53,7 @@ class RequestMockup(object):
         self.browser_id = browser_id
         self.COOKIES = {}
         self.META = {}
+        self.GET = {}
 
 class NotAuthenticatedUser:
     def __init__(self):

@@ -85,7 +85,9 @@ class TeamVideoLanguagesIndex(SearchIndex):
         return self.prepared_data
 
     def prepares_moderation_info(self, obj, prepared_data):
-        self.prepared_data["needs_moderation"] = obj.video.moderated_by == obj.team and obj.team.get_pending_moderation().filter(language__video=obj.video).count() > 0
+        mod_on_same_team =  obj.video.moderated_by == obj.team
+        on_mod = obj.team.get_pending_moderation().filter(language__video=obj.video).count() > 0
+        self.prepared_data["needs_moderation"] =  mod_on_same_team and on_mod
 
         self.moderation_languages_urls = []
         self.moderation_languages_names = []
@@ -96,6 +98,7 @@ class TeamVideoLanguagesIndex(SearchIndex):
                                                             subtitleversion__moderation_status=WAITING_MODERATION).distinct("language"))
         if len(pending_languages) == 0 or self.prepared_data["needs_moderation"] is False:
             return
+
         prepared_data['moderation_languages_names'] =  []
         prepared_data['moderation_languages_pks'] =  []
         moderation_version_info = []

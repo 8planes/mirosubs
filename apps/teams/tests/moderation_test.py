@@ -573,6 +573,14 @@ class TestSubtitleVersions(BaseTestModeration):
         
 
 class TestDashboard(TestSubtitleVersions, BaseTestModeration):
+    fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json", "moderation.json"]
+
+    def tearDown(self):
+        super(TestSubtitleVersions, self).tearDown()
+        from haystack import backend
+        sb = backend.SearchBackend()
+        sb.clear()
+        
     def test_pending_count(self):
         self.assertEquals(self.team.get_pending_moderation().count() , 0)
         tv = self.team.teamvideo_set.all()[0]
@@ -580,6 +588,77 @@ class TestDashboard(TestSubtitleVersions, BaseTestModeration):
         self.assertEquals(self.team.get_pending_moderation().count() , 0)
         self._create_versions( tv.video.subtitle_language(), num_versions=2)
         self.assertEquals(self.team.get_pending_moderation().count(), 2)
+
+    def _dump_mod(self, team):
+        from haystack.query import SearchQuerySet
+        from apps.teams.moderation_views import _get_moderation_results
+        print "Search for team %s" % team
+        form, results = _get_moderation_results(RequestMockup(self.user), team)
+        print "\tresults, len %s:" % len(results)
+        for x in results:
+            print "\t video:%s, tv:%s " %(x.video_pk, x.team_video_pk)
+            for l in x.moderation_languages_names:
+                print "\t\tlang: %s" % l
+        
+    def test_right_team_filter(self):
+        """
+        This is a test for story : #https://www.pivotaltracker.com/story/show/16450237
+        We add a video for moderation, create versions. Check we have the right number
+        of videos to moderate on that dashboard.
+        We then put antother video for another team under moderation. Then we check that each
+        team's dashboard will only show it's own video on the dashboard.
+        """
+        from haystack.query import SearchQuerySet
+        from apps.teams.moderation_views import _get_moderation_results
+        from apps.teams.moderation import _update_search_index
+
+        team1 = self.team
+        other_user  = User.objects.exclude(teammember__in=[x for x in team1.members.all()]).exclude(pk=self.user.pk)[0]
+        self.assertEquals(team1.get_pending_moderation().count() , 0)
+        tv1 = team1.teamvideo_set.all()[0]
+        
+        add_moderation(tv1.video, team1, self.user)
+        self.assertEquals(team1.get_pending_moderation().count() , 0)
+
+        self._create_versions( tv1.video.subtitle_language(), num_versions=2, user=other_user)
+        _update_search_index(tv1.video)
+        self.assertEquals(self.team.get_pending_moderation().count(), 2)
+
+
+        form, results = _get_moderation_results(RequestMockup(self.user), tv1.team)
+        team_video_pks = [x.team_video_pk for x in results]
+        check_pks = [x.pk for x in team1.teamvideo_set.all()]
+
+        for pk in team_video_pks:
+            self.assertTrue(pk in check_pks)
+        # second team should be filteres
+        team2 = Team.objects.exclude(pk=team1.pk)[0]
+        tv2 = team2.teamvideo_set.exclude(video=tv1.video)[0]
+        lang, c  = SubtitleLanguage.objects.get_or_create(video=tv2.video, is_original=False, language="pt")
+        member = TeamMember(user=self.user, team=team2, role=TeamMember.ROLE_MANAGER)
+        member.save()
+        add_moderation(tv2.video, team2, self.user)
+        self.assertEquals(tv2.video.moderated_by , team2)
+        other_user  = User.objects.exclude(teammember__in=[x for x in team2.members.all()]).exclude(pk=self.user.pk)[0]
+        self.assertFalse(tv1.team == tv2.team)
+        self.assertFalse(tv1.video == tv2.video)
+        self.assertEquals(team2.get_pending_moderation().count() , 0)
+        num_versions = 2
+        versions = self._create_versions( lang, num_versions=num_versions, user=other_user)
+        _update_search_index(tv2.video)
+        self.assertEquals(team2.get_pending_moderation().count(), num_versions)
+        versions =  team2.get_pending_moderation()
+        videos_with_new = set()
+        [videos_with_new.add(v.video) for v in versions]
+
+        form, results = _get_moderation_results(RequestMockup(self.user), tv2.team)
+        team_video_pks = [x.team_video_pk for x in results]
+        check_pks = [x.pk for x in team2.teamvideo_set.all()]
+        for pk in team_video_pks:
+            self.assertTrue(pk in check_pks)
+        self.assertEquals(results.count(), 1)
+        self.assertEquals(results.count() , len(videos_with_new))
+        
 
 class TestRemoval(TestSubtitleVersions, BaseTestModeration):
     def test_pending_count_after_removal(self):
