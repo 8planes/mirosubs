@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
@@ -35,18 +35,16 @@ from django.contrib.admin.views.decorators import staff_member_required
 from widget.views import base_widget_params
 from vidscraper.errors import Error as VidscraperError
 from auth.models import CustomUser as User
-from datetime import datetime
 from utils import send_templated_email
 from django.contrib.auth import logout
 from videos.share_utils import _add_share_panel_context_for_video, _add_share_panel_context_for_history
 from gdata.service import RequestError
-from django.db.models import Sum, Q, F
+from django.db.models import Sum
 from django.db import transaction
 from django.utils.translation import ugettext
 from django.utils.encoding import force_unicode
 from statistic.models import EmailShareStatistic
 import urllib, urllib2
-from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from videos.rpc import VideosApiClass
@@ -57,7 +55,6 @@ from django.utils.http import urlquote_plus
 from videos.tasks import video_changed_tasks
 from haystack.query import SearchQuerySet
 from videos.search_indexes import VideoSearchResult
-from utils.celery_search_index import update_search_index
 import datetime
 
 from apps.teams.moderation import user_can_moderate, get_pending_count
@@ -157,28 +154,6 @@ def bug(request):
     context['general_settings'] = json.dumps(general_settings)    
     return render_to_response('bug.html', context,
                               context_instance=RequestContext(request))
-
-def ajax_change_video_title(request):
-    from videos.tasks import send_change_title_email
-    
-    video_id = request.POST.get('video_id')
-    title = request.POST.get('title')
-    user = request.user
-
-    try:
-        video = Video.objects.get(video_id=video_id)
-        if title and not video.title or video.is_html5() or user.is_superuser:
-            old_title = video.title_display()
-            video.title = title
-            video.slug = slugify(video.title)
-            video.save()
-            update_search_index.delay(Video, video.pk)
-            Action.change_title_handler(video, user)
-            send_change_title_email.delay(video.id, user and user.id, old_title.encode('utf8'), video.title.encode('utf8'))          
-    except Video.DoesNotExist:
-        pass
-    
-    return HttpResponse('')
 
 def create(request):
     video_form = VideoForm(request.user, request.POST or None)

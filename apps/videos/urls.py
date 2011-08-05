@@ -45,7 +45,6 @@ urlpatterns = patterns(
     url(r'^email_friend/$', 'email_friend', name='email_friend'),
     url(r'^demo/$', 'demo', name='demo'),
     url(r'^activities/(?P<video_id>(\w|-)+)/$', 'actions_list', name='actions_list'),
-    url(r'^change_video_title', 'ajax_change_video_title', name='ajax_change_video_title'),
     url(r'^stop_notification/(?P<video_id>(\w|-)+)/$', 'stop_notification', name='stop_notification'),    
     url(r'^revision/(?P<pk>\d+)/$', 'revision', name='revision'),
     url(r'^rollback/(?P<pk>\d+)/$', 'rollback', name='rollback'),

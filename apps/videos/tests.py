@@ -635,6 +635,30 @@ class VideoTest(TestCase):
         cache_id_3 = video_cache.get_video_id(video_url)
         self.assertEqual(cache_id_3, cache_id_2)
 
+class RpcTest(TestCase):
+    fixtures = ['test.json']
+    
+    def setUp(self):
+        from videos.rpc import VideosApiClass
+        
+        self.rpc = VideosApiClass()
+        self.user = User.objects.get(username='admin')
+        self.video = Video.objects.get(video_id='iGzkk7nwWX8F')
+
+    
+    def test_change_title_video(self):
+        title = u'New title'
+        self.rpc.change_title_video(self.video.pk, title, self.user)
+        
+        video = Video.objects.get(pk=self.video.pk)
+        self.assertEqual(video.title, title)
+        try:
+            Action.objects.get(video=self.video, \
+                               new_video_title=title, \
+                               action_type=Action.CHANGE_TITLE)
+        except Action.DoesNotExist:
+            self.fail()
+    
 class ViewsTest(WebUseTest):
     
     fixtures = ['test.json']
@@ -664,23 +688,6 @@ class ViewsTest(WebUseTest):
         response = self.client.post(reverse('videos:feedback'), data)
         self.assertEqual(response.status_code, 200)
         #self.assertEquals(len(mail.outbox), 2)
-    
-    def test_ajax_change_video_title(self):
-        video = Video.objects.get(video_id='S7HMxzLmS9gw')
-
-        data = {
-            'video_id': video.video_id,
-            'title': 'New title'
-        }
-        response = self.client.post(reverse('videos:ajax_change_video_title'), data)
-        self.assertEqual(response.status_code, 200)
-        
-        try:
-            Action.objects.get(video=video, \
-                               new_video_title=data['title'], \
-                               action_type=Action.CHANGE_TITLE)
-        except Action.DoesNotExist:
-            self.fail()
             
     def test_create(self):
         self._login()

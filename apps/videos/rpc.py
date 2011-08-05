@@ -22,7 +22,7 @@
 #  link context.  For usage documentation see:
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
-from videos.models import Video, SubtitleLanguage
+from videos.models import Video, SubtitleLanguage, Action
 from django.utils.translation import ugettext as _
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from utils.rpc import Error, Msg, RpcExceptionEvent, add_request_to_kwargs
@@ -33,6 +33,8 @@ from django.conf import settings
 from haystack.query import SearchQuerySet
 from videos.search_indexes import VideoSearchResult
 from utils.celery_search_index import update_search_index
+from videos.tasks import send_change_title_email
+from django.template.defaultfilters import slugify
 import datetime
 
 VIDEOS_ON_WATCH_PAGE = getattr(settings, 'VIDEOS_ON_WATCH_PAGE', 15)
@@ -238,7 +240,31 @@ class VideosApiClass(object):
         return {
             'content': content
         }
-
+    
+    def change_title_video(self, video_pk, title, user):
+        if not user.is_authenticated():
+            return Error(self.authentication_error_msg)
+        
+        if not title:
+            return Error(_(u'Title can\'t be empty'))
+                
+        try:
+            video = Video.objects.get(pk=video_pk)
+            if title and not video.title or video.is_html5() or user.is_superuser:
+                old_title = video.title_display()
+                video.title = title
+                video.slug = slugify(video.title)
+                video.save()
+                update_search_index.delay(Video, video.pk)
+                Action.change_title_handler(video, user)
+                send_change_title_email.delay(video.id, user and user.id, old_title.encode('utf8'), video.title.encode('utf8'))
+            else:
+                return Error(_(u'Title can\'t be changed for this video'))          
+        except Video.DoesNotExist:
+            return Error(_(u'Video does not exist'))
+        
+        return Msg(_(u'Title was changed success'))
+    
     def change_title_translation(self, language_id, title, user):
         if not user.is_authenticated():
             return Error(self.authentication_error_msg)
