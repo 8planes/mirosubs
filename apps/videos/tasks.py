@@ -16,6 +16,15 @@ from videos.types.youtube import save_subtitles_for_lang
 from django.core.files.base import ContentFile
 from urllib import urlopen
 
+@periodic_task(run_every=crontab(hour=3, day_of_week=1))
+def cleanup():
+    import datetime
+    from django.db import transaction
+    from django.contrib.sessions.models import Session
+    
+    Session.objects.filter(expire_date__lt=datetime.datetime.now()).delete()
+    transaction.commit_unless_managed()
+    
 @task
 def save_thumbnail_in_s3(video_id):
     try:
