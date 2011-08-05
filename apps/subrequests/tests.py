@@ -45,6 +45,14 @@ class TestSubtitleRequest(TestCase):
         ).count()
         self.assertEqual(1, request_count)
 
+        request = self.Model.create_requests(self.video.video_id,
+                                             self.user,
+                                             self.languages1)[0]
+        # The request already existed so it must be marked as reopened
+        self.assertEqual(False, request.done)
+        self.assertEqual(True, request.reopened)
+
+
     def test_create_requests(self):
         self.Model.create_requests(self.video.video_id, self.user,
                                    self.languages1)
