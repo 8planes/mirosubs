@@ -2,9 +2,11 @@
 
 <ul class="video_list clearfix">
     {% for video in video_list %}
-        {% with display_views|default:'' as display_views %}
-            {% render_video video display_views %}
-        {% endwith %}
+        {% if video %}
+            {% with display_views|default:'' as display_views %}
+                {% render_video video display_views %}
+            {% endwith %}
+        {% endif %}
     {% empty %}
         <h3 style="color: #788b90; padding: 0 0 20px 5px;">{% trans "No video found" %}</h3>
     {% endfor %}
