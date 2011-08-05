@@ -36,10 +36,15 @@ if INSTALLATION == DEV:
     SITE_NAME = 'unisubsdev'
     FEEDBACK_EMAILS.append('aduston@gmail.com')
     REDIS_DB = "3"
-    AWS_QUEUE_PREFIX = 'DEV'
     EMAIL_SUBJECT_PREFIX = '[usubs-dev]'
     SENTRY_TESTING = True
     SOLR_ROOT = '/usr/share/'
+    BROKER_BACKEND = 'amqplib'
+    BROKER_HOST = "localhost"
+    BROKER_PORT = 5672
+    BROKER_USER = "unisub"
+    BROKER_PASSWORD = "unisub"
+    BROKER_VHOST = "unisub"
 elif INSTALLATION == STAGING:
     SITE_ID = 14
     SITE_NAME = 'unisubsstaging'
@@ -54,6 +59,9 @@ elif INSTALLATION == STAGING:
         import sys
         print >> sys.stderr, "[oboe] Unable to instrument app and middleware"
     EMAIL_SUBJECT_PREFIX = '[usubs-staging]'
+    BROKER_USER = AWS_ACCESS_KEY_ID
+    BROKER_PASSWORD = AWS_SECRET_ACCESS_KEY
+    BROKER_VHOST = AWS_QUEUE_PREFIX    
 elif INSTALLATION == PRODUCTION:
     SITE_ID = 8
     SITE_NAME = 'unisubs'
@@ -66,6 +74,9 @@ elif INSTALLATION == PRODUCTION:
     ADMINS = (
       ('universalsubtitles-errors', 'universalsubtitles-errors@pculture.org'),
     )
+    BROKER_USER = AWS_ACCESS_KEY_ID
+    BROKER_PASSWORD = AWS_SECRET_ACCESS_KEY
+    BROKER_VHOST = AWS_QUEUE_PREFIX
     
 if INSTALLATION == STAGING or INSTALLATION == PRODUCTION:
     uslogging_db = {
@@ -111,10 +122,6 @@ DATABASES = {
 DATABASES.update(uslogging_db)
 
 USE_AMAZON_S3 = AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and DEFAULT_BUCKET
-
-BROKER_USER = AWS_ACCESS_KEY_ID
-BROKER_PASSWORD = AWS_SECRET_ACCESS_KEY
-BROKER_VHOST = AWS_QUEUE_PREFIX
 
 EMAIL_BCC_LIST = EMAIL_BCC_LIST.append('hwilson+notifications@gmail.com')
 
