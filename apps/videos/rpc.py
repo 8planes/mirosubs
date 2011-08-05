@@ -136,7 +136,8 @@ class VideosApiClass(object):
 
         relevant = SearchQuerySet().result_class(VideoSearchResult) \
             .models(Video).filter(video_language_exact__in=user_langs) \
-            .filter_or(languages_exact__in=user_langs)
+            .filter_or(languages_exact__in=user_langs) \
+            .order_by('-requests_count')
 
         return relevant
 
@@ -152,8 +153,7 @@ class VideosApiClass(object):
     def load_requested_page_volunteer(self, page, request, user):
         user_langs = get_user_languages_from_request(request)
         relevant = self._get_volunteer_sqs(request, user)
-        sqs = relevant.filter(requests_exact__in=user_langs) \
-            .order_by('-requests_count')
+        sqs = relevant.filter(requests_exact__in=user_langs)
 
         return render_page(page, sqs, request=request)
 
