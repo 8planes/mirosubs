@@ -71,20 +71,26 @@
                 return false;
             });
             var SL_ID = '{{ language.id }}';
-    
+
             $('.edit-title').click( function() {
-                var msg = '{% trans "Enter new title.  Note: this is for editing of translating the title." %}'
-                var title = prompt(msg, $('.title-container').html());
+                $('#edit-title-dialog .title-input').val($('.title-container').html());
+            });
+            
+            $('#edit-title-dialog .save-title').click(function(){
+                var title = $('#edit-title-dialog .title-input').val();
                 if (title) {
-                    VideosApi.change_title_translation(SL_ID, title, function(response) {
+                    $('.title-container').html(title);
+                    VideosApi.change_title_translation(SL_ID, title, function(response){
                         if (response.error) {
                             $.jGrowl.error(response.error);
                         } else {
                             $('.title-container').html(title);
-                        }
+                        }                        
                     });
+                    $('#edit-title-dialog').modClose();
+                }else{
+                    $.jGrowl.error('{% trans "Enter non-empty title" %}');
                 }
-                return false;
             });
         });
     </script>
@@ -106,9 +112,28 @@
     <h2 class="main-title">
         <a href="{{ video.get_absolute_url }}" class="title-container">{{ language.get_title_display }}</a>
         {% if not language.standard_language and not language.is_original and user.is_authenticated %}
-        <a class="edit-title" href="#" style="color: #3196AD !important; text-decoration: underline;">{% trans 'edit title' %}</a>
+        <a class="edit-title" href="#" data-modal="edit-title-dialog" style="color: #3196AD !important; text-decoration: underline;">{% trans 'edit title' %}</a>
         {% endif %}
     </h2>
+    
+    <div id="edit-title-dialog" style="display: none" class="msg_modal_wrap" >
+        <a href="#close" class="close">{% trans "Close" %}</a>
+        <h3>{% trans 'Please enter the translation of the video title for the current language below' %}</h3>
+        <div class="msg_modal">
+            <p>
+            {% blocktrans %}
+            IMPORTANT: the translated title will be displayed only with the subtitles 
+            in the currently selected language. The change will not affect the original 
+            video title or any other translations.
+            {% endblocktrans %}
+            </p>
+            <p>
+                <input type="text" val="" style="width: 100%" class="title-input">
+                <button class="green_button small save-title" style="margin: 0 0 15px 0; float: right">{% trans "Save" %}</button>
+            </p>
+        </div>
+    </div>
+        
     <div class="left_column">
         {% widget widget_params %}
     </div>
