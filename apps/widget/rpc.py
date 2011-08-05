@@ -188,6 +188,7 @@ class Rpc(BaseRpc):
                 request.user,
                 request_languages,
                 track=track_request,
+                description=description,
         )
 
         return {

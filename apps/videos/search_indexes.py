@@ -97,7 +97,7 @@ class VideoIndex(CelerySearchIndex):
         self.prepared_data = super(VideoIndex, self).prepare(obj)
         
         langs = obj.subtitlelanguage_set.exclude(language=u'', subtitle_count__gt=0)
-        requests = obj.subtitlerequest_set.all()
+        requests = obj.subtitlerequest_set.filter(done=False)
         self.prepared_data['languages_count'] = obj.subtitlelanguage_set.filter(subtitle_count__gt=0).count()
         self.prepared_data['video_language'] = obj.language
         #TODO: converting should be in Field
