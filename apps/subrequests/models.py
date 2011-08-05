@@ -36,13 +36,15 @@ class SubtitleRequestManager(models.Manager):
     of requests from provided video, user and languages.
     '''
 
-    def _create_request(self, video, user, language, action, track=True):
+    def _create_request(self, video, user, language, action, track=True,
+                        description=''):
         '''
         Create a subtitle request for single language.
         '''
 
         subreq, new = self.get_or_create(user=user, video=video,
-                                         language=language, track=track)
+                                         language=language, track=track,
+                                         description=description)
         if not new:
             # Mark as 'not done' as it is reopened.
             subreq.done = False
@@ -52,7 +54,8 @@ class SubtitleRequestManager(models.Manager):
         subreq.actions.add(action)
         return subreq
 
-    def create_requests(self, video_id, user, languages, track=True):
+    def create_requests(self, video_id, user, languages, track=True,
+                        description=''):
         '''
         Create multiple requests according to the list of languages provided.
         '''
@@ -85,6 +88,8 @@ class SubtitleRequest(models.Model):
     actions = models.ManyToManyField(Action, related_name='subtitlerequests',
                                      blank=True, null=True)
     track = models.BooleanField(_('follow related activities'), default=True)
+    description = models.TextField(_('description of the request'), blank=True)
+    objects = SubtitleRequestManager()
 
     def __unicode__(self):
         return "%s-%s request (%s)" %(self.video, self.get_language_display(),
