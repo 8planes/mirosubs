@@ -32,7 +32,7 @@ class VideoAdmin(admin.ModelAdmin):
     list_display = ['__unicode__', 'video_thumbnail', 'languages', 'languages_count', 'is_subtitled']
     search_fields = ['video_id', 'title', 'videourl__url', 'user__username']
     readonly_fields = ['subtitles_fetched_count', 'widget_views_count', 'view_count']
-    raw_id_fields = ['user']
+    raw_id_fields = ['user', 'moderated_by']
     
     def video_thumbnail(self, obj):
         return '<img width="80" height="60" src="%s"/>' % obj.get_small_thumbnail()
