@@ -44,13 +44,7 @@ class SubtitleRequestManager(models.Manager):
 
         subreq, new = self.get_or_create(user=user, video=video,
                                          language=language, track=track,
-                                         description=description)
-        if not new:
-            # Mark as 'not done' as it is reopened.
-            subreq.done = False
-            subreq.reopened = True
-            subreq.save()
-
+                                         description=description, done=False)
         subreq.actions.add(action)
         return subreq
 
@@ -84,7 +78,6 @@ class SubtitleRequest(models.Model):
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES)
     user = models.ForeignKey(User, related_name='subtitlerequests')
     done = models.BooleanField(_('request completed'))
-    reopened = models.BooleanField(_('request has been reopened'))
     actions = models.ManyToManyField(Action, related_name='subtitlerequests',
                                      blank=True, null=True)
     track = models.BooleanField(_('follow related activities'), default=True)
@@ -95,5 +88,8 @@ class SubtitleRequest(models.Model):
         return "%s-%s request (%s)" %(self.video, self.get_language_display(),
                                        self.user)
 
-    class Meta:
-        unique_together = ('video', 'user', 'language')
+    def subtitle_language(self):
+        '''
+        The subtitle language which is related to this subtitle request.
+        '''
+        return self.video.subtitle_language(self.language)
