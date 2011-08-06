@@ -112,6 +112,9 @@ def reject_version(version, team, user, rejection_message=None, sender=None, upd
     Action.create_rejected_video_handler(version, user)    
     return v
 
+def remove_version_moderation(version, team, user, updates_meta=True):
+    res =  _set_version_moderation_status(version, team, user, WAITING_MODERATION, updates_meta)
+    
 def create_comment_for_rejection(version, msg, sender):
     from apps.comments.models import Comment
     comment = Comment(content_object=version.language,

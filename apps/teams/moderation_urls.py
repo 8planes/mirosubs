@@ -25,7 +25,7 @@ urlpatterns = patterns(
 
     url('^team/(?P<team_id>\d+)/$', 'edit_moderation', name='edit_moderation'),                                         
     url(r'team/(?P<team_id>\d+)/videos/$', 'get_pending_videos', name='get-pending-videos'),
-    url(r'team/(?P<team_id>\d+)/revisions/(?P<version_id>\d+)/remove-approval/$', 'remove_moderation_version', name='revision-remove-approval'),
+    url(r'team/(?P<team_id>\d+)/revisions/(?P<version_id>\d+)/remove-approval/$', 'remove_moderation_version', name='revision-remove-moderation'),
     
     url(r'team/(?P<team_id>\d+)/revision/(?P<version_id>\d+)/approve/', 'approve_version', name='revision-approve'),
     url(r'team/(?P<team_id>\d+)/revisions/approves/$', 'batch_approve_version', name='revision-approve-batch'),

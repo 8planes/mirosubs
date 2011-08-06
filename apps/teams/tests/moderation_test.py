@@ -27,7 +27,8 @@ LANGUAGEPAIR_RE = re.compile(r"([a-zA-Z\-]+)_([a-zA-Z\-]+)_(.*)")
 LANGUAGE_RE = re.compile(r"S_([a-zA-Z\-]+)")
 
 from apps.teams.tests.teamstestsutils import refresh_obj, reset_solr , rpc
-    
+from apps.teams.moderation_views import _get_moderation_results
+
 from django.core.exceptions import SuspiciousOperation
 
 from apps.teams.moderation_const import SUBJECT_EMAIL_VERSION_REJECTED    
@@ -471,6 +472,30 @@ class TestModerationViews(BaseTestModeration):
         version = SubtitleVersion.objects.get(pk=version.pk)
         self.assertEquals(version.moderation_status,APPROVED)
 
+    def test_remove_moderation(self):
+        reset_solr()
+        add_moderation(self.video, self.team, self.user)
+        lang = self.video.subtitle_language()
+        [ self._make_subs(lang, 5) for x in xrange(0, 1)]
+        self.assertEquals(self.team.get_pending_moderation().count(), 1)
+        version = self.team.get_pending_moderation()[0]
+        approve_version(version, self.team, self.user)
+        self.assertEquals(self.team.get_pending_moderation().count(), 0)
+        self._login(is_moderator=True)
+        # dashboard should have no video to moderate
+        form, results = _get_moderation_results(RequestMockup(self.user), self.team)
+        self.assertEquals(0, results.count())        
+        url = reverse("moderation:revision-remove-moderation", kwargs={"team_id":self.team.pk, "version_id":version.pk})
+        response = self.client.post(url, {}, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        data = json.loads(response.content)
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(True, data["success"])
+        self.assertEquals(self.team.get_pending_moderation().count(), 1)
+        # dashboard should have one video to moderate
+        form, results = _get_moderation_results(RequestMockup(self.user), self.team)
+        self.assertEquals(1, results.count())
+        reset_solr()
+
 class TestSubtitleVersions(BaseTestModeration):
     fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
      
@@ -589,7 +614,6 @@ class TestDashboard(TestSubtitleVersions, BaseTestModeration):
 
     def _dump_mod(self, team):
         from haystack.query import SearchQuerySet
-        from apps.teams.moderation_views import _get_moderation_results
         print "Search for team %s" % team
         form, results = _get_moderation_results(RequestMockup(self.user), team)
         print "\tresults, len %s:" % len(results)

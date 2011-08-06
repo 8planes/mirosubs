@@ -20,6 +20,7 @@ from apps.teams.moderation import CAN_MODERATE_VERSION, CAN_SET_VIDEO_AS_MODERAT
   WAITING_MODERATION, REJECTED
 from apps.teams.moderation import approve_version as core_approve_version
 from apps.teams.moderation import reject_version as core_reject_version
+from apps.teams.moderation import remove_version_moderation as core_remove_version_moderation
 from apps.teams.templatetags.moderation import render_moderation_togggle_button, render_moderation_icon
 
 from apps.videos.models import SubtitleVersion, Video
@@ -48,12 +49,12 @@ def _set_moderation(request, team, version, status,  updates_meta=True, rejectio
             version = get_object_or_404(SubtitleVersion, pk=version)
         if not isinstance(team, Team):
             team = get_object_or_404(Team, pk=team)
-
-
         if status == APPROVED:
             core_approve_version(version, team, request.user, updates_meta)
         elif status == REJECTED:
             core_reject_version(version, team, request.user, rejection_message=rejection_message, sender=sender, updates_meta=updates_meta )
+        elif status == WAITING_MODERATION:
+            core_remove_version_moderation(version, team, request.user, updates_meta)
         if request.is_ajax():
             return {
                         "status":"ok",
@@ -94,7 +95,9 @@ def reject_version(request, team, version_id):
 @_check_moderate_permission
 @require_POST
 def remove_moderation_version(request, team, version_id):
-    return _set_moderation(request, team, version_id, WAITING_MODERATION, msg="Moderation data removed")
+    res =  _set_moderation(request, team, version_id, WAITING_MODERATION)
+    res["msg"] = "Moderation removed"
+    return res
 
 def _batch_set_moderation(request, team, status, before_rev=None, lang_id= None):
     if before_rev is not None:
