@@ -575,6 +575,10 @@ class TestSubtitleVersions(BaseTestModeration):
 class TestDashboard(TestSubtitleVersions, BaseTestModeration):
     fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json", "moderation.json"]
 
+    def setUp(self):
+        super(TestDashboard, self).setUp()
+        reset_solr()
+        
     def test_pending_count(self):
         self.assertEquals(self.team.get_pending_moderation().count() , 0)
         tv = self.team.teamvideo_set.all()[0]
@@ -602,7 +606,6 @@ class TestDashboard(TestSubtitleVersions, BaseTestModeration):
         We then put antother video for another team under moderation. Then we check that each
         team's dashboard will only show it's own video on the dashboard.
         """
-        reset_solr()
         from haystack.query import SearchQuerySet
         from apps.teams.moderation_views import _get_moderation_results
         from apps.teams.moderation import _update_search_index
@@ -654,7 +657,6 @@ class TestDashboard(TestSubtitleVersions, BaseTestModeration):
         self.assertEquals(results.count(), 1)
         self.assertEquals(results.count() , len(videos_with_new))
         reset_solr()
-        
 
 class TestRemoval(TestSubtitleVersions, BaseTestModeration):
     def test_pending_count_after_removal(self):
