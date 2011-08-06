@@ -4,6 +4,7 @@ var LOADING_TEXT = "wait ...";
 var batchURLS = [];
 var rejectionMarkerClass = "reject-version";
 var showsRejectionNotification = false;
+var disabledClass = "disabled";
 
 
 
@@ -18,19 +19,18 @@ function updatePendingCount(num, absolute){
 function hideRow(row){
     row.fadeOut(500, function(){
         var myTable = $(this).parents("table");
-        
         $(this).remove();
         var numLangs = $("tr", myTable).length;
         // if it's the last one, we still heave the header
         if (numLangs == 1 ){
             // the header
-            
             $(myTable).slideDown( 400, function(){
                 $(this).parents(".video-container").remove();
             });
         }
     });    
 }
+
 function updateModPane(el, data){
     hideRow($(el).parents("tr"));
 }
@@ -51,6 +51,8 @@ function updateHistoryPanel(el, data){
     $("div.moderation-status-icon", statusHolder).replaceWith(data.status_icon_html);
 
 }
+
+
 function showMessageFromResponse(response){
     var message = response.data.msg || "An error ocurred, we're working on getting this fixes asap.";
     jQuery['jGrowl'](message, {'life': 10000});    
@@ -76,25 +78,55 @@ function onApproveDone(el, response, isRejection){
         }
         updatePendingCount(response.data.pending_count, true);
     }
+    var replacesWithResponseButton = $(el).data("render_server_button");
+    if (replacesWithResponseButton){
+        var newel = $(response.data.new_button_html);
+        $(el).replaceWith(newel);
+        prepareApproveButton(null, newel);
+    }else{
+        $(el).remove();
+    }
+}
+
+function restoreText(el){
+    $(el).text($(el).data("previousLabel"));
+}
+
+function setButtonState(el, enabled){
+    if (enabled){
+        $(el).removeClass(disabledClass);
+        $(el).css("opacity", 1);
+        restoreText(el);
+    }else{
+        $(el).addClass(disabledClass);
+        $(el).data("previousLabel",  $(el).text());
+        $(el).text(LOADING_TEXT);
+        $(el).css("opacity", 0.5);
+    }
+}
+
+function isEnabled(el){
+    return !$(el).hasClass(disabledClass);
 }
 
 function sendModeration(el, extra){
-    var previousLabel = $(el).text();
-    $(el).text(LOADING_TEXT);
-    $(el).addClass("disabled");
-    $(el).css("opacity", 0.5);
+    if (!isEnabled(el)){
+        return;
+    }
+    setButtonState(el, false);
     var url = $(el).attr('href');
     $(el).attr('#');
     var btn = $(el);
     var isRejection = $(el).hasClass(rejectionMarkerClass);
+    $(el).data("")
     $.ajax( {
         url: url,
         dataType: 'json',
         type: "POST",
         data:extra,        
         success: function(response){
-            btn.text(previousLabel);
-            btn.removeClass("disabled");
+            //restoreText(btn);
+            setButtonState(btn, true);
             onApproveDone(el, response, isRejection);
         },
         error: function(response){
@@ -104,10 +136,8 @@ function sendModeration(el, extra){
 }
 
 function prepareApproveButton(i, el){
-
     $(el).click( function(e){
         e.preventDefault();
-
         if ($(this).hasClass("disabled")){
             return false;
         }
@@ -120,8 +150,11 @@ function prepareApproveButton(i, el){
         }else{
             sendModeration(el);
         }
-    
+        return false;
     });
+    if (window.UNISUBS_MOD_REPLACE_HTML_BUTTON){
+        $(el).data("render_server_button", true);
+    }
 }
 
 function ajaxifyApproveButtons(el){

@@ -27,7 +27,7 @@ from django.template.loader import render_to_string
 
 register = template.Library()
 
-from apps.teams.moderation import  APPROVED, WAITING_MODERATION
+from apps.teams.moderation import  APPROVED, WAITING_MODERATION, is_approved, is_rejected, is_waiting
 from apps.teams.moderation import   user_can_moderate as _user_can_moderate
 
 from apps.videos.models import SubtitleLanguage, SubtitleVersion
@@ -158,11 +158,15 @@ def render_moderation_togggle_button(version):
     approved = version.moderation_status == APPROVED
     label = ""
     
-    if approved:
+    if is_approved(version):
         template_name = "moderation/_reject_button.html"
         label = _("Unapprove")
         url = reverse("moderation:revision-reject", kwargs={'team_id':version.video.moderated_by_id, "version_id":version.pk})
-    else:
+    elif is_rejected(version):
+        template_name = "moderation/_approve_button.html"
+        label = _("Approve")
+        url = reverse("moderation:revision-approve", kwargs={'team_id':version.video.moderated_by_id, "version_id":version.pk})
+    elif is_waiting(version):
         template_name = "moderation/_approve_button.html"
         label = _("Approve")
         url = reverse("moderation:revision-approve", kwargs={'team_id':version.video.moderated_by_id, "version_id":version.pk})

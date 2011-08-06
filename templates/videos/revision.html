@@ -171,6 +171,7 @@
 {% block bottom_scripts %}
 <script>
     $(window).load(function(){
+              window.UNISUBS_MOD_REPLACE_HTML_BUTTON = true;
     {% include 'moderation/moderation-buttons.js' %}
   });
 </script>
