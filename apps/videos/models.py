@@ -1387,7 +1387,18 @@ class Action(models.Model):
         obj.created = datetime.now()
         obj.save()        
         
+    @classmethod
+    def create_subrequest_handler(cls, sender, instance, created, **kwargs):
+        if created:
+            obj = cls.objects.create(
+                user=instance.user,
+                video=instance.video,
+                action_type=cls.SUBTITLE_REQUEST,
+                created=datetime.now()
+            )
 
+            instance.action = obj
+            instance.save()
                 
 post_save.connect(Action.create_comment_handler, Comment)        
 

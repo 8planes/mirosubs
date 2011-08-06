@@ -36,7 +36,7 @@ class SubtitleRequestManager(models.Manager):
     of requests from provided video, user and languages.
     '''
 
-    def _create_request(self, video, user, language, action, track=True,
+    def _create_request(self, video, user, language, track=True,
                         description=''):
         '''
         Create a subtitle request for single language.
@@ -45,7 +45,7 @@ class SubtitleRequestManager(models.Manager):
         subreq, new = self.get_or_create(user=user, video=video,
                                          language=language, track=track,
                                          description=description, done=False)
-        subreq.actions.add(action)
+
         return subreq
 
     def create_requests(self, video_id, user, languages, track=True,
@@ -57,17 +57,9 @@ class SubtitleRequestManager(models.Manager):
         video = Video.objects.get(video_id=video_id)
         subreqs = []
 
-        # A new action relating the requested sub langs
-        action = Action.objects.create(
-            user=user,
-            video=video,
-            action_type=Action.SUBTITLE_REQUEST,
-            created=datetime.now(),
-        )
-
         for language in languages:
-            subreqs.append(self._create_request(video, user, language,
-                                                action, track))
+            subreqs.append(self._create_request(video, user, language, track,
+                                                description))
         return subreqs
 
 class SubtitleRequest(models.Model):
@@ -76,10 +68,9 @@ class SubtitleRequest(models.Model):
     '''
     video = models.ForeignKey(Video)
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES)
-    user = models.ForeignKey(User, related_name='subtitlerequest_set')
+    user = models.ForeignKey(User)
     done = models.BooleanField(_('request completed'))
-    actions = models.ManyToManyField(Action, related_name='subtitlerequest_set',
-                                     blank=True, null=True)
+    action = models.ForeignKey(Action, blank=True, null=True)
     track = models.BooleanField(_('follow related activities'), default=True)
     description = models.TextField(_('description of the request'), blank=True)
     objects = SubtitleRequestManager()
@@ -93,3 +84,5 @@ class SubtitleRequest(models.Model):
         The subtitle language which is related to this subtitle request.
         '''
         return self.video.subtitle_language(self.language)
+
+models.signals.post_save.connect(Action.create_subrequest_handler, SubtitleRequest)

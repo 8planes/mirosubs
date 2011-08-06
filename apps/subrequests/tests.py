@@ -60,6 +60,6 @@ class TestSubtitleRequest(TestCase):
         self.assertEqual(2, len(requests))
 
         # An action should have been created relating this video
-        action = Action.objects.filter(subtitlerequest_set__in=requests).latest()
-        self.assertEqual(2, action.subtitlerequest_set.all().count())
+        action = Action.objects.filter(subtitlerequest__in=requests).latest()
+        self.assertEqual(1, action.subtitlerequest_set.all().count())
 
