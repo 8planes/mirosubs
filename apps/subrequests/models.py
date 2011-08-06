@@ -76,9 +76,9 @@ class SubtitleRequest(models.Model):
     '''
     video = models.ForeignKey(Video)
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES)
-    user = models.ForeignKey(User, related_name='subtitlerequests')
+    user = models.ForeignKey(User, related_name='subtitlerequest_set')
     done = models.BooleanField(_('request completed'))
-    actions = models.ManyToManyField(Action, related_name='subtitlerequests',
+    actions = models.ManyToManyField(Action, related_name='subtitlerequest_set',
                                      blank=True, null=True)
     track = models.BooleanField(_('follow related activities'), default=True)
     description = models.TextField(_('description of the request'), blank=True)

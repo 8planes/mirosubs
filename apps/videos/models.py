@@ -1202,7 +1202,7 @@ class ActionRenderer(object):
         return msg % self._base_kwargs(item)
 
     def render_SUBTITLE_REQUEST(self, item):
-        requests = item.subtitlerequests.all()
+        requests = item.subtitlerequest_set.all()
         languages = [request.get_language_display() for request in requests]
         kwargs = self._base_kwargs(item)
         kwargs['languages'] = ', '.join(languages)
