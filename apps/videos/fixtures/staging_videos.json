@@ -122,6 +122,27 @@
         }
     },    
     {
+        "pk": 7, 
+        "model": "videos.video", 
+        "fields": {
+            "view_count": 0, 
+            "writelock_owner": null, 
+            "title": "\u041f\u0435\u0442\u0443\u0445 \u0436\u0436\u043e\u0442", 
+            "writelock_session_key": "", 
+            "video_id": "mKzjvZHgZ0xHo", 
+            "is_subtitled": true, 
+            "thumbnail": "http://i.ytimg.com/vi/KttxRC7iOeU/0.jpg", 
+            "writelock_time": null, 
+            "created": "2010-11-24 11:49:12", 
+            "subtitles_fetched_count": 0, 
+            "duration": 12, 
+            "allow_community_edits": false, 
+            "was_subtitled": true, 
+            "widget_views_count": 1, 
+            "allow_video_urls_edit": true
+        }
+    },    
+    {
         "pk": 2, 
         "model": "videos.videourl", 
         "fields": {
