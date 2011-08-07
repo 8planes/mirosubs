@@ -23,7 +23,6 @@
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
 
-from datetime import datetime
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -45,6 +44,8 @@ class SubtitleRequestManager(models.Manager):
         subreq, new = self.get_or_create(user=user, video=video,
                                          language=language, track=track,
                                          description=description, done=False)
+        # Mark all other requests with same video, user, language triad as done
+        self.exclude(pk=subreq.pk).update(done=True)
 
         return subreq
 
@@ -60,7 +61,7 @@ class SubtitleRequestManager(models.Manager):
         for language in languages:
             subreqs.append(self._create_request(video, user, language, track,
                                                 description))
-        return subreqs
+        return subreqs  # self.filter(id__in=subreqs)
 
 class SubtitleRequest(models.Model):
     '''
