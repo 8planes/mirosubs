@@ -43,14 +43,19 @@ mirosubs.SRTWriter.writeSrtTimeLine_ = function(sub, stringBuffer) {
 };
 
 mirosubs.SRTWriter.writeSrtTime_ = function(seconds, stringBuffer) {
-    var secondsInt = Math.floor(seconds);
-    var p = goog.string.padNumber;
-    stringBuffer.
-        append(p(Math.floor(secondsInt / 3600) , 2)).
-        append(':').
-        append(p(Math.floor(secondsInt / 60) % 60, 2)).
-        append(':').
-        append(p(secondsInt % 60, 2)).
-        append(',').
-        append(p(Math.floor(seconds * 1000) % 1000, 3));
+    if (seconds == -1 || !goog.isDefAndNotNull(seconds)) {
+        stringBuffer.append("99:59:59,000");
+    }
+    else {
+        var secondsInt = Math.floor(seconds);
+        var p = goog.string.padNumber;
+        stringBuffer.
+            append(p(Math.floor(secondsInt / 3600) , 2)).
+            append(':').
+            append(p(Math.floor(secondsInt / 60) % 60, 2)).
+            append(':').
+            append(p(secondsInt % 60, 2)).
+            append(',').
+            append(p(Math.floor(seconds * 1000) % 1000, 3));
+    }
 };
