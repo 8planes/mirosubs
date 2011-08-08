@@ -476,6 +476,7 @@ def revision(request, pk):
     context['prev_version'] = version.prev_version()
     language = version.language
     context['language'] = language
+    context["user_can_moderate"] = user_can_moderate(version.video, request.user)
     context['widget_params'] = _widget_params(request, \
             language.video, version.version_no, language)
     context['latest_version'] = language.latest_version()
@@ -551,6 +552,7 @@ def diffing(request, first_pk, second_pk):
     context['first_version'] = first_version
     context['second_version'] = second_version
     context['latest_version'] = language.latest_version()
+    context["user_can_moderate"] = user_can_moderate(video, request.user)
     context['widget0_params'] = \
         _widget_params(request, video, 
                        first_version.version_no)

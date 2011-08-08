@@ -1,3 +1,4 @@
+
 from apps.teams.moderation_const import *
 
 import datetime
@@ -20,6 +21,9 @@ from widget.rpc import video_cache
 
 
 def _update_search_index(video):
+    """
+    Updates the search team video index for that video if that video is under moderation
+    """
     if video.moderated_by:
         tv = TeamVideo.objects.get(video=video, team=video.moderated_by)
         site.get_index(TeamVideo).update_object(tv)
