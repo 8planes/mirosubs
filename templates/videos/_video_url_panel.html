@@ -159,6 +159,11 @@ jQuery(function($){
         return false;
     }); 
     
+    $('#add-video-url').bind('close-modal', function(){
+        $('#add-video-url form p.error_list').remove();
+        $('#id_url').val('');
+    });
+    
     $('#add-video-url form').ajaxForm({
         dataType: 'json',
         success: function(data, status, xhr, $form){
