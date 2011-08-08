@@ -26,7 +26,7 @@
         </span>
         <span class="languages">
             {% if video.languages_count %}
-            <a class="lang_arrow" href="#" video_id="{{ video.pk }}"></a>
+            <div class="lang_arrow" href="#" video_id="{{ video.pk }}"></div>
             {% endif %}
             <span>
                   {% blocktrans count video.languages_count as number %}

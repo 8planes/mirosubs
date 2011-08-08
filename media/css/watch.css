@@ -272,7 +272,7 @@ ul.video_list li span.languages {
 	margin: 5px 0 0 0;
 }
 
-ul.video_list li span.languages a.lang_arrow {
+ul.video_list li span.languages div.lang_arrow {
 	width: 18px;
 	height: 18px;
 	background: transparent url(../images/icon_lang_arrow.png) 0 0 no-repeat;
@@ -281,13 +281,10 @@ ul.video_list li span.languages a.lang_arrow {
 	margin: 0 5px 0 0;
 	position: relative;
 	top: -2px;
+	cursor: pointer;
 }
 
-ul.video_list li span.languages a.lang_arrow div.lang_menu {
-
-}
-
-ul.video_list li span.languages a.lang_arrow div.lang_menu {
+ul.video_list li span.languages div.lang_arrow div.lang_menu {
 	display: block;
 	background: #FFF;
 	position: absolute;
