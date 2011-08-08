@@ -242,6 +242,7 @@ class VideosApiClass(object):
         }
     
     def change_title_video(self, video_pk, title, user):
+        title = title.strip()
         if not user.is_authenticated():
             return Error(self.authentication_error_msg)
         
@@ -251,13 +252,14 @@ class VideosApiClass(object):
         try:
             video = Video.objects.get(pk=video_pk)
             if title and not video.title or video.is_html5() or user.is_superuser:
-                old_title = video.title_display()
-                video.title = title
-                video.slug = slugify(video.title)
-                video.save()
-                update_search_index.delay(Video, video.pk)
-                Action.change_title_handler(video, user)
-                send_change_title_email.delay(video.id, user and user.id, old_title.encode('utf8'), video.title.encode('utf8'))
+                if title != video.title:
+                    old_title = video.title_display()
+                    video.title = title
+                    video.slug = slugify(video.title)
+                    video.save()
+                    update_search_index.delay(Video, video.pk)
+                    Action.change_title_handler(video, user)
+                    send_change_title_email.delay(video.id, user and user.id, old_title.encode('utf8'), video.title.encode('utf8'))
             else:
                 return Error(_(u'Title can\'t be changed for this video'))          
         except Video.DoesNotExist:
