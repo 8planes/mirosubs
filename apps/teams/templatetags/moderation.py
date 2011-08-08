@@ -40,8 +40,10 @@ def render_remove_approve_button(version_or_language):
         version = version_or_language
     elif isinstance(version_or_language, SubtitleLanguage):
         version = version_or_language.latest(public_only=False)
-
+    if is_waiting(version):
+        return {}
     team = version.video.moderated_by
+     
     return {
         "team": team,
         "version": version
@@ -49,12 +51,15 @@ def render_remove_approve_button(version_or_language):
 
 @register.inclusion_tag("moderation/_approve_button.html")
 def render_approve_button(version_or_list):
+    needs_render = True
     if isinstance(version_or_list, SubtitleVersion):
         team = version_or_list.language.video.moderated_by
         url = reverse("moderation:revision-approve", kwargs={'team_id':team.pk, "version_id":version_or_list.pk})
         label = _("Approve")
+        needs_render = not is_approved(version_or_list)
     elif isinstance(version_or_list, list):
         # we will approve all revisions unitl this one, as this is what the moderator saw on the review subs panel
+        needs_render = not is_approved(version_or_list[0])
         team = version_or_list[0].language.video.moderated_by_id
         label = _("Approve  revisions")
         url = reverse("moderation:revision-approve-batch-until", kwargs={
@@ -62,10 +67,13 @@ def render_approve_button(version_or_list):
                 "before_rev": version_or_list[0].pk,
                 "lang_id":version_or_list[0].language.pk,
         })
+    if not needs_render:
+        return {}
     return {
         "label": label,
         "team": team,
-        "url": url
+        "url": url,
+        
         }
 
 @register.inclusion_tag("moderation/_approve_button.html")
@@ -104,7 +112,8 @@ def render_reject_button(version_or_language, label=None, confirms=False):
         version = version_or_language
     elif isinstance(version_or_language, SubtitleLanguage):
         version = version_or_language.latest(public_only=False)
-
+    if is_rejected(version):
+       return {}
 
     team = version.video.moderated_by
     url = reverse("moderation:revision-reject", kwargs={
@@ -133,7 +142,6 @@ def render_approval_toolbar( user, version):
     return {
         "version":version,
         "team": team,
-        "is_approved": version.moderation_status == APPROVED
     }
     
     

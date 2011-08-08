@@ -3,6 +3,8 @@
 
 {% load widget i18n media_compressor moderation%}
 
+
+
 {% block css %}
   {{ block.super }}
   <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
@@ -67,6 +69,9 @@
         });
     </script>
     {% include_bundle "mirosubs-onsite-compiled" %}
+    {% if user_can_moderate %}
+       {% include_bundle "js-moderation-dashboard" %}
+    {% endif %}
 {% endblock %}
 
 {% block main_content %}
@@ -217,10 +222,13 @@
           {% endfor %}
         </table>
     </div>    
+    {% if user_can_moderate %}
     <script type="text/javascript">
        $(window).load(function(){
           window.UNISUBS_MOD_REPLACE_HTML_BUTTON = true;
+       
           {% include 'moderation/moderation-buttons.js' %}
       });
     </script> 
+    {% endif %}
 {% endblock %}

@@ -333,6 +333,7 @@ JS_MODERATION_DASHBOARD =  [
     "js/jquery.address-1.4.fixed.js",
     "js/jquery.ajax-paginator.js",
     "js/moderation/simplewarning.js",
+    "js/moderation/confirmrejectiondialog.js",
     ]
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

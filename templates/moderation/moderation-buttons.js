@@ -5,6 +5,7 @@ var batchURLS = [];
 var rejectionMarkerClass = "reject-version";
 var showsRejectionNotification = false;
 var disabledClass = "disabled";
+goog.require("mirosubs.subtitle.ConfirmRejectiondDialog");
 
 
 
@@ -80,9 +81,13 @@ function onApproveDone(el, response, isRejection){
     }
     var replacesWithResponseButton = $(el).data("render_server_button");
     if (replacesWithResponseButton){
-        var newel = $(response.data.new_button_html);
-        $(el).replaceWith(newel);
-        prepareApproveButton(null, newel);
+        var target = $(el).parents(".moderation-toolbar-remove");
+        if (target){
+            var newel = $(response.data.new_toolbar_html);
+            $(target).replaceWith(newel);
+            ajaxifyApproveButtons(newel);
+        }
+        
     }else{
         $(el).remove();
     }

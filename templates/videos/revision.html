@@ -62,6 +62,9 @@
         });
     </script>
     {% include_bundle "mirosubs-onsite-compiled" %}
+    {% if user_can_moderate %}
+       {% include_bundle "js-moderation-dashboard" %}
+    {% endif %}
 
 {% endblock %}
 
@@ -169,11 +172,13 @@
 {% endblock %}
 
 {% block bottom_scripts %}
+    {% if user_can_moderate %}
 <script>
     $(window).load(function(){
               window.UNISUBS_MOD_REPLACE_HTML_BUTTON = true;
     {% include 'moderation/moderation-buttons.js' %}
   });
 </script>
+{% endif %}
 {% endblock %}
 

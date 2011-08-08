@@ -17,6 +17,10 @@
 {% block scripts %}
     {{ block.super }}
     {% include_bundle "mirosubs-onsite-compiled" %}
+    {% if user_can_moderate %}
+       {% include_bundle "js-moderation-dashboard" %}
+    {% endif %}
+
     <script src="{% url videos:rpc_api %}" type="text/javascript"></script>
     {% with write_video_type_js as jsinclude %}{% if jsinclude %}{% write_video_type_js video %}{% endif %}{% endwith %}
     <script src="{{ MEDIA_URL }}js/jquery.tabs.js" type="text/javascript"></script>
@@ -348,13 +352,16 @@
     <script>
         $(window).load( function() {
             mirosubs.messaging.simplemessage.displayPendingMessages();
-            {% include 'moderation/moderation-buttons.js' %}
+            {% if user_can_moderate %}
+                {% include 'moderation/moderation-buttons.js' %}
+            {% endif %}
             $('#edit_subtitles_button').click( function(e) {
                 if (!(localStorage && localStorage.getItem)) {
                     alert("Sorry, you'll need to upgrade your browser to use the subtitling dialog.");
                     e.preventDefault();
                 }
             });
+       
         });
     </script>
 {% endblock %}

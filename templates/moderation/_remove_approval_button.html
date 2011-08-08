@@ -1,2 +1,4 @@
+{% if version %}
 {% load i18n  %}
 <a href="{% url moderation:revision-remove-moderation version_id=version.pk,team_id=team.pk %}" class="green_button small remove-approval-version moderation-set-button"><span>{% trans 'Remove moderation' %}</span></a>
+{% endif %}

@@ -9,6 +9,7 @@ from django.core.exceptions import SuspiciousOperation
 from django.http import HttpResponseForbidden, HttpResponseRedirect, HttpResponse, Http404
 from django.views.decorators.http import  require_POST
 from django.template import RequestContext
+from django.template.loader import render_to_string
 from django.utils.functional import  wraps
 
 from django.views.generic.list_detail import object_list
@@ -59,7 +60,13 @@ def _set_moderation(request, team, version, status,  updates_meta=True, rejectio
             return {
                         "status":"ok",
                         "status_icon_html": render_moderation_icon(version),
-                        "new_button_html":render_moderation_togggle_button(version)}
+                        "new_button_html":render_moderation_togggle_button(version),
+                        "new_toolbar_html": render_to_string(
+                            "moderation/_approval_toolbar.html", {
+                                'user':request.user,
+                                "team":team,
+                                'version':version
+                            })}
         else:
             return HttpResponseRedirect(reverse("videos:revision", kwargs={'pk':version.pk}))
     except SuspiciousOperation:
