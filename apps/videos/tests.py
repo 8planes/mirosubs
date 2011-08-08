@@ -1015,20 +1015,20 @@ class VolunteerRpcTest(TestCase):
 
         self.user = User.objects.all()[0]
         self.request = RequestMockup(self.user)
-        reset_solr()
-        ## FIXME: Add fixtures which have some subtitles, so that they are included
-        ## in the solr index
-        ## This should yield a non empty queryset
-        #from videos.models import SubtitleLanguage
-        #print SubtitleLanguage.objects.filter(subtitle_count__gt=0)
 
+        for language in SubtitleLanguage.objects.all():
+            v = language.version()
+            if v:
+                video_changed_tasks.delay(v.video.pk, v.pk)
+
+        reset_solr()
 
     def test_get_volunteer_sqs(self):
 
         rpc = VideosApiClass()
         response = rpc._get_volunteer_sqs(self.request, self.user)
 
-        self.assertEqual(1, len(response))
+        self.assertEqual(4, len(response))
 
 #Testings VideoType classes
 from videos.types.youtube import YoutubeVideoType
