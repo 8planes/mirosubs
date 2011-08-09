@@ -625,9 +625,16 @@ MEDIA_BUNDLES = {
         "files":(
             "css/nyroModal.css",
             "css/mirosubs-widget.css",
-
          ),
         },
+     "new_home":{
+         "type":"css",
+         "files":(
+            "css/new_index.css",
+             "css/nyroModal.css",
+             "css/mirosubs-widget.css",
+          ),
+         },
     "mirosubs-offsite-compiled":{
         "type": "js",
         "files": JS_OFFSITE,

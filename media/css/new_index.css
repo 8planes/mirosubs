@@ -1,3 +1,77 @@
+body#index .wrapper {
+	width: 980px !important;
+}
+
+body#index a {
+	color: #126895;
+	text-decoration: none;
+}
+
+body#index a:hover { 
+  color: #333;
+  text-decoration: none; 
+}
+
+body#index a:visited {
+  color: auto;
+}
+
+.button {
+  display: inline-block;
+  background-image: -moz-linear-gradient(top, #177db6, #1369a8);
+  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #177db6),color-stop(1, #1369a8));
+  -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#177db6', EndColorStr='#1369a8');
+  height: 34px;
+  line-height: 34px;
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff !important;
+  border: 1px solid #093362;
+  border-radius: 3px;
+  box-shadow: inset 0px 1px 0 #23bddb, 0 1px 3px rgba(0,0,0,0.1);
+  padding: 0 16px;
+	cursor: pointer;
+	text-decoration: none !important;
+}
+
+button {
+  background-image: -moz-linear-gradient(top, #177db6, #1369a8);
+  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #177db6),color-stop(1, #1369a8));
+  -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#177db6', EndColorStr='#1369a8');
+  height: 34px;
+  line-height: 34px;
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff !important;
+  border: 1px solid #093362;
+  border-radius: 3px;
+  -moz-box-shadow: inset 0px 1px 0 #23bddb, 0 1px 3px rgba(0,0,0,0.1);
+	-webkit-box-shadow: inset 0px 1px 0 #23bddb, 0 1px 3px rgba(0,0,0,0.1);
+  padding: 0 16px;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.button.grey {
+  background-image: -moz-linear-gradient(top, #737373, #555);
+  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #737373),color-stop(1, #555));
+  -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#737373', EndColorStr='#555555');
+  -moz-box-shadow: inset 0px 1px 0 #959595, 0 1px 3px rgba(0,0,0,0.4);
+	-webkit-box-shadow: inset 0px 1px 0 #959595, 0 1px 3px rgba(0,0,0,0.4);	
+  border: 1px solid #393939;
+}
+
+.rounded-img {
+  background-clip: padding-box !important;
+}
+
+.rounded-img img {
+  opacity: 0;
+  display: block;
+}
+
 #home-blurb {
   text-align: center;
   margin-bottom: 36px;
@@ -54,7 +128,7 @@
   font-weight: bold;
   border: 1px solid #c6c6c6;
   border-radius: 4px;
-  width: 180px;
+  width: 170px;
   height: 32px;
   padding: 0 0 0 4px;
   margin-right: 5px;
@@ -66,12 +140,13 @@
 }
 
 #home-left form {
-  float:left;
+  float: left !important;
+	width: 280px;
 }
 
 #home-left #features {
   float: right;
-  width: 172px;
+  width: 170px;
   font-size: 11px;
   padding: 0;
   margin: 0;
@@ -171,6 +246,7 @@
 #partners li {
 	display: block;
 	float: left;
+	margin: 0 0 0 15px;
 }
 
 #partners li a {
@@ -189,6 +265,10 @@
   color: #2067b0;
   font-weight: normal;
   display: block;
+}
+
+#partners a:hover .url {
+	color: #333;
 }
 
 #enterprise {
@@ -275,3 +355,78 @@
 
 #most-popular { float: left; }
 #featured-videos { float: right; }
+
+ul.video_list {
+	margin: 20px 0 0 0;
+}
+
+ul.video_list li {
+	width: 120px;
+	float: left;
+	margin: 0 13px 0 13px;
+	height: 170px;
+}
+
+ul.video_list li a {
+	text-decoration: none !important;
+}
+
+ul.video_list li a span.video_thumb {
+	vertical-align: bottom;
+	display: inline-block;
+	_display: inline;
+	overflow: hidden;
+}
+
+ul.video_list li a span.video_thumb span.clip {
+	position: relative;
+	overflow: hidden;
+	display: block;
+	width: 120px;
+	height: 90px;
+	background: #000;
+}
+
+ul.video_list li a span.video_thumb span.clip img {
+	top: 0;
+	position: absolute;
+	display: block;
+	left: 0;
+	width: 120px;
+	height: 90px;
+}
+
+ul.video_list li a h4 {
+	margin: 0 0 5px 0;
+	font-size: 13px;
+	overflow: hidden;
+	width: 120px;
+}
+
+ul.video_list li a:hover h4 {
+	color: #7f878d;
+}
+
+ul.video_list li span {
+	display: block;
+	font-size: 13px;
+}
+
+ul.video_list li span strong {
+	font-weight: normal;
+}
+
+ul.video_list li span.date {
+	margin: 0 0 5px 0;
+}
+
+ul.video_list li span.views {
+	color: #747b81;
+	font-size: 14px;
+}
+
+ul.video_list li span.date_added {
+	color: #747b81;
+	font-weight: bold;
+	font-size: 12px;
+}

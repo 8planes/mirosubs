@@ -212,7 +212,7 @@ ul.video_list {
 }
 
 ul.video_list li {
-	width: 155px;
+	width: 120px;
 	float: left;
 	margin: 0 13px 0 13px;
 	height: 250px;
@@ -251,7 +251,7 @@ ul.video_list li a h4 {
 	margin: 0 0 5px 0;
 	font-size: 13px;
 	overflow: hidden;
-	width: 155px;
+	width: 120px;
 }
 
 ul.video_list li a:hover h4 {
