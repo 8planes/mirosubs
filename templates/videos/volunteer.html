@@ -32,6 +32,24 @@
 </div><!-- // pod -->
 <br/>
 
+<div class="pod" id="requested_videos">
+    <div class="hd">
+        <a class="btn_more_videos" href="{% url videos:volunteer_category "requested" %}">
+            {% trans "More Requested Videos" %}
+        </a>
+        <h2>{% trans "Requested Videos" %}</h2>
+    </div><!-- // hd -->
+    <div class="bd">
+        <div class="watch-page-content">
+            {% with requested_videos as video_list %}
+                {% include 'videos/_watch_page.html' %}
+            {% endwith %}    
+        </div>
+    </div><!-- // bd -->
+</div><!-- // pod -->
+<br/>
+
+
 <div class="pod" id="popular_videos">
     <div class="hd clearfix">
         <a class="btn_more_videos" href="{% url videos:volunteer_category "popular" %}">
@@ -87,23 +105,6 @@
     </div><!-- // bd -->
 </div><!-- // pod -->
 <br/>
-
-<div class="pod" id="requested_videos">
-    <div class="hd">
-        <a class="btn_more_videos" href="{% url videos:volunteer_category "requested" %}">
-            {% trans "More Requested Videos" %}
-        </a>
-        <h2>{% trans "Requested Videos" %}</h2>
-    </div><!-- // hd -->
-    <div class="bd">
-        <div class="watch-page-content">
-            {% with requested_videos as video_list %}
-                {% include 'videos/_watch_page.html' %}
-            {% endwith %}    
-        </div>
-    </div><!-- // bd -->
-</div><!-- // pod -->
-
 
 <div class="pod" id="latest_videos">
     <div class="hd">
