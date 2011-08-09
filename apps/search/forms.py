@@ -87,7 +87,7 @@ class SearchForm(forms.Form):
         for lang, val in data:
             lang = LanguageField.convert(lang)
             try:
-                choices.append((lang, u'%s(%s)' % (ALL_LANGUAGES_NAMES[lang], val), val))
+                choices.append((lang, u'%s (%s)' % (ALL_LANGUAGES_NAMES[lang], val), val))
             except KeyError:
                 pass
 
