@@ -28,6 +28,7 @@ LANGUAGE_RE = re.compile(r"S_([a-zA-Z\-]+)")
 
 from apps.teams.tests.teamstestsutils import refresh_obj, reset_solr , rpc
 from apps.teams.moderation_views import _get_moderation_results
+from apps.teams.moderation import _update_search_index
 
 from django.core.exceptions import SuspiciousOperation
 
@@ -121,7 +122,7 @@ class TestVideoModerationForm(BaseTestModeration):
         self.assertTrue(form.is_valid())
         self.video = Video.objects.get(pk=self.video.pk)
         self.assertFalse(is_moderated(self.video))
-        
+
 class TestBusinessLogic( BaseTestModeration):
     fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
      
@@ -632,7 +633,7 @@ class TestDashboard(TestSubtitleVersions, BaseTestModeration):
         """
         from haystack.query import SearchQuerySet
         from apps.teams.moderation_views import _get_moderation_results
-        from apps.teams.moderation import _update_search_index
+        
 
         team1 = self.team
         other_user  = User.objects.exclude(teammember__in=[x for x in team1.members.all()]).exclude(pk=self.user.pk)[0]
@@ -681,6 +682,15 @@ class TestDashboard(TestSubtitleVersions, BaseTestModeration):
         self.assertEquals(results.count(), 1)
         self.assertEquals(results.count() , len(videos_with_new))
         reset_solr()
+
+    def indexing_works_for_userless_versions(self):
+        # for https://www.pivotaltracker.com/story/show/16776381
+        add_moderation(self.video, self.team, self.user)
+        lang = self.video.subtitle_language()
+        v = SubtitleVersion(language=lang, version_no = lang.subtitleversion_set.all().count(), datetime_started=datetime.now())
+        v.save()
+        _update_search_index(self.video)#TeamVideo.objects.get(video=self.video, team=self.team))
+    
 
 class TestRemoval(TestSubtitleVersions, BaseTestModeration):
     def test_pending_count_after_removal(self):
