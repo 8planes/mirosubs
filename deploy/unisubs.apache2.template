@@ -11,8 +11,8 @@
 
     LogLevel warn
 
-    CustomLog "|/usr/bin/cronolog /var/log/apache2/INSERT_SITE_DIRECTORY/access.log" combined
-    ErrorLog "|/usr/bin/cronolog /var/log/apache2/INSERT_SITE_DIRECTORY/error.log"
+    CustomLog "|/usr/bin/cronolog /var/log/apache2/INSERT_SUBDOMAIN.universalsubtitles.org/access.log" combined
+    ErrorLog "|/usr/bin/cronolog /var/log/apache2/INSERT_SUBDOMAIN.universalsubtitles.org/error.log"
 
     WSGIDaemonProcess unisubs-INSERT_SITE_NAME user=www-data group=pcf-web processes=8 threads=25 maximum-requests=10000
     WSGIProcessGroup unisubs-INSERT_SITE_NAME
