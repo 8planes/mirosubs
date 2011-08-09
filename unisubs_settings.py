@@ -26,7 +26,6 @@ DEBUG = False
 
 ADMINS = (
     ('Adam Duston', 'adam@8planes.com'),
-    ('Holmes Wilson', 'hwilson@gmail.com'),
     ('Craig Zheng', 'craig@pculture.org'),
     ('universalsubtitles-errors', 'universalsubtitles-errors@pculture.org')
 )
