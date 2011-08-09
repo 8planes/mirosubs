@@ -33,6 +33,7 @@ from django.conf import settings
 from haystack.query import SearchQuerySet
 from videos.search_indexes import VideoSearchResult
 from utils.celery_search_index import update_search_index
+from utils.multi_query_set import MultiQuerySet
 from videos.tasks import send_change_title_email
 from django.template.defaultfilters import slugify
 import datetime
@@ -134,37 +135,56 @@ class VideosApiClass(object):
         Return the search query set for videos which would be relevant to
         volunteer for writing subtitles.
         '''
+
         user_langs = get_user_languages_from_request(request)
+        rest_langs = dict(settings.ALL_LANGUAGES).keys()
+        for lang in user_langs:
+            rest_langs.remove(lang)
 
         relevant = SearchQuerySet().result_class(VideoSearchResult) \
             .models(Video).filter(video_language_exact__in=user_langs) \
             .filter_or(languages_exact__in=user_langs) \
             .order_by('-requests_count')
 
-        return relevant
+
+        # Rest of the videos, which most probably would not be much useful
+        # for the volunteer
+        rest = SearchQuerySet().result_class(VideoSearchResult) \
+            .exclude(languages_exact__in=user_langs) \
+            .exclude(video_language_exact__in=user_langs) \
+            .order_by('-requests_count')
+
+        return relevant, rest
 
     @add_request_to_kwargs
     def load_featured_page_volunteer(self, page, request, user):
-        relevant = self._get_volunteer_sqs(request, user)
-        sqs = relevant.filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
+        rel, rest = self._get_volunteer_sqs(request, user)
+
+        rel = rel.filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
             .order_by('-featured')
 
-        return render_page(page, sqs, request=request)    
+        rest = rest.filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
+            .order_by('-featured')
+
+        return render_page(page, MultiQuerySet(rel, rest), request=request)
 
     @add_request_to_kwargs
     def load_requested_page_volunteer(self, page, request, user):
         user_langs = get_user_languages_from_request(request)
-        relevant = self._get_volunteer_sqs(request, user)
-        sqs = relevant.filter(requests_exact__in=user_langs)
 
-        return render_page(page, sqs, request=request)
+        rel, rest = self._get_volunteer_sqs(request, user)
+        rel = rel.filter(requests_exact__in=user_langs)
+        rest = rest.filter(requests_exact__in=user_langs)
+
+        return render_page(page, MultiQuerySet(rel, rest), request=request)
 
     @add_request_to_kwargs
     def load_latest_page_volunteer(self, page, request, user):
-        relevant = self._get_volunteer_sqs(request, user)
-        sqs = relevant.order_by('-edited')
+        rel, rest = self._get_volunteer_sqs(request, user)
+        rel = rel.order_by('-edited')
+        rest = rest.order_by('-edited')
 
-        return render_page(page, sqs, request=request)
+        return render_page(page, MultiQuerySet(rel, rest), request=request)
 
     @add_request_to_kwargs
     def load_popular_page_volunteer(self, page, sort, request, user):
@@ -179,10 +199,11 @@ class VideosApiClass(object):
 
         sort_field = sort_types.get(sort, 'week_views')
 
-        relevant = self._get_volunteer_sqs(request, user)
-        sqs = relevant.order_by('-%s' % sort_field)
+        rel, rest = self._get_volunteer_sqs(request, user)
+        rel = rel.order_by('-%s' % sort_field)
+        rest = rest.order_by('-%s' % sort_field)
 
-        return render_page(page, sqs, request=request)
+        return render_page(page, MultiQuerySet(rel, rest), request=request)
 
     @add_request_to_kwargs
     def load_popular_videos(self, sort, request, user):
@@ -227,12 +248,13 @@ class VideosApiClass(object):
 
         sort_field = sort_types.get(sort, 'week_views')
 
-        relevant = self._get_volunteer_sqs(request, user)
+        rel, rest = self._get_volunteer_sqs(request, user)
 
-        popular_videos = relevant.order_by('-%s' % sort_field)[:5]
+        rel = rel.order_by('-%s' % sort_field)[:5]
+        rest = rest.order_by('-%s' % sort_field)[:5]
 
         context = {
-            'video_list': popular_videos
+            'video_list': MultiQuerySet(rel, rest)
         }
 
         content = render_to_string('videos/_watch_page.html', context, RequestContext(request))
