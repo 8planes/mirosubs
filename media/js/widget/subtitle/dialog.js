@@ -86,6 +86,7 @@ mirosubs.subtitle.Dialog.prototype.showDownloadLink_ = function() {
 };
 mirosubs.subtitle.Dialog.prototype.enterDocument = function() {
     mirosubs.subtitle.Dialog.superClass_.enterDocument.call(this);
+    mirosubs.Dialog.translationDialogOpen = false;
     var doc = this.getDomHelper().getDocument();
     this.getHandler().
         listen(
