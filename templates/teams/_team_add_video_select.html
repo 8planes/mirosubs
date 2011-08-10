@@ -9,7 +9,7 @@
       <ul>
         {% for team in teams %}
             <li>
-                <a href="{% url teams:add_video team.slug %}?url={{ request.build_absolute_uri|urlencode }}{% if video.title %}&title={{ video.title|urlencode }}{% endif %}">
+                <a href="{% url teams:add_video team.slug %}?url={{ video_absolute_url|urlencode }}{% if video.title %}&title={{ video.title|urlencode }}{% endif %}">
                     {{ team }}
                 </a>
             </li>
