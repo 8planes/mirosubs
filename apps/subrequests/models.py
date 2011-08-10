@@ -27,7 +27,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from auth.models import CustomUser as User
-from videos.models import Video, Action, SubtitleLanguage, ALL_LANGUAGES
+from videos.models import Video, Action, ALL_LANGUAGES
 
 class SubtitleRequestManager(models.Manager):
     '''
@@ -90,12 +90,7 @@ class SubtitleRequest(models.Model):
         '''
         The subtitle language which is related to this subtitle request.
         '''
-        sl = self.video.subtitle_language(self.language) or SubtitleLanguage(
-            video=self.video,
-            language=self.language,
-        ).save()
-
-        return sl
+        return self.video.subtitle_language(self.language)
 
     def subtitlelanguage_handler(cls, sender, instance, created, **kwargs):
         related_requests = cls.video.subtitlerequest_set.filter(
