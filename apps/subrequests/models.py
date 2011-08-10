@@ -45,7 +45,8 @@ class SubtitleRequestManager(models.Manager):
                                          language=language, track=track,
                                          description=description, done=False)
         # Mark all other requests with same video, user, language triad as done
-        self.exclude(pk=subreq.pk).update(done=True)
+        self.filter(user=user, video=video, language=language) \
+            .exclude(pk=subreq.pk).update(done=True)
 
         return subreq
 
