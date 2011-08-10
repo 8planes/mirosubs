@@ -1,0 +1,46 @@
+{% extends "jsdemo/base_demo.html" %}
+{% block body %}
+
+<div id="playerContainer"></div>
+<div>
+  <a href="#" onclick="togglePlaying(); return false">toggle play</a>  
+</div>
+<!-- Event log. -->
+<fieldset class="goog-debug-panel">
+  <legend>Event Log</legend>
+  <div id="log" style="height: 300px; overflow-y: auto"></div>
+</fieldset>
+<div id="perf"></div>  
+<script type="text/javascript">
+  goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
+  var logger = goog.debug.Logger.getLogger('player');
+  var logConsole = new goog.debug.DivConsole(document.getElementById('log'));
+  logConsole.setCapturing(true);
+
+  var videoSource = new mirosubs.video.YTIFrameVideoSource('CtTZCZG2A8c');
+  var player = videoSource.createPlayer();
+  var container = new goog.ui.Component();
+  container.decorate(document.getElementById('playerContainer'));
+  container.addChild(player, true);
+
+
+  var playing = false;
+  
+  function togglePlaying() {
+     playing = !playing;
+     if (playing)
+         player.play();
+     else
+         player.pause();
+  }
+
+  function playerEventHandler(e) {
+     logger.info(e.type);
+  }
+
+  goog.events.listen(player, goog.object.getValues(
+      mirosubs.video.AbstractVideoPlayer.EventType), 
+      playerEventHandler);
+
+</script>
+{% endblock %}

@@ -48,16 +48,19 @@ mirosubs.video.YoutubeVideoSource.isYoutube = function(videoURL) {
 };
 
 mirosubs.video.YoutubeVideoSource.prototype.createPlayer = function() {
-    return this.createPlayer_(false);
+    return this.createPlayerInternal(false);
 };
 
 mirosubs.video.YoutubeVideoSource.prototype.createControlledPlayer = 
     function() 
 {
-    return new mirosubs.video.ControlledVideoPlayer(this.createPlayer_(true));
+    return new mirosubs.video.ControlledVideoPlayer(this.createPlayerInternal(true));
 };
 
-mirosubs.video.YoutubeVideoSource.prototype.createPlayer_ = function(forDialog) {
+/**
+ * @protected
+ */
+mirosubs.video.YoutubeVideoSource.prototype.createPlayerInternal = function(forDialog) {
     return new mirosubs.video.YoutubeVideoPlayer(
         new mirosubs.video.YoutubeVideoSource(
             this.youtubeVideoID_, this.videoConfig_), 

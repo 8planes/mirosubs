@@ -122,8 +122,9 @@ mirosubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
         if (this.forDialog_)
             uri = new goog.Uri('http://www.youtube.com/apiplayer');
         else
-            uri = new goog.Uri('http://www.youtube.com/v/' +
-                               this.videoSource_.getYoutubeVideoID());
+            uri = new goog.Uri(
+                'http://www.youtube.com/v/' +
+                    this.videoSource_.getYoutubeVideoID());
         this.addQueryString_(uri);
         window["swfobject"]["embedSWF"](
             uri.toString(), videoSpan.id, 
@@ -205,6 +206,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
 mirosubs.video.YoutubeVideoPlayer.prototype.playerStateChange_ = function(newState) {
     var s = mirosubs.video.YoutubeVideoPlayer.State_;
     var et = mirosubs.video.AbstractVideoPlayer.EventType;
+    this.logger_.info("player new state is " + newState);
     if (newState == s.PLAYING) {
         this.dispatchEvent(et.PLAY);
         this.timeUpdateTimer_.start();

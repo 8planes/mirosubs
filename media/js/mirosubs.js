@@ -420,6 +420,16 @@ mirosubs.removeFromLocalStorage = function(key) {
     mirosubs.storage_['removeItem'](key);
 };
 
+mirosubs.addScript = function(src, opt_async) {
+    var tag = document.createElement('script');
+    tag.type = 'text/javascript';
+    tag.src = src;
+    if (opt_async)
+        tag.async = true;
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+};
+
 if (goog.DEBUG) {
     mirosubs.logger_ = goog.debug.Logger.getLogger('mirosubs');
 }
