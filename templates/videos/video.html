@@ -72,8 +72,10 @@
 {% block main_content %}
     <h2 class="main-title">
         <span class="title-container" style="float: none;">{{ video }}</span>
-        {% if not video.title or video.is_html5 or user.is_superuser %}
-        <a class="edit-title" href="#" data-modal="edit-title-dialog">{% trans 'edit title' %}</a>
+        {% if user.is_authenticated %}
+            {% if not video.title or video.is_html5 or user.is_superuser %}
+            <a class="edit-title" href="#" data-modal="edit-title-dialog">{% trans 'edit title' %}</a>
+            {% endif %}
         {% endif %}
     </h2>
     {% if saved %}
