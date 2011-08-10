@@ -280,7 +280,10 @@ def upload_subtitles(request):
         except AlreadyEditingException, e:
             output['errors'] = {"_all__":[force_unicode(e.msg)]}
             transaction.rollback()
-     
+        except Exception, e:
+            #trying find out one error on dev-server. hope this should help
+            transaction.rollback()
+            raise e
     else:
         output['errors'] = form.get_errors()
         transaction.rollback()

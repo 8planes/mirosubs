@@ -121,7 +121,11 @@
     
     <div id="edit-title-dialog" style="display: none" class="msg_modal_wrap" >
         <a href="#close" class="close">{% trans "Close" %}</a>
-        <h3>{% trans 'Please enter the translation of the video title for the current language below' %}</h3>
+        <h3>
+            {% blocktrans with language.language_display|lower as language %}
+                You are editing the {{ language }} translation of the video title
+            {% endblocktrans %}
+        </h3>
         <div class="msg_modal">
             <p>
             {% blocktrans %}
