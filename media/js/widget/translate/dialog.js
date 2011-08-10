@@ -86,6 +86,7 @@ mirosubs.translate.Dialog.prototype.isWorkSaved = function() {
 };
 mirosubs.translate.Dialog.prototype.enterDocument = function() {
     mirosubs.translate.Dialog.superClass_.enterDocument.call(this);
+    mirosubs.Dialog.translationDialogOpen = true;
     var that = this;
     this.getRightPanelInternal().showDownloadLink(
         function() {
