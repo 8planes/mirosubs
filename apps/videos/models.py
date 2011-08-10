@@ -790,6 +790,12 @@ class SubtitleCollection(models.Model):
         return effective_subtitles
 
 class SubtitleVersion(SubtitleCollection):
+    """
+    user -> The legacy data model allowed null users. We do not allow it anymore, but
+    for those cases, we've replaced it with the user created on the syncdb commit (see
+    apps.auth.__init__).
+    
+    """
     language = models.ForeignKey(SubtitleLanguage)
     version_no = models.PositiveIntegerField(default=0)
     datetime_started = models.DateTimeField(editable=False)
