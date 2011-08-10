@@ -95,7 +95,6 @@ class SubtitleRequest(models.Model):
     def subtitlelanguage_handler(cls, sender, instance, created, **kwargs):
         related_requests = cls.video.subtitlerequest_set.filter(
             language=instance.language,
-            track=True,
             done=False
         )
 
@@ -104,7 +103,8 @@ class SubtitleRequest(models.Model):
             if created:
                 # Adds followers to languages which have pending requests and
                 # were not already existing.
-                for user in related_requests.values_list('user', flat=True):
+                tracked_requests = related_requests.filter(track=True)
+                for user in tracked_requests.values_list('user', flat=True):
                     instance.followers.add(user)
 
             elif instance.is_complete:
