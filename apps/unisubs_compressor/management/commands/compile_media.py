@@ -215,15 +215,17 @@ class Command(BaseCommand):
         os.chdir(settings.PROJECT_ROOT)
         self.base_dir = self.create_cache_dir()
         bundles = settings.MEDIA_BUNDLES
-        
+        self.copy_dirs() 
         for bundle_name, data in bundles.items():
             if restrict_bundles and bundle_name not in args:
                 continue
             self.compile_media_bundle( bundle_name, data['type'], data["files"])
-        self.copy_dirs()
-
+        
         # we now move the old temp dir to it's final destination
         final_path = get_cache_dir()
-        shutil.move(self.base_dir, final_path)
+        if os.path.exists(final_path):
+            shutil.rmtree(final_path)
+        for filename in os.listdir(self.base_dir):
+            shutil.move(os.path.join(self.base_dir, filename), os.path.join(final_path, filename))
         
 

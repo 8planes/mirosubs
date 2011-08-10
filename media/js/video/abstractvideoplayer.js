@@ -53,6 +53,13 @@ goog.inherits(mirosubs.video.AbstractVideoPlayer, goog.ui.Component);
 mirosubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL = 500;
 mirosubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL = 80;
 
+/*
+  We store the latest volume set on a cookie, so that a regular user 
+  doesn't have to reset the volume for each edit, this is the identifier
+  for that volume 
+*/
+mirosubs.video.AbstractVideoPlayer.VOLUME_COOKIE_ID  = "lastestVolume";
+
 if (goog.DEBUG) {
     mirosubs.video.AbstractVideoPlayer.logger_ = 
         goog.debug.Logger.getLogger('AbstractVideoPlayer');
@@ -266,8 +273,24 @@ mirosubs.video.AbstractVideoPlayer.prototype.videoElementsContain = function(ele
  * @param {number} volume A number between 0.0 and 1.0
  */
 mirosubs.video.AbstractVideoPlayer.prototype.setVolume = function(volume) {
-    goog.abstractMethod();
+    this.rememberVolume_(volume);
 };
+
+mirosubs.video.AbstractVideoPlayer.prototype.rememberVolume_ = function (volume){
+    var cookie = new goog.net.Cookies(document);
+    cookie.set(mirosubs.video.AbstractVideoPlayer.VOLUME_COOKIE_ID, volume);
+}
+
+mirosubs.video.AbstractVideoPlayer.prototype.fetchLastSetVolume_ = function (volume){
+
+    return new goog.net.Cookies(document).get(mirosubs.video.AbstractVideoPlayer.VOLUME_COOKIE_ID, 1);
+}
+
+mirosubs.video.AbstractVideoPlayer.prototype.restorePreviousVolume_ = function (){
+    var vol = this.fetchLastSetVolume_();
+    this.setVolume(vol);
+}
+
 mirosubs.video.AbstractVideoPlayer.prototype.getVideoSource = function() {
     return this.videoSource_;
 };
