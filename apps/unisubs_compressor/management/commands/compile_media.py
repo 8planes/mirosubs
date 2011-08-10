@@ -148,7 +148,7 @@ class Command(BaseCommand):
                                    "--define goog.NATIVE_ARRAY_PROTOTYPES=false "
                                    "--output_wrapper (function(){%%output%%})(); "
                                    "--compilation_level %s") % 
-                                  (compiler_jar, calcdeps_js, deps, compiled_js,
+                                  (compiler_jar, calcdeps_js, " ".join(deps), compiled_js,
                                    debug_arg, optimization_type))
 
         with open(compiled_js, 'r') as compiled_js_file:
@@ -201,13 +201,14 @@ class Command(BaseCommand):
         os.chdir(settings.PROJECT_ROOT)
         self.base_dir = self.create_cache_dir()
         bundles = settings.MEDIA_BUNDLES
-
+        self.copy_dirs()
         for bundle_name, data in bundles.items():
             self.compile_media_bundle( bundle_name, data['type'], data["files"])
-        self.copy_dirs()
-
         # we now move the old temp dir to it's final destination
         final_path = get_cache_dir()
-        shutil.move(self.base_dir, final_path)
+        if os.path.exists(final_path):
+            shutil.rmtree(final_path)
+        for filename in os.listdir(self.base_dir):
+            shutil.move(os.path.join(self.base_dir, filename), os.path.join(final_path, filename))
         
 
