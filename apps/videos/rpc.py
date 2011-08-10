@@ -166,17 +166,28 @@ class VideosApiClass(object):
         rest = rest.filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
             .order_by('-featured')
 
-        return render_page(page, MultiQuerySet(rel, rest), request=request)
+        count = rel.count() + rest.count()
+
+        mqs = MultiQuerySet(rel, rest)
+        mqs.set_count(count)
+
+        return render_page(page, mqs, request=request)
 
     @add_request_to_kwargs
     def load_requested_page_volunteer(self, page, request, user):
         user_langs = get_user_languages_from_request(request)
 
         rel, rest = self._get_volunteer_sqs(request, user)
+
         rel = rel.filter(requests_exact__in=user_langs)
         rest = rest.filter(requests_exact__in=user_langs)
 
-        return render_page(page, MultiQuerySet(rel, rest), request=request)
+        count = rel.count() + rest.count()
+
+        mqs = MultiQuerySet(rel, rest)
+        mqs.set_count(count)
+
+        return render_page(page, mqs, request=request)
 
     @add_request_to_kwargs
     def load_latest_page_volunteer(self, page, request, user):
@@ -184,7 +195,12 @@ class VideosApiClass(object):
         rel = rel.order_by('-edited')
         rest = rest.order_by('-edited')
 
-        return render_page(page, MultiQuerySet(rel, rest), request=request)
+        count = rel.count() + rest.count()
+
+        mqs = MultiQuerySet(rel, rest)
+        mqs.set_count(count)
+
+        return render_page(page, mqs, request=request)
 
     @add_request_to_kwargs
     def load_popular_page_volunteer(self, page, sort, request, user):
@@ -203,7 +219,12 @@ class VideosApiClass(object):
         rel = rel.order_by('-%s' % sort_field)
         rest = rest.order_by('-%s' % sort_field)
 
-        return render_page(page, MultiQuerySet(rel, rest), request=request)
+        count = rel.count() + rest.count()
+
+        mqs = MultiQuerySet(rel, rest)
+        mqs.set_count(count)
+
+        return render_page(page, mqs,  request=request)
 
     @add_request_to_kwargs
     def load_popular_videos(self, sort, request, user):
@@ -253,8 +274,13 @@ class VideosApiClass(object):
         rel = rel.order_by('-%s' % sort_field)[:5]
         rest = rest.order_by('-%s' % sort_field)[:5]
 
+        count = rel.count() + rest.count()
+
+        mqs = MultiQuerySet(rel, rest)
+        mqs.set_count(count)
+
         context = {
-            'video_list': MultiQuerySet(rel, rest)
+            'video_list': mqs
         }
 
         content = render_to_string('videos/_watch_page.html', context, RequestContext(request))
