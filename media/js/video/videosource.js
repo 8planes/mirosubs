@@ -47,7 +47,7 @@ mirosubs.video.VideoSource.prototype.getVideoURL = function() {};
 
 /**
  *
- * @param {Array} videoSpecs This is an array with each element either 
+ * @param {Array} videoSpecs This is an array in which each element is either 
  *   a string (for a url) or an object with properties "url" and "config".
  * @return {?mirosubs.video.VideoSource} video source, or null if none found.
  */
@@ -105,8 +105,15 @@ mirosubs.video.VideoSource.html5VideoSource_ = function(videoSources, videoType)
 mirosubs.video.VideoSource.videoSourceForURL = function(videoURL, opt_videoConfig) {
     var blipFileGetRegex = /^\s*https?:\/\/([^\.]+\.)*blip\.tv\/file\/get\//;
     if (mirosubs.video.YoutubeVideoSource.isYoutube(videoURL)) {
-        var videoSource =
-            mirosubs.video.YoutubeVideoSource.forURL(videoURL, opt_videoConfig);
+        var videoSource = null;
+        if (mirosubs.supportsIFrameMessages()) {
+            videoSource = mirosubs.video.YTIFrameVideoSource.forURL(
+                videoURL, opt_videoConfig);
+        }
+        else {
+            videoSource = mirosubs.video.YoutubeVideoSource.forURL(
+                videoURL, opt_videoConfig);
+        }
         if (videoSource != null)
             return videoSource;
     }
@@ -128,8 +135,9 @@ mirosubs.video.VideoSource.videoSourceForURL = function(videoURL, opt_videoConfi
     }
     else if (/\.flv$|\.mov$/i.test(videoURL)) {
         return new mirosubs.video.FlvVideoSource(videoURL, opt_videoConfig);
-    }else if (mirosubs.video.BrightcoveVideoSource.isBrightcove(videoURL)){
-        return  mirosubs.video.BrightcoveVideoSource.forURL(videoURL);
+    }
+    else if (mirosubs.video.BrightcoveVideoSource.isBrightcove(videoURL)) {
+        return mirosubs.video.BrightcoveVideoSource.forURL(videoURL);
     }
     else {
         var videoSource = 
