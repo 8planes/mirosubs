@@ -21,8 +21,13 @@ def cleanup():
     import datetime
     from django.db import transaction
     from django.contrib.sessions.models import Session
+    from djcelery.models import TaskState
     
-    Session.objects.filter(expire_date__lt=datetime.datetime.now()).delete()
+    now = datetime.datetime.now()
+    Session.objects.filter(expire_date__lt=now).delete()
+    
+    d = now - datetime.timedelta(days=31)
+    TaskState.objects.filter(tstamp__lt=d).delete()
     transaction.commit_unless_managed()
     
 @task

@@ -119,9 +119,14 @@ mirosubs.video.Html5VideoPlayer.prototype.enterDocument = function() {
         listen(this.videoElem_, 'timeupdate', this.sendTimeUpdate_).
         listen(this.videoElem_, 'ended', this.dispatchEndedEvent).
         listenOnce(this.videoElem_, 'click', this.playerClicked_);
-    if (this.videoElem_['readyState'] >= this.videoElem_['HAVE_METADATA'])
+    if (this.videoElem_['readyState'] >= this.videoElem_['HAVE_METADATA']){
+        
         this.setDimensionsKnownInternal();
+    }
+    this.restorePreviousVolume_();
+    
 };
+
 
 mirosubs.video.Html5VideoPlayer.prototype.playerClicked_ = function(e) {
     if (this.playToClick_ && !this.playedOnce_) {
@@ -169,6 +174,8 @@ mirosubs.video.Html5VideoPlayer.prototype.getVolume = function() {
 };
 mirosubs.video.Html5VideoPlayer.prototype.setVolume = function(volume) {
     this.videoElem_['volume'] = volume;
+    mirosubs.video.Html5VideoPlayer.superClass_.setVolume.call(this, volume);
+    
 };
 mirosubs.video.Html5VideoPlayer.prototype.getBufferedLength = function() {
     if (this.videoElem_['buffered'])

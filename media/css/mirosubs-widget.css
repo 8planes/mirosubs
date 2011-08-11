@@ -2060,7 +2060,7 @@ cursor: pointer !important;
 
 .mirosubs-volume .mirosubs-volume-container {
    overflow: hidden !important;
-   height: 0 !important;
+   height: 0 ;
    bottom: 29px !important;
    width: 31px !important;
    -moz-border-radius-topright: 3px !important;
