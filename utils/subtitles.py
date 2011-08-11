@@ -279,7 +279,7 @@ class TtmlSubtitleParser(SubtitleParser):
         
     def _get_data(self, node):
         output = {
-            'subtitle_text': htmlentitydecode(strip_tags(node.toxml()))
+            'subtitle_text': unescape_html(strip_tags(node.toxml()))
         }        
         output['start_time'], output['end_time'] = \
             self._get_time(node.getAttribute('begin'), node.getAttribute('dur'))
