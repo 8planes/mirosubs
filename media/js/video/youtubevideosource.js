@@ -32,13 +32,18 @@ mirosubs.video.YoutubeVideoSource = function(youtubeVideoID, opt_videoConfig) {
     this.videoConfig_ = opt_videoConfig;
 };
 
+mirosubs.video.YoutubeVideoSource.extractVideoID = function(videoURL) {
+    var videoIDExtract = /v[\/=]([0-9a-zA-Z\-\_]+)/i.exec(videoURL);
+    return videoIDExtract ? videoIDExtract[1] : null;
+}
+
 mirosubs.video.YoutubeVideoSource.forURL = 
     function(videoURL, opt_videoConfig) 
 {
-    var videoIDExtract = /v[\/=]([0-9a-zA-Z\-\_]+)/i.exec(videoURL);
-    if (videoIDExtract)
+    var videoID = mirosubs.video.YoutubeVideoSource.extractVideoID(videoURL);
+    if (videoID)
         return new mirosubs.video.YoutubeVideoSource(
-            videoIDExtract[1], opt_videoConfig);
+            videoID, opt_videoConfig);
     else
         return null;
 };

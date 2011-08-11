@@ -29,3 +29,12 @@ mirosubs.video.YTIFrameVideoSource.prototype.createPlayerInternal = function(for
             this.getYoutubeVideoID(), this.getVideoConfig()),
         forDialog);
 };
+
+mirosubs.video.YTIFrameVideoSource.forURL = function(videoURL, opt_videoConfig) {
+    var videoID = mirosubs.video.YoutubeVideoSource.extractVideoID(videoURL);
+    if (videoID)
+        return new mirosubs.video.YTIFrameVideoSource(
+            videoID, opt_videoConfig);
+    else
+        return null;
+};

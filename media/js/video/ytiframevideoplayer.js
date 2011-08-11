@@ -23,31 +23,23 @@ mirosubs.video.YTIFrameVideoPlayer = function(videoSource, opt_forDialog) {
     this.player_ = null;
     this.videoSource_ = videoSource;
     this.playerElemID_ = mirosubs.randomString() + "_ytplayer";
+    this.forDialog_ = !!opt_forDialog;
     this.commands_ = [];
     this.progressTimer_ = new goog.Timer(
         mirosubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL);
     this.timeUpdateTimer_ = new goog.Timer(
         mirosubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL);
+    this.logger_ = goog.debug.Logger.getLogger('mirosubs.video.YTIFrameVideoPlayer');
 };
 goog.inherits(mirosubs.video.YTIFrameVideoPlayer, mirosubs.video.AbstractVideoPlayer);
 
-mirosubs.video.YTIFrameVideoPlayer.prototype.logger_ = 
-    goog.debug.Logger.getLogger('mirosubs.video.YTIFrameVideoPlayer');
-
 mirosubs.video.YTIFrameVideoPlayer.prototype.createDom = function() {
     mirosubs.video.YTIFrameVideoPlayer.superClass_.createDom.call(this);
-    this.playerSize_ = this.forDialog_ ? 
-        mirosubs.video.AbstractVideoPlayer.DIALOG_SIZE :
-        mirosubs.video.AbstractVideoPlayer.DEFAULT_SIZE;
-    var locationUri = new goog.Uri(window.location);
-    var domain = window.location.protocol + "//" + 
-        locationUri.getDomain() + 
-        (locationUri.getPort() != 80 ? (':' + locationUri.getPort()) : '');
+    this.setPlayerSize_();
     var embedUri = new goog.Uri(
         "http://youtube.com/embed/" + 
             this.videoSource_.getYoutubeVideoID());
-    embedUri.setParameterValue('enablejsapi', '1').
-        setParameterValue('origin', domain);
+    this.addQueryString_(embedUri);
     this.iframe_ = this.getDomHelper().createDom(
         'iframe', 
         { 'id': this.playerElemID_,
@@ -57,6 +49,38 @@ mirosubs.video.YTIFrameVideoPlayer.prototype.createDom = function() {
           'src': embedUri.toString(),
           'frameborder': '0'});
     this.setElementInternal(this.iframe_);
+};
+
+mirosubs.video.YTIFrameVideoPlayer.prototype.addQueryString_ = function(uri) {
+    var config = this.videoSource_.getVideoConfig();
+    if (!this.forDialog_ && config) {
+        for (var prop in config) {
+            if (prop != 'width' && prop != 'height')
+                uri.setParameterValue(prop, config[prop]);
+        }
+    }
+    var locationUri = new goog.Uri(window.location);
+    var domain = window.location.protocol + "//" + 
+        locationUri.getDomain() + 
+        (locationUri.getPort() != 80 ? (':' + locationUri.getPort()) : '');
+    uri.setParameterValue('enablejsapi', '1').
+        setParameterValue('origin', domain).
+        setParameterValue('wmode', 'opaque');
+    if (this.forDialog_) {
+        uri.setParameterValue('disablekb', '1').
+            setParameterValue('controls', '0');
+    }
+};
+
+mirosubs.video.YTIFrameVideoPlayer.prototype.setPlayerSize_ = function() {
+    var sizeFromConfig = this.videoSource_.sizeFromConfig();
+    if (!this.forDialog_ && sizeFromConfig)
+        this.playerSize_ = sizeFromConfig;
+    else
+        this.playerSize_ = this.forDialog_ ?
+        mirosubs.video.AbstractVideoPlayer.DIALOG_SIZE :
+        mirosubs.video.AbstractVideoPlayer.DEFAULT_SIZE;
+    this.setDimensionsKnownInternal();
 };
 
 mirosubs.video.YTIFrameVideoPlayer.prototype.enterDocument = function() {
@@ -168,3 +192,15 @@ mirosubs.video.YTIFrameVideoPlayer.prototype.setPlayheadTime =
 mirosubs.video.YTIFrameVideoPlayer.prototype.getPlayerState_ = 
     mirosubs.video.YoutubeVideoPlayer.prototype.getPlayerState_;
 
+mirosubs.video.YTIFrameVideoPlayer.prototype.getVideoSize = 
+    mirosubs.video.YoutubeVideoPlayer.prototype.getVideoSize;
+
+mirosubs.video.YTIFrameVideoPlayer.prototype.getVideoElement = function() {
+    return this.iframe_;
+};
+
+mirosubs.video.YTIFrameVideoPlayer.prototype.disposeInternal = function() {
+    mirosubs.video.YTIFrameVideoPlayer.superClass_.disposeInternal.call(this);
+    this.progressTimer_.dispose();
+    this.timeUpdateTimer_.dispose();
+};
