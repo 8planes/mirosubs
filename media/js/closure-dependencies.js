@@ -43,3 +43,4 @@ goog.require('goog.string.StringBuffer');
 goog.require('goog.dom.ViewportSizeMonitor');
 goog.require('goog.events.InputHandler');
 goog.require('goog.testing.events');
+goog.require("goog.net.Cookies");

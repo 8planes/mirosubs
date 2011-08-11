@@ -27,7 +27,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from auth.models import CustomUser as User
-from videos.models import Video, Action, ALL_LANGUAGES
+from videos.models import Video, Action, SubtitleLanguage, ALL_LANGUAGES
 
 class SubtitleRequestManager(models.Manager):
     '''
@@ -44,8 +44,14 @@ class SubtitleRequestManager(models.Manager):
         subreq, new = self.get_or_create(user=user, video=video,
                                          language=language, track=track,
                                          description=description, done=False)
+
         # Mark all other requests with same video, user, language triad as done
-        self.exclude(pk=subreq.pk).update(done=True)
+        self.filter(user=user, video=video, language=language) \
+            .exclude(pk=subreq.pk).update(done=True)
+
+        subtitle_language = subreq.subtitle_language()
+        if subtitle_language and track:
+            subtitle_language.followers.add(user)
 
         return subreq
 
@@ -86,4 +92,38 @@ class SubtitleRequest(models.Model):
         '''
         return self.video.subtitle_language(self.language)
 
-models.signals.post_save.connect(Action.create_subrequest_handler, SubtitleRequest)
+    def subtitlelanguage_handler(cls, sender, instance, created, **kwargs):
+        related_requests = cls.video.subtitlerequest_set.filter(
+            language=instance.language,
+            done=False
+        )
+
+        if related_requests.count():
+
+            if created:
+                # Adds followers to languages which have pending requests and
+                # were not already existing.
+                tracked_requests = related_requests.filter(track=True)
+                for user in tracked_requests.values_list('user', flat=True):
+                    instance.followers.add(user)
+
+            elif instance.is_complete:
+                # Marks request as completed according to subtitle status.
+                #
+                # FIXME: This will not hold good for re-requests, i.e. when the
+                # request  is made after the language is already complete (to
+                # ask for some fixes in the language probably)
+                #
+                # Solution 1: Mark subtitles as not complete.
+                #
+                # Solution 2: For re-requests only close those requests
+                # for which subtitles were edited recently. (This does not
+                # look good and is subjective about what is recent)
+
+                related_requests.update(done=True)
+
+models.signals.post_save.connect(Action.create_subrequest_handler,
+                                 SubtitleRequest)
+
+models.signals.post_save.connect(SubtitleRequest.subtitlelanguage_handler,
+                                 SubtitleLanguage)

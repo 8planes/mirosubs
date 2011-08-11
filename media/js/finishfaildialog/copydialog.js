@@ -69,13 +69,8 @@ mirosubs.finishfaildialog.CopyDialog.showForSubs = function(jsonSubs) {
 };
 
 mirosubs.finishfaildialog.CopyDialog.subsToString_ = function(jsonSubs) {
-    var noTimes = goog.array.every(
-        jsonSubs, 
-        function(j) {
-            return !j['start_time'] && !j['end_time'];
-        });
     var baseString;
-    if (noTimes)
+    if (mirosubs.Dialog.translationDialogOpen)
         baseString = goog.json.serialize(jsonSubs);
     else
         baseString = mirosubs.SRTWriter.toSRT(jsonSubs);

@@ -388,6 +388,10 @@ mirosubs.createLinkButton = function($d, text, opt_className) {
     return $d('a', atts, text);
 };
 
+mirosubs.supportsIFrameMessages = function() {
+    return !!window['postMessage'];
+};
+
 mirosubs.storage_ = window['localStorage'];
 
 mirosubs.supportsLocalStorage = function() {
@@ -418,6 +422,16 @@ mirosubs.removeFromLocalStorage = function(key) {
         mirosubs.logger_.info("Removing " + key + " from localStorage.");
     }
     mirosubs.storage_['removeItem'](key);
+};
+
+mirosubs.addScript = function(src, opt_async) {
+    var tag = document.createElement('script');
+    tag.type = 'text/javascript';
+    tag.src = src;
+    if (opt_async)
+        tag.async = true;
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 };
 
 if (goog.DEBUG) {

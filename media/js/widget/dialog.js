@@ -58,6 +58,12 @@ mirosubs.Dialog.MINUTES_TILL_WARNING = 5;
  */
 mirosubs.Dialog.SECONDS_TILL_FREEZE = 120;
 
+/**
+ * Set by whichever dialog is open. Since only one dialog is open on a page,
+ * it is okay to make this global.
+ */
+mirosubs.Dialog.translationDialogOpen = false;
+
 mirosubs.Dialog.prototype.createDom = function() {
     mirosubs.Dialog.superClass_.createDom.call(this);
     var leftColumn = new goog.ui.Component();

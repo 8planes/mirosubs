@@ -32,13 +32,18 @@ mirosubs.video.YoutubeVideoSource = function(youtubeVideoID, opt_videoConfig) {
     this.videoConfig_ = opt_videoConfig;
 };
 
+mirosubs.video.YoutubeVideoSource.extractVideoID = function(videoURL) {
+    var videoIDExtract = /v[\/=]([0-9a-zA-Z\-\_]+)/i.exec(videoURL);
+    return videoIDExtract ? videoIDExtract[1] : null;
+}
+
 mirosubs.video.YoutubeVideoSource.forURL = 
     function(videoURL, opt_videoConfig) 
 {
-    var videoIDExtract = /v[\/=]([0-9a-zA-Z\-\_]+)/i.exec(videoURL);
-    if (videoIDExtract)
+    var videoID = mirosubs.video.YoutubeVideoSource.extractVideoID(videoURL);
+    if (videoID)
         return new mirosubs.video.YoutubeVideoSource(
-            videoIDExtract[1], opt_videoConfig);
+            videoID, opt_videoConfig);
     else
         return null;
 };
@@ -48,16 +53,19 @@ mirosubs.video.YoutubeVideoSource.isYoutube = function(videoURL) {
 };
 
 mirosubs.video.YoutubeVideoSource.prototype.createPlayer = function() {
-    return this.createPlayer_(false);
+    return this.createPlayerInternal(false);
 };
 
 mirosubs.video.YoutubeVideoSource.prototype.createControlledPlayer = 
     function() 
 {
-    return new mirosubs.video.ControlledVideoPlayer(this.createPlayer_(true));
+    return new mirosubs.video.ControlledVideoPlayer(this.createPlayerInternal(true));
 };
 
-mirosubs.video.YoutubeVideoSource.prototype.createPlayer_ = function(forDialog) {
+/**
+ * @protected
+ */
+mirosubs.video.YoutubeVideoSource.prototype.createPlayerInternal = function(forDialog) {
     return new mirosubs.video.YoutubeVideoPlayer(
         new mirosubs.video.YoutubeVideoSource(
             this.youtubeVideoID_, this.videoConfig_), 
@@ -80,6 +88,16 @@ mirosubs.video.YoutubeVideoSource.prototype.setVideoConfig = function(config) {
     this.videoConfig_ = config;
 };
 
+mirosubs.video.YoutubeVideoSource.prototype.sizeFromConfig = function() {
+    if (this.videoConfig_ && this.videoConfig_['width'] && 
+        this.videoConfig_['height']) {
+        return new goog.math.Size(
+            parseInt(this.videoConfig_['width']), parseInt(this.videoConfig_['height']));
+    }
+    else {
+        return null;
+    }
+};
 
 mirosubs.video.YoutubeVideoSource.prototype.getVideoURL = function() {
     return "http://www.youtube.com/watch?v=" + this.youtubeVideoID_;

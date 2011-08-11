@@ -1026,9 +1026,10 @@ class VolunteerRpcTest(TestCase):
     def test_get_volunteer_sqs(self):
 
         rpc = VideosApiClass()
-        response = rpc._get_volunteer_sqs(self.request, self.user)
+        rel, rest = rpc._get_volunteer_sqs(self.request, self.user)
 
-        self.assertEqual(4, len(response))
+        self.assertEqual(4, len(rel))
+        self.assertEqual(3, len(rest))
 
 #Testings VideoType classes
 from videos.types.youtube import YoutubeVideoType

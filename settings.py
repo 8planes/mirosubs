@@ -182,11 +182,13 @@ JS_CORE = \
      'js/video/flashvideoplayer.js',
      'js/video/html5videoplayer.js',
      'js/video/youtubevideoplayer.js',
+     'js/video/ytiframevideoplayer.js',
      'js/video/jwvideoplayer.js',
      'js/video/flvvideoplayer.js',
      'js/video/videosource.js',
      'js/video/html5videosource.js',
      'js/video/youtubevideosource.js',
+     'js/video/ytiframevideosource.js',
      'js/video/brightcovevideosource.js',
      'js/video/brightcovevideoplayer.js',
      'js/video/flvvideosource.js',
@@ -538,7 +540,7 @@ PROJECT_VERSION = '0.5'
 
 EDIT_END_THRESHOLD = 120
 
-ANONYMOUS_USER_ID = -1
+ANONYMOUS_USER_ID = 1000
 
 #Use on production
 GOOGLE_ANALYTICS_NUMBER = 'UA-163840-22'

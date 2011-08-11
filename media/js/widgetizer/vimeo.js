@@ -22,7 +22,7 @@ goog.provide('mirosubs.widgetizer.Vimeo');
  * @constructor
  */
 mirosubs.widgetizer.Vimeo = function() {
-    mirosubs.widgetizer.Vimeo.call(this);
+    mirosubs.widgetizer.VideoPlayerMaker.call(this);
     /**
      * @const
      */

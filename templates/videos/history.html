@@ -16,15 +16,14 @@
 
 {% block scripts %}
     {{ block.super }}
-    {% include_bundle "mirosubs-onsite-compiled" %}
+    {% include_bundle "mirosubs-onsite-compiled" 0 %}
     {% if user_can_moderate %}
-       {% include_bundle "js-moderation-dashboard" %}
+       {% include_bundle "js-moderation-dashboard" 0 %}
     {% endif %}
 
     <script src="{% url videos:rpc_api %}" type="text/javascript"></script>
     {% with write_video_type_js as jsinclude %}{% if jsinclude %}{% write_video_type_js video %}{% endif %}{% endwith %}
     <script src="{{ MEDIA_URL }}js/jquery.tabs.js" type="text/javascript"></script>
-    <script src="{{ MEDIA_URL }}js/moderation/confirmrejectiondialog.js" type="text/javascript"></script>
     <script type="text/javascript">
         //create url template
         var DIFFING_URL = function() {
@@ -122,7 +121,11 @@
     
     <div id="edit-title-dialog" style="display: none" class="msg_modal_wrap" >
         <a href="#close" class="close">{% trans "Close" %}</a>
-        <h3>{% trans 'Please enter the translation of the video title for the current language below' %}</h3>
+        <h3>
+            {% blocktrans with language.language_display|lower as language %}
+                You are editing the {{ language }} translation of the video title
+            {% endblocktrans %}
+        </h3>
         <div class="msg_modal">
             <p>
             {% blocktrans %}

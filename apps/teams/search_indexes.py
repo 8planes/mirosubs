@@ -109,8 +109,8 @@ class TeamVideoLanguagesIndex(SearchIndex):
             version_info = []
             for version in versions:
                 version_info.append({
-                        "username":version.user.username,
-                        "user_id":version.user.pk,
+                        "username":version.user and version.user.username,
+                        "user_id": version.user and version.user.pk,
                         "pk":version.pk
                 })
             moderation_version_info.append( version_info)

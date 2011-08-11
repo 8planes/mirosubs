@@ -21,6 +21,8 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 import widget
 import simplejson as json
+from django.template import TemplateDoesNotExist
+from django.http import Http404
 
 def jstest(request, file_name):
     if file_name == 'alltests':
@@ -29,6 +31,9 @@ def jstest(request, file_name):
         template = 'jstesting/{0}.js'.format(file_name)
     context = {
         'languages': json.dumps(settings.ALL_LANGUAGES) }
-    return render_to_response(
-        template,
-        context_instance=RequestContext(request, context))
+    try:
+        return render_to_response(
+            template,
+            context_instance=RequestContext(request, context))
+    except TemplateDoesNotExist:
+        raise Http404

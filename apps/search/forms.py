@@ -87,7 +87,7 @@ class SearchForm(forms.Form):
         for lang, val in data:
             lang = LanguageField.convert(lang)
             try:
-                choices.append((lang, u'%s(%s)' % (ALL_LANGUAGES_NAMES[lang], val), val))
+                choices.append((lang, u'%s (%s)' % (ALL_LANGUAGES_NAMES[lang], val), val))
             except KeyError:
                 pass
 
@@ -99,7 +99,11 @@ class SearchForm(forms.Form):
     
     @classmethod
     def apply_query(cls, q, qs):
-        return qs.auto_query(q).filter_or(title=q)
+        clean_query = qs.query.clean(q)
+        qs = qs.auto_query(q)
+        if clean_query:
+            qs = qs.filter_or(title=clean_query)
+        return qs
     
     def search_qs(self, qs):
         q = self.cleaned_data.get('q')

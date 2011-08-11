@@ -96,7 +96,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.setFlashPlayerElement = function(ele
 
 mirosubs.video.YoutubeVideoPlayer.prototype.createDom = function() {
     mirosubs.video.YoutubeVideoPlayer.superClass_.createDom.call(this);
-    var sizeFromConfig = this.sizeFromConfig_();
+    var sizeFromConfig = this.videoSource_.sizeFromConfig();
     if (!this.forDialog_ && sizeFromConfig)
         this.playerSize_ = sizeFromConfig;
     else
@@ -122,8 +122,9 @@ mirosubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
         if (this.forDialog_)
             uri = new goog.Uri('http://www.youtube.com/apiplayer');
         else
-            uri = new goog.Uri('http://www.youtube.com/v/' +
-                               this.videoSource_.getYoutubeVideoID());
+            uri = new goog.Uri(
+                'http://www.youtube.com/v/' +
+                    this.videoSource_.getYoutubeVideoID());
         this.addQueryString_(uri);
         window["swfobject"]["embedSWF"](
             uri.toString(), videoSpan.id, 
@@ -148,14 +149,6 @@ mirosubs.video.YoutubeVideoPlayer.prototype.addQueryString_ = function(uri) {
         setParameterValue('playerapiid', this.playerAPIID_);
     if (this.forDialog_)
         uri.setParameterValue('disablekb', '1');
-};
-mirosubs.video.YoutubeVideoPlayer.prototype.sizeFromConfig_ = function() {
-    var config = this.videoSource_.getVideoConfig();
-    if (config && config['width'] && config['height'])
-        return new goog.math.Size(
-            parseInt(config['width']), parseInt(config['height']));
-    else
-        return null;
 };
 mirosubs.video.YoutubeVideoPlayer.prototype.exitDocument = function() {
     mirosubs.video.YoutubeVideoPlayer.superClass_.exitDocument.call(this);
@@ -205,6 +198,7 @@ mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
 mirosubs.video.YoutubeVideoPlayer.prototype.playerStateChange_ = function(newState) {
     var s = mirosubs.video.YoutubeVideoPlayer.State_;
     var et = mirosubs.video.AbstractVideoPlayer.EventType;
+    this.logger_.info("player new state is " + newState);
     if (newState == s.PLAYING) {
         this.dispatchEvent(et.PLAY);
         this.timeUpdateTimer_.start();

@@ -204,8 +204,8 @@ class CustomUser(BaseUser):
         return hashlib.sha224(settings.SECRET_KEY+str(self.pk)+video_id).hexdigest()
     
     @classmethod
-    def get_youtube_anonymous(cls):
-        return cls.objects.get(pk=10000)
+    def get_anonymous(cls):
+        return cls.objects.get(pk=settings.ANONYMOUS_USER_ID)
     
 def create_custom_user(sender, instance, created, **kwargs):
     if created:

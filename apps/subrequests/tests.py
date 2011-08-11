@@ -8,7 +8,8 @@ Replace these with more appropriate tests for your application.
 from django.test import TestCase
 
 from auth.models import CustomUser as User
-from videos.models import Video
+from videos.models import Video, SubtitleLanguage
+from videos.tasks import video_changed_tasks
 from subrequests.models import SubtitleRequest
 
 SubRequests = SubtitleRequest.objects
@@ -25,6 +26,7 @@ class TestSubtitleRequest(TestCase):
             'description': 'A request description just for test',
             'track': True,
         }
+        video_changed_tasks.delay(self.video)
 
     def _create_requests(self, langs, **kwargs):
         '''
@@ -77,3 +79,20 @@ class TestSubtitleRequest(TestCase):
         # All the older requests should have been marked as done
         for request in self._lang_requests(lang[0]).exclude(pk=req2.pk):
             self.assertEqual(request.done, True)
+
+    def test_request_auto_new_language_following(self):
+        '''
+        Test the signal handler which sets the requesters as language
+        followers when a new (requested) language is created.
+        '''
+
+        subrequest = self._create_requests(self.langs[2:3])[0]
+
+        subtitlelanguage = SubtitleLanguage(
+            video=self.video,
+            language=subrequest.language
+        )
+
+        subtitlelanguage.save()
+
+        #self.assertEqual(self.user, subtitlelanguage.followers.all()[0)

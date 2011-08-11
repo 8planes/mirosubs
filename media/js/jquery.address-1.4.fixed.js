@@ -282,7 +282,10 @@
                 }
             },
             _decode = function(value){
-                return decodeURI(value.replace(/\+/g, ' '));
+                return decodeURIComponent(value.replace(/\+/g, ' '));
+            },
+            _encode = function(value){
+                return encodeURIComponent(value)
             },
             UNDEFINED,
             ID = 'jQueryAddress',
@@ -565,12 +568,12 @@
                 if (value !== UNDEFINED) {
                     var names = this.parameterNames();
                     params = [];
-                    value = value ? value.toString() : '';
+                    value = _encode(value ? value.toString() : '');
                     for (i = 0; i < names.length; i++) {
                         var n = names[i],
                             v = this.parameter(n);
                         if (typeof v == STRING) {
-                            v = [v];
+                            v = [_encode(v)];
                         }
                         if (n == name) {
                             v = (value === null || value === '') ? [] : 

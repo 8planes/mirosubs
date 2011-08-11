@@ -68,9 +68,9 @@
             });
         });
     </script>
-    {% include_bundle "mirosubs-onsite-compiled" %}
+    {% include_bundle "mirosubs-onsite-compiled" 0 %}
     {% if user_can_moderate %}
-       {% include_bundle "js-moderation-dashboard" %}
+       {% include_bundle "js-moderation-dashboard" 0 %}
     {% endif %}
 {% endblock %}
 

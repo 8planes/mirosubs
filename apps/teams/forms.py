@@ -179,9 +179,7 @@ class AddTeamVideoForm(BaseVideoBoundForm):
         language = self.cleaned_data['language']
         video = self.fields['video_url'].video
         
-        original_language = video.subtitle_language()
-        
-        if not original_language.language and not language:
+        if video and not video.subtitle_language().language and not language:
             msg = _(u'Set original language for this video.')
             self._errors['language'] = self.error_class([msg])
             

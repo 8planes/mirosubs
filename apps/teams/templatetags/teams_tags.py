@@ -30,6 +30,7 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from widget.views import base_widget_params
 from django.utils import simplejson as json
+from django.utils.http import urlquote
 
 DEV_OR_STAGING = getattr(settings, 'DEV', False) or getattr(settings, 'STAGING', False)
 ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 10)
@@ -97,6 +98,13 @@ def team_activity(context, team):
 
 @register.inclusion_tag('teams/_team_add_video_select.html', takes_context=True)    
 def team_add_video_select(context):
+    request = context['request']
+    
+    #fix problem with encoding "?" in build_absolute_uri. It is not encoded,
+    #so we get not same URL that page has
+    location = request.get_full_path()
+    context['video_absolute_url'] = request.build_absolute_uri(urlquote(location))
+    
     user = context['user']
     if user.is_authenticated():
         qs = Team.objects.filter(users=user)

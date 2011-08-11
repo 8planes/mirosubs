@@ -29,6 +29,7 @@ from videos.types import VideoTypeError
 from django.utils.safestring import mark_safe
 from django.conf import settings
 from videos.types import video_type_registrar
+from django.utils.translation import ugettext_lazy as _
 
 class UniSubBoundVideoField(UniSubURLField):
     def format_url(self, url):
@@ -38,10 +39,10 @@ class UniSubBoundVideoField(UniSubURLField):
     def clean(self, value):
         super(UniSubBoundVideoField, self).clean(value)
         self.vt = None    
+        self.video = None
         video_url = value
         
         if not video_url:
-            self.video = None
             return video_url
 
         host = Site.objects.get_current().domain
@@ -75,7 +76,8 @@ class UniSubBoundVideoField(UniSubURLField):
                 else:
                     user = None
 
-                self.video, created = Video.get_or_create_for_url(vt=self.vt, user=user)
+                if self.vt:
+                    self.video, created = Video.get_or_create_for_url(vt=self.vt, user=user)
             except VideoTypeError, e:
                 self.video = None
                 raise forms.ValidationError(e)

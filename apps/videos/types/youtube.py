@@ -85,7 +85,7 @@ def save_subtitles_for_lang(lang, video_pk, youtube_id):
     version = SubtitleVersion(language=language)
     version.version_no = version_no
     version.datetime_started = datetime.now()
-    version.user = User.get_youtube_anonymous()
+    version.user = User.get_anonymous()
     version.note = u'From youtube'
     version.is_forked = True
     version.save()
@@ -109,7 +109,7 @@ def save_subtitles_for_lang(lang, video_pk, youtube_id):
     language.save()
     
     from videos.tasks import video_changed_tasks
-    video_changed_tasks.delay(video.pk, version.pk)
+    video_changed_tasks.delay(video.pk)
     
 class YoutubeVideoType(VideoType):
     
