@@ -99,7 +99,7 @@ class SearchForm(forms.Form):
     
     @classmethod
     def apply_query(cls, q, qs):
-        return qs.auto_query(q).filter_or(title=q)
+        return qs.auto_query(q).filter_or(title=qs.query.clean(q))
     
     def search_qs(self, qs):
         q = self.cleaned_data.get('q')
