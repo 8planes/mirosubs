@@ -27,7 +27,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from auth.models import CustomUser as User
-from videos.models import Video, Action, ALL_LANGUAGES
+from videos.models import Video, Action, SubtitleLanguage, ALL_LANGUAGES
 
 class SubtitleRequestManager(models.Manager):
     '''
@@ -125,6 +125,5 @@ class SubtitleRequest(models.Model):
 models.signals.post_save.connect(Action.create_subrequest_handler,
                                  SubtitleRequest)
 
-# TODO: Uncomment after writting a unit-test
-#models.signals.post_save.connect(SubtitleRequest.subtitlelanguage_handler,
-#                                 SubtitleLanguage)
+models.signals.post_save.connect(SubtitleRequest.subtitlelanguage_handler,
+                                 SubtitleLanguage)
