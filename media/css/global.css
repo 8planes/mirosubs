@@ -72,7 +72,7 @@ New Header Styles
 
 #main_bar #bar_search {
 	float: left;
-	margin: 0 -7px 0 0;
+	margin: 0;
 	padding: 6px 10px 6px 0;
 	border-right: 1px #DDD solid;
 	-webkit-box-shadow: inset -1px 0 0 #FFF;
@@ -130,21 +130,11 @@ New Header Styles
 #main_bar ul#bar_menu li#nav_submit {
 }
 
-#main_bar ul#bar_menu li#nav_submit a em.icon {
-	width: 26px;
-	height: 20px;
-	background: transparent url(../images/icon_create_subtitle.png) 0 0 no-repeat;
-	display: inline-block;
-	position: relative;
-	top: 5px;
-	left: -3px;
-	opacity: 0.8;
-}
-
 #main_bar ul#bar_menu li#nav_submit a {
 	font-weight: bold;
 	color: #777;
-	padding: 9px 13px 14px 13px;
+	background: transparent url(../images/icon_create_subtitle.png) 13px -27px no-repeat;
+	padding-left: 46px;
 }
 
 #main_bar ul#bar_menu li a:hover {
@@ -153,6 +143,8 @@ New Header Styles
 }
 
 #main_bar ul#bar_menu li#nav_submit a:hover {
+	background-color: rgba(255,255,255, 0.5);
+	background-position: 13px 13px;
 	color: #555;
 }
 
