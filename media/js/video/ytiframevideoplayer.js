@@ -18,6 +18,9 @@
 
 goog.provide('mirosubs.video.YTIFrameVideoPlayer');
 
+/**
+ * @constructor
+ */
 mirosubs.video.YTIFrameVideoPlayer = function(videoSource, opt_forDialog) {
     mirosubs.video.AbstractVideoPlayer.call(this, videoSource);
     this.player_ = null;

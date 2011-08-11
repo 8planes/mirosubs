@@ -140,6 +140,10 @@ form ul li span.checkbox_hint {
 
 /////////////////////////////////////////////*/
 
+.content form {
+	clear: both;
+}
+
 form p {
   clear: both;
   font-size: 11px;

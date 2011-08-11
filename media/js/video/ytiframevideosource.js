@@ -18,6 +18,9 @@
 
 goog.provide('mirosubs.video.YTIFrameVideoSource');
 
+/**
+ * @constructor
+ */
 mirosubs.video.YTIFrameVideoSource = function(youtubeVideoID, opt_videoConfig) {
     mirosubs.video.YoutubeVideoSource.call(this, youtubeVideoID, opt_videoConfig);
 };
