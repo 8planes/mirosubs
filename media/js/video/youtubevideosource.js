@@ -83,6 +83,16 @@ mirosubs.video.YoutubeVideoSource.prototype.setVideoConfig = function(config) {
     this.videoConfig_ = config;
 };
 
+mirosubs.video.YoutubeVideoSource.prototype.sizeFromConfig = function() {
+    if (this.videoConfig_ && this.videoConfig_['width'] && 
+        this.videoConfig_['height']) {
+        return new goog.math.Size(
+            parseInt(this.videoConfig_['width']), parseInt(this.videoConfig_['height']));
+    }
+    else {
+        return null;
+    }
+};
 
 mirosubs.video.YoutubeVideoSource.prototype.getVideoURL = function() {
     return "http://www.youtube.com/watch?v=" + this.youtubeVideoID_;
