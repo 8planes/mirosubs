@@ -109,6 +109,7 @@ New Header Styles
 
 #main_bar ul#bar_menu {
 	float: right;
+	padding: 0;
 }
 
 #main_bar ul#bar_menu li {
