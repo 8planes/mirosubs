@@ -53,6 +53,17 @@ class TestSearch(TestCase):
     def setUp(self):
         self.user = User.objects.all()[0]
     
+    def test_query_clean(self):
+        video = Video.objects.all()[0]
+        video.title = u"Cher BBC and Dawn French's Lookalikes"
+        video.save()
+        reset_solr()
+        rpc = SearchApiClass()
+        
+        rdata = RpcMultiValueDict(dict(q=u'?BBC'))
+        result = rpc.search(rdata, self.user, testing=True)['sqs']
+        self.assertTrue(len(result))        
+    
     def test_views(self):
         url = reverse('search:index')
         response = self.client.get(url)

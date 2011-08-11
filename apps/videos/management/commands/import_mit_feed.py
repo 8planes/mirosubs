@@ -96,7 +96,7 @@ class Command(BaseCommand):
                     'is_complete': True }
             file_data = {'subtitles': SimpleUploadedFile('subs.srt', content)}
             form = SubtitlesUploadForm(
-                CustomUser.get_youtube_anonymous(), data, file_data)
+                CustomUser.get_anonymous(), data, file_data)
             if form.is_valid():
                 form.save()
             else:

@@ -793,7 +793,7 @@ class SubtitleVersion(SubtitleCollection):
     """
     user -> The legacy data model allowed null users. We do not allow it anymore, but
     for those cases, we've replaced it with the user created on the syncdb commit (see
-    apps.auth.__init__).
+    apps.auth.CustomUser.get_anonymous.
     
     """
     language = models.ForeignKey(SubtitleLanguage)

@@ -388,6 +388,10 @@ mirosubs.createLinkButton = function($d, text, opt_className) {
     return $d('a', atts, text);
 };
 
+mirosubs.supportsIFrameMessages = function() {
+    return !!window['postMessage'];
+};
+
 mirosubs.storage_ = window['localStorage'];
 
 mirosubs.supportsLocalStorage = function() {
