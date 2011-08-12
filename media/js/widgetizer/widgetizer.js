@@ -35,7 +35,8 @@ mirosubs.Widgetizer = function() {
     this.makers_ = [
         new mirosubs.widgetizer.Youtube(),
         new mirosubs.widgetizer.HTML5(),
-        new mirosubs.widgetizer.JWPlayer()
+        new mirosubs.widgetizer.JWPlayer(),
+        new mirosubs.widgetizer.YoutubeIFrame()
     ];
     this.logger_ = goog.debug.Logger.getLogger('mirosubs.Widgetizer');
 };

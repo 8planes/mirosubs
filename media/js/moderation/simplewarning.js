@@ -78,7 +78,6 @@ mirosubs.SimpleWarning.prototype.enterDocument = function() {
         this.cancelLink_, 'click', 
         function(e) {
             e.preventDefault();
-            console.log();
             that.setVisible(false);
             if (this.cancelCallback_){
                 this.cancelCallback_()

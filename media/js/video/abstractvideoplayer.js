@@ -48,6 +48,10 @@ mirosubs.video.AbstractVideoPlayer = function(videoSource) {
      */
     this.duration_ = 0;
     mirosubs.video.AbstractVideoPlayer.players.push(this);
+    if (goog.DEBUG) {
+        mirosubs.video.AbstractVideoPlayer.logger_.info(
+            'players length is now ' + mirosubs.video.AbstractVideoPlayer.players.length);
+    }
 };
 goog.inherits(mirosubs.video.AbstractVideoPlayer, goog.ui.Component);
 mirosubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL = 500;

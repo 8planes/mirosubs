@@ -21,6 +21,17 @@ function testYoutubeFormats() {
     }
 }
 
+function testYTIFrameFormat() {
+    var test_cases = [
+        ['http://www.youtube.com/embed/V0youqZ2JwI?enablejsapi=1&wmode=opaque&origin=http://mirosubs.example.com:8000', 
+         'V0youqZ2JwI']]
+    for (i in test_cases) {
+        var test_case = test_cases[i];
+        var vs = mirosubs.video.YTIFrameVideoSource.forURL(test_case[0]);
+        assertEquals(test_case[1], vs.getYoutubeVideoID());
+    }
+}
+
 function testBlipFlv() {
     var vs = mirosubs.video.VideoSource.videoSourceForURL(
         'http://blip.tv/file/get/Coldguy-SpineBreakersLiveAWizardOfEarthsea210.FLV');

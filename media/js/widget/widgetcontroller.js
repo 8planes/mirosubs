@@ -38,9 +38,6 @@ mirosubs.widget.WidgetController.prototype.initializeState = function(result) {
         this.initializeStateImpl_(result);
     }
     catch (e) {
-        if (console && console.log) {
-            console.log(e);
-        }
         this.videoTab_.showError();
     }
 };

@@ -298,7 +298,8 @@ JS_WIDGETIZER_CORE.extend([
     "js/widgetizer/widgetizer.js",
     "js/widgetizer/youtube.js",
     "js/widgetizer/html5.js",
-    "js/widgetizer/jwplayer.js"])
+    "js/widgetizer/jwplayer.js",
+    "js/widgetizer/youtubeiframe.js"])
 
 JS_WIDGETIZER = list(JS_WIDGETIZER_CORE)
 JS_WIDGETIZER.append('js/widgetizer/dowidgetize.js')

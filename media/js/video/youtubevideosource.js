@@ -33,7 +33,7 @@ mirosubs.video.YoutubeVideoSource = function(youtubeVideoID, opt_videoConfig) {
 };
 
 mirosubs.video.YoutubeVideoSource.extractVideoID = function(videoURL) {
-    var videoIDExtract = /v[\/=]([0-9a-zA-Z\-\_]+)/i.exec(videoURL);
+    var videoIDExtract = /(?:v[\/=]|embed\/)([0-9a-zA-Z\-\_]+)/i.exec(videoURL);
     return videoIDExtract ? videoIDExtract[1] : null;
 }
 

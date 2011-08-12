@@ -27,11 +27,14 @@ mirosubs.widgetizer.Youtube = function() {
     /**
      * @const
      */
-    this.ON_YT_SITE = 
-        window.location.hostname.match(/youtube\.com$/) != null;
+    this.ON_YT_SITE = mirosubs.widgetizer.Youtube.onYTSite();
 };
 goog.inherits(mirosubs.widgetizer.Youtube,
               mirosubs.widgetizer.VideoPlayerMaker);
+
+mirosubs.widgetizer.Youtube.onYTSite = function() {
+    return window.location.hostname.match(/youtube\.com$/) != null;
+};
 
 mirosubs.widgetizer.Youtube.prototype.logger_ =
     goog.debug.Logger.getLogger('mirosubs.widgetizer.Youtube');
@@ -93,7 +96,7 @@ mirosubs.widgetizer.Youtube.prototype.replaceVideoElement_ =
     // players other than youtube.
     if (element.nodeName == "EMBED" && element.parentNode.nodeName == "OBJECT")
         element = element.parentNode;
-    var nextNode = element.nextSibling;
+    var nextNode = goog.dom.getNextElementSibling(element);
     var parent = element.parentNode;
     goog.dom.removeNode(element);
     if (nextNode)
