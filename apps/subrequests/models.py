@@ -50,8 +50,11 @@ class SubtitleRequestManager(models.Manager):
             .exclude(pk=subreq.pk).update(done=True)
 
         subtitle_language = subreq.subtitle_language()
-        if subtitle_language and track:
-            subtitle_language.followers.add(user)
+        if subtitle_language:
+            if track:
+                subtitle_language.followers.add(user)
+            subtitle_language.is_complete = False
+            subtitle_language.save()
 
         return subreq
 
