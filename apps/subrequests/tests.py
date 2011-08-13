@@ -108,3 +108,25 @@ class TestSubtitleRequest(TestCase):
         subrequest = SubtitleRequest.objects.get(pk=subrequest.pk)
 
         self.assertEqual(subrequest.done, True)
+
+    def test_languages_mark_incomplete(self):
+        '''
+        Test if already completed subtitles are marked as incomplete on a
+        subtitle request
+        '''
+
+        langs = self.langs[3:]
+
+        original = self.video.subtitle_language()
+        lang = SubtitleLanguage(
+            video=self.video,
+            language=langs[0],
+            is_original=False,
+            is_forked=False,
+            is_complete=True,
+            standard_language=original)
+        lang.save()
+        self._create_requests(langs)[0]
+
+        lang = SubtitleLanguage.objects.get(pk=lang.pk)
+        self.assertEqual(False, lang.is_complete)
