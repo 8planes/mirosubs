@@ -70,7 +70,11 @@ class SubtitleRequestManager(models.Manager):
         for language in languages:
             subreqs.append(self._create_request(video, user, language, track,
                                                 description))
-        return subreqs  # self.filter(id__in=subreqs)
+
+        # Update the search results to reflect this request
+        video.update_search_index()
+
+        return subreqs
 
 class SubtitleRequest(models.Model):
     '''
