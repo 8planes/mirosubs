@@ -33,8 +33,7 @@ mirosubs.video.VimeoVideoPlayer = function(videoSource, opt_forDialog) {
                          '' + new Date().getTime()].join('');
     this.playerElemID_ = videoSource.getUUID() + "_vimeoplayer";
     this.eventFunction_ = 'event' + videoSource.getUUID();
-    
-    this.currentVolume_ = 0;
+
     this.loadedFraction_ = 0;
 
     var readyFunc = goog.bind(this.onVimeoPlayerReady_, this);
@@ -151,15 +150,12 @@ mirosubs.video.VimeoVideoPlayer.prototype.getBufferedStart = function(index) {
 mirosubs.video.VimeoVideoPlayer.prototype.getBufferedEnd = function(index) {
     return this.loadedFraction_ * this.getDuration();
 };
-
-// vimeo doesn't let us get the current volume, only set it
 mirosubs.video.VimeoVideoPlayer.prototype.getVolume = function() {
-    return this.currentVolume_;
+    return this.player_ ? this.player_['api_getVolume']() : 0.5;
 };
 mirosubs.video.VimeoVideoPlayer.prototype.setVolume = function(volume) {
     if (this.player_) {
-        this.player_['api_setVolume'](100 * volume);
-        this.currentVolume_ = volume;
+        this.player_['api_setVolume'](volume);
     }
     else
         this.commands_.push(goog.bind(this.setVolume, this, volume));
