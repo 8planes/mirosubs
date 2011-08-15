@@ -42,6 +42,8 @@ except ImportError:
 
 from apps.unisubs_compressor.management.commands.compile_media import get_cache_dir
 from deploy.git_helpers import get_current_commit_hash
+from compile_media import NO_UNIQUE_URL
+
 class Command(BaseCommand):
 
     # Extra variables to avoid passing these around
@@ -51,7 +53,7 @@ class Command(BaseCommand):
     DIRECTORY = ''
     FILTER_LIST = [re.compile(x) for x in ['\.DS_Store', "^videos.+","^js\/closure-lib" , "^teams", "^test", "^videos"]]
 
-    NO_FAR_FUTURE = ["js/mirosubs-widgetizer.js", "js/widgetizer/widgetizerprimer.js"]
+    NO_FAR_FUTURE = NO_UNIQUE_URL
     GZIP_CONTENT_TYPES = (
         'text/css',
         'application/javascript',
