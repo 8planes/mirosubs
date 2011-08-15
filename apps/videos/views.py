@@ -80,7 +80,7 @@ def watch_page(request):
         .load_all().order_by('-featured')[:5]
     
     latest_videos = SearchQuerySet().result_class(VideoSearchResult) \
-        .models(Video).load_all().order_by('-edited')[:15]
+        .models(Video).load_all().order_by('-created')[:15]
     
     context = {
         'featured_videos': featured_videos,

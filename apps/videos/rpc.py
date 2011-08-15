@@ -109,7 +109,7 @@ class VideosApiClass(object):
     @add_request_to_kwargs
     def load_latest_page(self, page, request, user):
         sqs = SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).order_by('-edited')
+            .models(Video).order_by('-created')
             
         return render_page(page, sqs, request=request)
 
@@ -192,8 +192,8 @@ class VideosApiClass(object):
     @add_request_to_kwargs
     def load_latest_page_volunteer(self, page, request, user):
         rel, rest = self._get_volunteer_sqs(request, user)
-        rel = rel.order_by('-edited')
-        rest = rest.order_by('-edited')
+        rel = rel.order_by('-created')
+        rest = rest.order_by('-created')
 
         count = rel.count() + rest.count()
 
