@@ -50,13 +50,13 @@ HAYSTACK_SOLR_URL = 'http://127.0.0.1:8983/solr/core0'
 # 3. >>> ./dev-runserver
 # 4. >>> python manage.py celerycam #this is optional. It allow see in admin-interface tasks running
 
+COMPRESS_MEDIA = not DEBUG
+
 try:
     from settings_local import *
 except ImportError:
     pass
 
-COMPRESS_MEDIA = not DEBUG
 MEDIA_URL_BASE = MEDIA_URL
 if COMPRESS_MEDIA:
     MEDIA_URL += "%s/%s/" % (COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID.split("/")[1])
-
