@@ -72,16 +72,16 @@ def index(request):
 def watch_page(request):
     #Popular videos
     popular_videos = SearchQuerySet().result_class(VideoSearchResult) \
-        .models(Video).load_all().order_by('-week_views')[:5]
+        .models(Video).order_by('-week_views')[:6]
         
     #featured videos
     featured_videos = SearchQuerySet().result_class(VideoSearchResult) \
         .models(Video).filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
-        .load_all().order_by('-featured')[:5]
+        .order_by('-featured')[:6]
     
     latest_videos = SearchQuerySet().result_class(VideoSearchResult) \
-        .models(Video).load_all().order_by('-created')[:15]
-    
+        .models(Video).order_by('-created')[:18]
+
     context = {
         'featured_videos': featured_videos,
         'popular_videos': popular_videos,
