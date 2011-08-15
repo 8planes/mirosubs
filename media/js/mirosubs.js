@@ -424,7 +424,21 @@ mirosubs.removeFromLocalStorage = function(key) {
     mirosubs.storage_['removeItem'](key);
 };
 
-mirosubs.addScript = function(src, opt_async) {
+mirosubs.addScript = function(src, opt_async, opt_checkFn, opt_callbackFn) {
+    if (opt_checkFn && opt_callbackFn) {
+        var timer = new goog.Timer(250);
+        goog.events.listen(
+            timer,
+            goog.Timer.TICK,
+            function(e) {
+                if (opt_checkFn()) {
+                    timer.stop();
+                    timer.dispose();
+                    opt_callbackFn();
+                }
+            });
+        timer.start();
+    }
     var tag = document.createElement('script');
     tag.type = 'text/javascript';
     tag.src = src;
