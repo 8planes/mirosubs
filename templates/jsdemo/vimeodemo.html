@@ -5,6 +5,7 @@
     <script type="text/javascript" src="{{ MEDIA_URL }}js/swfobject.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-library/closure/goog/base.js"></script>
     <script>
+      goog.require('goog.Timer');
       goog.require('goog.debug.Logger');
       goog.require('goog.debug.DivConsole');
     </script>
@@ -31,12 +32,16 @@
 
   function vimeo_player_loaded(apiID) {
       logger.info('ready with api id ' + apiID);
-      var player = goog.dom.$('videodiv');
-      var timer = new goog.Timer(1000);
+  console.log('what');
+      var player = goog.dom.getElement('videodiv');
+  console.log('yes');
+      var timer = new goog.Timer(100);
+  console.log('timer');
       goog.events.listen(timer, goog.Timer.TICK,
           function() {
               logger.info('current time: ' + player.api_getCurrentTime());
           });
+     console.log(timer);
      timer.start();
   }
 
