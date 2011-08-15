@@ -32,7 +32,10 @@ mirosubs.video.YTIFrameVideoPlayer = function(videoSource, opt_forDialog) {
         mirosubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL);
     this.timeUpdateTimer_ = new goog.Timer(
         mirosubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL);
-    this.logger_ = goog.debug.Logger.getLogger('mirosubs.video.YTIFrameVideoPlayer');
+    this.logger_ = goog.debug.Logger.getLogger(
+        'mirosubs.video.YTIFrameVideoPlayer');
+    goog.mixin(mirosubs.video.YTIFrameVideoPlayer.prototype,
+               mirosubs.video.YoutubeBaseMixin.prototype);
 };
 goog.inherits(mirosubs.video.YTIFrameVideoPlayer, mirosubs.video.AbstractVideoPlayer);
 
@@ -147,75 +150,6 @@ mirosubs.video.YTIFrameVideoPlayer.prototype.playerReady_ = function(e) {
     this.progressTimer_.start();
 };
 
-mirosubs.video.YTIFrameVideoPlayer.prototype.exitDocument = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.exitDocument;
-
-mirosubs.video.YTIFrameVideoPlayer.prototype.progressTick_ = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.progressTick_;
-
-mirosubs.video.YTIFrameVideoPlayer.prototype.timeUpdateTick_ = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.timeUpdateTick_;
-
-mirosubs.video.YTIFrameVideoPlayer.prototype.playerStateChange_ = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.playerStateChange_;
-
-mirosubs.video.YTIFrameVideoPlayer.prototype.getBufferedLength = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.getBufferedLength;
-
-mirosubs.video.YTIFrameVideoPlayer.prototype.getBufferedStart = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.getBufferedStart;
-
-mirosubs.video.YTIFrameVideoPlayer.prototype.getBufferedEnd = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.getBufferedEnd;
-
-mirosubs.video.YTIFrameVideoPlayer.prototype.getStartBytes_ = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.getStartBytes_;
-
-mirosubs.video.YTIFrameVideoPlayer.prototype.getBytesTotal_ = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.getBytesTotal_;
-
-mirosubs.video.YTIFrameVideoPlayer.prototype.getDuration = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.getDuration;
-
-mirosubs.video.YTIFrameVideoPlayer.prototype.getVolume = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.getVolume;
-
-mirosubs.video.YTIFrameVideoPlayer.prototype.setVolume = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.setVolume;
-
-mirosubs.video.YTIFrameVideoPlayer.prototype.isPausedInternal = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.isPausedInternal;
-
-mirosubs.video.YTIFrameVideoPlayer.prototype.videoEndedInternal = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.videoEndedInternal;
-
-mirosubs.video.YTIFrameVideoPlayer.prototype.isPlayingInternal = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.isPlayingInternal;
-
-mirosubs.video.YTIFrameVideoPlayer.prototype.playInternal = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.playInternal;
-
-mirosubs.video.YTIFrameVideoPlayer.prototype.pauseInternal = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.pauseInternal;
-
-mirosubs.video.YTIFrameVideoPlayer.prototype.stopLoadingInternal = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.stopLoadingInternal;
-
-mirosubs.video.YTIFrameVideoPlayer.prototype.resumeLoadingInternal = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.resumeLoadingInternal;
-
-mirosubs.video.YTIFrameVideoPlayer.prototype.getPlayheadTime = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.getPlayheadTime;
-
-mirosubs.video.YTIFrameVideoPlayer.prototype.setPlayheadTime = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.setPlayheadTime;
-
-mirosubs.video.YTIFrameVideoPlayer.prototype.getPlayerState_ = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.getPlayerState_;
-
-mirosubs.video.YTIFrameVideoPlayer.prototype.getVideoSize = 
-    mirosubs.video.YoutubeVideoPlayer.prototype.getVideoSize;
-
 mirosubs.video.YTIFrameVideoPlayer.prototype.getVideoElements = function() {
     return [this.iframe_];
 };
@@ -224,4 +158,10 @@ mirosubs.video.YTIFrameVideoPlayer.prototype.disposeInternal = function() {
     mirosubs.video.YTIFrameVideoPlayer.superClass_.disposeInternal.call(this);
     this.progressTimer_.dispose();
     this.timeUpdateTimer_.dispose();
+};
+
+mirosubs.video.YTIFrameVideoPlayer.prototype.exitDocument = function() {
+    mirosubs.video.YTIFrameVideoPlayer.superClass_.exitDocument.call(this);
+    this.progressTimer_.stop();
+    this.timeUpdateTimer_.stop();
 };

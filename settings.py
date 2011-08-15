@@ -183,6 +183,7 @@ JS_CORE = \
      'js/video/html5videoplayer.js',
      'js/video/youtubevideoplayer.js',
      'js/video/ytiframevideoplayer.js',
+     'js/video/youtubebasemixin.js',
      'js/video/jwvideoplayer.js',
      'js/video/flvvideoplayer.js',
      'js/video/videosource.js',
