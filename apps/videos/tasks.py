@@ -15,6 +15,27 @@ from celery.schedules import crontab
 from videos.types.youtube import save_subtitles_for_lang
 from django.core.files.base import ContentFile
 from urllib import urlopen
+import logging
+from sentry.client.handlers import SentryHandler 
+
+celery_logger = logging.getLogger('celery.task') 
+celery_logger.addHandler(SentryHandler())  
+def process_failure_signal(exception, traceback, sender, task_id,  
+                           signal, args, kwargs, einfo, **kw):  
+    exc_info = (type(exception), exception, traceback)  
+    celery_logger.error(  
+        'Celery job exception: %s(%s)' % (exception.__class__.__name__, exception),  
+        exc_info=exc_info,  
+        extra={  
+            'data': {  
+                'task_id': task_id,  
+                'sender': sender,  
+                'args': args,  
+                'kwargs': kwargs,  
+            }  
+        }  
+    )  
+task_failure.connect(process_failure_signal)  
 
 @periodic_task(run_every=crontab(hour=3, day_of_week=1))
 def cleanup():
@@ -45,42 +66,6 @@ def save_thumbnail_in_s3(video_id):
 def update_from_feed(*args, **kwargs):
     for feed in VideoFeed.objects.all():
         update_video_feed.delay(feed.pk)    
-
-def task_failure_handler(sender, task_id, exception, args, kwargs, traceback, einfo, **kwds):
-    """
-    As tasks are loaded with DjangoLoader at the begining,
-    handler will be connected before any task execution
-    """
-    from sentry.client.models import client
-
-    data = {
-        'task': sender,
-        'exception': exception,
-        'args': args,
-        'kwargs': kwargs
-    }
-
-    client.create_from_exception(exc_info=(type(exception), exception, traceback), data=data)
-    
-#task_failure.connect(task_failure_handler)
-
-def setup_logging_handler(sender, *args, **kwargs):
-    """
-    Init sentry logger handler
-    """
-    import logging
-    from sentry.client.handlers import SentryHandler
-
-    logger = sender.logger
-    
-    if SentryHandler not in map(lambda x: x.__class__, logger.handlers):
-        logger.addHandler(SentryHandler(logging.ERROR))
-        
-        logger = logging.getLogger('sentry.errors')
-        logger.propagate = False
-        logger.addHandler(logging.StreamHandler())        
-
-worker_ready.connect(setup_logging_handler)
 
 @task
 def update_subtitles_fetched_counter_for_sl(sl_pk):
