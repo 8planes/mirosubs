@@ -47,6 +47,13 @@ SKIP_COPING_ON = DIRS_TO_COMPILE + [
 NO_UNIQUE_URL = (
     #"js/embed.js", -> embed is actually a dinamic url
     "js/mirosubs-widgetizer.js",
+    "js/mirosubs-onsite-compiled.js",
+    "js/mirosubs-widgetizer.js",
+    "js/mirosubs-widgetizer-debug.js",
+    "js/mirosubs-extension.js",
+    "js/mirosubs-statwidget.js",
+    "js/mirosubs-api.js",
+    "js/mirosubs-mirosubs-offsite-compiled.js",
     "js/widgetizer/widgetizerprimer.js",
 )
 
