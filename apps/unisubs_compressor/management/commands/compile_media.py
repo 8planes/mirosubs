@@ -206,7 +206,6 @@ class Command(BaseCommand):
         for filename in NO_UNIQUE_URL:
             to_path =  os.path.join(settings.MEDIA_ROOT, filename)
             from_path = os.path.join(final_path, filename)
-            print "%s => %s" % (from_path, to_path)
             shutil.copy(from_path, to_path)
         
 
