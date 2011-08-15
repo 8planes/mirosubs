@@ -121,7 +121,9 @@ mirosubs.video.YTIFrameVideoPlayer.prototype.enterDocument = function() {
 };
 
 mirosubs.video.YTIFrameVideoPlayer.prototype.makePlayer_ = function() {
-    this.logger_.info('makePlayer_ called');
+    if (goog.DEBUG) {
+        this.logger_.info('makePlayer_ called');
+    }
     var playerStateChange = goog.bind(this.playerStateChange_, this);
     this.almostPlayer_ = new window['YT']['Player'](
         this.playerElemID_, {
