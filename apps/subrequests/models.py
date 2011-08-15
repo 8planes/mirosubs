@@ -50,8 +50,11 @@ class SubtitleRequestManager(models.Manager):
             .exclude(pk=subreq.pk).update(done=True)
 
         subtitle_language = subreq.subtitle_language()
-        if subtitle_language and track:
-            subtitle_language.followers.add(user)
+        if subtitle_language:
+            if track:
+                subtitle_language.followers.add(user)
+            subtitle_language.is_complete = False
+            subtitle_language.save()
 
         return subreq
 
@@ -67,7 +70,11 @@ class SubtitleRequestManager(models.Manager):
         for language in languages:
             subreqs.append(self._create_request(video, user, language, track,
                                                 description))
-        return subreqs  # self.filter(id__in=subreqs)
+
+        # Update the search results to reflect this request
+        video.update_search_index()
+
+        return subreqs
 
 class SubtitleRequest(models.Model):
     '''
@@ -110,17 +117,6 @@ class SubtitleRequest(models.Model):
 
             elif instance.is_complete:
                 # Marks request as completed according to subtitle status.
-                #
-                # FIXME: This will not hold good for re-requests, i.e. when the
-                # request  is made after the language is already complete (to
-                # ask for some fixes in the language probably)
-                #
-                # Solution 1: Mark subtitles as not complete.
-                #
-                # Solution 2: For re-requests only close those requests
-                # for which subtitles were edited recently. (This does not
-                # look good and is subjective about what is recent)
-
                 related_requests.update(done=True)
 
 models.signals.post_save.connect(Action.create_subrequest_handler,

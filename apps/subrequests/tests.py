@@ -10,6 +10,8 @@ from django.test import TestCase
 from auth.models import CustomUser as User
 from videos.tasks import video_changed_tasks
 from videos.models import Video, SubtitleLanguage
+from haystack.query import SearchQuerySet
+from videos.search_indexes import VideoSearchResult
 
 from subrequests.models import SubtitleRequest
 
@@ -21,6 +23,8 @@ class TestSubtitleRequest(TestCase):
     langs = ['en', 'hi', 'fr', 'ca']
 
     def setUp(self):
+        from teams.tests import reset_solr
+
         self.video = Video.objects.all()[0]
         self.user = User.objects.get(username=u'admin')
         self.DEFAULTS = {
@@ -28,6 +32,7 @@ class TestSubtitleRequest(TestCase):
             'track': True,
         }
         video_changed_tasks.delay(self.video)
+        reset_solr()
 
     def _create_requests(self, langs, **kwargs):
         '''
@@ -56,6 +61,14 @@ class TestSubtitleRequest(TestCase):
             self.assertEqual(not subreq.action, False)
             self.assertEqual(subreq.description, self.DEFAULTS['description'])
             self.assertEqual(subreq.track, self.DEFAULTS['track'])
+
+        searched_videos = SearchQuerySet().result_class(VideoSearchResult) \
+            .models(Video).filter(requests_exact__in=self.langs[:2])
+
+        # There must be one video in search results with video in the provided
+        # languages which are bing created in the test
+        self.assertEqual(len(searched_videos), 1)
+        self.assertEqual(searched_videos[0].video_id, self.video.video_id)
 
     def test_rerequest_same(self):
         '''
@@ -108,3 +121,25 @@ class TestSubtitleRequest(TestCase):
         subrequest = SubtitleRequest.objects.get(pk=subrequest.pk)
 
         self.assertEqual(subrequest.done, True)
+
+    def test_languages_mark_incomplete(self):
+        '''
+        Test if already completed subtitles are marked as incomplete on a
+        subtitle request
+        '''
+
+        langs = self.langs[3:]
+
+        original = self.video.subtitle_language()
+        lang = SubtitleLanguage(
+            video=self.video,
+            language=langs[0],
+            is_original=False,
+            is_forked=False,
+            is_complete=True,
+            standard_language=original)
+        lang.save()
+        self._create_requests(langs)[0]
+
+        lang = SubtitleLanguage.objects.get(pk=lang.pk)
+        self.assertEqual(False, lang.is_complete)

@@ -300,6 +300,11 @@ def _update_static(dir):
                 python_exe, media_dir))
         # we need to remove whatever was left on static-cache
         static_cache_path = "./media/static-cache/*"
+        _clear_permissions(media_dir)
+        
+        # this has to be here, since the environment that compiles media is not an app server
+        # so there is no guarantee we we'll have run the create_commit command
+        run('{0} deploy/create_commit_file.py'.format(python_exe))
         run('{0} manage.py  compile_media --settings=unisubs_settings'.format(python_exe))
         
 def update_static():

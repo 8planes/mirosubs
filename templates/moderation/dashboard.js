@@ -50,7 +50,6 @@ function onBatchReturned(response, dialog, action){
 }
 
 function onBatchConfirmed(action, dialog){
-    console.log(sellectedEles.getValues());
     $.ajax({
         type: "POST",
         url: "{% url moderation:affect-selected team_id=team.pk %}",
@@ -67,7 +66,6 @@ function onBatchConfirmed(action, dialog){
 }
 
 function onBatchApproveRequested(){
-    console.log('ap')
     var d = new mirosubs.SimpleWarning(
         "Approve all", 
         "You should be super sure", 
