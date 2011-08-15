@@ -198,15 +198,7 @@ class Command(BaseCommand):
                          ignore=shutil.ignore_patterns(*SKIP_COPING_ON))
          # we need to copy all js, ideally this can be refactored in other libs
 
-        for filename in NO_UNIQUE_URL:
-            
-            target_base = self.base_dir
-            source_path = os.path.join(mr,  filename)
-            target_path = os.path.join(target_base,  filename)
-            target_dir = os.path.dirname(target_path)
-            if os.path.exists(target_dir) is False:
-                os.makedirs(target_dir)
-            shutil.copy( source_path, target_path)
+        
                 
     def handle(self, *args, **options):
         self.verbosity = int(options.get('verbosity'))
@@ -227,5 +219,12 @@ class Command(BaseCommand):
             shutil.rmtree(final_path)
         for filename in os.listdir(self.base_dir):
             shutil.move(os.path.join(self.base_dir, filename), os.path.join(final_path, filename))
+
+        for filename in NO_UNIQUE_URL:
+            to_path =  os.path.join(settings.MEDIA_ROOT, filename)
+            from_path = os.path.join(final_path, filename)
+            if os.path.exists(to_path):
+                os.remove(to_path)
+            shutil.copy(from_path, to_path)
         
 
