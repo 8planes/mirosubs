@@ -15,7 +15,7 @@ The static files pipeline for unisubs has two goals:
 Quick how to
 ============
 
-1. When in development with DEBUG = True all media will not be compressed.
+1. When in development with DEBUG = True all media will not be compressed. Else you can controle this with the COMPRESS_MEDIA setting.
 2. You can add media to the any of the bundles on settings.py or create a new bundle if you need a specific collection of media (see bellow)
 3. If it's a new bundle add the include in the template (see bellow)
 
@@ -58,7 +58,8 @@ Compiling should be done with ::
 
   $manage.py compile_media --settings=[settings file] [bundle-name(s)]
 
-If you pass one or more bundle names as arguments to the command it will only compile those bundles (useful for testing / debugging), else all bundles will be compiles.
+If you pass one or more bundle names as arguments to the command it will only compile those bundles (useful for testing / debugging), else all bundles will be compiles. Just make sure that you have run compile_conf and friends and also the deploy/create_commit_file.py before doing so. 
+
 
 When the --verbosity param is set to 2, `compile_media` will output the cmd_strings passed to the compilers.
 
