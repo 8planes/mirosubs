@@ -25,6 +25,14 @@ import optparse
 
 from deploy.git_helpers import get_current_commit_hash
 
+def _make_version_debug_string():
+    """
+    See Command._append_verion_for_debug
+
+    We have this as an external function because we need this on compilation and testing deployment
+    """
+    return '/*mirosubs.static_version="%s"*/' % settings.LAST_COMMIT_GUID
+    
 
 
 
@@ -79,6 +87,13 @@ class Command(BaseCommand):
     help = 'Compiles all bundles in settings.py (css and js).'
     args = 'media_bundles'
 
+    option_list = BaseCommand.option_list + (
+
+        optparse.make_option('--checks-version',
+            action='store_true', dest='test_str_version', default=True,
+            help="Check that we outputed the version string for comopiled files."),
+        )
+
     def create_cache_dir(self):
         commit_hash = settings.LAST_COMMIT_GUID.split("/")[1]
         temp = os.path.join("/tmp", "static-%s-%s" % (commit_hash, time.time()))
@@ -86,6 +101,18 @@ class Command(BaseCommand):
 
         return temp
 
+    
+    def _append_version_for_debug(self, descriptor, file_type):
+        """
+        We append the /*mirosubs.static_version="{{commit guid}"*/ to the end of the
+        file so we can debug, be sure we have the correct version of media.
+
+        Arguments:
+        `descriptor` : the fd to append to
+        `file_type` : if it's a js or html or css file - we currently only support js and css
+            """
+        descriptor.write(_make_version_debug_string())
+        
     def compile_css_bundle(self, bundle_name, bundle_type, files):
         file_list = [os.path.join(settings.MEDIA_ROOT, x) for x in files]
         for f in file_list:
@@ -96,7 +123,7 @@ class Command(BaseCommand):
             os.mkdir(dir_path)
         concatenated_path =  os.path.join(dir_path, "%s.%s" % (bundle_name, bundle_type))
         out = open(concatenated_path, 'w')
-        out.write("".join(buffer))
+        out.write("".join(buffer))        
         out.close()
         if bundle_type == "css":
             filename = "%s.css" % ( bundle_name)
@@ -108,6 +135,7 @@ class Command(BaseCommand):
             
         out = open(concatenated_path, 'w')
         out.write(output)
+        self._append_version_for_debug(out, "css")
         out.close()
         #os.remove(concatenated_path)
         return  filename
@@ -177,7 +205,7 @@ class Command(BaseCommand):
                 with open(FLOWPLAYER_JS, 'r') as flowplayerjs_file:
                     compiled_js_file.write(flowplayerjs_file.read())
             compiled_js_file.write(compiled_js_text)
-
+            self._append_version_for_debug(compiled_js_file, "js")
         if len(output) > 0:
             logging.info("compiler.jar output: %s" % output)
 
@@ -207,6 +235,7 @@ class Command(BaseCommand):
                 
     def handle(self, *args, **options):
         self.verbosity = int(options.get('verbosity'))
+        self.test_str_version = bool(options.get('test_str_version'))
         restrict_bundles = bool(args)
 
         os.chdir(settings.PROJECT_ROOT)
@@ -231,5 +260,23 @@ class Command(BaseCommand):
             if os.path.exists(to_path):
                 os.remove(to_path)
             shutil.copy(from_path, to_path)
+
+        if self.test_str_version:
+            self.test_string_version()
+
+    def test_string_version(self):
+        """
+        Make sure all the compiled files have the version name appended
+        """
+        version_str = _make_version_debug_string()
+        for filename in NO_UNIQUE_URL:
+            # we only need compiled sutff (widgetizerprimer breaks the stable urls = compiled assumption
+            if os.path.basename(filename) not in settings.MEDIA_BUNDLES.keys():
+                continue
+            to_path =  os.path.join(settings.MEDIA_ROOT, filename)
+            
+            data = open(to_path).read()
+            assert(data.endswith(version_str))
+            
         
 
