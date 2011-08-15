@@ -2069,6 +2069,8 @@ cursor: pointer !important;
    -webkit-border-top-left-radius: 3px !important;
    position: absolute !important;
    background: #ededed url("../images/gradient.png") left 30px repeat-x !important;
+   /* needs to be > index else it will appear under the sub  */
+   z-index: 10 !important;
 }
 
 
