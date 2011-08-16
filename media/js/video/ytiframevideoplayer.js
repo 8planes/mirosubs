@@ -53,7 +53,8 @@ mirosubs.video.YTIFrameVideoPlayer.prototype.createDom = function() {
           'width': this.playerSize_.width + '',
           'height': this.playerSize_.height + '', 
           'src': embedUri.toString(),
-          'frameborder': '0'});
+          'frameborder': '0',
+          'style': mirosubs.style.setSizeInString('', this.playerSize_) });
     this.setElementInternal(this.iframe_);
 };
 
