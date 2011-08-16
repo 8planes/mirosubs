@@ -75,9 +75,9 @@ To run the development version:
    * If you want to install SOLR as a daemon on your Mac, please see
      https://github.com/8planes/mirosubs/wiki/Running-SOLR-as-a-daemon-on-Mac
 
-10 Celeryd:
+10. Celeryd:
 
-Many things in unisubs run assynchronously, so you will need to run celeryd. If you would rather run celery with another backend of your choice, it's fine just adapt these instructions:
+  Many things in unisubs run assynchronously, so you will need to run celeryd. If you would rather run celery with another backend of your choice, it's fine just adapt these instructions:
 
   A. Download and install  `redis <http://redis.io/>`_  
   B. Start redis
@@ -90,6 +90,11 @@ Many things in unisubs run assynchronously, so you will need to run celeryd. If 
   D. Cd in to the mirosubs directory and run ::
 
       python manage.py celeryd --loglevel=INFO --settings=dev_settings
+
+  Or you can just add to your local settings ::
+    
+    CELERY_ALWAYS_EAGER = True
+  
 
 
    
