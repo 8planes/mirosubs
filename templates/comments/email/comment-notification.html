@@ -1,19 +1,19 @@
-
+{% extends "videos/email_baee.html" %}
 {% load i18n localeurl_tags %}
 
 {% block content %}
     <p style="font-size: 12px;">
 
 
-Your video just received a new comment. a href="http://{{ domain }}{{ user_url }}">{{ u }}</a> commented on {{video.get_title}}
+Your video just received a new comment. <a href="http://{{ domain }}{{ user_url }}">{{ u }}</a> commented on {{video.get_title}}
             {% if is_rejection  %}
             <p>They said </p>
             {% endif %}
             {{msg|linebreaks}}
             {% if is_rejection %}
-            <p>about declining a version of [language] subtitles, [# revision history version number] </p.>
+            <p>about declining a version of <a href="{{language_url}}">  version.language.language </a> subtitles, <a href="{{version_url}}">versoin.version_no</a> </p.>
             {% endif %}
-            You can respond to this comment on the comments page [Comments Page]
+            You can respond to this comment on the <a href="{{version_url}}">comments page 
             Thanks for your participation!
             <br/>
 
