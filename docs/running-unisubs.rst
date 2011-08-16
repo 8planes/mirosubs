@@ -74,3 +74,27 @@ To run the development version:
       http://docs.haystacksearch.org/dev/management_commands.html
    * If you want to install SOLR as a daemon on your Mac, please see
      https://github.com/8planes/mirosubs/wiki/Running-SOLR-as-a-daemon-on-Mac
+
+10. Celeryd:
+
+  Many things in unisubs run assynchronously, so you will need to run celeryd. If you would rather run celery with another backend of your choice, it's fine just adapt these instructions:
+
+  A. Download and install  `redis <http://redis.io/>`_  
+  B. Start redis
+  C. Make sure you have on your local_settings ::
+
+      BROKER_BACKEND = 'redis'
+      BROKER_HOST = "localhost"
+      BROKER_VHOST = "/"
+ 
+  D. Cd in to the mirosubs directory and run ::
+
+      python manage.py celeryd --loglevel=INFO --settings=dev_settings
+
+  Or you can just add to your local settings ::
+    
+    CELERY_ALWAYS_EAGER = True
+  
+
+
+   
