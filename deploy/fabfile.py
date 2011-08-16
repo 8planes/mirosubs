@@ -236,8 +236,6 @@ def update_web():
             env.warn_only = True
             run("find . -name '*.pyc' -print0 | xargs -0 rm")
             env.warn_only = False
-            with cd('{0}/mirosubs/deploy'.format(env.web_dir)):
-                run('. ../../env/bin/activate && pip install -q -r requirements.txt')
             _reload_app_server()
     if env.admin_dir is not None:
         env.host_string = ADMIN_HOST
