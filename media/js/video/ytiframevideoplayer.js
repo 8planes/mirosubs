@@ -68,7 +68,7 @@ mirosubs.video.YTIFrameVideoPlayer.prototype.addQueryString_ = function(uri) {
     var locationUri = new goog.Uri(window.location);
     var domain = window.location.protocol + "//" + 
         locationUri.getDomain() + 
-        (locationUri.getPort() != 80 ? (':' + locationUri.getPort()) : '');
+        (locationUri.getPort() != null ? (':' + locationUri.getPort()) : '');
     uri.setParameterValue('enablejsapi', '1').
         setParameterValue('origin', domain).
         setParameterValue('wmode', 'opaque');
