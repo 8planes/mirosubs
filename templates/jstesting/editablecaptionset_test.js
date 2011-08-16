@@ -45,7 +45,7 @@ function createSet(existingCaptions) {
 };
 
 function setUp() {
-    mirosubs.Tracker.getInstance().dontReport();
+    mirosubs.REPORT_ANALYTICS = false;
     mirosubs.SubTracker.getInstance().start(false);
 }
 

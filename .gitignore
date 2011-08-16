@@ -15,8 +15,7 @@ settings_local.py
 commit.py
 media/js/config.js
 media/js/statwidget/statwidgetconfig.js
-media/js/mirosubs-widgetizer.js
-media/js/mirosubs-widgetizer-debug.js
+media/js/mirosubs-widgetizer*.js
 media/js/mirosubs-extension.js
 media/js/mirosubs-statwidget.js
 media/js/mirosubs-api.js

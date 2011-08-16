@@ -26,7 +26,6 @@ mirosubs.Tracker = function() {
     if (goog.DEBUG) {
         this.logger_ = goog.debug.Logger.getLogger('mirosubs.Tracker');
     }
-    this.dontReport_ = false;
 };
 
 goog.addSingletonGetter(mirosubs.Tracker);
@@ -34,40 +33,33 @@ goog.addSingletonGetter(mirosubs.Tracker);
 mirosubs.Tracker.prototype.ACCOUNT_ = 'UA-163840-22';
 mirosubs.Tracker.prototype.PREFIX_ = 'usubs';
 
-/**
- * Call before running unit tests or maybe selenium tests.
- */
-mirosubs.Tracker.prototype.dontReport = function() {
-    this.dontReport_ = true;
-};
-
 mirosubs.Tracker.prototype.gaq_ = function() {
     return window['_gaq'];
 };
 
 mirosubs.Tracker.prototype.trackEvent = function(category, action, opt_label, opt_value) {
-    if (this.dontReport_)
-        return;
-    if (goog.DEBUG) {
-        this.logger_.info('tracking event: ' + category + 
-                          ' for action ' + action + 
-                          (opt_label ? (' with label ' + opt_label) : ""));
+    if (mirosubs.REPORT_ANALYTICS) {
+        if (goog.DEBUG) {
+            this.logger_.info('tracking event: ' + category + 
+                              ' for action ' + action + 
+                              (opt_label ? (' with label ' + opt_label) : ""));
+        }
+        this.setAccount_();
+        this.gaq_().push(
+            [this.PREFIX_ + "._trackEvent", category, action, opt_label, opt_value]);
     }
-    this.setAccount_();
-    this.gaq_().push(
-        [this.PREFIX_ + "._trackEvent", category, action, opt_label, opt_value]);
 };
 
 mirosubs.Tracker.prototype.trackPageview = function(pageview, opt_props) {
-    if (this.dontReport_)
-        return;
-    if (goog.DEBUG) {
-        this.logger_.info(pageview);
+    if (mirosubs.REPORT_ANALYTICS) {
+        if (goog.DEBUG) {
+            this.logger_.info(pageview);
+        }
+        var props = opt_props || {};
+        props['onsite'] = mirosubs.isFromDifferentDomain() ? 'no' : 'yes';
+        this.setAccount_();
+        this.gaq_().push([this.PREFIX_ + '._trackPageview', '/widget/' + pageview]);
     }
-    var props = opt_props || {};
-    props['onsite'] = mirosubs.isFromDifferentDomain() ? 'no' : 'yes';
-    this.setAccount_();
-    this.gaq_().push([this.PREFIX_ + '._trackPageview', '/widget/' + pageview]);
 };
 
 mirosubs.Tracker.prototype.setAccount_ = function() {
@@ -80,6 +72,8 @@ mirosubs.Tracker.prototype.setAccount_ = function() {
 };
 
 mirosubs.Tracker.prototype.loadGA_ = function() {
-    var url = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    mirosubs.addScript(url, true);
+    if (mirosubs.REPORT_ANALYTICS) {
+        var url = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        mirosubs.addScript(url, true);
+    }
 };
