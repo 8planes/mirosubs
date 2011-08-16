@@ -1750,6 +1750,98 @@ class TestModelsSaving(TestCase):
         self.video = Video.objects.get(pk=self.video.pk)
         self.assertEqual(self.video.complete_date, None)
 
+    def test_fork_preserves_ordering(self):
+        """
+        When forking , even unsyched subs should have their ordering preserved
+        """
+        lang = SubtitleLanguage(language="pt", video=self.video, standard_language=self.video.subtitle_language(), is_forked=False)
+        lang.save()
+        v1 = create_version(lang, [
+                {
+                   "subtitle_order" : 1,
+                   "subtitle_text": "t1",
+                   "subtitle_id": "id1",
+                 },
+                  {
+                   "subtitle_order" : 2,
+                   "subtitle_text": "t2",
+                   "subtitle_id": "id2",
+                 },
+                  {
+                   "subtitle_order" : 3,
+                   "subtitle_text": "t3",
+                   "subtitle_id": "id3",
+                 },
+                
+        ])
+        self.assertEqual(lang.is_forked, False)
+
+        lang.fork(user=User.objects.all()[0])
+        lang = SubtitleLanguage.objects.get(pk=lang.pk)
+        version = lang.latest_version()
+        self.assertTrue(lang.is_forked )
+        subs = version.subtitles()
+        self.assertEqual(len(subs), 3)
+        for x in subs:
+            self.assertTrue(x.sub_order > 0)
+
+        # now fork throught the rpc
+        u, created = User.objects.get_or_create(username='admin')
+        u.set_password("admin")
+        u.save()
+        from widget.rpc import Rpc
+        from widget.tests import RequestMockup, NotAuthenticatedUser
+        
+        rpc = Rpc()
+        self.client.login(**{"username":"admin", "password":"admin"})
+        request = RequestMockup(user=u)
+        request.user = u
+        return_value = rpc.start_editing(
+            request,
+            self.video.video_id, 
+            "eu", 
+            base_language_pk=lang.pk
+        )
+        session_pk = return_value['session_pk']
+        inserted = [{'subtitle_id': 'aa',
+                     'text': 'hey!',
+                     'start_time': 2.3,
+                     'end_time': 3.4,
+                     'sub_order': 4.0}]
+        rpc.finished_subtitles(request, session_pk, inserted);
+
+        return_value = rpc.start_editing(
+            request,
+            self.video.video_id, 
+            "eu", 
+        )
+        session_pk = return_value['session_pk']
+        inserted = []
+        for s in subs:
+            inserted.append({
+                    'subtitle_id': s.subtitle_id,
+                     'text': s.text,
+                     'start_time': s.start_time,
+                     'end_time': s.end_time,
+                     'sub_order': s.sub_order}
+                )
+        inserted.append( {'subtitle_id': 'ac',
+                     'text': 'hey!',
+                     'start_time': 4.3,
+                     'end_time': 5.4,
+                     'sub_order': 5.0})
+        rpc.finished_subtitles(request, session_pk, inserted, forked=True);
+        lang = self.video.subtitlelanguage_set.get(language='eu', is_forked=True)
+        version2 = lang.latest_version()
+        self.assertTrue(lang.is_forked )
+
+        subs = version2.subtitles()
+        self.assertEqual(len(subs), 4)
+        for x in subs:
+            self.assertTrue(x.sub_order > 0)
+        
+        
+
 from videos.feed_parser import FeedParser
 
 class TestFeedParser(TestCase):
@@ -1870,3 +1962,17 @@ def _create_trans( video, latest_version=None, lang_code=None, forked=False):
                 s.duplicate_for(v).save()
         return translation
 
+def create_version(lang, subs, user=None):
+    latest = lang.latest_version()
+    version_no = latest and latest.version_no + 1 or 1
+    version = SubtitleVersion(version_no=version_no,
+                              user=user or User.objects.all()[0],
+                              language=lang,
+                              datetime_started=datetime.now())
+    version.save()
+    for sub in subs:
+        s = Subtitle(**sub)
+        s.version  = version
+        s.save()
+    return version    
+    
