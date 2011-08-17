@@ -23,7 +23,14 @@ import string
 import random
 import os
 
+#:This environment is responsible for:
+#:
+#:- syncdb on all environment
+#:- memechached and solr for `dev`
+#:- media compilation on all environments
 DEV_HOST = 'dev.universalsubtitles.org:2191'
+#: Environment where celeryd and solr run for staging
+#: - solr, celeryd and memcached for staging and production
 ADMIN_HOST = 'pcf-us-admin.pculture.org:2191'
 
 def _create_env(username, hosts, s3_bucket, 
