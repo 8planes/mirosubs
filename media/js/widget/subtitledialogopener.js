@@ -126,8 +126,11 @@ mirosubs.widget.SubtitleDialogOpener.prototype.resumeEditing_ =
         { 'session_pk': savedSubtitles.SESSION_PK },
         function(result) {
             if (result['response'] == 'ok') {
+                // FIXME: ouch, kinda hacky.
                 result['subtitles']['subtitles'] = 
                     savedSubtitles.CAPTION_SET.makeJsonSubs();
+                result['subtitles']['title'] = 
+                    savedSubtitles.CAPTION_SET.title;
                 that.startEditingResponseHandler_(
                     result, true, 
                     savedSubtitles.CAPTION_SET.wasForkedDuringEdits());
