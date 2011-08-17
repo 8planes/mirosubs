@@ -11,7 +11,10 @@
             $('.remove-avatar').click(function(){
                 if (confirm('{% trans "Do you really want delete picture?" %}')){
                     $.post('{% url profiles:remove_avatar %}', {remove: true}, function(response){
-                        response.errors || $('.user-avatar').attr('src', '');
+                        if ( ! response.errors){
+                            $('.user-avatar').attr('src', response.avatar);
+                            $('.remove-avatar').remove();
+                        }
                     }, 'json');
                 }
                 return false;
