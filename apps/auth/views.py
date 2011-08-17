@@ -26,13 +26,16 @@ from django.contrib.auth import logout, login as auth_login
 from auth.forms import CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.sites.models import Site
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.simple import direct_to_template
 from socialauth.models import AuthMeta, OpenidProfile, TwitterUserProfile, FacebookUserProfile
+from socialauth.lib.facebook import get_facebook_signature
 from utils.translation import get_user_languages_from_cookie
 from auth.models import UserLanguage, CustomUser as User
 from django.contrib.admin.views.decorators import staff_member_required
 import re
+from datetime import datetime
 
 def login(request):
     redirect_to = request.REQUEST.get(REDIRECT_FIELD_NAME, '')
@@ -107,6 +110,8 @@ def render_login(request, user_creation_form, login_form, redirect_to):
         'auth/login.html', {
             'creation_form': user_creation_form,
             'login_form' : login_form,
+            'FACEBOOK_API_KEY': settings.FACEBOOK_API_KEY,
+            'site': Site.objects.get_current(),
             REDIRECT_FIELD_NAME: redirect_to,
             }, context_instance=RequestContext(request))
         
@@ -188,3 +193,27 @@ def twitter_login_done(request):
 
     # authentication was successful, use is now logged in
     return HttpResponseRedirect(request.GET.get('next', settings.LOGIN_REDIRECT_URL))
+
+def facebook_login_done(request):
+    API_KEY = settings.FACEBOOK_API_KEY
+    API_SECRET = settings.FACEBOOK_API_SECRET
+    REST_SERVER = 'http://api.facebook.com/restserver.php'
+    # FB Connect will set a cookie with a key == FB App API Key if the user has been authenticated
+    if API_KEY in request.COOKIES:
+        signature_hash = get_facebook_signature(API_KEY, API_SECRET, request.COOKIES, True)
+        # The hash of the values in the cookie to make sure they're not forged
+        # AND If session hasn't expired
+        if(signature_hash == request.COOKIES[API_KEY]) and (datetime.fromtimestamp(float(request.COOKIES[API_KEY+'_expires'])) > datetime.now()):
+            #Log the user in now.
+            user = authenticate(cookies=request.COOKIES)
+            if user:
+                # if user is authenticated then login user
+                auth_login(request, user)
+                return HttpResponseRedirect(request.GET.get('next', settings.LOGIN_REDIRECT_URL))
+            else:
+                #Delete cookies and redirect to main Login page.
+                del request.COOKIES[API_KEY + '_session_key']
+                del request.COOKIES[API_KEY + '_user']
+                return HttpResponseRedirect(reverse('auth:login'))
+    return HttpResponseRedirect(reverse('auth:login'))
+

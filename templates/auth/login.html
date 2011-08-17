@@ -3,6 +3,18 @@
 {% load i18n %}
 
 {% block body_attrs %}id="login"{% endblock %}
+{% block html_attrs %}{{ block.super }} xmlns:fb="http://www.facebook.com/2008/fbml"{% endblock %}
+
+{% block bottom_scripts %}
+    {{ block.super }}
+    <script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php/en_US" type="text/javascript"></script>
+    <script type="text/javascript">
+        FB.init("{{ FACEBOOK_API_KEY }}", "//{{ site }}{% url socialauth_xd_receiver %}");
+        function facebook_onlogin() {
+            window.location = '{% url auth:facebook_login_done %}?next={{ next }}';
+        }
+    </script>
+{% endblock %}
 
 {% block main_content %}
 <div class="left_column">
@@ -18,6 +30,9 @@
     <a class="twitter" href="{% url auth:twitter_login %}?next={{ next }}"> twitter</a> 
     <a class="open-id" href="{% url socialauth_openid_login %}?next={{ next }}">openid</a>
     <a class="google" href="{% url socialauth_google_login %}?next={{ next }}">gmail</a>
+    <div class="facebook">
+        <fb:login-button onlogin="facebook_onlogin();"></fb:login-button>
+    </div>
 </div>
 <div class="right_column">
 <h2>{% trans 'Create an Account' %}</h2>
