@@ -58,7 +58,7 @@ def save_thumbnail_in_s3(video_id):
     except Video.DoesNotExist:
         return
 
-    if video.thumbnail:
+    if video.thumbnail and not video.s3_thumbnail:
         content = ContentFile(urlopen(video.thumbnail).read())
         video.s3_thumbnail.save(video.thumbnail.split('/')[-1], content)
         
