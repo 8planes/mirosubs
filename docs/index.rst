@@ -15,7 +15,6 @@ Contents:
    static-files
    demos
    deployment-guide
-   fabric-commands
 
 
 Indices and tables
