@@ -301,7 +301,7 @@ def update_solr_schema():
             run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/main/conf/schema.xml'.format(python_exe))
             run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/testing/conf/schema.xml'.format(python_exe))
             sudo('service tomcat6 restart')
-            run('yes y | {0} manage.py rebuild_index --settings=unisubs_settings'.format(python_exe))
+            run('screen -d -m "yes y | {0} manage.py rebuild_index --settings=unisubs_settings"'.format(python_exe))
 
 def _bounce_celeryd():
     if env.admin_dir:
