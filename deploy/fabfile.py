@@ -38,13 +38,14 @@ def _create_env(username, hosts, s3_bucket,
                 memcached_bounce_cmd, 
                 admin_dir, celeryd_host, celeryd_proj_root, 
                 separate_uslogging_db=False,
-                celeryd_bounce_cmd=""):
+                celeryd_bounce_cmd="",
+                web_dir=None):
     env.user = username
     env.web_hosts = hosts
     env.hosts = []
     env.s3_bucket = s3_bucket
-    env.web_dir = '/var/www/{0}'.format(installation_dir)
-    env.static_dir = '/var/{0}'.format(static_dir)
+    env.web_dir = web_dir or '/var/www/{0}'.format(installation_dir)
+    env.static_dir = static_dir or '/var/{0}'.format(static_dir)
     env.installation_name = name
     env.memcached_bounce_cmd = memcached_bounce_cmd
     env.admin_dir = admin_dir
@@ -412,3 +413,12 @@ def generate_docs():
     with cd(os.path.join(env.static_dir, 'mirosubs')):
         python_exe = '{0}/env/bin/python'.format(env.static_dir)
         run('{0} manage.py  sphinx-build docs/ media/docs --settings=unisubs_settings'.format(python_exe))
+    
+try:
+    from local_env import *
+    def local (username):
+        _create_env(**local_env_data)
+
+except ImportError:
+    pass 
+
