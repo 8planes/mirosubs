@@ -86,7 +86,7 @@ mirosubs.HowToVideoPanel.prototype.createDom = function() {
     var el = this.getElement();
     el.className = 'mirosubs-howtopanel';
     el.appendChild(this.contentElement_);
-    this.skipVideosSpan_ = $d('span');
+    this.skipVideosSpan_ = $d('span', 'goog-checkbox-unchecked');
     el.appendChild($d('div', null, this.skipVideosSpan_,
                       goog.dom.createTextNode(' Skip these videos')));
     this.continueLink_ = 
@@ -133,6 +133,7 @@ mirosubs.HowToVideoPanel.prototype.enterDocument = function() {
         this.skipVideosCheckbox_.decorate(this.skipVideosSpan_);
         this.skipVideosCheckbox_.setLabel(
             this.skipVideosCheckbox_.getElement().parentNode);
+        this.skipVideosCheckbox_.setChecked(goog.ui.Checkbox.State.UNCHECKED);
     }
     this.getHandler().listen(this.skipVideosCheckbox_,
                              goog.ui.Component.EventType.CHANGE,
@@ -150,7 +151,7 @@ mirosubs.HowToVideoPanel.prototype.startPlaying_ = function(e) {
 mirosubs.HowToVideoPanel.prototype.skipVideosCheckboxChanged_ = function(e) {
     mirosubs.UserSettings.setBooleanValue(
         mirosubs.UserSettings.Settings.SKIP_HOWTO_VIDEO,
-        this.skipVideosCheckbox_.getChecked());
+        this.skipVideosCheckbox_.isChecked());
 };
 
 mirosubs.HowToVideoPanel.prototype.continue_ = function(e) {
