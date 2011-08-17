@@ -215,17 +215,11 @@ def add_disabled():
     for host in env.web_hosts:
         env.host_string = host
         run('touch {0}/mirosubs/disabled'.format(env.web_dir))
-    if env.admin_dir is not None:
-        env.host_string = ADMIN_HOST
-        sudo('/etc/init.d/cron stop')
 
 def remove_disabled():
     for host in env.web_hosts:
         env.host_string = host
         run('rm {0}/mirosubs/disabled'.format(env.web_dir))
-    if env.admin_dir is not None:
-        env.host_string = ADMIN_HOST
-        sudo('/etc/init.d/cron start')
 
 def update_web():
     for host in env.web_hosts:
