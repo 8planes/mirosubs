@@ -216,8 +216,15 @@ def _git_pull():
     _clear_permissions('.')
 
 def _reload_app_server():
-    run('python deploy/create_commit_file.py')
-    run('touch deploy/unisubs.wsgi')
+    """
+    Reloading the app server will both make sure we have a
+    valid commit guid (by running the create_commit_file)
+    and also that we make the server reload code (currently
+    with mod_wsgi this is touching the wsgi file)
+    """
+    with cd('{0}/mirosubs'.format(env.web_dir)):
+        run('python deploy/create_commit_file.py')
+        run('touch deploy/unisubs.wsgi')
     
 def add_disabled():
     for host in env.web_hosts:
@@ -230,6 +237,23 @@ def remove_disabled():
         run('rm {0}/mirosubs/disabled'.format(env.web_dir))
 
 def update_web():
+    """
+    This is how code gets reloaded:
+
+    - Checkout code on the auxiliary server ADMIN whost
+    - Checkout the latest code on all appservers
+    - Remove all pyc files from app servers
+    - Bounce celeryd, memcached , test services
+    - Reload app code (touch wsgi file)
+
+    Until we implement the checking out code to an isolated dir
+    any failure on these steps need to be fixed or will result in
+    breakage
+    """
+    if env.admin_dir is not None:
+        env.host_string = ADMIN_HOST
+        with cd(os.path.join(env.admin_dir, 'mirosubs')):
+            _git_pull()
     for host in env.web_hosts:
         env.host_string = host
         with cd('{0}/mirosubs'.format(env.web_dir)):
@@ -238,16 +262,16 @@ def update_web():
             env.warn_only = True
             run("find . -name '*.pyc' -print0 | xargs -0 rm")
             env.warn_only = False
-            _reload_app_server()
-    if env.admin_dir is not None:
-        env.host_string = ADMIN_HOST
-        with cd(os.path.join(env.admin_dir, 'mirosubs')):
-            _git_pull()
     _bounce_celeryd()
     bounce_memcached()
     test_services()
+    for host in env.web_hosts:
+        _reload_app_server()
 
 def bounce_memcached():
+    """
+    Purges old data from memcached should be done by the end of each deploy
+    """
     if env.admin_dir:
         env.host_string = ADMIN_HOST
     else:
@@ -292,6 +316,9 @@ def _update_static(dir):
         media_dir = '{0}/mirosubs/media/'.format(dir)
         python_exe = '{0}/env/bin/python'.format(dir)
         _git_pull()
+        # this has to be here, since the environment that compiles media is not an app server
+        # so there is no guarantee we we'll have run the create_commit command
+        run('{0} deploy/create_commit_file.py'.format(python_exe))
         run('{0} manage.py compile_config {1} --settings=unisubs_settings'.format(
                 python_exe, media_dir))
         run('{0} manage.py compile_statwidgetconfig {1} --settings=unisubs_settings'.format(
@@ -302,9 +329,7 @@ def _update_static(dir):
         static_cache_path = "./media/static-cache/*"
         _clear_permissions(media_dir)
         
-        # this has to be here, since the environment that compiles media is not an app server
-        # so there is no guarantee we we'll have run the create_commit command
-        run('{0} deploy/create_commit_file.py'.format(python_exe))
+        
         run('{0} manage.py  compile_media --settings=unisubs_settings'.format(python_exe))
         
 def update_static():
