@@ -13,9 +13,9 @@ Contents:
 
    running-unisubs
    static-files
-   video-models
    demos
    deployment-guide
+   fabric-commands
 
 
 Indices and tables
