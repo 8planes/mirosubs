@@ -483,6 +483,8 @@ def revision(request, pk):
     context['widget_params'] = _widget_params(request, \
             language.video, version.version_no, language)
     context['latest_version'] = language.latest_version()
+    version.ordered_subtitles()
+
     return render_to_response('videos/revision.html', context,
                               context_instance=RequestContext(request))     
     

@@ -76,7 +76,7 @@ class VideoIndex(CelerySearchIndex):
     requests_count = IntegerField()
     video_id = CharField(model_attr='video_id', indexed=False)
     thumbnail_url = CharField(model_attr='get_thumbnail', indexed=False)
-    small_thumbnail = CharField(model_attr='small_thumbnail', indexed=False)
+    small_thumbnail = CharField(model_attr='get_small_thumbnail', indexed=False)
     created = DateTimeField(model_attr='created')
     edited = DateTimeField(model_attr='edited')
     subtitles_fetched_count = IntegerField(model_attr='subtitles_fetched_count')

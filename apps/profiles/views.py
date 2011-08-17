@@ -46,7 +46,7 @@ def remove_avatar(request):
     if request.POST.get('remove'):
         request.user.picture = ''
         request.user.save()
-    return HttpResponse(json.dumps({}), "text/javascript")
+    return HttpResponse(json.dumps({'avatar': request.user.avatar()}), "text/javascript")
 
 @login_required
 def edit_avatar(request):
