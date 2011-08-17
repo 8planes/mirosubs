@@ -185,3 +185,9 @@ a.add_subtitles_bt{
     width: 400px;
     font-weight: bold;
 }
+
+p.notice {
+  color: #899;
+  margin-top: 2em;
+  font-size: .95em;
+}
