@@ -653,6 +653,12 @@ MEDIA_BUNDLES = {
         "closure_deps": "js/closure-dependencies.js",
         "files": ["js/config.js"] + JS_WIDGETIZER,
      },
+    "mirosubs-widgetizer-sumo": {
+        "type": "js",
+        "closure_deps": "js/closure-dependencies.js",
+        "files": ["js/config.js"] + JS_WIDGETIZER,
+        "extra_defines": {"mirosubs.REPORT_ANALYTICS": "false"}
+    },
     "mirosubs-widgetizer-debug":{
         "type": "js",
         "files": ["js/config.js" ] + JS_WIDGETIZER  ,

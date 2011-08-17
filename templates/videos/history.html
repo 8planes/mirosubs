@@ -152,14 +152,14 @@
     <!-- Start Transcript -->
     
     <div class="grid_3 left_nav_wrapper alpha">
+        {% upload_subtitles video %}
+        <a class="green_button small add-translation-behavior" id="add_translation" href="#">{% trans 'Add Translation' %}</a>        
         <ul class="left_nav">
             <li>
                 <a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a>
             </li>
             {% include 'videos/_left_navigation.html' %}
         </ul>
-        <a class="green_button small add-translation-behavior" id="add_translation" href="#">{% trans 'Add Translation' %}</a>
-        {% upload_subtitles video %}
         {% if user.is_staff and perms.videos.edit_video %}
             {% feature_video video %}
         {% endif %}

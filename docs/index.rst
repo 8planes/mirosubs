@@ -13,7 +13,6 @@ Contents:
 
    running-unisubs
    static-files
-   video-models
    demos
    deployment-guide
 

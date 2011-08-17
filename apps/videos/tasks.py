@@ -57,11 +57,11 @@ def save_thumbnail_in_s3(video_id):
         video = Video.objects.get(pk=video_id)
     except Video.DoesNotExist:
         return
-    
-    if video.thumbnail:
-        content = ContentFile(urlopen(video.thumbnail))
-        video.s3_thumbnail.save(video.thumbnail.split('/')[-1], content)
 
+    if video.thumbnail and not video.s3_thumbnail:
+        content = ContentFile(urlopen(video.thumbnail).read())
+        video.s3_thumbnail.save(video.thumbnail.split('/')[-1], content)
+        
 @periodic_task(run_every=crontab(minute=0, hour=1))
 def update_from_feed(*args, **kwargs):
     for feed in VideoFeed.objects.all():

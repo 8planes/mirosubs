@@ -35,7 +35,7 @@ function addNewCaption(startTime, endTime) {
 /* the tests */
 
 function setUp() {
-    mirosubs.Tracker.getInstance().dontReport();
+    mirosubs.REPORT_ANALYTICS = false;
     mirosubs.SubTracker.getInstance().start(false);
 }
 

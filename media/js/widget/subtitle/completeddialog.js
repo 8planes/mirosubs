@@ -35,7 +35,7 @@ mirosubs.subtitle.CompletedDialog.prototype.createDom = function() {
     mirosubs.subtitle.CompletedDialog.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.getElement().appendChild($d('h3', null, "Entire video completed?"));
-    this.checkboxSpan_ = $d('span');
+    this.checkboxSpan_ = $d('span', this.completed_ ? "goog-checkbox-checked" : "goog-checkbox-unchecked");
     this.getElement().appendChild(
         $d('div', null,
            $d('p', null, 
@@ -57,11 +57,11 @@ mirosubs.subtitle.CompletedDialog.prototype.createDom = function() {
 mirosubs.subtitle.CompletedDialog.prototype.enterDocument = function() {
     mirosubs.subtitle.CompletedDialog.superClass_.enterDocument.call(this);
     if (!this.checkbox_) {
-        this.checkbox_ = new goog.ui.Checkbox();
+        this.checkbox_ = new goog.ui.Checkbox(
+            this.completed_ ? goog.ui.Checkbox.State.CHECKED : goog.ui.Checkbox.State.UNCHECKED);
         this.checkbox_.decorate(this.checkboxSpan_);
         this.checkbox_.setLabel(
             this.checkbox_.getElement().parentNode);
-        this.checkbox_.setChecked(this.completed_);
     }
     this.getHandler().listen(
         this.okButton_, 'click', this.okClicked_);
@@ -70,7 +70,7 @@ mirosubs.subtitle.CompletedDialog.prototype.enterDocument = function() {
 mirosubs.subtitle.CompletedDialog.prototype.okClicked_ = function(e) {
     e.preventDefault();
     this.setVisible(false);
-    this.callback_(this.checkbox_.getChecked());
+    this.callback_(this.checkbox_.isChecked());
 };
 
 /**

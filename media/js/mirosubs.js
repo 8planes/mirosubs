@@ -19,6 +19,13 @@
 goog.provide('mirosubs');
 
 /**
+ * @define {boolean} REPORT_ANALYTICS is provided so that a build that 
+ * excludes analytics reporting. Right now this is useful for Mozilla --
+ * see https://bugzilla.mozilla.org/show_bug.cgi?id=669911#c8
+ */
+mirosubs.REPORT_ANALYTICS = true;
+
+/**
  * If a widget is embedded in a different domain, this is set by
  * mirosubs.widget.CrossDomainEmbed. It has two properties: siteURL
  * and mediaURL. It is non-null iff the widget is embedded in a 

@@ -114,27 +114,24 @@
     <hr />
     
     <div class="grid_3 left_nav_wrapper alpha">
+        {% upload_subtitles video %}
+        {% paste_transcription %}    
+        {% if not video.subtitle_language %}
+            <a href="#" style="margin-bottom: 5px;" id="add_subtitles" class="green_button small"> {% trans 'Add Subtitles' %}</a><br /><br />
+        {% else %}
+            <a style="margin-bottom: 5px;" class="green_button small add-translation-behavior" id="add_translation " href="#">{% trans 'Add Translation' %}</a>
+        {% endif %}
+
         <ul class="left_nav">
             <li class="active">
                 <a href="{{ video.get_absolute_url }}">{% trans 'Video Info' %}</a>
             </li>
             {% include 'videos/_left_navigation.html' %}
         </ul>
-        {% if not video.subtitle_language %}
-            <a href="#" id="add_subtitles" class="green_button small"> {% trans 'Add Subtitles' %}</a><br /><br />
-        {% else %}
-            <a class="green_button small add-translation-behavior" id="add_translation "   href="#">{% trans 'Add Translation' %}</a>
-        {% endif %}
-
-       {% render_approve_all_button video user %}    
-        <br /><br />
-        {% upload_subtitles video %}
-        <br /><br />
-        {% paste_transcription %}
+        {% render_approve_all_button video user %}    
     
         {% if user.is_staff and perms.videos.edit_video %}
             <a href="{% url videos:video_debug video.video_id %}"  class="green_button small" target="blank"> View debug info </a>
-            <br /><br />
             <a href="{% url admin:videos_video_change video.pk %}"  class="green_button small" target="blank"> {% trans 'Edit in Admin Interface' %}</a>
             {% feature_video video %}
         {% endif %}

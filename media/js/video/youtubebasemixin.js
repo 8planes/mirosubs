@@ -105,7 +105,6 @@ mirosubs.video.YoutubeBaseMixin.prototype.resumeLoadingInternal = function(playh
         this.commands_.push(goog.bind(this.resumeLoadingInternal, this, playheadTime));
 };
 mirosubs.video.YoutubeBaseMixin.prototype.getPlayheadTime = function() {
-    window['console']['log'](this.player_);
     return this.player_ ? this.player_['getCurrentTime']() : 0;
 };
 

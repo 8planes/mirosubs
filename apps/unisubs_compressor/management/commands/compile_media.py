@@ -58,6 +58,7 @@ NO_UNIQUE_URL = (
     #"js/embed.js", -> embed is actually a dinamic url
     "js/mirosubs-widgetizer.js",
     "js/mirosubs-widgetizer-debug.js",
+    "js/mirosubs-widgetizer-sumo.js",
     "js/mirosubs-extension.js",
     "js/mirosubs-statwidget.js",
     "js/mirosubs-api.js",
@@ -144,6 +145,7 @@ class Command(BaseCommand):
         output_file_name = "%s.js" % bundle_name
         bundle_settings = settings.MEDIA_BUNDLES[bundle_name]
         debug = bundle_settings.get("debug", False)
+        extra_defines = bundle_settings.get("extra_defines", None)
         include_flash_deps = bundle_settings.get("include_flash_deps", True)
         closure_dep_file = bundle_settings.get("closure_deps",'js/closure-dependencies.js' )
         optimization_type = bundle_settings.get("optimizations", "ADVANCED_OPTIMIZATIONS")
@@ -189,7 +191,16 @@ class Command(BaseCommand):
         debug_arg = ''
         if not debug:
             debug_arg = '--define goog.DEBUG=false'
-        cmd_str =  "java -jar %s --js %s %s --js_output_file %s %s --define goog.NATIVE_ARRAY_PROTOTYPES=false --output_wrapper (function(){%%output%%})(); --compilation_level %s" % ( compiler_jar, calcdeps_js, deps, compiled_js,debug_arg, optimization_type)
+        extra_defines_arg = ''
+        if extra_defines is not None:
+            for k, v in extra_defines.items():
+                extra_defines_arg += ' --define {0}={1} '.format(k, v)
+        cmd_str =  ("java -jar %s --js %s %s --js_output_file %s %s %s "
+                    "--define goog.NATIVE_ARRAY_PROTOTYPES=false "
+                    "--output_wrapper (function(){%%output%%})(); "
+                    "--compilation_level %s") % \
+                    (compiler_jar, calcdeps_js, deps, compiled_js, 
+                     debug_arg, extra_defines_arg, optimization_type)
 
         if self.verbosity > 1:
             logging.info( "calling %s" % cmd_str)    

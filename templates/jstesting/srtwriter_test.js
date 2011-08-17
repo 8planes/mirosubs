@@ -15,7 +15,7 @@ function captionJSON(startTime, endTime, captionID, subOrder, text) {
 /* the tests */
 
 function setUp() {
-    mirosubs.Tracker.getInstance().dontReport();
+    mirosubs.REPORT_ANALYTICS = false;
 }
 
 function testSrt() {

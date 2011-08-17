@@ -23,7 +23,14 @@ import string
 import random
 import os
 
+#:This environment is responsible for:
+#:
+#:- syncdb on all environment
+#:- memechached and solr for `dev`
+#:- media compilation on all environments
 DEV_HOST = 'dev.universalsubtitles.org:2191'
+#: Environment where celeryd and solr run for staging
+#: - solr, celeryd and memcached for staging and production
 ADMIN_HOST = 'pcf-us-admin.pculture.org:2191'
 
 def _create_env(username, hosts, s3_bucket, 
@@ -31,13 +38,14 @@ def _create_env(username, hosts, s3_bucket,
                 memcached_bounce_cmd, 
                 admin_dir, celeryd_host, celeryd_proj_root, 
                 separate_uslogging_db=False,
-                celeryd_bounce_cmd=""):
+                celeryd_bounce_cmd="",
+                web_dir=None):
     env.user = username
     env.web_hosts = hosts
     env.hosts = []
     env.s3_bucket = s3_bucket
-    env.web_dir = '/var/www/{0}'.format(installation_dir)
-    env.static_dir = '/var/{0}'.format(static_dir)
+    env.web_dir = web_dir or '/var/www/{0}'.format(installation_dir)
+    env.static_dir = static_dir 
     env.installation_name = name
     env.memcached_bounce_cmd = memcached_bounce_cmd
     env.admin_dir = admin_dir
@@ -52,7 +60,7 @@ def staging(username):
                                         'pcf-us-staging2.pculture.org:2191'],
                 s3_bucket             = 's3.staging.universalsubtitles.org',
                 installation_dir      = 'universalsubtitles.staging',
-                static_dir            = 'static/staging', 
+                static_dir            = '/var/static/staging', 
                 name                  = 'staging',
                 memcached_bounce_cmd  = '/etc/init.d/memcached-staging restart',
                 admin_dir             = '/usr/local/universalsubtitles.staging',
@@ -66,7 +74,7 @@ def dev(username):
                 hosts                 = ['dev.universalsubtitles.org:2191'],
                 s3_bucket             = None,
                 installation_dir      = 'universalsubtitles.dev',
-                static_dir            = 'www/universalsubtitles.dev', 
+                static_dir            = '/var/www/universalsubtitles.dev', 
                 name                  = 'dev', 
                 memcached_bounce_cmd  = '/etc/init.d/memcached restart', 
                 admin_dir             = None,
@@ -208,26 +216,44 @@ def _git_pull():
     _clear_permissions('.')
 
 def _reload_app_server():
-    run('python deploy/create_commit_file.py')
-    run('touch deploy/unisubs.wsgi')
+    """
+    Reloading the app server will both make sure we have a
+    valid commit guid (by running the create_commit_file)
+    and also that we make the server reload code (currently
+    with mod_wsgi this is touching the wsgi file)
+    """
+    with cd('{0}/mirosubs'.format(env.web_dir)):
+        run('python deploy/create_commit_file.py')
+        run('touch deploy/unisubs.wsgi')
     
 def add_disabled():
     for host in env.web_hosts:
         env.host_string = host
         run('touch {0}/mirosubs/disabled'.format(env.web_dir))
-    if env.admin_dir is not None:
-        env.host_string = ADMIN_HOST
-        sudo('/etc/init.d/cron stop')
 
 def remove_disabled():
     for host in env.web_hosts:
         env.host_string = host
         run('rm {0}/mirosubs/disabled'.format(env.web_dir))
-    if env.admin_dir is not None:
-        env.host_string = ADMIN_HOST
-        sudo('/etc/init.d/cron start')
 
 def update_web():
+    """
+    This is how code gets reloaded:
+
+    - Checkout code on the auxiliary server ADMIN whost
+    - Checkout the latest code on all appservers
+    - Remove all pyc files from app servers
+    - Bounce celeryd, memcached , test services
+    - Reload app code (touch wsgi file)
+
+    Until we implement the checking out code to an isolated dir
+    any failure on these steps need to be fixed or will result in
+    breakage
+    """
+    if env.admin_dir is not None:
+        env.host_string = ADMIN_HOST
+        with cd(os.path.join(env.admin_dir, 'mirosubs')):
+            _git_pull()
     for host in env.web_hosts:
         env.host_string = host
         with cd('{0}/mirosubs'.format(env.web_dir)):
@@ -236,18 +262,16 @@ def update_web():
             env.warn_only = True
             run("find . -name '*.pyc' -print0 | xargs -0 rm")
             env.warn_only = False
-            with cd('{0}/mirosubs/deploy'.format(env.web_dir)):
-                run('. ../../env/bin/activate && pip install -q -r requirements.txt')
-            _reload_app_server()
-    if env.admin_dir is not None:
-        env.host_string = ADMIN_HOST
-        with cd(os.path.join(env.admin_dir, 'mirosubs')):
-            _git_pull()
     _bounce_celeryd()
     bounce_memcached()
     test_services()
+    for host in env.web_hosts:
+        _reload_app_server()
 
 def bounce_memcached():
+    """
+    Purges old data from memcached should be done by the end of each deploy
+    """
     if env.admin_dir:
         env.host_string = ADMIN_HOST
     else:
@@ -277,7 +301,7 @@ def update_solr_schema():
             run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/main/conf/schema.xml'.format(python_exe))
             run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/testing/conf/schema.xml'.format(python_exe))
             sudo('service tomcat6 restart')
-            run('yes y | {0} manage.py rebuild_index --settings=unisubs_settings'.format(python_exe))
+            run('screen -d -m "yes y | {0} manage.py rebuild_index --settings=unisubs_settings"'.format(python_exe))
 
 def _bounce_celeryd():
     if env.admin_dir:
@@ -292,6 +316,9 @@ def _update_static(dir):
         media_dir = '{0}/mirosubs/media/'.format(dir)
         python_exe = '{0}/env/bin/python'.format(dir)
         _git_pull()
+        # this has to be here, since the environment that compiles media is not an app server
+        # so there is no guarantee we we'll have run the create_commit command
+        run('{0} deploy/create_commit_file.py'.format(python_exe))
         run('{0} manage.py compile_config {1} --settings=unisubs_settings'.format(
                 python_exe, media_dir))
         run('{0} manage.py compile_statwidgetconfig {1} --settings=unisubs_settings'.format(
@@ -302,9 +329,7 @@ def _update_static(dir):
         static_cache_path = "./media/static-cache/*"
         _clear_permissions(media_dir)
         
-        # this has to be here, since the environment that compiles media is not an app server
-        # so there is no guarantee we we'll have run the create_commit command
-        run('{0} deploy/create_commit_file.py'.format(python_exe))
+        
         run('{0} manage.py  compile_media --settings=unisubs_settings'.format(python_exe))
         
 def update_static():
@@ -351,6 +376,7 @@ def promote_django_admins(email=None, new_password=None, userlist_path=None):
 def update_translations():
     """
     What it does:
+    
     - Pushes new strings in english and new languages to transifex.
     - Pulls all changes from transifex, for all languages
     - Adds only the *.mo and *.po files to the index area
@@ -358,6 +384,7 @@ def update_translations():
     - Pushes to origon.
 
     Caveats:
+    
     - If any of these steps fail, it will stop execution
     - At some point, this is pretty much about syncing two reps, so conflicts can appear
     - This assumes that we do not edit translation .po files on the file system.
@@ -411,3 +438,12 @@ def generate_docs():
     with cd(os.path.join(env.static_dir, 'mirosubs')):
         python_exe = '{0}/env/bin/python'.format(env.static_dir)
         run('{0} manage.py  sphinx-build docs/ media/docs --settings=unisubs_settings'.format(python_exe))
+    
+try:
+    from local_env import *
+    def local (username):
+        _create_env(**local_env_data)
+
+except ImportError:
+    pass 
+

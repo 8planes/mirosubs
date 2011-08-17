@@ -53,7 +53,8 @@ mirosubs.video.YTIFrameVideoPlayer.prototype.createDom = function() {
           'width': this.playerSize_.width + '',
           'height': this.playerSize_.height + '', 
           'src': embedUri.toString(),
-          'frameborder': '0'});
+          'frameborder': '0',
+          'style': mirosubs.style.setSizeInString('', this.playerSize_) });
     this.setElementInternal(this.iframe_);
 };
 
@@ -68,7 +69,7 @@ mirosubs.video.YTIFrameVideoPlayer.prototype.addQueryString_ = function(uri) {
     var locationUri = new goog.Uri(window.location);
     var domain = window.location.protocol + "//" + 
         locationUri.getDomain() + 
-        (locationUri.getPort() != 80 ? (':' + locationUri.getPort()) : '');
+        (locationUri.getPort() != null ? (':' + locationUri.getPort()) : '');
     uri.setParameterValue('enablejsapi', '1').
         setParameterValue('origin', domain).
         setParameterValue('wmode', 'opaque');

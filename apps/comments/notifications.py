@@ -73,10 +73,9 @@ def notify_comment_by_email(comment,  version=None,  moderator=None, is_rejectio
         })
     else:
         version_url = None
-    if moderator:
-        user_url = universal_url("profiles:profile", args=(moderator.id,))
-    else:
-        user_url  = ""
+    user = moderator or comment.user    
+    user_url = universal_url("profiles:profile", args=(user.id,))
+    
     if is_rejection:
         subject = SUBJECT_EMAIL_VERSION_REJECTED  % video.title_display()
     else:
@@ -90,10 +89,11 @@ def notify_comment_by_email(comment,  version=None,  moderator=None, is_rejectio
             user.email,
             subject,
             "comments/email/comment-notification.html", {
-                "version": version,
-                "moderator": moderator,
+                "video": video,
+                "user": user,
                 "version_url":version_url,
                 "language_url":language_url,
                 "domain":domain,
+                "version": version,
             }, not settings.DEBUG)
 
