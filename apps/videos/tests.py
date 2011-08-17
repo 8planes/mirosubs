@@ -755,13 +755,6 @@ class ViewsTest(WebUseTest):
         response = self.client.get(self.video.get_absolute_url('en'))
         self.assertEqual(response.status_code, 200)
 
-# FIXME: Dmitriy, please fix.
-#    def test_video_absolute_url(self):
-#        # absolute urls should start with http://
-#        # if the urls returned from this method don't start with http,
-#        # then the method should be renamed to get_relative_url.
-#        self.assertEquals('http', self.video.get_absolute_url()[:4])
-        
     def test_video_list(self):
         self._simple_test('videos:list')
         self._simple_test('videos:list', data={'o': 'languages_count', 'ot': 'desc'})
