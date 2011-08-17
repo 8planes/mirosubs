@@ -189,7 +189,7 @@ class Video(models.Model):
         
     def get_thumbnail(self):
         if self.s3_thumbnail:
-            return self.s3_thumbnail.thumb_url(100, 100)
+            return self.s3_thumbnail.url
         
         if self.thumbnail:
             return self.thumbnail
@@ -197,6 +197,9 @@ class Video(models.Model):
         return ''
     
     def get_small_thumbnail(self):
+        if self.s3_thumbnail:
+            return self.s3_thumbnail.thumb_url(120, 90)
+                
         if self.small_thumbnail:
             return self.small_thumbnail
         
@@ -283,6 +286,9 @@ class Video(models.Model):
                     obj.slug = slugify(obj.title)
                 obj.user = user
                 obj.save()
+
+                from videos.tasks import save_thumbnail_in_s3
+                save_thumbnail_in_s3.delay(obj.pk)
     
                 Action.create_video_handler(obj, user)
                 
