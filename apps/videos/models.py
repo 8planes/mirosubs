@@ -918,9 +918,8 @@ class SubtitleVersion(SubtitleCollection):
         #to be sure we have real data in instance, without cached values in attributes
         lang = SubtitleLanguage.objects.get(id=self.language.id) 
         latest_subtitles = lang.latest_version(public_only=False)
-        new_version_no = latest_subtitles.version_no + 1
         note = u'rollback to version #%s' % self.version_no
-
+        
         if latest_subtitles.result_of_rollback is False:
             # if we have tanslations, we need to keep a forked version of them
             # else all translations will be wiped by an earlier original rollback
@@ -935,6 +934,9 @@ class SubtitleVersion(SubtitleCollection):
                         logger.warning(
                             "Got error on forking insinde rollback, original %s, forked %s" %
                             (lang.pk, translation.pk))
+                    
+        last_version = self.language.latest_version(False)
+        new_version_no = last_version.version_no + 1
         new_version = cls(language=lang, version_no=new_version_no, \
                               datetime_started=datetime.now(), user=user, note=note, 
                           is_forked=self.is_forked,
@@ -943,7 +945,7 @@ class SubtitleVersion(SubtitleCollection):
         
         for item in self.subtitle_set.all():
             item.duplicate_for(version=new_version).save()
-        self.latest_version = new_version
+
         return new_version
 
     def is_all_blank(self):

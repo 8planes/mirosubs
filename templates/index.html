@@ -21,9 +21,9 @@
     
     <div id="home-left">
       <div id="subtitle" class="clearfix">
-        <form>
+        <form action="{% url videos:create %}" method="POST">
           <h2>Subtitle a Video Now</h2>
-          <input type="text" name="url" />
+          <input type="text" name="video_url" />
           <button class="button" type="submit">Subtitle</button>
           <p>Works with YouTube, Vimeo, Blip.tv, HTML5, and more.</p>
         </form>
