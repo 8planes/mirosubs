@@ -214,3 +214,11 @@ man_pages = [
     ('index', 'universalsubtitles', u'Universal Subtitles Documentation',
      [u'Participatory Culture Foundation'], 1)
 ]
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', )))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', "apps")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', "libs")))
+import dev_settings  as settings
+from django.core.management import setup_environ
+setup_environ(settings)
+
