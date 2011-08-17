@@ -350,6 +350,7 @@ def promote_django_admins(email=None, new_password=None, userlist_path=None):
 def update_translations():
     """
     What it does:
+    
     - Pushes new strings in english and new languages to transifex.
     - Pulls all changes from transifex, for all languages
     - Adds only the *.mo and *.po files to the index area
@@ -357,6 +358,7 @@ def update_translations():
     - Pushes to origon.
 
     Caveats:
+    
     - If any of these steps fail, it will stop execution
     - At some point, this is pretty much about syncing two reps, so conflicts can appear
     - This assumes that we do not edit translation .po files on the file system.
