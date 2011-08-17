@@ -45,7 +45,7 @@ def _create_env(username, hosts, s3_bucket,
     env.hosts = []
     env.s3_bucket = s3_bucket
     env.web_dir = web_dir or '/var/www/{0}'.format(installation_dir)
-    env.static_dir = static_dir or '/var/{0}'.format(static_dir)
+    env.static_dir = static_dir 
     env.installation_name = name
     env.memcached_bounce_cmd = memcached_bounce_cmd
     env.admin_dir = admin_dir
@@ -60,7 +60,7 @@ def staging(username):
                                         'pcf-us-staging2.pculture.org:2191'],
                 s3_bucket             = 's3.staging.universalsubtitles.org',
                 installation_dir      = 'universalsubtitles.staging',
-                static_dir            = 'static/staging', 
+                static_dir            = '/var/static/staging', 
                 name                  = 'staging',
                 memcached_bounce_cmd  = '/etc/init.d/memcached-staging restart',
                 admin_dir             = '/usr/local/universalsubtitles.staging',
@@ -74,7 +74,7 @@ def dev(username):
                 hosts                 = ['dev.universalsubtitles.org:2191'],
                 s3_bucket             = None,
                 installation_dir      = 'universalsubtitles.dev',
-                static_dir            = 'www/universalsubtitles.dev', 
+                static_dir            = '/var/www/universalsubtitles.dev', 
                 name                  = 'dev', 
                 memcached_bounce_cmd  = '/etc/init.d/memcached restart', 
                 admin_dir             = None,
