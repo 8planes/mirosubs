@@ -89,8 +89,8 @@ def notify_comment_by_email(comment,  version=None,  moderator=None, is_rejectio
             user.email,
             subject,
             "comments/email/comment-notification.html", {
-                "version": version,
-                "moderator": moderator,
+                "video": version.video,
+                "user": user,
                 "version_url":version_url,
                 "language_url":language_url,
                 "domain":domain,
