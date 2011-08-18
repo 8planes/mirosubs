@@ -63,17 +63,17 @@
   padding-top: 1em;
 }
 
-#partners {
+#services-partners {
   position: absolute;
   top:3em;
   right:0;
 }
 
-#partners li {
+#services-partners li {
   text-align: center;
   margin: 1em 0;
 }
 
-#partners li p {
+#services-partners li p {
   margin: .5em 0;
 }
