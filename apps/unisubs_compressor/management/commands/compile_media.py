@@ -25,13 +25,15 @@ import optparse
 
 from deploy.git_helpers import get_current_commit_hash
 
+LAST_COMMIT_GUID = get_current_commit_hash()
+
 def _make_version_debug_string():
     """
     See Command._append_verion_for_debug
 
     We have this as an external function because we need this on compilation and testing deployment
     """
-    return '/*mirosubs.static_version="%s"*/' % settings.LAST_COMMIT_GUID
+    return '/*mirosubs.static_version="%s"*/' % LAST_COMMIT_GUID
     
 
 
@@ -73,12 +75,19 @@ def call_command(command):
     return process.communicate()
 
 def get_cache_dir():
-    commit_hash = get_current_commit_hash()
-    return os.path.join(settings.MEDIA_ROOT, settings.COMPRESS_OUTPUT_DIRNAME, commit_hash)
+    return os.path.join(settings.MEDIA_ROOT, settings.COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID)
 
 def get_cache_base_url():
-    commit_hash = get_current_commit_hash()
-    return "%s/%s/%s" % (settings.MEDIA_URL, settings.COMPRESS_OUTPUT_DIRNAME, commit_hash)
+    return "%s/%s/%s" % (settings.MEDIA_URL, settings.COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID)
+
+
+
+def sorted_ls(path):
+    """
+    Returns contents of dir from older to newer
+    """
+    mtime = lambda f: os.stat(os.path.join(path, f)).st_mtime
+    return list(sorted(os.listdir(path), key=mtime))
 
 class Command(BaseCommand):
 
@@ -93,6 +102,11 @@ class Command(BaseCommand):
         optparse.make_option('--checks-version',
             action='store_true', dest='test_str_version', default=True,
             help="Check that we outputed the version string for comopiled files."),
+
+
+        optparse.make_option('--keeps-previous',
+            action='store_true', dest='keeps_previous', default=False,
+            help="Will remove older static media builds."),
         )
 
     def create_cache_dir(self):
@@ -247,6 +261,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.verbosity = int(options.get('verbosity'))
         self.test_str_version = bool(options.get('test_str_version'))
+        self.keeps_previous = bool(options.get('keeps_previous'))        
         restrict_bundles = bool(args)
 
         os.chdir(settings.PROJECT_ROOT)
@@ -257,7 +272,16 @@ class Command(BaseCommand):
             if restrict_bundles and bundle_name not in args:
                 continue
             self.compile_media_bundle( bundle_name, data['type'], data["files"])
-        
+
+
+            
+        if not self.keeps_previous:
+            # we remove all but the last export, since the build can fail at the next step
+            # in which case it will still need the previous build there
+            base = os.path.dirname(get_cache_dir())
+            targets = [os.path.join(base, x) for x in sorted_ls("media/static-cache/")
+                       if x.startswith(".") is False][:-1]
+            [shutil.rmtree(t) for t in targets ]
         # we now move the old temp dir to it's final destination
         final_path = get_cache_dir()
         if os.path.exists(final_path):

@@ -97,7 +97,9 @@ class TeamVideoForm(forms.ModelForm):
 
 class TeamVideoAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'team_link', 'created')
-
+    readonly_fields = ('completed_languages',)
+    raw_id_fields = ['video', 'team', 'added_by']
+    
     def team_link(self, obj):
         url = reverse('admin:teams_team_change', args=[obj.team_id])
         return u'<a href="%s">%s</a>' % (url, obj.team)

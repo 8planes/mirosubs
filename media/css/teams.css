@@ -192,3 +192,8 @@ a.add_subtitles_bt{
 .video-moderation-item{
    margin-bottom:40px;
 }
+p.notice {
+  color: #899;
+  margin-top: 2em;
+  font-size: .95em;
+}
