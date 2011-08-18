@@ -170,7 +170,7 @@ mirosubs.video.AbstractVideoPlayer.prototype.resumeLoadingInternal = function(pl
  */
 mirosubs.video.AbstractVideoPlayer.prototype.setDimensionsKnownInternal = function() {
     this.dimensionsKnown_ = true;
-    goog.style.setSize(this.getElement(), this.getVideoSize());
+    mirosubs.style.setSize(this.getElement(), this.getVideoSize());
     this.dispatchEvent(
         mirosubs.video.AbstractVideoPlayer.EventType.DIMENSIONS_KNOWN);
 };

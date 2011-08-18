@@ -104,7 +104,8 @@ mirosubs.video.YoutubeVideoPlayer.prototype.createDom = function() {
     else
         this.playerSize_ = this.forDialog_ ?
         mirosubs.video.AbstractVideoPlayer.DIALOG_SIZE :
-        mirosubs.video.AbstractVideoPlayer.DEFAULT_SIZE;    
+        mirosubs.video.AbstractVideoPlayer.DEFAULT_SIZE;
+    this.setDimensionsKnownInternal();
 };
 
 mirosubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
@@ -168,7 +169,6 @@ mirosubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
     if (playerAPIID != this.playerAPIID_)
         return;
     if (!this.isDecorated()) {
-        this.setDimensionsKnownInternal();
         this.player_ = goog.dom.getElement(this.playerElemID_);
         mirosubs.style.setSize(this.player_, this.playerSize_);
         if (this.forDialog_)
