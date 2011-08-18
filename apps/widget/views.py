@@ -49,7 +49,9 @@ def embed(request, version_no=''):
     with the media url hasn't taken place.
     Public clients will use the url : SITE_MEDIA/js/embed.js
     """
-    context = widget.add_offsite_js_files({})
+    context = { 'js_file': (widget.full_path('js/mirosubs-offsite-compiled.js') 
+                            if settings.COMPRESS_MEDIA else 
+                            widget.full_path(settings.JS_OFFSITE[-1])) }
     if bool(version_no) is False:
         version_no = ""
     return render_to_response('widget/embed{0}.js'.format(version_no), 

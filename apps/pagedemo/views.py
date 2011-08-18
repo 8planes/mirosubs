@@ -84,6 +84,7 @@ def pagedemo(request, file_name):
         return pagedemo(request, "index")
     context = widget.add_config_based_js_files(
         {}, settings.JS_WIDGETIZER, 'mirosubs-widgetizer.js')
+    context['COMPRESS_MEDIA'] = settings.COMPRESS_MEDIA
     context['embed_js_url'] = \
         "http://{0}/embed{1}.js".format(
         Site.objects.get_current().domain,
