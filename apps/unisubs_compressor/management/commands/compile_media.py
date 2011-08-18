@@ -20,10 +20,14 @@ import sys, os, shutil, subprocess, logging, time
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
+from django.contrib.sites.models import Site
+from django.template.loader import render_to_string
 
 import optparse
 
 from deploy.git_helpers import get_current_commit_hash
+
+from apps import widget
 
 LAST_COMMIT_GUID = get_current_commit_hash()
 
@@ -78,7 +82,7 @@ def get_cache_dir():
     return os.path.join(settings.MEDIA_ROOT, settings.COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID)
 
 def get_cache_base_url():
-    return "%s/%s/%s" % (settings.MEDIA_URL, settings.COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID)
+    return "%s%s/%s" % (settings.MEDIA_URL_BASE, settings.COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID)
 
 
 
@@ -257,7 +261,40 @@ class Command(BaseCommand):
          # we need to copy all js, ideally this can be refactored in other libs
 
         
-                
+
+    def _output_embed_to_dir(self, output_dir, version=''):
+        file_name = 'embed{0}.js'.format(version)
+        context = widget.add_offsite_js_files(
+            {'current_site': Site.objects.get_current(),
+             'MEDIA_URL': get_cache_base_url() +"/"})
+        rendered = render_to_string(
+            'widget/{0}'.format(file_name), context)
+        with open(os.path.join(output_dir, file_name), 'w') as f:
+            f.write(rendered)
+            
+    def compile_conf_js(self):
+        file_name = os.path.join(settings.MEDIA_ROOT, 'js/config.js')
+
+
+        context = {'current_site': Site.objects.get_current(),
+                   'MEDIA_URL': get_cache_base_url()+ "/"}
+        rendered = render_to_string(
+            'widget/config.js', context)
+        with open(file_name, 'w') as f:
+            f.write(rendered)
+
+        self._output_embed_to_dir(settings.MEDIA_ROOT)
+        self._output_embed_to_dir(settings.MEDIA_ROOT, settings.EMBED_JS_VERSION)
+        for version in settings.PREVIOUS_EMBED_JS_VERSIONS:
+            self._output_embed_to_dir(output_dir, version)
+
+
+        file_name = os.path.join(settings.MEDIA_ROOT, 'js/statwidget/statwidgetconfig.js')
+        rendered = render_to_string(
+            'widget/statwidgetconfig.js', context)
+        with open(file_name, 'w') as f:
+            f.write(rendered)    
+            
     def handle(self, *args, **options):
         self.verbosity = int(options.get('verbosity'))
         self.test_str_version = bool(options.get('test_str_version'))
@@ -267,7 +304,8 @@ class Command(BaseCommand):
         os.chdir(settings.PROJECT_ROOT)
         self.base_dir = self.create_cache_dir()
         bundles = settings.MEDIA_BUNDLES
-        self.copy_dirs() 
+        self.copy_dirs()
+        self.compile_conf_js()
         for bundle_name, data in bundles.items():
             if restrict_bundles and bundle_name not in args:
                 continue
