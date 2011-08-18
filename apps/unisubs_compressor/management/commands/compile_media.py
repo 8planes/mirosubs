@@ -25,13 +25,15 @@ import optparse
 
 from deploy.git_helpers import get_current_commit_hash
 
+LAST_COMMIT_GUID = get_current_commit_hash()
+
 def _make_version_debug_string():
     """
     See Command._append_verion_for_debug
 
     We have this as an external function because we need this on compilation and testing deployment
     """
-    return '/*mirosubs.static_version="%s"*/' % settings.LAST_COMMIT_GUID
+    return '/*mirosubs.static_version="%s"*/' % LAST_COMMIT_GUID
     
 
 
@@ -73,12 +75,10 @@ def call_command(command):
     return process.communicate()
 
 def get_cache_dir():
-    commit_hash = get_current_commit_hash()
-    return os.path.join(settings.MEDIA_ROOT, settings.COMPRESS_OUTPUT_DIRNAME, commit_hash)
+    return os.path.join(settings.MEDIA_ROOT, settings.COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID)
 
 def get_cache_base_url():
-    commit_hash = get_current_commit_hash()
-    return "%s/%s/%s" % (settings.MEDIA_URL, settings.COMPRESS_OUTPUT_DIRNAME, commit_hash)
+    return "%s/%s/%s" % (settings.MEDIA_URL, settings.COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID)
 
 class Command(BaseCommand):
 
