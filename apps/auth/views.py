@@ -26,16 +26,14 @@ from django.contrib.auth import logout, login as auth_login
 from auth.forms import CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.contrib.sites.models import Site
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.simple import direct_to_template
 from socialauth.models import AuthMeta, OpenidProfile, TwitterUserProfile, FacebookUserProfile
-from socialauth.lib.facebook import get_facebook_signature
 from utils.translation import get_user_languages_from_cookie
 from auth.models import UserLanguage, CustomUser as User
 from django.contrib.admin.views.decorators import staff_member_required
-import re
-from datetime import datetime
+import facebook
+import base64, re
 
 def login(request):
     redirect_to = request.REQUEST.get(REDIRECT_FIELD_NAME, '')
@@ -110,8 +108,6 @@ def render_login(request, user_creation_form, login_form, redirect_to):
         'auth/login.html', {
             'creation_form': user_creation_form,
             'login_form' : login_form,
-            'FACEBOOK_API_KEY': settings.FACEBOOK_API_KEY,
-            'site': Site.objects.get_current(),
             REDIRECT_FIELD_NAME: redirect_to,
             }, context_instance=RequestContext(request))
         
@@ -194,26 +190,69 @@ def twitter_login_done(request):
     # authentication was successful, use is now logged in
     return HttpResponseRedirect(request.GET.get('next', settings.LOGIN_REDIRECT_URL))
 
-def facebook_login_done(request):
-    API_KEY = settings.FACEBOOK_API_KEY
-    API_SECRET = settings.FACEBOOK_API_SECRET
-    REST_SERVER = 'http://api.facebook.com/restserver.php'
-    # FB Connect will set a cookie with a key == FB App API Key if the user has been authenticated
-    if API_KEY in request.COOKIES:
-        signature_hash = get_facebook_signature(API_KEY, API_SECRET, request.COOKIES, True)
-        # The hash of the values in the cookie to make sure they're not forged
-        # AND If session hasn't expired
-        if(signature_hash == request.COOKIES[API_KEY]) and (datetime.fromtimestamp(float(request.COOKIES[API_KEY+'_expires'])) > datetime.now()):
-            #Log the user in now.
-            user = authenticate(cookies=request.COOKIES)
-            if user:
-                # if user is authenticated then login user
-                auth_login(request, user)
-                return HttpResponseRedirect(request.GET.get('next', settings.LOGIN_REDIRECT_URL))
-            else:
-                #Delete cookies and redirect to main Login page.
-                del request.COOKIES[API_KEY + '_session_key']
-                del request.COOKIES[API_KEY + '_user']
-                return HttpResponseRedirect(reverse('auth:login'))
-    return HttpResponseRedirect(reverse('auth:login'))
 
+# Facebook
+
+def _facebook():
+    '''Return a pyfacebook Facebook object with our current API information.'''
+    return facebook.Facebook(settings.FACEBOOK_API_KEY, settings.FACEBOOK_API_SECRET,
+                             app_id=settings.FACEBOOK_APP_ID, oauth2=True)
+
+
+# Facebook's OAuth2 implementation requires that callback URLs not include "special
+# characters".  The safest way to pass a callback URL is to base64 encode it.
+#
+# Unfortunately Facebook considers a '/' to be a "special character", so we have to
+# tell Python's base64 module to base64 it with some alternate characters.
+#
+# See this StackOverflow answer for more information:
+# http://stackoverflow.com/questions/4386691/facebook-error-error-validating-verification-code/5389447#5389447
+def _fb64_encode(s):
+    return base64.b64encode(s, ['-', '_'])
+
+def _fb64_decode(s):
+    return base64.b64decode(str(s), ['-', '_'])
+
+
+def _fb_callback_url(request, next):
+    '''Return the callback URL for the given request and eventual destination.'''
+    return '%s%s' % (
+        get_url_host(request),
+        reverse("auth:facebook_login_done", kwargs={'next': next}))
+
+
+def facebook_login(request, next=None):
+    next = request.GET.get('next', settings.LOGIN_REDIRECT_URL)
+    callback_url = _fb_callback_url(request, _fb64_encode(next))
+
+    fb = _facebook()
+    signin_url = fb.get_login_url(next=callback_url)
+
+    return HttpResponseRedirect(signin_url)
+
+def facebook_login_done(request, next):
+    fallback_url = '%s?next=%s' % (reverse('auth:login'), _fb64_decode(next))
+
+    code = request.GET.get('code')
+    if not code:
+        # If there's no code, the user probably clicked "Don't Allow".
+        # Just redirect them back to the login page, preserving their destination.
+        return HttpResponseRedirect(fallback_url)
+
+    callback_url = _fb_callback_url(request, next)
+
+    fb = _facebook()
+    fb.oauth2_access_token(code, callback_url)
+
+    request.facebook = fb
+    user = authenticate(facebook=fb, request=request)
+
+    if user:
+        # If authentication was successful, log the user in and then redirect them
+        # to their (decoded) destination.
+        auth_login(request, user)
+        return HttpResponseRedirect(_fb64_decode(next))
+    else:
+        # We were not able to authenticate the user.
+        # Redirect them to login page, preserving their destination.
+        return HttpResponseRedirect(fallback_url)

@@ -569,7 +569,7 @@ input#email_friend_id_subject, input#email_friend_id_math_captcha_field {
 .open-id{
   background: url(../images/social_login.png) 0 0px no-repeat;
   display: block;
-  width: 110px;
+  width: 113px;
   float: left;
   padding-top: 33px;
   height: 0;
@@ -579,7 +579,7 @@ input#email_friend_id_subject, input#email_friend_id_math_captcha_field {
 input.open-id{
   background: url(../images/social_login.png) 0 0px no-repeat;
   display: block;
-  width: 110px;
+  width: 113px;
   float: left;
   padding: 33px 0 0 0;
   height: 0 !important;
@@ -593,12 +593,11 @@ input.open-id{
 .twitter{
   background: url(../images/social_login.png) -120px 0px no-repeat;
   display: block;
-  width: 110px;
+  width: 113px;
   float: left;
   padding-top: 33px;
   height: 0;
   overflow: hidden;
-  margin-left: -5px;
   }
 
 
@@ -614,13 +613,6 @@ input.open-id{
   }
 
   
-.facebook{
-  margin-top: 3px;
-  margin-left: 5px;
-  float: left;
-  }
-
-
 #bulk_create {
 	margin: 15px 0 0 0;
 	border-top: 1px #cae1e6 solid;
