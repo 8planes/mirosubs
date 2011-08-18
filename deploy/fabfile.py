@@ -159,10 +159,9 @@ def _switch_branch(dir, branch_name):
         run('git fetch')
         # the following command will harmlessly fail if branch already exists.
         # don't be intimidated by the one-line message.
-        env.warn_only = True
-        run('git branch --track {0} origin/{0}'.format(branch_name))
-        run('git checkout {0}'.format(branch_name))
-        env.warn_only = False
+        with settings(warn_only=True):
+            run('git branch --track {0} origin/{0}'.format(branch_name))
+            run('git checkout {0}'.format(branch_name))
         _git_pull()
 
 def _execute_on_all_hosts(cmd):
@@ -259,9 +258,8 @@ def update_web():
         with cd('{0}/mirosubs'.format(env.web_dir)):
             python_exe = '{0}/env/bin/python'.format(env.web_dir)
             _git_pull()
-            env.warn_only = True
-            run("find . -name '*.pyc' -print0 | xargs -0 rm")
-            env.warn_only = False
+            with settings(warn_only=True):
+                run("find . -name '*.pyc' -print0 | xargs -0 rm")
     _bounce_celeryd()
     bounce_memcached()
     test_services()
