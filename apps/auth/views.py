@@ -32,7 +32,7 @@ from socialauth.models import AuthMeta, OpenidProfile, TwitterUserProfile, Faceb
 from utils.translation import get_user_languages_from_cookie
 from auth.models import UserLanguage, CustomUser as User
 from django.contrib.admin.views.decorators import staff_member_required
-import facebook
+import facebook.djangofb as facebook
 import base64, re
 
 def login(request):
@@ -195,30 +195,50 @@ def twitter_login_done(request):
 
 def _facebook():
     '''Return a pyfacebook Facebook object with our current API information.'''
-    return facebook.Facebook(settings.FACEBOOK_API_KEY, settings.FACEBOOK_API_SECRET,
+    return facebook.Facebook(settings.FACEBOOK_API_KEY, settings.FACEBOOK_SECRET_KEY,
                              app_id=settings.FACEBOOK_APP_ID, oauth2=True)
 
 
-# Facebook's OAuth2 implementation requires that callback URLs not include "special
-# characters".  The safest way to pass a callback URL is to base64 encode it.
-#
-# Unfortunately Facebook considers a '/' to be a "special character", so we have to
-# tell Python's base64 module to base64 it with some alternate characters.
-#
-# See this StackOverflow answer for more information:
-# http://stackoverflow.com/questions/4386691/facebook-error-error-validating-verification-code/5389447#5389447
 def _fb64_encode(s):
+    '''Return a base64-encoded version of the string that's compatible with Facebook.
+
+    Facebook's OAuth2 implementation requires that callback URLs not include "special
+    characters".  The safest way to pass a callback URL is to base64 encode it.
+
+    Unfortunately Facebook considers a '/' to be a "special character", so we have to
+    tell Python's base64 module to base64 it with some alternate characters.
+
+    See this StackOverflow answer for more information:
+    http://stackoverflow.com/questions/4386691/facebook-error-error-validating-verification-code/5389447#5389447
+
+    '''
     return base64.b64encode(s, ['-', '_'])
 
 def _fb64_decode(s):
     return base64.b64decode(str(s), ['-', '_'])
 
 
-def _fb_callback_url(request, next):
+def _fb_callback_url(request, fb64_next):
     '''Return the callback URL for the given request and eventual destination.'''
     return '%s%s' % (
         get_url_host(request),
-        reverse("auth:facebook_login_done", kwargs={'next': next}))
+        reverse("auth:facebook_login_done", kwargs={'next': fb64_next}))
+
+def _fb_fallback_url(fb64_next):
+    '''Return a fallback URL that we'll redirect to if the authentication fails.
+
+    If the eventual target is the widget's close_window URL we'll just redirect them
+    back to that to close the popup window.
+
+    Otherwise we'll redirect them back to the login page, preserving their
+    destination.
+
+    '''
+    final_target_url = _fb64_decode(fb64_next)
+    if 'close_window' in final_target_url:
+        return final_target_url
+    else:
+        return '%s?next=%s' % (reverse('auth:login'), final_target_url)
 
 
 def facebook_login(request, next=None):
@@ -226,20 +246,24 @@ def facebook_login(request, next=None):
     callback_url = _fb_callback_url(request, _fb64_encode(next))
 
     fb = _facebook()
+    request.facebook = fb
     signin_url = fb.get_login_url(next=callback_url)
 
     return HttpResponseRedirect(signin_url)
 
 def facebook_login_done(request, next):
-    fallback_url = '%s?next=%s' % (reverse('auth:login'), _fb64_decode(next))
+    # The next parameter we get here is base64'ed.
+    fb64_next = next
+
+    fallback_url = _fb_fallback_url(fb64_next)
 
     code = request.GET.get('code')
     if not code:
         # If there's no code, the user probably clicked "Don't Allow".
-        # Just redirect them back to the login page, preserving their destination.
+        # Redirect them to the fallback.
         return HttpResponseRedirect(fallback_url)
 
-    callback_url = _fb_callback_url(request, next)
+    callback_url = _fb_callback_url(request, fb64_next)
 
     fb = _facebook()
     fb.oauth2_access_token(code, callback_url)
@@ -251,7 +275,7 @@ def facebook_login_done(request, next):
         # If authentication was successful, log the user in and then redirect them
         # to their (decoded) destination.
         auth_login(request, user)
-        return HttpResponseRedirect(_fb64_decode(next))
+        return HttpResponseRedirect(_fb64_decode(fb64_next))
     else:
         # We were not able to authenticate the user.
         # Redirect them to login page, preserving their destination.

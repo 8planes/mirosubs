@@ -11,7 +11,7 @@ import random
 TWITTER_CONSUMER_KEY = getattr(settings, 'TWITTER_CONSUMER_KEY', '')
 TWITTER_CONSUMER_SECRET = getattr(settings, 'TWITTER_CONSUMER_SECRET', '')
 FACEBOOK_API_KEY = getattr(settings, 'FACEBOOK_API_KEY', '')
-FACEBOOK_API_SECRET = getattr(settings, 'FACEBOOK_API_SECRET', '')
+FACEBOOK_SECRET_KEY = getattr(settings, 'FACEBOOK_SECRET_KEY', '')
 FACEBOOK_REST_SERVER = getattr(settings, 'FACEBOOK_REST_SERVER', 'http://api.facebook.com/restserver.php')
 
 class CustomUserBackend(ModelBackend):
@@ -177,7 +177,9 @@ class TwitterBackend:
 
 class FacebookBackend:
     def authenticate(self, facebook, request):
-        facebook.check_session(request)
+        facebook.oauth2_check_session(request)
+
+        facebook.uid = facebook.users.getLoggedInUser()
         user_info = facebook.users.getInfo([facebook.uid], ['first_name', 'last_name', 'pic_square'])[0]
 
         username = user_info['first_name']
@@ -195,12 +197,19 @@ class FacebookBackend:
             user = User.objects.create(username=username)
             user.first_name = user_info['first_name']
             user.last_name = user_info['last_name']
+
+            img_url = user_info.get('pic_square')
+            if img_url:
+                img = ContentFile(urlopen(img_url).read())
+                name = img_url.split('/')[-1]
+                user.picture.save(name, img, False)
+
             user.save()
 
             location = '' # TODO: Figure out how to get this from Facebook.  Maybe.
 
             fb_profile = FacebookUserProfile(facebook_uid=user_info['uid'], user=user,
-                    profile_image_url=user_info['pic_square'], location=location)
+                    profile_image_url=img_url, location=location)
             fb_profile.save()
 
             AuthMeta(user=user, provider='Facebook').save()

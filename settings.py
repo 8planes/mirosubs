@@ -500,7 +500,7 @@ OPENID_AX = [{"type_uri": "http://axschema.org/contact/email", "count": 1, "requ
              {"type_uri": "fullname", "count": 1 , "required": False, "alias": "fullname"}]
 
 FACEBOOK_API_KEY = ''
-FACEBOOK_API_SECRET = ''
+FACEBOOK_SECRET_KEY = ''
 
 VIMEO_API_KEY = None
 VIMEO_API_SECRET = None

@@ -49,6 +49,7 @@ urlpatterns += patterns(
     url(r'^login/$', 'django.contrib.auth.views.login'),
     url(r'^twitter_login/', 'auth.views.twitter_login', 
         kwargs={'next': '/widget/close_window/'}),
+    url(r'^facebook_login/', 'auth.views.facebook_login'),
     url(r'^close_window/$', 
         'django.views.generic.simple.direct_to_template', 
         {'template' : 'widget/close_window.html'}),

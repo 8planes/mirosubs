@@ -161,7 +161,7 @@ def openid_done(request, provider=None):
     
 def facebook_login_done(request):
     API_KEY = settings.FACEBOOK_API_KEY
-    API_SECRET = settings.FACEBOOK_API_SECRET   
+    API_SECRET = settings.FACEBOOK_SECRET_KEY   
     REST_SERVER = 'http://api.facebook.com/restserver.php'
     # FB Connect will set a cookie with a key == FB App API Key if the user has been authenticated
     if API_KEY in request.COOKIES:
