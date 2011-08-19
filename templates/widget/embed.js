@@ -1,4 +1,4 @@
-{% load escapejs %}
+{% load escapejs media_compressor %}
 
 // Universal Subtitles, universalsubtitles.org
 // 
@@ -117,7 +117,7 @@
         var css = $c('link');
         css.type = 'text/css';
         css.rel = 'stylesheet';
-        css.href = '{{MEDIA_URL}}css/mirosubs-widget.css';
+        css.href = '{{MEDIA_URL}}{% url_for "widget-css" %}';
         css.media = 'screen';
         head.appendChild(css);
     }

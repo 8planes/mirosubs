@@ -119,7 +119,6 @@ All files above 1kb will be served with gzip compression (smaller files tend to 
 TODOS
 ====
     
-- Join all the compile_config... commands with compile media
 - Remove all lingering instances of `include _js_onsite... ` 
 - Make compilation fail on any error.
 - Find out how to fix warnings for jQuery and others

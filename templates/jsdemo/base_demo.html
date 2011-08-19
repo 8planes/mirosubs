@@ -2,7 +2,7 @@
 {% load media_compressor %}
 <html>
   <head>
-    <link href="{{MEDIA_URL}}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
+	{% include_bundle "widget-css"%}
     {% include_bundle "mirosubs-onsite-compiled" %}
     {% block script %}{% endblock %}
     <script>
