@@ -16,7 +16,12 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-mirosubs.Widgetizer.getInstance().widgetize();
-mirosubs.widget.WidgetDecorator.exportJSSymbols();
-
-window['UnisubsWidgetizerLoaded'] = true;
+if (!window['{{gatekeeper}}']) {
+    (function() {
+        var script = document.createElement('script');
+        script.src = "{{script_src}}";
+        script.async = true;
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    })();
+}

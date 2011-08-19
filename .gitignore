@@ -18,7 +18,7 @@ media/js/statwidget/statwidgetconfig.js
 media/js/mirosubs-widgetizer*.js
 media/js/mirosubs-extension.js
 media/js/mirosubs-statwidget.js
-media/js/mirosubs-api.js
+media/js/mirosubs-api*.js
 media/js/js-base-dependencies.js
 media/js/js-moderation-dashboard.js
 media/js/js-onsite-dialog.js

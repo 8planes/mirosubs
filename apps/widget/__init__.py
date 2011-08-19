@@ -24,6 +24,11 @@ import simplejson as json
 
 LANGUAGES_MAP = dict(LANGUAGES)
 
+def embed_context():
+    return { 'js_file': (full_path('js/mirosubs-offsite-compiled.js') 
+                         if settings.COMPRESS_MEDIA else 
+                         full_path(settings.JS_OFFSITE[-1])) }
+
 def full_path(js_file):
     return "{0}{1}".format(settings.MEDIA_URL, js_file)
 

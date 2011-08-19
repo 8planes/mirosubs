@@ -47,11 +47,9 @@ def embed(request, version_no=''):
     """
     This is for serving embed when in development since the compilation
     with the media url hasn't taken place.
-    Public clients will use the url : SITE_MEDIA/js/embed.js
+    Public clients will use the url : SITE_MEDIA/embed.js
     """
-    context = { 'js_file': (widget.full_path('js/mirosubs-offsite-compiled.js') 
-                            if settings.COMPRESS_MEDIA else 
-                            widget.full_path(settings.JS_OFFSITE[-1])) }
+    context = widget.embed_context()
     if bool(version_no) is False:
         version_no = ""
     return render_to_response('widget/embed{0}.js'.format(version_no), 
