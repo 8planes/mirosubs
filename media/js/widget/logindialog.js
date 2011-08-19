@@ -58,6 +58,9 @@ mirosubs.LoginDialog.prototype.createDom = function() {
     this.googleLink_ =
         $d('a', {'className': 'mirosubs-google', 'href': '#'},
            $d('span', null, 'Google'));
+    this.facebookLink_ =
+        $d('a', {'className': 'mirosubs-facebook', 'href': '#'},
+           $d('span', null, 'Facebook'));
     var el = this.getContentElement();
     if (this.message_)
         goog.dom.appendChild(el,
@@ -71,6 +74,7 @@ mirosubs.LoginDialog.prototype.createDom = function() {
     goog.dom.appendChild(el, this.twitterLink_);
     goog.dom.appendChild(el, this.openidLink_);
     goog.dom.appendChild(el, this.googleLink_);
+    goog.dom.appendChild(el, this.facebookLink_);
     goog.dom.appendChild(
         el, 
         $d('p', 'mirosubs-small', 
@@ -96,7 +100,8 @@ mirosubs.LoginDialog.prototype.enterDocument = function() {
         listen(this.loginLink_, 'click', this.siteLoginClicked_).
         listen(this.twitterLink_, 'click', this.clicked_).
         listen(this.openidLink_, 'click', this.clicked_).
-        listen(this.googleLink_, 'click', this.clicked_);
+        listen(this.googleLink_, 'click', this.clicked_).
+        listen(this.facebookLink_, 'click', this.clicked_);
 };
 
 mirosubs.LoginDialog.prototype.siteLoginClicked_ = function(e) {
@@ -117,8 +122,10 @@ mirosubs.LoginDialog.prototype.clicked_ = function(e) {
         type = mirosubs.LoginPopupType.TWITTER;
     else if (e.target == this.openidLink_)
         type = mirosubs.LoginPopupType.OPENID;
-    else
+    else if (e.target == this.googleLink_)
         type = mirosubs.LoginPopupType.GOOGLE;
+    else
+        type = mirosubs.LoginPopupType.FACEBOOK;
     this.loginWin_ = mirosubs.openLoginPopup(
         type, 
         goog.bind(this.processCompleted_, this),
