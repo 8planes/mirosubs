@@ -658,21 +658,30 @@ MEDIA_BUNDLES = {
         "type": "js",
         "closure_deps": "js/closure-dependencies.js",
         "files": ["js/config.js"] + JS_WIDGETIZER,
-        "bootloader": { "gatekeeper": "UnisubsWidgetizerLoaded" }
+        "bootloader": { 
+            "gatekeeper": "UnisubsWidgetizerLoaded",
+            "render_bootloader": True
+        }
      },
     "mirosubs-widgetizer-sumo": {
         "type": "js",
         "closure_deps": "js/closure-dependencies.js",
         "files": ["js/config.js"] + JS_WIDGETIZER,
         "extra_defines": {"mirosubs.REPORT_ANALYTICS": "false"},
-        "bootloader": { "gatekeeper": "UnisubsWidgetizerLoaded" }
+        "bootloader": { 
+            "gatekeeper": "UnisubsWidgetizerLoaded",
+            "render_bootloader": True
+        }
     },
     "mirosubs-widgetizer-debug": {
         "type": "js",
         "files": ["js/config.js" ] + JS_WIDGETIZER  ,
         "closure_deps": "js/closure-dependencies.js",
         "debug": True,
-        "bootloader": { "gatekeeper": "UnisubsWidgetizerLoaded" }
+        "bootloader": { 
+            "gatekeeper": "UnisubsWidgetizerLoaded",
+            "render_bootloader": True
+        }
      },
     "mirosubs-extension":{
         "type": "js",
@@ -693,7 +702,10 @@ MEDIA_BUNDLES = {
     "mirosubs-api":{
         "type": "js",
         "files": ["js/config.js"] + JS_API,
-        "bootloader": { "gatekeeper": "UnisubsApiLoaded" }
+        "bootloader": { 
+            "gatekeeper": "UnisubsApiLoaded" 
+            "render_bootloader": False
+        }
      },
     "js-base-dependencies":{
         "type":"js",
