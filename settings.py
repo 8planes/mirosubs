@@ -703,7 +703,7 @@ MEDIA_BUNDLES = {
         "type": "js",
         "files": ["js/config.js"] + JS_API,
         "bootloader": { 
-            "gatekeeper": "UnisubsApiLoaded" 
+            "gatekeeper": "UnisubsApiLoaded", 
             "render_bootloader": False
         }
      },
