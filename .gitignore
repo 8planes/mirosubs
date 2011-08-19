@@ -33,3 +33,4 @@ deploy/build/*
 celerybeat-schedule
 /media/js/site_base_js.js
 /media/docs/*
+/media/video/thumbnail/*
