@@ -48,7 +48,7 @@ def _urls_for(bundle_name, should_compress):
             base =  "css-compressed/"
         elif bundle_type == "js":
             base = "js/"
-            if 'bootloader' in bundle and not bundle['render_bootloader']:
+            if 'bootloader' in bundle and not bundle['bootloader']['render_bootloader']:
                 suffix = "-inner"
         urls += ["%s%s%s.%s" % ( base, bundle_name, suffix, bundle_type)]
     else:
