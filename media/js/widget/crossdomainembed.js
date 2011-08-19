@@ -45,3 +45,5 @@ if (typeof(m) != 'undefined'){
         mirosubs.widget.CrossDomainEmbed.embed(m[i][0], m[i][1], m[i][2]);
     }
 }
+
+window['MiroSubsCrossDomainLoaded'] = true;

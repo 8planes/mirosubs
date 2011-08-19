@@ -159,10 +159,9 @@ def _switch_branch(dir, branch_name):
         run('git fetch')
         # the following command will harmlessly fail if branch already exists.
         # don't be intimidated by the one-line message.
-        env.warn_only = True
-        run('git branch --track {0} origin/{0}'.format(branch_name))
-        run('git checkout {0}'.format(branch_name))
-        env.warn_only = False
+        with settings(warn_only=True):
+            run('git branch --track {0} origin/{0}'.format(branch_name))
+            run('git checkout {0}'.format(branch_name))
         _git_pull()
 
 def _execute_on_all_hosts(cmd):
@@ -259,9 +258,8 @@ def update_web():
         with cd('{0}/mirosubs'.format(env.web_dir)):
             python_exe = '{0}/env/bin/python'.format(env.web_dir)
             _git_pull()
-            env.warn_only = True
-            run("find . -name '*.pyc' -print0 | xargs -0 rm")
-            env.warn_only = False
+            with settings(warn_only=True):
+                run("find . -name '*.pyc' -print0 | xargs -0 rm")
     _bounce_celeryd()
     bounce_memcached()
     test_services()
@@ -316,20 +314,7 @@ def _update_static(dir):
         media_dir = '{0}/mirosubs/media/'.format(dir)
         python_exe = '{0}/env/bin/python'.format(dir)
         _git_pull()
-        # this has to be here, since the environment that compiles media is not an app server
-        # so there is no guarantee we we'll have run the create_commit command
-        run('{0} deploy/create_commit_file.py'.format(python_exe))
-        run('{0} manage.py compile_config {1} --settings=unisubs_settings'.format(
-                python_exe, media_dir))
-        run('{0} manage.py compile_statwidgetconfig {1} --settings=unisubs_settings'.format(
-                python_exe, media_dir))
-        run('{0} manage.py compile_embed {1} --settings=unisubs_settings'.format(
-                python_exe, media_dir))
-        # we need to remove whatever was left on static-cache
-        static_cache_path = "./media/static-cache/*"
         _clear_permissions(media_dir)
-        
-        
         run('{0} manage.py  compile_media --settings=unisubs_settings'.format(python_exe))
         
 def update_static():

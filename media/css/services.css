@@ -1,32 +1,79 @@
-#services_description {
-  width: 700px;
+#services {
+  position: relative;
+  width: 770px;
+}
+
+#services h1 {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: .5em;
+}
+
+#services .row {
   float: left;
-  margin: 30px 0 0 0;
+  margin: 1em -25px 2em 0;
 }
 
-#services_description h1 {
-  font-size: 25px;
-  font-weight: normal;
-  margin: 20px 0 20px 0;
+#services .row .feature {
+  width: 505px;
+  background-color: #52686E;
+  color: #ECF3F5;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  border-radius: 8px;
+  -moz-box-shadow: 1px -1px 1px #fff;
+  -webkit-box-shadow: 1px -1px 1px #fff;
+  box-shadow: 1px -1px 1px #fff;
 }
 
-#services_description h4 {
+#services .row .feature p {
+  float: left;
+  width: 215px;
+  margin: 25px;
+  line-height: 200%;
+  padding: 6px 0;
+}
+
+#services .row .feature p.headline {
+  margin-right:0;
+  padding: 0;
   font-size: 18px;
 }
 
-#services_description ul li {
-  list-style-type: disc !important;
-  font-size: 18px;
-  line-height: 22px;
-  margin: 6px 0 0 20px;
+#services .row .feature p.headline strong {
+  color: #fff;
+  text-shadow: 1px 1px 1px #32484E;
 }
 
-#sidebarlogos {
-  width: 200px;
+#services .row div {
   float: left;
-  margin: 55px 0 0 25px;
+  width: 240px;
+  margin-right: 25px;
+}
+#services .row h3, #services .row h2 {
+  line-height: 125%;
+  color: #52686E;
+}
+#services .row p {
+  line-height: 175%;
 }
 
-#sidebarlogos ul li {
-  list-style: none;
+#services > h2 {
+  font-size: 18px;
+  padding-top: 1em;
+}
+
+#services-partners {
+  position: absolute;
+  top:3em;
+  right:0;
+}
+
+#services-partners li {
+  text-align: center;
+  margin: 1em 0;
+}
+
+#services-partners li p {
+  margin: .5em 0;
 }

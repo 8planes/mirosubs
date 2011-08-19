@@ -731,6 +731,10 @@ MEDIA_BUNDLES = {
         "optimizations": "WHITESPACE_ONLY",
         "closure_deps": "js/closure-dependencies.js",
         "files": JS_MODERATION_DASHBOARD,
-
-        }
+    },
+    "debug-embed-js": {
+        "type": "js",
+        "optimizations": "WHITESPACE_ONLY",
+        "files": JS_BASE_DEPENDENCIES + JS_OFFSITE[:-1]
+    }
 }

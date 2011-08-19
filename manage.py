@@ -17,6 +17,14 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
+# annoying as this is, it's meant to silence the damn keydcache warning
+import logging
+class NullHandler(logging.Handler):
+    def emit(self, record):
+        pass
+logging.getLogger('keyedcache').addHandler(NullHandler())
+
+
 from django.core.management import execute_manager
 
 # put apps dir in python path, like pinax

@@ -3,7 +3,7 @@ Deployment Guide
 ================
 
 
-The basic sequence:
+The basic sequence::
 
     fab <server> add_disabled
     fab <server> switch_branch:<branch_name>
@@ -20,5 +20,7 @@ Things to keep in mind:
     - Rebuilding the solr index is pretty slow, so it will run on a screen session, if you need to check it, just logge back to the server and open it on screen
 
 
+Fabric commands
+===============
 .. automodule:: deploy.fabfile
     :members:
