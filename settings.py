@@ -639,6 +639,12 @@ MEDIA_BUNDLES = {
              "css/mirosubs-widget.css",
           ),
          },
+    "widget-css":{
+         "type":"css",
+         "files":(
+             "css/mirosubs-widget.css",
+          ),
+        },
     "mirosubs-offsite-compiled":{
         "type": "js",
         "files": JS_OFFSITE,

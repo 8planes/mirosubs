@@ -1,7 +1,8 @@
+{% load media_compressor %}
 <!DOCTYPE html>
 <html>
   <head>
-    <link href="{{MEDIA_URL}}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
+    {% include_bundle "widget-css"%}
     <script type="text/javascript" src="{{ MEDIA_URL }}js/swfobject.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-library/closure/goog/base.js"></script>
     <script>

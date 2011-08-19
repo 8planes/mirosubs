@@ -26,8 +26,7 @@ logger = logging.getLogger(__name__)
 
 should_compress = None
 
-@register.simple_tag
-def include_bundle(bundle_name, should_compress=None):
+def _urls_for(bundle_name, should_compress):
     # if we want to turn off compilation at runtime (eg/ on javascript unit tests)
     # then we need to know the media url prior the the unique mungling
     media_url = settings.MEDIA_URL
@@ -55,10 +54,18 @@ def include_bundle(bundle_name, should_compress=None):
         
         if should_compress:
             logger.warning("could not find final url for %s" % bundle_name)
+    return urls  , media_url, bundle_type
+    
+@register.simple_tag
+def include_bundle(bundle_name, should_compress=None):
+    urls, media_url, bundle_type = _urls_for(bundle_name, should_compress)
 
     return template.loader.render_to_string("uni_compressor/%s_links.html" % bundle_type,{
         "urls":urls,
         "adapted_media_url": media_url,
         "bundle_type": bundle_type,
     })
-                           
+
+@register.simple_tag
+def url_for(bundle_name, should_compress=True):
+    return _urls_for(bundle_name, should_compress)[0][0]

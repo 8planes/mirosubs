@@ -13,8 +13,7 @@
     
     {{ block.super }}
     {% include_bundle "video_history" %}
-    
-    <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
+    {% include_bundle "widget-css"%}
 {% endblock %}
 
 {% block scripts %}
