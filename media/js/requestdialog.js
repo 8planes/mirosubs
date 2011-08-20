@@ -128,9 +128,9 @@ mirosubs.RequestDialog.prototype.addMetaForm_ = function($d){
     this.metaDiv_ = $d('div');
     this.checkBox_ = $d('input', {'type':'checkbox', 'checked':true, 'id':'mirosubs-request-track'});
     this.checkBoxLabel_ = $d('label', {'for':'mirosubs-request-track'}, this.TRACK_REQUEST_LABEL_);
-    this.description_ = $d('textarea', { 'id':'mirosubs-request-description' }, this.DESCRIPTION_INITIAL_);
+    this.descriptionText_ = $d('textarea', { 'id':'mirosubs-request-description' }, this.DESCRIPTION_INITIAL_);
     goog.dom.append(this.metaDiv_, this.checkBox_, this.checkBoxLabel_,
-                    this.description_);
+                    this.descriptionText_);
     goog.dom.append(this.contentDiv_, this.metaDiv_);
 }
 
@@ -231,8 +231,9 @@ mirosubs.RequestDialog.prototype.okClicked_ = function(e) {
     if (this.requestLanguages_.length > 0){
         var track = document.getElementById('mirosubs-request-track').checked;
         var description = document.getElementById('mirosubs-request-description').value;
+        alert(description + ' ' + description);
         this.track_ = track;
-        if (description != this.descriptionInitial_){
+        if (description != this.DESCRIPTION_INITIAL_){
             this.description_ = description;
         }
 
