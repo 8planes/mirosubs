@@ -1,4 +1,4 @@
-{% load escapejs %}
+{% load escapejs media_compressor %}
 
 // Universal Subtitles, universalsubtitles.org
 // 
@@ -52,10 +52,7 @@
 (function() {
     var innerStyle = '{% escapejs %}{% include "widget/widget.css" %}{% endescapejs %}';
 
-    var scriptsToLoad = [
-      {% for dep in js_dependencies %}
-        '{{dep|safe}}'{% if not forloop.last %},{% endif %}
-      {% endfor %}];
+    var scriptsToLoad = ["{{js_file}}"];
 
     var siteConfig = {
         siteURL: 'http://{{current_site.domain}}',
@@ -103,9 +100,10 @@
     containingElement.appendChild(widgetSpan);
 
     var head = document.getElementsByTagName('head')[0];
-    if (typeof(mirosubs) == 'undefined' && !window.MiroSubsLoading) {
+    if (typeof(MiroSubsCrossDomainLoaded) == 'undefined' && !window.MiroSubsLoading) {
         window.MiroSubsLoading = true;
         for (var i = 0; i < scriptsToLoad.length; i++) {
+            console.log('adding script ' + scriptsToLoad[i]);
             var curScript = $c('script');
             curScript.type = 'text/javascript';
             curScript.src = scriptsToLoad[i];
@@ -119,7 +117,7 @@
         var css = $c('link');
         css.type = 'text/css';
         css.rel = 'stylesheet';
-        css.href = '{{MEDIA_URL}}css/mirosubs-widget.css';
+        css.href = '{{MEDIA_URL}}{% url_for "widget-css" %}';
         css.media = 'screen';
         head.appendChild(css);
     }

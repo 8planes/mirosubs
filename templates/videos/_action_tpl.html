@@ -1,10 +1,12 @@
 {% load i18n %}
 
+{% comment %}
 <a href="{{ item.video.get_absolute_url }}" class="thumbnail_{% if medium_thumb %}medium{% else %}small{% endif %}">
     {% if item.video.thumbnail %}
     <img height="{% if medium_thumb %}100{% else %}50{% endif %}" src="{{ item.video.get_thumbnail }}">
     {% endif %}
 </a>
+{% endcomment %}
 
 <div class="info">
 

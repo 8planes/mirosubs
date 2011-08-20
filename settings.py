@@ -639,6 +639,12 @@ MEDIA_BUNDLES = {
              "css/mirosubs-widget.css",
           ),
          },
+    "widget-css":{
+         "type":"css",
+         "files":(
+             "css/mirosubs-widget.css",
+          ),
+        },
     "mirosubs-offsite-compiled":{
         "type": "js",
         "files": JS_OFFSITE,
@@ -652,24 +658,35 @@ MEDIA_BUNDLES = {
         "type": "js",
         "closure_deps": "js/closure-dependencies.js",
         "files": ["js/config.js"] + JS_WIDGETIZER,
+        "bootloader": { 
+            "gatekeeper": "UnisubsWidgetizerLoaded",
+            "render_bootloader": True
+        }
      },
     "mirosubs-widgetizer-sumo": {
         "type": "js",
         "closure_deps": "js/closure-dependencies.js",
         "files": ["js/config.js"] + JS_WIDGETIZER,
-        "extra_defines": {"mirosubs.REPORT_ANALYTICS": "false"}
+        "extra_defines": {"mirosubs.REPORT_ANALYTICS": "false"},
+        "bootloader": { 
+            "gatekeeper": "UnisubsWidgetizerLoaded",
+            "render_bootloader": True
+        }
     },
-    "mirosubs-widgetizer-debug":{
+    "mirosubs-widgetizer-debug": {
         "type": "js",
         "files": ["js/config.js" ] + JS_WIDGETIZER  ,
         "closure_deps": "js/closure-dependencies.js",
         "debug": True,
+        "bootloader": { 
+            "gatekeeper": "UnisubsWidgetizerLoaded",
+            "render_bootloader": True
+        }
      },
     "mirosubs-extension":{
         "type": "js",
         "files": ["js/config.js" ] + JS_EXTENSION,
      },
-
     "mirosubs-statwidget":{
         "type": "js",
         "closure_deps": "js/closure-stat-dependencies.js",
@@ -685,6 +702,10 @@ MEDIA_BUNDLES = {
     "mirosubs-api":{
         "type": "js",
         "files": ["js/config.js"] + JS_API,
+        "bootloader": { 
+            "gatekeeper": "UnisubsApiLoaded", 
+            "render_bootloader": False
+        }
      },
     "js-base-dependencies":{
         "type":"js",
@@ -731,6 +752,10 @@ MEDIA_BUNDLES = {
         "optimizations": "WHITESPACE_ONLY",
         "closure_deps": "js/closure-dependencies.js",
         "files": JS_MODERATION_DASHBOARD,
-
-        }
+    },
+    "debug-embed-js": {
+        "type": "js",
+        "optimizations": "WHITESPACE_ONLY",
+        "files": JS_BASE_DEPENDENCIES + JS_OFFSITE[:-1]
+    }
 }

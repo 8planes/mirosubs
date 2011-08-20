@@ -314,20 +314,7 @@ def _update_static(dir):
         media_dir = '{0}/mirosubs/media/'.format(dir)
         python_exe = '{0}/env/bin/python'.format(dir)
         _git_pull()
-        # this has to be here, since the environment that compiles media is not an app server
-        # so there is no guarantee we we'll have run the create_commit command
-        run('{0} deploy/create_commit_file.py'.format(python_exe))
-        run('{0} manage.py compile_config {1} --settings=unisubs_settings'.format(
-                python_exe, media_dir))
-        run('{0} manage.py compile_statwidgetconfig {1} --settings=unisubs_settings'.format(
-                python_exe, media_dir))
-        run('{0} manage.py compile_embed {1} --settings=unisubs_settings'.format(
-                python_exe, media_dir))
-        # we need to remove whatever was left on static-cache
-        static_cache_path = "./media/static-cache/*"
         _clear_permissions(media_dir)
-        
-        
         run('{0} manage.py  compile_media --settings=unisubs_settings'.format(python_exe))
         
 def update_static():
@@ -434,8 +421,7 @@ def test_memcached():
 def generate_docs():
     env.host_string = DEV_HOST
     with cd(os.path.join(env.static_dir, 'mirosubs')):
-        python_exe = '{0}/env/bin/python'.format(env.static_dir)
-        run('{0} manage.py  sphinx-build docs/ media/docs --settings=unisubs_settings'.format(python_exe))
+        run('%s/env/bin/sphinx-build %s/mirosubs/docs/ %s/media/docs/' % (env.static_dir, env.static_dir, env.static_dir))
     
 try:
     from local_env import *

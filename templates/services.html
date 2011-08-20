@@ -4,87 +4,112 @@
 
 
 {% block main_content %}
-  <div id="services_description">
-    <h1>{% trans "Want more video views and a more engaged audience?" %}</h1>
+  <div id="services">
+    <h1>{% trans "Enterprise Services" %}</h1>
+    <div class="row">
+      <div class="feature">
+        <p class="headline">
+          {% blocktrans %}
+            <strong>Make your videos more global and more popular.</strong> Transcripts, captions, and translations dramatically increase video viewership.
+          {% endblocktrans %}
+        </p>
+        <p>
+          {% blocktrans %}
+            Universal Subtitles is the most powerful subtitling platform in the world. We can help you build an <strong>active and engaged volunteer community</strong> and you can take advantage of <strong>professional transcription and translation services</strong>, all in one unified workflow.
+          {% endblocktrans %}
+        </p>
+      </div>
+      <div>
+        <h2>{% trans "Interested?" %}</h2>
+        <p>
+          {% blocktrans %}
+            To learn more about our services, please contact Dean Jansen, <a href="mailto:dean@pculture.org">dean@pculture.org</a>
+          {% endblocktrans %}
+        </p>
+      </div>
+    </div>
+    <h2>{% trans "What Can Universal Subtitles Do?" %}</h2>
+    <div class="row">
+      <div>
+        <h3>{% trans "Build a Translation Team" %}</h3>
+        <p>
+        {% blocktrans %}
+          Build a powerful volunteer translation and captioning team around your content. A video that lots of people want to watch is a video that fans will want to translate and share around the world.
+        {% endblocktrans %}
+        </p>
+      </div>
+      <div>
+        <h3>{% trans "Crowdsource with Professional Review" %}</h3>
+        <p>
+          {% blocktrans %}
+            Engage a crowd and use professional quality assurance. This balances amazingly low cost with professional level quality.
+          {% endblocktrans %}
+        </p>
+      </div>
+      <div>
+        <h3>{% trans "Professional 1-Click Services" %}</h3>
+        <p>
+          {% blocktrans %}
+            Access professional services including: captions, translations, and quality control. These services, when mixed with volunteer contributions, give you ultimate flexibility.
+          {% endblocktrans %}
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <h3>{% trans "Work with Any Video Platform" %}</h3>
+        <p>
+          {% blocktrans %}
+            Universal Subtitles works with all the most popular video hosting services and video players. Integrate and embed videos with subtitles without changing your current publishing workflow.
+          {% endblocktrans %}
+        </p>
+      </div>
+      <div>
+        <h3>{% trans "Improve Your SEO" %}</h3>
+        <p>
+          {% blocktrans %}
+            Rank higher in Google and other search engines by helping them index full transcripts for all of your videos. Searchable videos are found more often.
+          {% endblocktrans %}
+        </p>
+      </div>
+      <div>
+        <h3>{% trans "Flexible Integration" %}</h3>
+        <p>
+          {% blocktrans %}
+            Need seamless subtitles on your custom video player? Want 1-click features integrated into your back-end or CMS? We can help.
+          {% endblocktrans %}
+        </p>
+      </div>
+    </div>
+    <h2>{% trans "Transcription and Translation Service Providers" %}</h2>
+    <p>
+      {% blocktrans %}
+        Do you provide professional transcription, subtitling, or translation services? We can work together to offer your customers a powerful subtitle management and embedding platform. And if you’d like to offer your services to our customers, we’d also like to hear from you.
+      {% endblocktrans %}
+    </p>
+  </div>
+  <div id="services-partners">
     <ul>
       <li>
-        {% trans "Subtitles extend your reach to a <strong>global multilingual audience</strong>" %}.
+        <a href="http://mozillalabs.com/chromeless/?p=26"><img src="{{ MEDIA_URL }}images/partners/new_partner_mozilla.png" alt="Mozilla" /></a>
+        <p><a href="http://mozillalabs.com/chromeless/?p=26">Mozilla Integration</a><p>
       </li>
       <li>
-        {% blocktrans %}
-        With transcripts, your videos <strong>get much better SEO</strong>. You'll
-        rank higher in Google and other search engines.
-        {% endblocktrans %}
+        <a href="http://gigaom.com/video/khan-academy-universal-subtitles/"><img src="{{ MEDIA_URL }}images/partners/new_partner_khan.png" alt="Khan Academy" /></a>
+        <p><a href="http://gigaom.com/video/khan-academy-universal-subtitles/">Khan Integration</a><p>
       </li>
       <li>
-        {% blocktrans %}
-        Improve <strong>accessibility</strong> for deaf and hard of hearing
-        viewers.
-        {% endblocktrans %}
+        <a href="http://drupal.org/drupal-7.0#video"><img src="{{ MEDIA_URL }}images/partners/new_partner_drupal.png" alt="Drupal" /></a>
+        <p><a href="http://drupal.org/drupal-7.0#video">Drupal Integration</a><p>
       </li>
       <li>
-        {% blocktrans %}
-        Viewers can <strong>watch without headphones</strong> (eg. in a cubicle
-        setting)
-        {% endblocktrans %}
+        <a href="http://www.universalsubtitles.org/en/teams/al-jazeera/"><img src="{{ MEDIA_URL }}images/partners/new_partner_aj.png" alt="Al Jazeera" /></a>
+        <p><a href="http://www.universalsubtitles.org/en/teams/al-jazeera/">Al Jazeera Team</a><p>
+      </li>
+      <li>
+        <a href="http://blog.universalsubtitles.org/translating-state-of-the-union-2011/"><img src="{{ MEDIA_URL }}images/partners/new_partner_pbs.png" alt="PBS" /></a>
+        <p><a href="http://blog.universalsubtitles.org/translating-state-of-the-union-2011/">NewsHour Integration</a><p>
       </li>
     </ul>
-    <h1>{% trans "Universal Subtitles makes it easy to:" %}</h1>
-    <ul>
-      <li>
-        {% blocktrans %}
-        <strong>Leverage volunteer help</strong> while expending minimal
-        resources.
-        {% endblocktrans %}
-      </li>
-      <li>
-        {% blocktrans %}
-        Engage existing fans and <strong>grow your audience</strong> at the same
-        time.
-        {% endblocktrans %}
-      </li>
-      <li>
-        {% blocktrans %}
-        <strong>Integration is easy and flexible</strong>. We're compatible with
-        nearly every video format.
-        {% endblocktrans %}
-      </li>
-      <li>
-        {% blocktrans %}
-        Our subtitling interface is fantastic; <strong>users say they love
-        it</strong>.
-        {% endblocktrans %}
-      </li>
-      <li>
-        {% blocktrans %}
-        Our white label product (suitable for enterprise use) <strong>simplifies
-        subtitle deployment</strong>.
-        {% endblocktrans %}
-      </li>
-      <li>
-        {% blocktrans %}
-        <strong>From enterprise to independent</strong>, we can help you develop a
-        great subtitle strategy.
-        {% endblocktrans %}
-      </li>
-    </ul>
-    <h4>
-      {% trans "For details on enterprise services, email" %} 
-      <a href="mailto:dean@pculture.org">Dean@Pculture.org</a>
-    </h4>
-  </div><!-- services -->
-  <div id="sidebarlogos">
-    <h3>{% trans "Some of Our Partners" %}</h3>
-    <ul>
-      <li>
-        <img src="{{ MEDIA_URL }}images/partners/firefox.png" alt="Firefox" />
-      </li>
-      <li>
-        <img src="{{ MEDIA_URL }}images/partners/okgo.png" alt="OK Go" />
-      </li>
-      <li>
-        <img src="{{ MEDIA_URL }}images/partners/wikipedia.png" alt="Wikipedia" />
-      </li>
-    </ul>
-  </div><!-- sidebarlogos -->
+  </div>
 {% endblock %}

@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% load escapejs i18n %}
+{% load escapejs i18n media_compressor %}
 {% block css %}
   {{ block.super }}
-  <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
+  {% include_bundle "widget-css"%}
   <style>
 div.mirosubs-widget {
     position: relative;    

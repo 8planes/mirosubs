@@ -174,3 +174,5 @@ goog.exportSymbol(
     mirosubs.api.embed);
 
 mirosubs.widget.Widget.exportFireKeySequence();
+
+window["UnisubsApiLoaded"] = true;

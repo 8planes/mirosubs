@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% load i18n %}
+{% load i18n media_compressor %}
 
 {% block scripts %}
-    <link media="all" rel="stylesheet" href="{{ MEDIA_URL }}css/mirosubs-widget.css" />
+{% include_bundle "widget-css"%}
 {% endblock %}
 
 {% block main_content %}

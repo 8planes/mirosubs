@@ -44,6 +44,26 @@ from apps.unisubs_compressor.management.commands.compile_media import get_cache_
 from deploy.git_helpers import get_current_commit_hash
 from compile_media import NO_UNIQUE_URL
 
+def add_far_future_expires(headers, verbose=False):
+    # HTTP/1.0
+    headers['Expires'] = '%s GMT' % (email.Utils.formatdate(
+            time.mktime((datetime.datetime.now() +
+                         datetime.timedelta(days=365*2)).timetuple())))
+    # HTTP/1.1
+    headers['Cache-Control'] = 'max-age %d' % (3600 * 24 * 365 * 2)
+    if verbose:
+        print "\texpires: %s" % (headers['Expires'])
+        print "\tcache-control: %s" % (headers['Cache-Control'])
+
+def add_no_cache(headers, verbose=False):
+    headers['Cache-Control'] = 'no-cache'
+    headers['Expires'] = '%s GMT' % (email.Utils.formatdate(
+            time.mktime((datetime.datetime.now() +
+                         datetime.timedelta(years=-30)).timetuple())))
+    if verbose:
+        print "\texpires: %s" % (headers['Expires'])
+        print "\tcache-control: %s" % (headers['Cache-Control'])
+
 class Command(BaseCommand):
 
     # Extra variables to avoid passing these around
@@ -53,7 +73,6 @@ class Command(BaseCommand):
     DIRECTORY = ''
     FILTER_LIST = [re.compile(x) for x in ['\.DS_Store', "^videos.+","^js\/closure-lib" , "^teams", "^test", "^videos"]]
 
-    NO_FAR_FUTURE = NO_UNIQUE_URL
     GZIP_CONTENT_TYPES = (
         'text/css',
         'application/javascript',
@@ -139,14 +158,14 @@ class Command(BaseCommand):
         outside_dir = os.path.dirname(self.DIRECTORY)
 
         # these are not to be prefixed by commit, e.g. outside systems link to them
-        # they need a stable url with regular expire headers
-        for item in self.NO_FAR_FUTURE:
-            fname = os.path.basename(item)
-            base_dir =os.path.join(settings.MEDIA_ROOT, os.path.dirname( item))
-            full_path = os.path.join(settings.MEDIA_ROOT, item)
-            self.upload_one(bucket, key, self.AWS_BUCKET_NAME, outside_dir, full_path, item, do_expires=False)
-        self.prefix = old_prefix    
-            
+        for item in NO_UNIQUE_URL:
+            file_name = item['name']
+            fname = os.path.basename(file_name)
+            base_dir =os.path.join(settings.MEDIA_ROOT, os.path.dirname(file_name))
+            full_path = os.path.join(settings.MEDIA_ROOT, file_name)
+            self.upload_one(bucket, key, self.AWS_BUCKET_NAME, outside_dir, full_path, item,
+                            add_no_cache if item['no-cache'] else None)
+        self.prefix = old_prefix
 
     def compress_string(self, s):
         """Gzip a given string."""
@@ -183,10 +202,6 @@ class Command(BaseCommand):
             root_dir = root_dir + '/'
 
         for file in names:
-            
-
-            
-
             filename = os.path.join(dirname, file)
             for p in self.FILTER_LIST:
                 if p.match(file) or p.match(filename):
@@ -216,11 +231,13 @@ class Command(BaseCommand):
                             print "File %s hasn't been modified since last " \
                                 "being uploaded" % (file_key)
                         continue
-            self.upload_one(bucket, key, bucket_name, root_dir, filename, file_key)
-                    
+            cache_strategy = None
+            if self.do_expires:
+                cache_strategy = add_far_future_expires
+            self.upload_one(bucket, key, bucket_name, root_dir, filename, file_key, cache_strategy)                    
 
-                    
-    def upload_one(self, bucket, key, bucket_name, root_dir , filename, file_key, do_expires=True):
+
+    def upload_one(self, bucket, key, bucket_name, root_dir , filename, file_key, cache_strategy=None):
         if self.verbosity > 0:
             print "Uploading %s..." % (file_key)
         headers = {}
@@ -239,17 +256,8 @@ class Command(BaseCommand):
                 if self.verbosity > 1:
                     print "\tgzipped: %dk to %dk" % \
                         (file_size/1024, len(filedata)/1024)
-        if self.do_expires and do_expires :
-            # HTTP/1.0
-            headers['Expires'] = '%s GMT' % (email.Utils.formatdate(
-                time.mktime((datetime.datetime.now() +
-                datetime.timedelta(days=365*2)).timetuple())))
-            # HTTP/1.1
-            headers['Cache-Control'] = 'max-age %d' % (3600 * 24 * 365 * 2)
-            if self.verbosity > 1:
-                print "\texpires: %s" % (headers['Expires'])
-                print "\tcache-control: %s" % (headers['Cache-Control'])
-
+        if cache_strategy is not None:
+            cache_strategy(headers, self.verbosity > 1)
 
         try:
             key.name = file_key
