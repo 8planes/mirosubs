@@ -3149,9 +3149,10 @@ background: #666 url("../images/gradient_light.png") 0 0px repeat-x !important;
 }
 
 .mirosubs-dropdown .mirosubs-languageList ul li {
-    list-style: none !important;
-    border-bottom: 1px solid #ddd !important;
+   list-style: none !important;
+   border-bottom: 1px solid #ddd !important;
    margin: 0 !important;
+   background: none;
 }
 
 .mirosubs-dropdown .mirosubs-languageList ul li:hover {
@@ -3203,6 +3204,9 @@ padding-left: 5px !important;
 
 }
 
+.mirosubs-dropdown  ul li {
+   background: none;
+}
 
 .mirosubs-asterisk{
 color: red !important;
