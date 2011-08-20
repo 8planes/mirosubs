@@ -30,8 +30,7 @@
             {{ form.as_p }}
             {% csrf_token %}              
             {% if form.is_moderated_by_other_team %}
-                {% blocktrans %} This video is being moderated by team {% endblocktrans %} <a href="{% url teams:detail slug=form.is_moderated_by_other.slug %}">{{form.is_moderated_by_other_team}}</a>.
-}
+                {% blocktrans %} This video is being moderated by team {% endblocktrans %} <a href="{% url teams:detail slug=form.is_moderated_by_other_team.slug %}">{{form.is_moderated_by_other_team}}</a>.
 
 
             {% endif %}
