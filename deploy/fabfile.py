@@ -288,7 +288,7 @@ def update_solr_schema():
                     python_exe, 
                     'production' if env.installation_name is None else 'staging'))
             sudo('service tomcat6 restart')
-            run('yes y | {0} manage.py rebuild_index --settings=unisubs_settings'.format(python_exe))
+            run('screen -d -m "{0} manage.py rebuild_index --no-input --settings=unisubs_settings | mail -s Solr_index_rebuilt_on_{1}  universalsubtitles-dev@pculture.org "'.format(python_exe, env.host_string))
     else:
         # dev
         env.host_string = DEV_HOST
