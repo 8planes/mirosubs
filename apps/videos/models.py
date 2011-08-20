@@ -1216,15 +1216,18 @@ class ActionRenderer(object):
         return msg % self._base_kwargs(item)
 
     def render_SUBTITLE_REQUEST(self, item):
-        requests = item.subtitlerequest_set.all()
-        languages = [request.get_language_display() for request in requests]
+        request = item.subtitlerequest_set.all()[0]
         kwargs = self._base_kwargs(item)
-        kwargs['languages'] = ', '.join(languages)
+        kwargs['language'] = request.get_language_display()
+        if request.description:
+            kwargs['description'] = u'<br/>Request Description: %s' %(request.description)
+        else:
+            kwargs['description'] = ''
 
         if item.user:
-            msg = _(u'requested subtitles for <a href="%(video_url)s">%(video_name)s</a> in %(languages)s.')
+            msg = _(u'requested subtitles for <a href="%(video_url)s">%(video_name)s</a> in %(language)s. %(description)s')
         else:
-            msg = _(u'New subtitles requested for <a href="%(video_url)s">%(video_name)s</a> in %(languages)s.')
+            msg = _(u'New subtitles requested  for <a href="%(video_url)s">%(video_name)s</a> in %(language)s. %(language_info)s%(description)s')
 
         return msg % kwargs
 
