@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # 
+#   <fodorferi@freemail.hu>, 2011.
 # NB_ <nbkreg@gmail.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
 "Report-Msgid-Bugs-To: https://www.pivotaltracker.com/projects/224127\n"
-"POT-Creation-Date: 2011-08-14 01:31-0500\n"
-"PO-Revision-Date: 2011-08-14 06:41+0000\n"
+"POT-Creation-Date: 2011-08-21 01:31-0500\n"
+"PO-Revision-Date: 2011-08-21 06:42+0000\n"
 "Last-Translator: unisubsapi <debert+pcf@gmail.com>\n"
 "Language-Team: Hungarian (http://www.transifex.net/projects/p/universalsubtitles/team/hu/)\n"
 "MIME-Version: 1.0\n"
@@ -19,35 +20,35 @@ msgstr ""
 
 #: settings.py:31
 msgid "Spanish, Argentinian"
-msgstr ""
+msgstr "Spanyol, argentin"
 
 #: settings.py:32 utils/translation_names.py:50
 msgid "English, British"
-msgstr ""
+msgstr "Angol, brit"
 
 #: settings.py:33
 msgid "Portuguese, Brazilian"
-msgstr ""
+msgstr "Portugál, brazil"
 
 #: settings.py:34
 msgid "Latin, Serbian"
-msgstr ""
+msgstr "Latin, szerb"
 
 #: settings.py:35 utils/translation_names.py:38
 msgid "Chinese, Simplified"
-msgstr ""
+msgstr "Kínai, egyszerűsített"
 
 #: settings.py:36 utils/translation_names.py:39
 msgid "Chinese, Traditional"
-msgstr ""
+msgstr "Kínai, hagyományos"
 
 #: settings.py:37 utils/translation_names.py:51
 msgid "Esperanto"
-msgstr ""
+msgstr "eszperantó"
 
 #: settings.py:49 utils/translation_names.py:74
 msgid "Inuktitut"
-msgstr ""
+msgstr "inuktitut"
 
 #: settings.py:50
 msgid "Mohawk"
@@ -59,7 +60,7 @@ msgstr ""
 
 #: settings.py:52 utils/translation_names.py:42
 msgid "Cree"
-msgstr ""
+msgstr "cree"
 
 #: settings.py:53
 msgid "Haida"
@@ -332,7 +333,7 @@ msgid ""
 "Required. 30 characters or fewer. Alphanumeric characters only (letters, "
 "digits and underscores)."
 msgstr ""
-"Kötelező. 30 karakter vagy kevesebb. Csak alfanumerikus karakterek (betűk, "
+"Kötelező. Legfeljebb 30 karakter. Csak alfanumerikus karakterek (betűk, "
 "számjegyek és _)."
 
 #: apps/auth/admin.py:14
@@ -477,12 +478,12 @@ msgstr ""
 #: templates/openid_consumer/signin.html:12
 #: templates/openid_consumer/signin.html:31
 msgid "Sign in with your OpenID"
-msgstr ""
+msgstr "Belépés OpenID használatával"
 
 #: apps/openid_consumer/templates/openid_consumer/signin.html:15
 #: templates/openid_consumer/signin.html:18
 msgid "Sign in"
-msgstr ""
+msgstr "Belépés"
 
 #: apps/profiles/forms.py:99
 msgid "This user has not email"
@@ -499,7 +500,7 @@ msgstr "Személyes üzenet %(sender)s-től az universalsubtitles.org-on"
 
 #: apps/profiles/forms.py:149
 msgid "Confirm new password:"
-msgstr "Új jelsó megerősítése:"
+msgstr "Új jelszó megerősítése:"
 
 #: apps/profiles/forms.py:166
 msgid "Invalid password."
@@ -580,15 +581,15 @@ msgstr ""
 msgid "Widget view statistic"
 msgstr ""
 
-#: apps/subrequests/models.py:82
+#: apps/subrequests/models.py:86
 msgid "request completed"
 msgstr ""
 
-#: apps/subrequests/models.py:84
+#: apps/subrequests/models.py:88
 msgid "follow related activities"
 msgstr ""
 
-#: apps/subrequests/models.py:85
+#: apps/subrequests/models.py:89
 msgid "description of the request"
 msgstr ""
 
@@ -617,7 +618,7 @@ msgstr ""
 msgid "Unfeature teams"
 msgstr ""
 
-#: apps/teams/admin.py:74 apps/teams/admin.py:104 apps/teams/models.py:100
+#: apps/teams/admin.py:74 apps/teams/admin.py:106 apps/teams/models.py:100
 msgid "Team"
 msgstr ""
 
@@ -1000,7 +1001,7 @@ msgstr ""
 
 #: apps/videos/forms.py:155
 msgid "Somebody is subtitling this video right now. Try later."
-msgstr "Valaki most feliratozza ezt a videót. Próbálkozz később."
+msgstr "Valaki éppen feliratozza ezt a videót. Próbálkozz később."
 
 #: apps/videos/forms.py:340
 #, python-format
@@ -1077,163 +1078,163 @@ msgstr ""
 msgid "Views"
 msgstr ""
 
-#: apps/videos/models.py:715
+#: apps/videos/models.py:721
 msgid ""
 "Sorry, you cannot upload subtitles right now because someone is editing the "
 "language you are uploading or a translation of it"
 msgstr ""
 
-#: apps/videos/models.py:1132
+#: apps/videos/models.py:1140
 #, python-format
 msgid ""
 "  rejected <a href=\"%(language_url)s\">%(language)s</a> subtitles for <a "
 "href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1137
+#: apps/videos/models.py:1145
 #, python-format
 msgid ""
 "  approved <a href=\"%(language_url)s\">%(language)s</a> subtitles for <a "
 "href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1142
+#: apps/videos/models.py:1150
 #, python-format
 msgid "added video <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1144
+#: apps/videos/models.py:1152
 #, python-format
 msgid "<a href=\"%(video_url)s\">%(video_name)s</a> video added"
 msgstr ""
 
-#: apps/videos/models.py:1150
+#: apps/videos/models.py:1158
 #, python-format
 msgid "changed title for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1152
+#: apps/videos/models.py:1160
 #, python-format
 msgid "Title was changed for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1167
+#: apps/videos/models.py:1175
 #, python-format
 msgid ""
 "commented on <a href=\"%(comments_url)s\">%(language)s subtitles</a> for <a "
 "href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1169
+#: apps/videos/models.py:1177
 #, python-format
 msgid ""
 "Comment added for <a href=\"%(comments_url)s\">%(language)s subtitles</a> "
 "for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1172
+#: apps/videos/models.py:1180
 #, python-format
 msgid "commented on <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1174
+#: apps/videos/models.py:1182
 #, python-format
 msgid "Comment added for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1183
+#: apps/videos/models.py:1191
 #, python-format
 msgid ""
 "started <a href=\"%(language_url)s\">%(language)s subtitles</a> for <a "
 "href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1185
+#: apps/videos/models.py:1193
 #, python-format
 msgid ""
 "<a href=\"%(language_url)s\">%(language)s subtitles</a> started for <a "
 "href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1196
+#: apps/videos/models.py:1204
 #, python-format
 msgid ""
 "edited <a href=\"%(language_url)s\">%(language)s subtitles</a> for <a "
 "href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1198
+#: apps/videos/models.py:1206
 #, python-format
 msgid ""
 "<a href=\"%(language_url)s\">%(language)s subtitles</a> edited for <a "
 "href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1204
+#: apps/videos/models.py:1212
 #, python-format
 msgid "added new URL for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1206
+#: apps/videos/models.py:1214
 #, python-format
 msgid "New URL added for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1217
+#: apps/videos/models.py:1228
 #, python-format
 msgid ""
 "requested subtitles for <a href=\"%(video_url)s\">%(video_name)s</a> in "
-"%(languages)s."
+"%(language)s. %(description)s"
 msgstr ""
 
-#: apps/videos/models.py:1219
+#: apps/videos/models.py:1230
 #, python-format
 msgid ""
-"New subtitles requested for <a href=\"%(video_url)s\">%(video_name)s</a> in "
-"%(languages)s."
+"New subtitles requested  for <a href=\"%(video_url)s\">%(video_name)s</a> in"
+" %(language)s. %(language_info)s%(description)s"
 msgstr ""
 
-#: apps/videos/models.py:1235
+#: apps/videos/models.py:1246
 msgid "add video"
 msgstr ""
 
-#: apps/videos/models.py:1236
+#: apps/videos/models.py:1247
 msgid "change title"
 msgstr ""
 
-#: apps/videos/models.py:1237
+#: apps/videos/models.py:1248
 msgid "comment"
 msgstr ""
 
-#: apps/videos/models.py:1238
+#: apps/videos/models.py:1249
 msgid "add version"
 msgstr ""
 
-#: apps/videos/models.py:1239
+#: apps/videos/models.py:1250
 msgid "add translation"
 msgstr ""
 
-#: apps/videos/models.py:1240
+#: apps/videos/models.py:1251
 msgid "add video url"
 msgstr ""
 
-#: apps/videos/models.py:1241
+#: apps/videos/models.py:1252
 msgid "request subtitles"
 msgstr ""
 
-#: apps/videos/models.py:1242
+#: apps/videos/models.py:1253
 msgid "approve version"
 msgstr ""
 
-#: apps/videos/models.py:1243
+#: apps/videos/models.py:1254
 msgid "add contributor"
 msgstr ""
 
-#: apps/videos/models.py:1244
+#: apps/videos/models.py:1255
 msgid "reject version"
 msgstr ""
 
-#: apps/videos/models.py:1442
+#: apps/videos/models.py:1453
 #, python-format
 msgid ""
 "This URL already <a href=\"%(url)s\">exists</a> as its own video in our "
@@ -1345,19 +1346,19 @@ msgid ""
 "feed, submit this feed again and make sure to check \"Save feed\" box."
 msgstr ""
 
-#: apps/videos/views.py:619
+#: apps/videos/views.py:621
 msgid "You have not permission change this URL"
 msgstr ""
 
-#: apps/videos/views.py:625 apps/videos/views.py:645
+#: apps/videos/views.py:627 apps/videos/views.py:647
 msgid "Object does not exist"
 msgstr ""
 
-#: apps/videos/views.py:638
+#: apps/videos/views.py:640
 msgid "You have not permission delete this URL"
 msgstr ""
 
-#: apps/videos/views.py:641
+#: apps/videos/views.py:643
 msgid "You cann't remove original URL"
 msgstr ""
 
@@ -1510,7 +1511,7 @@ msgstr ""
 #: templates/profiles/my_profile.html:36 templates/search/_search_form.html:40
 #: templates/teams/index.html:100
 msgid "Search"
-msgstr ""
+msgstr "Keresés"
 
 #: libs/rosetta/templates/rosetta/pofile.html:44
 msgid "Go"
@@ -1518,7 +1519,7 @@ msgstr ""
 
 #: libs/rosetta/templates/rosetta/pofile.html:54
 msgid "Original"
-msgstr ""
+msgstr "Eredeti"
 
 #: libs/rosetta/templates/rosetta/pofile.html:58
 msgid "Occurrences(s)"
@@ -1626,12 +1627,16 @@ msgid ""
 "Warning: These videos should not be embeded--there is a good possibility "
 "they will break at some point!"
 msgstr ""
+"Figyelem: Ezek a videók nem ajánlottak beágyazásra - nagy az esélye hogy "
+"meghibásodnak valamikor."
 
 #: templates/_testing_widget.html:16
 msgid ""
 "Warning #2: These subtitles are non-permanent and should not be relied on --"
 " someone could change them."
 msgstr ""
+"Figyelem #2: Ezek a feliratok még nem véglegesek és nem ajánlott rájuk "
+"hagyatkozni - valaki megváltoztathatja őket."
 
 #: templates/_testing_widget.html:17
 msgid "This alpha site is for purely testing purposes."
@@ -1760,6 +1765,9 @@ msgid ""
 "Universal Subtitles does not support your browser. Upgrade your browser or "
 "<a href=\"http://getfirefox.com\">Try Firefox</a>."
 msgstr ""
+"Sajnos a böngésződ nem támogatott az Universal Subtitles-en. Kérlek "
+"frissítsd a böngésződet vagy <a href=\"http://getfirefox.com\">próbáld ki a "
+"Firefox -ot</a>."
 
 #: templates/base.html:97
 msgid "Admin"
@@ -1796,7 +1804,7 @@ msgstr ""
 
 #: templates/base.html:127
 msgid "Volunteer"
-msgstr ""
+msgstr "Így segíthetsz"
 
 #: templates/base.html:128
 msgid "Services"
@@ -1816,11 +1824,13 @@ msgid ""
 "Universal Subtitles is a project of <a "
 "href=\"http://participatoryculture.org/\">PCF</a>."
 msgstr ""
+"Universal Subtitles a <a href=\"http://participatoryculture.org/\">PCF</a> "
+"projektje."
 
 #: templates/base.html:165 templates/base_masterbranch.html:164
 #: templates/profiles/view_profile.html:46
 msgid "About"
-msgstr ""
+msgstr "Rólunk"
 
 #: templates/base.html:168 templates/base_masterbranch.html:167
 #: templates/bug.html:323
@@ -1830,7 +1840,7 @@ msgstr "Kapcsolat"
 #: templates/base.html:169 templates/base_masterbranch.html:168
 #: templates/bug.html:324
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Adatvédelem"
 
 #: templates/base.html:170 templates/base_masterbranch.html:169
 #: templates/bug.html:325
@@ -2083,17 +2093,17 @@ msgstr ""
 #: templates/bug.html:307 templates/index_old.html:170
 #: templates/jsdemo/home.html:112
 msgid "Mozilla will double your donation!"
-msgstr ""
+msgstr "A Mozilla megduplázza az adományod!"
 
 #: templates/bug.html:308 templates/index_old.html:171
 #: templates/jsdemo/home.html:113
 msgid "We're a featured Mozilla Drumbeat project!"
-msgstr ""
+msgstr "A Mozilla Drumbeat egy kiemelt projektje vagyunk!"
 
 #: templates/bug.html:309 templates/index_old.html:172
 #: templates/jsdemo/home.html:113
 msgid "Donate Now"
-msgstr ""
+msgstr "Adományozz Most"
 
 #: templates/demo.html:23
 msgid "Universal Subtitles Editor Demo"
@@ -2377,67 +2387,73 @@ msgstr ""
 
 #: templates/faq.html:16
 msgid "Frequently Asked Questions"
-msgstr ""
+msgstr "Gyakran Ismételt Kérdések"
 
 #: templates/faq.html:19 templates/faq.html.py:43
 msgid "What is Universal Subtitles?"
-msgstr ""
+msgstr "Mi az Universal Subtitles?"
 
 #: templates/faq.html:20 templates/faq.html.py:54
 msgid "How can I use Universal Subtitles?"
-msgstr ""
+msgstr "Hogyan használhatom a Universal Subtitles-t?"
 
 #: templates/faq.html:21 templates/faq.html.py:65
 msgid "What are the benefits of subtitles?"
-msgstr ""
+msgstr "Mik a feliratok előnyei?"
 
 #: templates/faq.html:22 templates/faq.html.py:74
 msgid ""
 "Who is the Participatory Culture Foundation and why are they making "
 "Universal Subtitles?"
 msgstr ""
+"Mi a Participatory Culture Foundation és miért készítik a Universal "
+"Subtitles-t?"
 
 #: templates/faq.html:23 templates/faq.html.py:78
 msgid ""
 "Will Universal Subtitles support closed captions for the deaf and hard of "
 "hearing?"
 msgstr ""
+"Támogatni fogja a Universal Subtitles a süketek és nagyothallók számára a "
+"zárt, azaz Closed Caption feliratokat?"
 
 #: templates/faq.html:24 templates/faq.html.py:82
 msgid "Will your subtitles support my language or characterset?"
-msgstr ""
+msgstr "Támogatni fogják a feliratok a nyelvemet és a karaktereit?"
 
 #: templates/faq.html:25 templates/faq.html.py:86
 msgid "When will the tools, including this site, be available in my language?"
 msgstr ""
+"Mikor lesznek az eszközök, beleértve a weboldalt, elérhetőek az én "
+"nyelvemen?"
 
 #: templates/faq.html:26 templates/faq.html.py:97
 msgid "How can I add subtitles to my video?"
-msgstr ""
+msgstr "Hogyan adhatok hozzá feliratokat a videómhoz?"
 
 #: templates/faq.html:27 templates/faq.html.py:107
 msgid "What open source license do you use?"
-msgstr ""
+msgstr "Melyik nyílt forrású licenc van használatban?"
 
 #: templates/faq.html:28 templates/faq.html.py:111
 msgid "I'm a developer, can I help out?"
-msgstr ""
+msgstr "Fejlesztő vagyok, tudok segíteni?"
 
 #: templates/faq.html:29 templates/faq.html.py:115
 msgid "Can non-technical people get involved with the project?"
-msgstr ""
+msgstr "Nem műszaki beállítottságú emberek is részt vehetnek a projektben?"
 
 #: templates/faq.html:30 templates/faq.html.py:126
 msgid "Do you accept donations? Are they tax deductible?"
-msgstr ""
+msgstr "Fogadnak adományokat? Leírhatóak az adómból?"
 
 #: templates/faq.html:31 templates/faq.html.py:134
 msgid "What is your relationship with Mozilla Drumbeat?"
-msgstr ""
+msgstr "Milyen kapcsolatban áll a projekt és a Mozilla Drumbeat?"
 
 #: templates/faq.html:32 templates/faq.html.py:138
 msgid "Where can I download subtitles in .SRT or other formats?"
-msgstr ""
+msgstr "Hol tudom letölteni a feliratokat .SRT, vagy más formátumban?"
 
 #: templates/faq.html:33 templates/faq.html.py:149
 msgid ""
@@ -2447,7 +2463,7 @@ msgstr ""
 
 #: templates/faq.html:34 templates/faq.html.py:159
 msgid "Why can't I change the timing on a translation?"
-msgstr ""
+msgstr "Miért nem tudok egy fordítás időzítésén változtatni?"
 
 #: templates/faq.html:35 templates/faq.html.py:170
 msgid ""
@@ -2520,11 +2536,16 @@ msgid ""
 "Yes, we are working on a solution for making closed captions [including "
 "information about sounds and music], as well as subtitles/translations."
 msgstr ""
+"Igen, dolgozunk a Closed Caption feliratok [melyek feliratozzák a "
+"jelentősebb hangokat és zenéket is] támogatásán, éppannyira mint a normál "
+"feliratok/fordításokon."
 
 #: templates/faq.html:83
 msgid ""
 "We will be working to support as many languages/charactersets as possible."
 msgstr ""
+"Dolgozunk rajta, hogy annyi nyelvet/karakterkészletet támogassunk, amennyit "
+"csak lehetséges."
 
 #: templates/faq.html:88
 msgid ""
@@ -2550,6 +2571,9 @@ msgid ""
 "For our subtitling widget and community website, we're using the <a "
 "href=\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a>."
 msgstr ""
+"A feliratozás widgethez és a közösségi oldalunkhoz az <a "
+"href=\"http://en.wikipedia.org/wiki/Affero_General_Public_License\">AGPL</a>"
+" licencet használjuk."
 
 #: templates/faq.html:112
 msgid ""
@@ -2557,6 +2581,9 @@ msgid ""
 "<a href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">developer "
 "center</a>."
 msgstr ""
+"Igen, tudsz! Ha érdekel a kódolás és a fejlesztés, kérjük látogass el a <a "
+"href=\"http://wiki.github.com/8planes/mirosubs/dev-center\">fejlesztői "
+"központba</a>."
 
 #: templates/faq.html:117
 msgid ""
@@ -2584,6 +2611,11 @@ msgid ""
 "to keep the web open for the next 100 years, and Universal Subtitles is a "
 "featured project!"
 msgstr ""
+"A Mozilla Alapítvány kezdeti finanszírozást, közösségi támogatást nyújtott "
+"és adománygyűjtést szervezett a <a "
+"href=\"http://www.drumbeat.org/about\">Drumbeat</a> -en keresztül. A "
+"Drumbeat egy olyan mozgalom, melynek célja a nyílt web megtartása a "
+"következő 100 évben, és a Universal Subtitles egy kiemelt projektjük."
 
 #: templates/faq.html:140
 msgid ""
@@ -2653,10 +2685,12 @@ msgid ""
 "Thanks for getting in touch! We love hearing your ideas, bugs, feedback, "
 "opinions and such."
 msgstr ""
+"Köszönjük hogy kapcsolatba léptél velünk! Örülünk, ha az ötleteidet, a "
+"hibákat, véleményedet és a visszajelzéseidet hallhatjuk."
 
 #: templates/feedback_response.html:6
 msgid "Stay tuned as the project evolves!"
-msgstr ""
+msgstr "Maradj velünk, ahogyan a projekt fejlődik!"
 
 #: templates/feedback_response.html:9
 msgid "Announcement Signup"
@@ -2664,13 +2698,15 @@ msgstr ""
 
 #: templates/feedback_response.html:12
 msgid "Best"
-msgstr ""
+msgstr "Legjobb"
 
 #: templates/feedback_response.html:16
 msgid ""
 "PS. We do our best to respond to all questions, but please be patient -- we "
 "get a lot of email"
 msgstr ""
+"Mindent megteszünk, hogy válaszoljunk minden kérdésre, de kérlek légy "
+"türelemmel - rengeteg e-mailt kapunk"
 
 #: templates/index_old.html:68
 msgid "enter a video URL to enable and then embed anywhere"
@@ -2698,7 +2734,7 @@ msgstr ""
 
 #: templates/opensubtitles2010.html:8 templates/opensubtitles2010.html:26
 msgid "Open Subtitles Design Summit"
-msgstr ""
+msgstr "Open Subtitles Design Summit"
 
 #: templates/opensubtitles2010.html:28
 msgid ""
@@ -2753,15 +2789,15 @@ msgstr ""
 
 #: templates/opensubtitles2010.html:62
 msgid "When"
-msgstr ""
+msgstr "Mikor"
 
 #: templates/opensubtitles2010.html:63
 msgid "September 29th and 30th, beginning at 9am on both days."
-msgstr ""
+msgstr "Szeptember 29.-én és 30.-án, reggel 9 órától kezdve mindkét nap."
 
 #: templates/opensubtitles2010.html:67
 msgid "Where"
-msgstr ""
+msgstr "Hol"
 
 #: templates/opensubtitles2010.html:68
 msgid ""
@@ -2832,97 +2868,113 @@ msgid ""
 msgstr ""
 
 #: templates/services.html:8
-msgid "Want more video views and a more engaged audience?"
+msgid "Enterprise Services"
 msgstr ""
 
-#: templates/services.html:11
-msgid ""
-"Subtitles extend your reach to a <strong>global multilingual "
-"audience</strong>"
-msgstr ""
-
-#: templates/services.html:14
+#: templates/services.html:12
 msgid ""
 "\n"
-"        With transcripts, your videos <strong>get much better SEO</strong>. You'll\n"
-"        rank higher in Google and other search engines.\n"
+"            <strong>Make your videos more global and more popular.</strong> Transcripts, captions, and translations dramatically increase video viewership.\n"
+"          "
+msgstr ""
+
+#: templates/services.html:17
+msgid ""
+"\n"
+"            Universal Subtitles is the most powerful subtitling platform in the world. We can help you build an <strong>active and engaged volunteer community</strong> and you can take advantage of <strong>professional transcription and translation services</strong>, all in one unified workflow.\n"
+"          "
+msgstr ""
+
+#: templates/services.html:23
+msgid "Interested?"
+msgstr ""
+
+#: templates/services.html:25
+msgid ""
+"\n"
+"            To learn more about our services, please contact Dean Jansen, <a href=\"mailto:dean@pculture.org\">dean@pculture.org</a>\n"
+"          "
+msgstr ""
+
+#: templates/services.html:31
+msgid "What Can Universal Subtitles Do?"
+msgstr ""
+
+#: templates/services.html:34
+msgid "Build a Translation Team"
+msgstr ""
+
+#: templates/services.html:36
+msgid ""
+"\n"
+"          Build a powerful volunteer translation and captioning team around your content. A video that lots of people want to watch is a video that fans will want to translate and share around the world.\n"
 "        "
 msgstr ""
 
-#: templates/services.html:20
+#: templates/services.html:42
+msgid "Crowdsource with Professional Review"
+msgstr ""
+
+#: templates/services.html:44
 msgid ""
 "\n"
-"        Improve <strong>accessibility</strong> for deaf and hard of hearing\n"
-"        viewers.\n"
-"        "
+"            Engage a crowd and use professional quality assurance. This balances amazingly low cost with professional level quality.\n"
+"          "
 msgstr ""
 
-#: templates/services.html:26
+#: templates/services.html:50
+msgid "Professional 1-Click Services"
+msgstr ""
+
+#: templates/services.html:52
 msgid ""
 "\n"
-"        Viewers can <strong>watch without headphones</strong> (eg. in a cubicle\n"
-"        setting)\n"
-"        "
+"            Access professional services including: captions, translations, and quality control. These services, when mixed with volunteer contributions, give you ultimate flexibility.\n"
+"          "
 msgstr ""
 
-#: templates/services.html:32
-msgid "Universal Subtitles makes it easy to:"
+#: templates/services.html:60
+msgid "Work with Any Video Platform"
 msgstr ""
 
-#: templates/services.html:35
+#: templates/services.html:62
 msgid ""
 "\n"
-"        <strong>Leverage volunteer help</strong> while expending minimal\n"
-"        resources.\n"
-"        "
+"            Universal Subtitles works with all the most popular video hosting services and video players. Integrate and embed videos with subtitles without changing your current publishing workflow.\n"
+"          "
 msgstr ""
 
-#: templates/services.html:41
+#: templates/services.html:68
+msgid "Improve Your SEO"
+msgstr ""
+
+#: templates/services.html:70
 msgid ""
 "\n"
-"        Engage existing fans and <strong>grow your audience</strong> at the same\n"
-"        time.\n"
-"        "
+"            Rank higher in Google and other search engines by helping them index full transcripts for all of your videos. Searchable videos are found more often.\n"
+"          "
 msgstr ""
 
-#: templates/services.html:47
+#: templates/services.html:76
+msgid "Flexible Integration"
+msgstr ""
+
+#: templates/services.html:78
 msgid ""
 "\n"
-"        <strong>Integration is easy and flexible</strong>. We're compatible with\n"
-"        nearly every video format.\n"
-"        "
+"            Need seamless subtitles on your custom video player? Want 1-click features integrated into your back-end or CMS? We can help.\n"
+"          "
 msgstr ""
 
-#: templates/services.html:53
+#: templates/services.html:84
+msgid "Transcription and Translation Service Providers"
+msgstr ""
+
+#: templates/services.html:86
 msgid ""
 "\n"
-"        Our subtitling interface is fantastic; <strong>users say they love\n"
-"        it</strong>.\n"
-"        "
-msgstr ""
-
-#: templates/services.html:59
-msgid ""
-"\n"
-"        Our white label product (suitable for enterprise use) <strong>simplifies\n"
-"        subtitle deployment</strong>.\n"
-"        "
-msgstr ""
-
-#: templates/services.html:65
-msgid ""
-"\n"
-"        <strong>From enterprise to independent</strong>, we can help you develop a\n"
-"        great subtitle strategy.\n"
-"        "
-msgstr ""
-
-#: templates/services.html:72
-msgid "For details on enterprise services, email"
-msgstr ""
-
-#: templates/services.html:77
-msgid "Some of Our Partners"
+"        Do you provide professional transcription, subtitling, or translation services? We can work together to offer your customers a powerful subtitle management and embedding platform. And if you’d like to offer your services to our customers, we’d also like to hear from you.\n"
+"      "
 msgstr ""
 
 #: templates/settings.html:8 templates/profiles/_top_user_panel.html:10
@@ -2937,7 +2989,7 @@ msgstr ""
 
 #: templates/settings.html:13 templates/profiles/_top_user_panel.html:19
 msgid "View profile"
-msgstr ""
+msgstr "Profil megtekintése"
 
 #: templates/settings.html:15 templates/profiles/_top_user_panel.html:23
 msgid "Edit Profile"
@@ -2949,7 +3001,7 @@ msgstr ""
 
 #: templates/admin/base_site.html:4 templates/admin/base_site.html.py:7
 msgid "Universal Subtitles"
-msgstr ""
+msgstr "Universal Subtitles"
 
 #: templates/admin/base_site.html:12
 msgid "View site"
@@ -3022,17 +3074,19 @@ msgstr ""
 
 #: templates/jsdemo/home.html:19
 msgid "The Problem"
-msgstr ""
+msgstr "A Probléma"
 
 #: templates/jsdemo/home.html:19
 msgid ""
 "Web video is beginning to rival television, but there isn't a good open "
 "resource for subtitling."
 msgstr ""
+"Az internetes videók a televízió riválisává kezdenek válni, de nincs egy "
+"igazán jó, nyílt eszköz a feliratozásukhoz."
 
 #: templates/jsdemo/home.html:21
 msgid "Our Mission"
-msgstr ""
+msgstr "Küldetésünk"
 
 #: templates/jsdemo/home.html:21
 msgid ""
@@ -3054,41 +3108,49 @@ msgstr ""
 
 #: templates/jsdemo/home.html:25
 msgid "Try our demo"
-msgstr ""
+msgstr "Próbáld ki a demót"
 
 #: templates/jsdemo/home.html:25
 msgid "Become a tester"
-msgstr ""
+msgstr "Legyél tesztelő"
 
 #: templates/jsdemo/home.html:31
 msgid "Subtitle Widget"
-msgstr ""
+msgstr "Feliratozó Widget"
 
 #: templates/jsdemo/home.html:32
 msgid ""
 "A simple way to create and add captions to almost any video on the web "
 "(without having to transcode or re-upload videos)."
 msgstr ""
+"Egyszerű mód arra, hogy létrehozz és hozzáadj feliratokat szinte bármilyen "
+"videóhoz a weben (anélkül, hogy hozzá kellene nyúlnod vagy újra fel kellene "
+"töltened a videót)"
 
 #: templates/jsdemo/home.html:35
 msgid "Community Site"
-msgstr ""
+msgstr "Közösségi Oldal"
 
 #: templates/jsdemo/home.html:36
 msgid ""
 "An online community for collaboratively subtitling and translating the "
 "world's videos (like a Wikipedia for subtitles)."
 msgstr ""
+"Egy online közösség, amely együttműködve feliratozza és lefordítja a világ "
+"videóit (mint a Wikipédia feliratokra)"
 
 #: templates/jsdemo/home.html:39
 msgid "Subtitle Lookup Protocol"
-msgstr ""
+msgstr "Felirat Kereső Protokoll"
 
 #: templates/jsdemo/home.html:40
 msgid ""
 "An open standard to let Firefox extensions, desktop video players, websites,"
 " browsers--any client--find and retrieve subtitles for any video."
 msgstr ""
+"Egy nyílt szabvány, mellyel a Firefox kiegészítői, asztali videólejátszók, "
+"weboldalak, böngészők - bármilyen kliens - megtalálhatja és letöltheti a "
+"feliratokat bármelyik videóhoz."
 
 #: templates/jsdemo/home.html:50
 msgid "Get updates and find out first when we launch"
@@ -3100,19 +3162,19 @@ msgstr ""
 
 #: templates/jsdemo/home.html:60
 msgid "Please enter a valid email address"
-msgstr ""
+msgstr "Kérlek adj meg egy valós e-mail címet"
 
 #: templates/jsdemo/home.html:93
 msgid "Please enter your email address."
-msgstr ""
+msgstr "Kérlek add meg az e-mail címed."
 
 #: templates/jsdemo/home.html:121
 msgid "Check out the widget"
-msgstr ""
+msgstr "Nézd meg a widgetet"
 
 #: templates/jsdemo/home.html:122
 msgid "Test our subtitling widget"
-msgstr ""
+msgstr "Próbáld ki a feliratozó widgetet"
 
 #: templates/jsdemo/home.html:122
 msgid "Try the Demo"
@@ -3194,7 +3256,7 @@ msgstr ""
 #: templates/videos/_upload_subtitles.html:7
 #: templates/videos/_video_url_panel.html:71
 #: templates/videos/_video_url_panel.html:84 templates/videos/history.html:123
-#: templates/videos/video.html:86 templates/videos/video.html.py:91
+#: templates/videos/video.html:85 templates/videos/video.html.py:90
 msgid "Close"
 msgstr ""
 
@@ -3359,19 +3421,19 @@ msgstr ""
 
 #: templates/profiles/_send_message.html:41
 msgid "Email sent"
-msgstr ""
+msgstr "Email elküldve"
 
 #: templates/profiles/_send_message.html:60
 msgid "Enter message please."
-msgstr ""
+msgstr "Kérlek adj meg üzenetet."
 
 #: templates/profiles/_send_message.html:64
 msgid "Enter email please."
-msgstr ""
+msgstr "Kérlek adj meg e-mail címet."
 
 #: templates/profiles/_top_user_panel.html:36
 msgid "Logout"
-msgstr "Kijelenktkezés"
+msgstr "Kijelentkezés"
 
 #: templates/profiles/_user_avatar.html:6
 #: templates/profiles/my_profile.html:79
@@ -3394,67 +3456,67 @@ msgstr ""
 msgid "Do you really want delete picture?"
 msgstr ""
 
-#: templates/profiles/edit_profile.html:33
+#: templates/profiles/edit_profile.html:36
 #: templates/videos/_paste_transcription.html:106
 #: templates/videos/_paste_transcription.html:158
 #: templates/videos/_video_url_panel.html:99
 msgid "Saving..."
 msgstr ""
 
-#: templates/profiles/edit_profile.html:46
+#: templates/profiles/edit_profile.html:49
 msgid "Edit Your Profile"
-msgstr ""
+msgstr "Profil szerkesztése"
 
-#: templates/profiles/edit_profile.html:50
+#: templates/profiles/edit_profile.html:53
 msgid "Personal Info"
-msgstr ""
+msgstr "Személyes adatok"
 
-#: templates/profiles/edit_profile.html:57
-#: templates/profiles/edit_profile.html:63
-#: templates/profiles/edit_profile.html:69
+#: templates/profiles/edit_profile.html:60
+#: templates/profiles/edit_profile.html:66
+#: templates/profiles/edit_profile.html:72
 msgid "will display publicly"
 msgstr ""
 
-#: templates/profiles/edit_profile.html:82
+#: templates/profiles/edit_profile.html:85
 msgid "remove picture"
 msgstr ""
 
-#: templates/profiles/edit_profile.html:88
+#: templates/profiles/edit_profile.html:91
 msgid "Upload picture"
-msgstr ""
+msgstr "Kép feltöltése"
 
-#: templates/profiles/edit_profile.html:115
+#: templates/profiles/edit_profile.html:118
 msgid ""
 "Notify me by email about new personal messages and edits to the videos I "
 "follow"
 msgstr ""
 
-#: templates/profiles/edit_profile.html:122
+#: templates/profiles/edit_profile.html:125
 msgid "Follow the videos I submit"
 msgstr ""
 
-#: templates/profiles/edit_profile.html:133
+#: templates/profiles/edit_profile.html:136
 msgid "Language Info"
-msgstr ""
-
-#: templates/profiles/edit_profile.html:146
-msgid "Languages I Know"
-msgstr ""
+msgstr "Nyelv információ"
 
 #: templates/profiles/edit_profile.html:149
-#: templates/profiles/edit_profile.html:168
+msgid "Languages I Know"
+msgstr "Nyelvek, melyeket ismerek"
+
+#: templates/profiles/edit_profile.html:152
+#: templates/profiles/edit_profile.html:171
 msgid "Remove Language"
-msgstr ""
+msgstr "Nyelv eltávolítása"
 
-#: templates/profiles/edit_profile.html:185
+#: templates/profiles/edit_profile.html:188
 msgid "Add Language"
-msgstr ""
+msgstr "Nyelv hozzáadása"
 
-#: templates/profiles/edit_profile.html:194
+#: templates/profiles/edit_profile.html:197
 msgid "Save Edits to Profile"
-msgstr ""
+msgstr "Változtatások mentése"
 
-#: templates/profiles/edit_profile.html:198
+#: templates/profiles/edit_profile.html:201
 msgid "Permanently Delete Your Profile"
 msgstr ""
 
@@ -3476,11 +3538,11 @@ msgstr ""
 
 #: templates/profiles/view_profile.html:36
 msgid "Preferred Language"
-msgstr ""
+msgstr "Előnyben részesített nyelv"
 
 #: templates/profiles/view_profile.html:37
 msgid "Homepage"
-msgstr ""
+msgstr "Kezdőlap"
 
 #: templates/profiles/view_profile.html:48
 msgid "<i>User has not submitted a bio.</i>"
@@ -3558,46 +3620,50 @@ msgid ""
 "We've e-mailed you instructions for setting your password to the e-mail "
 "address you submitted. You should be receiving it shortly."
 msgstr ""
+"Elküldtük a megadott e-mail címre a jelszavad beállításához szükséges "
+"teendőket. Rövidesen meg kell kapnod."
 
 #: templates/registration/password_reset_email.html:2
 msgid "You're receiving this e-mail because you requested a password reset"
-msgstr ""
+msgstr "Azért kaptad ezt az e-mailt, mert jelszavad visszaállítását kérted"
 
 #: templates/registration/password_reset_email.html:3
 #, python-format
 msgid "for your user account at %(site_name)s"
-msgstr ""
+msgstr "a %(site_name)s-n regisztrált felhasználódhoz."
 
 #: templates/registration/password_reset_email.html:5
 msgid "Please go to the following page and choose a new password:"
-msgstr ""
+msgstr "Kérlek menj a következő oldalra, és válassz új jelszót:"
 
 #: templates/registration/password_reset_email.html:9
 msgid "Your username, in case you've forgotten:"
-msgstr ""
+msgstr "A felhasználóneved, ha elfelejtetted volna:"
 
 #: templates/registration/password_reset_email.html:11
 msgid "Thanks for using our site!"
-msgstr ""
+msgstr "Köszönjük, hogy az oldalunkat használod!"
 
 #: templates/registration/password_reset_email.html:13
 #, python-format
 msgid "The %(site_name)s team"
-msgstr ""
+msgstr "A %(site_name)s csapata"
 
 #: templates/registration/password_reset_form.html:12
 msgid ""
 "Forgotten your password? Enter your e-mail address below, and we'll e-mail "
 "instructions for setting a new one."
 msgstr ""
+"Elfelejtetted a jelszavad? Írd be az e-mail címed ide, és elküldjük egy új "
+"jelszó beállításához szükséges teendőket."
 
 #: templates/registration/password_reset_form.html:17
 msgid "E-mail address:"
-msgstr ""
+msgstr "E-mail cím:"
 
 #: templates/registration/password_reset_form.html:18
 msgid "Reset my password"
-msgstr ""
+msgstr "Jelszó beállítása"
 
 #: templates/search/_search_form.html:12
 msgid "Search videos"
@@ -4082,8 +4148,8 @@ msgid "Add video"
 msgstr ""
 
 #: templates/teams/add_video.html:29 templates/teams/edit.html:138
-#: templates/teams/team_video.html:41 templates/videos/history.html:139
-#: templates/videos/video.html:103
+#: templates/teams/team_video.html:40 templates/videos/history.html:139
+#: templates/videos/video.html:102
 msgid "Save"
 msgstr ""
 
@@ -4320,10 +4386,12 @@ msgstr ""
 msgid ""
 "Please let us know what you were doing when you encountered this error."
 msgstr ""
+"Kérlek juttasd tudomásunkra, hogy mit csináltál, amikor ez a hiba "
+"bekövetkezett."
 
 #: templates/videos/_error_feedback_form.html:9
 msgid "Sorry, the page you requested was not found."
-msgstr ""
+msgstr "Sajnálom, a keresett oldal nem található."
 
 #: templates/videos/_feature_video.html:12
 msgid "Unfeature video"
@@ -4340,7 +4408,7 @@ msgstr ""
 #: templates/videos/_feedback_form.html:8
 msgid ""
 "Please let us know if you have any comments, questions, or suggestions!"
-msgstr ""
+msgstr "Kérlek oszd meg velünk, ha van kérdésed, véleményed, javaslatod!"
 
 #: templates/videos/_feedback_form.html:9
 msgid ""
@@ -4350,11 +4418,11 @@ msgstr ""
 
 #: templates/videos/_feedback_form.html:13
 msgid "Your email:"
-msgstr ""
+msgstr "E-mail címed:"
 
 #: templates/videos/_feedback_form.html:16
 msgid "Your Feedback"
-msgstr ""
+msgstr "Visszajelzésed"
 
 #: templates/videos/_feedback_form.html:26
 msgid "Send feedback"
@@ -4362,19 +4430,19 @@ msgstr ""
 
 #: templates/videos/_feedback_form.html:26
 msgid "Send Feedback"
-msgstr ""
+msgstr "Visszajelzés küldése"
 
 #: templates/videos/_feedback_form.html:37
 msgid "Thank you for your feedback."
-msgstr ""
+msgstr "Köszönjük a visszajelzést."
 
 #: templates/videos/_feedback_form.html:38
 msgid "If you would like to perform some additional testing"
-msgstr ""
+msgstr "Ha szeretnél még néhány kiegészítő tesztet végezni"
 
 #: templates/videos/_feedback_form.html:39
 msgid "please go to our"
-msgstr ""
+msgstr "kérlek látogasd meg a"
 
 #: templates/videos/_feedback_form.html:39
 msgid "Litmus regression tests"
@@ -4382,15 +4450,15 @@ msgstr ""
 
 #: templates/videos/_feedback_form.html:40
 msgid "For new testers, we have"
-msgstr ""
+msgstr "Az új tesztelők számára van"
 
 #: templates/videos/_feedback_form.html:40
 msgid "a getting started guide"
-msgstr ""
+msgstr "egy Első lépések útmutatónk"
 
 #: templates/videos/_feedback_form.html:54
 msgid "Enter feedback please."
-msgstr ""
+msgstr "Kérlek töltsd ki a visszajelzést."
 
 #: templates/videos/_follow_video_button.html:37
 msgid "Unfollow Video"
@@ -4503,7 +4571,7 @@ msgstr ""
 #: templates/videos/_paste_transcription.html:146
 #: templates/videos/_upload_subtitles.html:25
 msgid "Language"
-msgstr ""
+msgstr "Nyelv"
 
 #: templates/videos/_paste_transcription.html:150
 #: templates/videos/_upload_subtitles.html:27
@@ -4517,12 +4585,12 @@ msgstr ""
 #: templates/videos/_paste_transcription.html:163
 #: templates/videos/_upload_subtitles.html:38
 msgid "Login to upload subtitles"
-msgstr ""
+msgstr "Feliratok feltöltéséhez jelentkezz be"
 
 #: templates/videos/_upload_subtitles.html:3
 #: templates/videos/_upload_subtitles.html:8
 msgid "Upload Subtitles"
-msgstr ""
+msgstr "Feliratok feltöltése"
 
 #: templates/videos/_upload_subtitles.html:12
 msgid ""
@@ -4550,6 +4618,8 @@ msgid ""
 "If you believe your subtitle file is compatible, <a "
 "href='mailto:feedback@universalsubtitles.org'>send it to us</a>"
 msgstr ""
+"Ha úgy gondolod, a feliratfájlod kompatibilis, <a "
+"href='mailto:feedback@universalsubtitles.org'>küldd el nekünk</a>"
 
 #: templates/videos/_upload_subtitles.html:48
 msgid ""
@@ -4586,7 +4656,7 @@ msgstr[1] ""
 
 #: templates/videos/_video_activity.html:8
 msgid "Activity"
-msgstr ""
+msgstr "Aktivitás"
 
 #: templates/videos/_video_activity.html:9
 msgid "Happened"
@@ -4677,7 +4747,7 @@ msgstr ""
 
 #: templates/videos/_video_url_panel.html:85
 msgid "Add another URL for this video"
-msgstr ""
+msgstr "Új videó URL hozzáadása"
 
 #: templates/videos/_video_url_panel.html:88
 msgid "Add a URL for another version of the exact same video."
@@ -4986,7 +5056,7 @@ msgstr ""
 
 #: templates/videos/email_video_url_add.html:13
 msgid "Anonymous"
-msgstr ""
+msgstr "Anonymous"
 
 #: templates/videos/email_video_url_add.html:15
 msgid ""
@@ -5016,7 +5086,7 @@ msgstr ""
 msgid "Select two revisions for compare, please"
 msgstr ""
 
-#: templates/videos/history.html:95 templates/videos/video.html:61
+#: templates/videos/history.html:95 templates/videos/video.html:60
 msgid "Enter non-empty title"
 msgstr ""
 
@@ -5036,9 +5106,9 @@ msgid ""
 "        "
 msgstr ""
 
-#: templates/videos/history.html:118 templates/videos/video.html:77
+#: templates/videos/history.html:118 templates/videos/video.html:76
 msgid "edit title"
-msgstr ""
+msgstr "cím szerkesztése"
 
 #: templates/videos/history.html:125
 #, python-format
@@ -5047,6 +5117,9 @@ msgid ""
 "                You are editing the %(language)s translation of the video title\n"
 "            "
 msgstr ""
+"\n"
+"                A videó címének %(language)s fordítását szerkeszted\n"
+"            "
 
 #: templates/videos/history.html:131
 msgid ""
@@ -5057,21 +5130,21 @@ msgid ""
 "            "
 msgstr ""
 
-#: templates/videos/history.html:157 templates/videos/video.html:119
-#: templates/videos/video.html.py:146
-msgid "Video Info"
+#: templates/videos/history.html:156 templates/videos/history.html.py:211
+#: templates/videos/video.html:121
+msgid "Add Translation"
 msgstr ""
 
-#: templates/videos/history.html:161 templates/videos/history.html.py:211
-#: templates/videos/video.html:126
-msgid "Add Translation"
+#: templates/videos/history.html:159 templates/videos/video.html:126
+#: templates/videos/video.html.py:142
+msgid "Video Info"
 msgstr ""
 
 #: templates/videos/history.html:178
 msgid "Original Language Subtitles"
 msgstr ""
 
-#: templates/videos/history.html:190 templates/videos/video.html:150
+#: templates/videos/history.html:190 templates/videos/video.html:146
 msgid "Comments"
 msgstr ""
 
@@ -5101,11 +5174,11 @@ msgstr ""
 
 #: templates/videos/history.html:282
 msgid "No subtitles yet."
-msgstr ""
+msgstr "Még nincsenek feliratok."
 
 #: templates/videos/history.html:283
 msgid "Make some!"
-msgstr ""
+msgstr "Hozz létre!"
 
 #: templates/videos/history.html:296
 msgid "Compare Revisions"
@@ -5133,11 +5206,11 @@ msgstr ""
 
 #: templates/videos/history.html:342
 msgid "No subtitles for this language."
-msgstr ""
+msgstr "Nincs felirat ehhez a nyelvhez."
 
 #: templates/videos/history.html:344
 msgid "Either no subtitles have been entered, or they were deleted."
-msgstr ""
+msgstr "Vagy nem lettek feliratok hozzáadva, vagy törölték őket."
 
 #: templates/videos/latest_videos.html:20 templates/videos/volunteer.html:114
 #: templates/videos/volunteer_latest.html:21 templates/videos/watch.html:107
@@ -5226,76 +5299,79 @@ msgstr ""
 
 #: templates/videos/test_form_page.html:18
 msgid "Your Email"
-msgstr ""
+msgstr "E-mail címed"
 
 #: templates/videos/test_form_page.html:23
 msgid "Task 1"
-msgstr ""
+msgstr "1. feladat"
 
 #: templates/videos/test_form_page.html:24
 msgid "Try creating subtitles on the following"
-msgstr ""
+msgstr "Próbálj meg feliratot készíteni a következő"
 
 #: templates/videos/test_form_page.html:24
 msgid "video"
-msgstr ""
+msgstr "videóhoz"
 
 #: templates/videos/test_form_page.html:25
 #: templates/videos/test_form_page.html:31
 #: templates/videos/test_form_page.html:37
 #: templates/videos/test_form_page.html:57
 msgid "how was it? were the instructions clear? what would improve it?"
-msgstr ""
+msgstr "Milyen volt? Helyesek voltak az utasítások? Mivel tehetnénk jobbá?"
 
 #: templates/videos/test_form_page.html:29
 msgid "Task 2"
-msgstr ""
+msgstr "2. feladat"
 
 #: templates/videos/test_form_page.html:30
 msgid "Try fixing errors on the video (or just get back in and make an edit)"
 msgstr ""
+"Próbálj hibákat javítani a videón (vagy csak menj vissza és módosíts "
+"valamin)"
 
 #: templates/videos/test_form_page.html:35
 msgid "Task 3"
-msgstr ""
+msgstr "3. feladat"
 
 #: templates/videos/test_form_page.html:36
 msgid "Translate the video (fake it if you’re not bilingual!)"
-msgstr ""
+msgstr "Fordítsd le a feliratot (csalj, ha nem tudsz több nyelven!)"
 
 #: templates/videos/test_form_page.html:42
 msgid "optional: get updates about Universal Subtitles"
 msgstr ""
+"opcionális: szeretnék értesítéseket kapni a Universal Subtitles fejlődéséről"
 
 #: templates/videos/test_form_page.html:45
 msgid "Submit!"
-msgstr ""
+msgstr "Elküldés!"
 
 #: templates/videos/test_form_page.html:67
 msgid "Simple Instructions"
-msgstr ""
+msgstr "Útmutató a kitöltéshez"
 
 #: templates/videos/test_form_page.html:73
 msgid "All tasks 2 & 3 are optional (but we recommend trying them all)."
-msgstr ""
+msgstr "A 2. és 3. feladat opcionális (de javasoljuk hogy próbáld ki mindet)"
 
 #: templates/videos/test_form_page.html:74
 msgid "That’s it!"
-msgstr ""
+msgstr "Ennyi!"
 
-#: templates/videos/video.html:83
+#: templates/videos/video.html:82
 msgid ""
 "Subtitles saved!  You can share the video with friends,\n"
 "        or get an embed code for your site.  To add a\n"
 "        translation, click the button below."
 msgstr ""
 
-#: templates/videos/video.html:92
+#: templates/videos/video.html:91
 msgid ""
 "You are editing the original video title (translations will not be affected)"
-msgstr ""
+msgstr "Az eredeti videó címét szerkeszted (a fordításokra nem lesz hatással)"
 
-#: templates/videos/video.html:95
+#: templates/videos/video.html:94
 msgid ""
 "\n"
 "            IMPORTANT: the new title will appear in the lists of videos and in \n"
@@ -5304,41 +5380,41 @@ msgid ""
 "            "
 msgstr ""
 
-#: templates/videos/video.html:124
+#: templates/videos/video.html:119
 msgid "Add Subtitles"
 msgstr ""
 
-#: templates/videos/video.html:138
+#: templates/videos/video.html:134
 msgid "Edit in Admin Interface"
 msgstr ""
 
-#: templates/videos/video.html:159
+#: templates/videos/video.html:155
 msgid "Activity Stream"
 msgstr ""
 
-#: templates/videos/video.html:165
+#: templates/videos/video.html:161
 msgid "Video URLs"
 msgstr ""
 
-#: templates/videos/video.html:183
+#: templates/videos/video.html:179
 msgid "all activity"
 msgstr ""
 
 #: templates/videos/video_list.html:8
 msgid "All Submitted Videos"
-msgstr ""
+msgstr "Minden Elküldött Videó"
 
 #: templates/videos/video_list.html:13
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: templates/videos/video_list.html:15
 msgid "Pageloads"
-msgstr ""
+msgstr "Oldalletöltések"
 
 #: templates/videos/video_list.html:19
 msgid "Subtitles Fetched"
-msgstr ""
+msgstr "Feliratok lekérdezve"
 
 #: templates/videos/video_list.html:23
 msgid "Subtitles and Translations"
@@ -5346,7 +5422,7 @@ msgstr ""
 
 #: templates/videos/video_list.html:44
 msgid "There are no videos."
-msgstr ""
+msgstr "Nincsenek videók."
 
 #: templates/videos/volunteer.html:18
 #: templates/videos/volunteer_featured.html:5
@@ -5937,7 +6013,7 @@ msgstr ""
 
 #: utils/forms/__init__.py:75
 msgid "Enter valid e-mail addresses separated by commas."
-msgstr "Írj be valós emailcímeket vesszőkkel elválasztva."
+msgstr "Írj be valós e-mail címeket vesszőkkel elválasztva."
 
 #: utils/forms/__init__.py:83
 msgid ""

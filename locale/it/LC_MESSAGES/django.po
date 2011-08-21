@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
 "Report-Msgid-Bugs-To: https://www.pivotaltracker.com/projects/224127\n"
-"POT-Creation-Date: 2011-08-14 01:31-0500\n"
-"PO-Revision-Date: 2011-08-14 06:41+0000\n"
+"POT-Creation-Date: 2011-08-21 01:31-0500\n"
+"PO-Revision-Date: 2011-08-21 06:42+0000\n"
 "Last-Translator: unisubsapi <debert+pcf@gmail.com>\n"
 "Language-Team: Italian (http://www.transifex.net/projects/p/universalsubtitles/team/it/)\n"
 "MIME-Version: 1.0\n"
@@ -585,15 +585,15 @@ msgstr "Statistica delle visualizzazioni del video"
 msgid "Widget view statistic"
 msgstr "Widged vedi statistica"
 
-#: apps/subrequests/models.py:82
+#: apps/subrequests/models.py:86
 msgid "request completed"
 msgstr "richiesta completata"
 
-#: apps/subrequests/models.py:84
+#: apps/subrequests/models.py:88
 msgid "follow related activities"
 msgstr "seguire le attività connesse"
 
-#: apps/subrequests/models.py:85
+#: apps/subrequests/models.py:89
 msgid "description of the request"
 msgstr "descrizione della richiesta"
 
@@ -622,7 +622,7 @@ msgstr "Mostra i team"
 msgid "Unfeature teams"
 msgstr "Non mostrare i team"
 
-#: apps/teams/admin.py:74 apps/teams/admin.py:104 apps/teams/models.py:100
+#: apps/teams/admin.py:74 apps/teams/admin.py:106 apps/teams/models.py:100
 msgid "Team"
 msgstr "Team"
 
@@ -1116,7 +1116,7 @@ msgstr "Visualizzazioni del widget"
 msgid "Views"
 msgstr "Visualizzazioni"
 
-#: apps/videos/models.py:715
+#: apps/videos/models.py:721
 msgid ""
 "Sorry, you cannot upload subtitles right now because someone is editing the "
 "language you are uploading or a translation of it"
@@ -1124,7 +1124,7 @@ msgstr ""
 "Spiacenti: non puoi caricare sottotitoli attualmente, perché qualcuno sta "
 "modificando la lingua che stai caricando, o una sua traduzione"
 
-#: apps/videos/models.py:1132
+#: apps/videos/models.py:1140
 #, python-format
 msgid ""
 "  rejected <a href=\"%(language_url)s\">%(language)s</a> subtitles for <a "
@@ -1133,7 +1133,7 @@ msgstr ""
 "  <a href=\"%(language_url)s\">%(language)s</a> sottotitoli per <a "
 "href=\"%(video_url)s\">%(video_name)s</a> rifiutati"
 
-#: apps/videos/models.py:1137
+#: apps/videos/models.py:1145
 #, python-format
 msgid ""
 "  approved <a href=\"%(language_url)s\">%(language)s</a> subtitles for <a "
@@ -1142,28 +1142,28 @@ msgstr ""
 "  <a href=\"%(language_url)s\">%(language)s</a> sottotitoli per <a "
 "href=\"%(video_url)s\">%(video_name)s</a> approvati"
 
-#: apps/videos/models.py:1142
+#: apps/videos/models.py:1150
 #, python-format
 msgid "added video <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr "video aggiunto <a href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1144
+#: apps/videos/models.py:1152
 #, python-format
 msgid "<a href=\"%(video_url)s\">%(video_name)s</a> video added"
 msgstr "video <a href=\"%(video_url)s\">%(video_name)s</a> aggiunto"
 
-#: apps/videos/models.py:1150
+#: apps/videos/models.py:1158
 #, python-format
 msgid "changed title for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr "cambiato il titolo per <a href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1152
+#: apps/videos/models.py:1160
 #, python-format
 msgid "Title was changed for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 "Il titolo per <a href=\"%(video_url)s\">%(video_name)s</a> è stato cambiato"
 
-#: apps/videos/models.py:1167
+#: apps/videos/models.py:1175
 #, python-format
 msgid ""
 "commented on <a href=\"%(comments_url)s\">%(language)s subtitles</a> for <a "
@@ -1172,7 +1172,7 @@ msgstr ""
 "ha  commentato su <a href=\"%(comments_url)s\">sottotitoli in %(language)s "
 "</a> per <a href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1169
+#: apps/videos/models.py:1177
 #, python-format
 msgid ""
 "Comment added for <a href=\"%(comments_url)s\">%(language)s subtitles</a> "
@@ -1181,17 +1181,17 @@ msgstr ""
 "Commento aggiunto per <a href=\"%(comments_url)s\">sottotitoli in "
 "%(language)s </a> per <a href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1172
+#: apps/videos/models.py:1180
 #, python-format
 msgid "commented on <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr "ha commentato su<a href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1174
+#: apps/videos/models.py:1182
 #, python-format
 msgid "Comment added for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr "Commento aggiunto per <a href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1183
+#: apps/videos/models.py:1191
 #, python-format
 msgid ""
 "started <a href=\"%(language_url)s\">%(language)s subtitles</a> for <a "
@@ -1200,7 +1200,7 @@ msgstr ""
 "ha iniziato <a href=\"%(language_url)s\">sottottoli in %(language)s </a> per"
 " <a href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1185
+#: apps/videos/models.py:1193
 #, python-format
 msgid ""
 "<a href=\"%(language_url)s\">%(language)s subtitles</a> started for <a "
@@ -1209,7 +1209,7 @@ msgstr ""
 "<a href=\"%(language_url)s\">sottotitoli in %(language)s </a> started for <a"
 " href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1196
+#: apps/videos/models.py:1204
 #, python-format
 msgid ""
 "edited <a href=\"%(language_url)s\">%(language)s subtitles</a> for <a "
@@ -1218,7 +1218,7 @@ msgstr ""
 "ha modificato <a href=\"%(language_url)s\">sottotitoli in %(language)s </a> "
 "per <a href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1198
+#: apps/videos/models.py:1206
 #, python-format
 msgid ""
 "<a href=\"%(language_url)s\">%(language)s subtitles</a> edited for <a "
@@ -1227,75 +1227,71 @@ msgstr ""
 "<a href=\"%(language_url)s\">sottotitoli in %(language)s </a> modificati per"
 " <a href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1204
+#: apps/videos/models.py:1212
 #, python-format
 msgid "added new URL for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr "ha aggiunto un nuovo URL per <a href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1206
+#: apps/videos/models.py:1214
 #, python-format
 msgid "New URL added for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr "Nuovo URL aggiunto per <a href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1217
+#: apps/videos/models.py:1228
 #, python-format
 msgid ""
 "requested subtitles for <a href=\"%(video_url)s\">%(video_name)s</a> in "
-"%(languages)s."
+"%(language)s. %(description)s"
 msgstr ""
-"ha richiesto sottotitoli per <a href=\"%(video_url)s\">%(video_name)s</a> in"
-" %(languages)s."
 
-#: apps/videos/models.py:1219
+#: apps/videos/models.py:1230
 #, python-format
 msgid ""
-"New subtitles requested for <a href=\"%(video_url)s\">%(video_name)s</a> in "
-"%(languages)s."
+"New subtitles requested  for <a href=\"%(video_url)s\">%(video_name)s</a> in"
+" %(language)s. %(language_info)s%(description)s"
 msgstr ""
-"Nuovi sottotitoli sono richiesti per <a "
-"href=\"%(video_url)s\">%(video_name)s</a> in %(languages)s."
 
-#: apps/videos/models.py:1235
+#: apps/videos/models.py:1246
 msgid "add video"
 msgstr "aggiungi video"
 
-#: apps/videos/models.py:1236
+#: apps/videos/models.py:1247
 msgid "change title"
 msgstr "modifica titolo"
 
-#: apps/videos/models.py:1237
+#: apps/videos/models.py:1248
 msgid "comment"
 msgstr "commenta"
 
-#: apps/videos/models.py:1238
+#: apps/videos/models.py:1249
 msgid "add version"
 msgstr "aggiungi versione"
 
-#: apps/videos/models.py:1239
+#: apps/videos/models.py:1250
 msgid "add translation"
 msgstr "aggiungi traduzione"
 
-#: apps/videos/models.py:1240
+#: apps/videos/models.py:1251
 msgid "add video url"
 msgstr "aggiungi url di video"
 
-#: apps/videos/models.py:1241
+#: apps/videos/models.py:1252
 msgid "request subtitles"
 msgstr "richiedere sottotitoli"
 
-#: apps/videos/models.py:1242
+#: apps/videos/models.py:1253
 msgid "approve version"
 msgstr "accettare la versione"
 
-#: apps/videos/models.py:1243
+#: apps/videos/models.py:1254
 msgid "add contributor"
 msgstr "aggiungere collaboratore"
 
-#: apps/videos/models.py:1244
+#: apps/videos/models.py:1255
 msgid "reject version"
 msgstr "rifiutare versione"
 
-#: apps/videos/models.py:1442
+#: apps/videos/models.py:1453
 #, python-format
 msgid ""
 "This URL already <a href=\"%(url)s\">exists</a> as its own video in our "
@@ -1421,19 +1417,19 @@ msgstr ""
 "questo feed, sottoponi di nuovo questo feed, e bada a contrassegnare la "
 "casella \"Salva flusso\"."
 
-#: apps/videos/views.py:619
+#: apps/videos/views.py:621
 msgid "You have not permission change this URL"
 msgstr "Non sei autorizzare a modificare questo URL"
 
-#: apps/videos/views.py:625 apps/videos/views.py:645
+#: apps/videos/views.py:627 apps/videos/views.py:647
 msgid "Object does not exist"
 msgstr "L'oggetto non esiste"
 
-#: apps/videos/views.py:638
+#: apps/videos/views.py:640
 msgid "You have not permission delete this URL"
 msgstr "Non sei autorizzato a cancellare questo URL"
 
-#: apps/videos/views.py:641
+#: apps/videos/views.py:643
 msgid "You cann't remove original URL"
 msgstr "Non puoi togliere l'URL originale"
 
@@ -1943,7 +1939,7 @@ msgstr ""
 
 #: templates/base.html:35
 msgid "Transcribe, caption, translate, and subtitle videos."
-msgstr ""
+msgstr "Trascrivi, sottotitola e traduci dei viedeo."
 
 #: templates/base.html:81 templates/base_masterbranch.html:85
 #: templates/bug.html:77
@@ -3371,136 +3367,114 @@ msgstr ""
 "Plans</a> per la messa a disposizione del luogo di riunione!"
 
 #: templates/services.html:8
-msgid "Want more video views and a more engaged audience?"
+msgid "Enterprise Services"
 msgstr ""
-"Vuoi più visualizzazioni per i tuoi video, e un pubblico più impegnato?"
 
-#: templates/services.html:11
-msgid ""
-"Subtitles extend your reach to a <strong>global multilingual "
-"audience</strong>"
-msgstr ""
-"I sottotitoli ti consentono di raggiungere un <strong>pubblico globale e "
-"multilingue</strong>"
-
-#: templates/services.html:14
+#: templates/services.html:12
 msgid ""
 "\n"
-"        With transcripts, your videos <strong>get much better SEO</strong>. You'll\n"
-"        rank higher in Google and other search engines.\n"
-"        "
+"            <strong>Make your videos more global and more popular.</strong> Transcripts, captions, and translations dramatically increase video viewership.\n"
+"          "
 msgstr ""
-"\n"
-"        Le trascrizioni <strong>miglioreranno molti</strong> l'indicizzabilità dei tuoi video.\n"
-"        Miglioreranno il tuo ranking nei risultati di Google e di altri motori di ricerca.\n"
-"        "
 
-#: templates/services.html:20
+#: templates/services.html:17
 msgid ""
 "\n"
-"        Improve <strong>accessibility</strong> for deaf and hard of hearing\n"
-"        viewers.\n"
-"        "
+"            Universal Subtitles is the most powerful subtitling platform in the world. We can help you build an <strong>active and engaged volunteer community</strong> and you can take advantage of <strong>professional transcription and translation services</strong>, all in one unified workflow.\n"
+"          "
 msgstr ""
-"\n"
-"        Migliora <strong>l'accessibilità</strong> per gli spettatori\n"
-"        sordi e sordastri.\n"
-"        "
 
-#: templates/services.html:26
+#: templates/services.html:23
+msgid "Interested?"
+msgstr ""
+
+#: templates/services.html:25
 msgid ""
 "\n"
-"        Viewers can <strong>watch without headphones</strong> (eg. in a cubicle\n"
-"        setting)\n"
-"        "
+"            To learn more about our services, please contact Dean Jansen, <a href=\"mailto:dean@pculture.org\">dean@pculture.org</a>\n"
+"          "
 msgstr ""
-"\n"
-"        Gli spettatori possono <strong>guardare senza cuffie</strong> (ad es. nei cubicoli delle\n"
-"        biblioteche)\n"
-"        "
 
-#: templates/services.html:32
-msgid "Universal Subtitles makes it easy to:"
-msgstr "Universal Subtitles facilita:"
+#: templates/services.html:31
+msgid "What Can Universal Subtitles Do?"
+msgstr ""
 
-#: templates/services.html:35
+#: templates/services.html:34
+msgid "Build a Translation Team"
+msgstr ""
+
+#: templates/services.html:36
 msgid ""
 "\n"
-"        <strong>Leverage volunteer help</strong> while expending minimal\n"
-"        resources.\n"
+"          Build a powerful volunteer translation and captioning team around your content. A video that lots of people want to watch is a video that fans will want to translate and share around the world.\n"
 "        "
 msgstr ""
-"\n"
-"        <strong>il coinvolgimento dell'aiuto di volontari</strong> con una spesa minima\n"
-"        di risorse.\n"
-"        "
 
-#: templates/services.html:41
+#: templates/services.html:42
+msgid "Crowdsource with Professional Review"
+msgstr ""
+
+#: templates/services.html:44
 msgid ""
 "\n"
-"        Engage existing fans and <strong>grow your audience</strong> at the same\n"
-"        time.\n"
-"        "
+"            Engage a crowd and use professional quality assurance. This balances amazingly low cost with professional level quality.\n"
+"          "
 msgstr ""
-"\n"
-"        Coinvolgi i fan che hai già e <strong>accresci il tuo pubblico</strong> allo stesso\n"
-"        tempo.\n"
-"        "
 
-#: templates/services.html:47
+#: templates/services.html:50
+msgid "Professional 1-Click Services"
+msgstr ""
+
+#: templates/services.html:52
 msgid ""
 "\n"
-"        <strong>Integration is easy and flexible</strong>. We're compatible with\n"
-"        nearly every video format.\n"
-"        "
+"            Access professional services including: captions, translations, and quality control. These services, when mixed with volunteer contributions, give you ultimate flexibility.\n"
+"          "
 msgstr ""
-"\n"
-"        <strong>L'integrazione è facile e flessibile</strong>. Siamo compatibili con\n"
-"        quasi qualsiasi formato video.\n"
-"        "
 
-#: templates/services.html:53
+#: templates/services.html:60
+msgid "Work with Any Video Platform"
+msgstr ""
+
+#: templates/services.html:62
 msgid ""
 "\n"
-"        Our subtitling interface is fantastic; <strong>users say they love\n"
-"        it</strong>.\n"
-"        "
+"            Universal Subtitles works with all the most popular video hosting services and video players. Integrate and embed videos with subtitles without changing your current publishing workflow.\n"
+"          "
 msgstr ""
-"\n"
-"        La nostra interfaccia di sottotitolazione è fantastica; <strong>gli utenti dicono di amarla molto</strong>.\n"
-"        "
 
-#: templates/services.html:59
+#: templates/services.html:68
+msgid "Improve Your SEO"
+msgstr ""
+
+#: templates/services.html:70
 msgid ""
 "\n"
-"        Our white label product (suitable for enterprise use) <strong>simplifies\n"
-"        subtitle deployment</strong>.\n"
-"        "
+"            Rank higher in Google and other search engines by helping them index full transcripts for all of your videos. Searchable videos are found more often.\n"
+"          "
 msgstr ""
-"\n"
-"        Il nostro prodotto labello bianco (adatto per l'uso imprenditoriale) <strong>semplifica\n"
-"        la presentazione dei sottotitoli</strong>.\n"
-"        "
 
-#: templates/services.html:65
+#: templates/services.html:76
+msgid "Flexible Integration"
+msgstr ""
+
+#: templates/services.html:78
 msgid ""
 "\n"
-"        <strong>From enterprise to independent</strong>, we can help you develop a\n"
-"        great subtitle strategy.\n"
-"        "
+"            Need seamless subtitles on your custom video player? Want 1-click features integrated into your back-end or CMS? We can help.\n"
+"          "
 msgstr ""
+
+#: templates/services.html:84
+msgid "Transcription and Translation Service Providers"
+msgstr ""
+
+#: templates/services.html:86
+msgid ""
 "\n"
-"        <strong>Che abbiate un'impresa o siate indipendenti</strong>, vi possiamo aiutare a sviluppare\n"
-"        una grande strategia di sottotitolazione.\n"
-"        "
-
-#: templates/services.html:72
-msgid "For details on enterprise services, email"
-msgstr "Per particolari sui servizi per imprese, e-mail"
-
-#: templates/services.html:77
-msgid "Some of Our Partners"
-msgstr "Alcuni nostri partner"
+"        Do you provide professional transcription, subtitling, or translation services? We can work together to offer your customers a powerful subtitle management and embedding platform. And if you’d like to offer your services to our customers, we’d also like to hear from you.\n"
+"      "
+msgstr ""
 
 #: templates/settings.html:8 templates/profiles/_top_user_panel.html:10
 #: templates/profiles/my_profile.html:24
@@ -3787,7 +3761,7 @@ msgstr "Invia un messaggio"
 #: templates/videos/_upload_subtitles.html:7
 #: templates/videos/_video_url_panel.html:71
 #: templates/videos/_video_url_panel.html:84 templates/videos/history.html:123
-#: templates/videos/video.html:86 templates/videos/video.html.py:91
+#: templates/videos/video.html:85 templates/videos/video.html.py:90
 msgid "Close"
 msgstr "Chiudi"
 
@@ -3994,36 +3968,36 @@ msgstr "Modifica il mio profilo"
 msgid "Do you really want delete picture?"
 msgstr "Vuoi veramente cancellare l'immagine?"
 
-#: templates/profiles/edit_profile.html:33
+#: templates/profiles/edit_profile.html:36
 #: templates/videos/_paste_transcription.html:106
 #: templates/videos/_paste_transcription.html:158
 #: templates/videos/_video_url_panel.html:99
 msgid "Saving..."
 msgstr "Salvando..."
 
-#: templates/profiles/edit_profile.html:46
+#: templates/profiles/edit_profile.html:49
 msgid "Edit Your Profile"
 msgstr "Modifica il tuo profilo"
 
-#: templates/profiles/edit_profile.html:50
+#: templates/profiles/edit_profile.html:53
 msgid "Personal Info"
 msgstr "Informazioni personali"
 
-#: templates/profiles/edit_profile.html:57
-#: templates/profiles/edit_profile.html:63
-#: templates/profiles/edit_profile.html:69
+#: templates/profiles/edit_profile.html:60
+#: templates/profiles/edit_profile.html:66
+#: templates/profiles/edit_profile.html:72
 msgid "will display publicly"
 msgstr "apparirà pubblicamente"
 
-#: templates/profiles/edit_profile.html:82
+#: templates/profiles/edit_profile.html:85
 msgid "remove picture"
 msgstr "togli l'immagine"
 
-#: templates/profiles/edit_profile.html:88
+#: templates/profiles/edit_profile.html:91
 msgid "Upload picture"
 msgstr "Carica una foto"
 
-#: templates/profiles/edit_profile.html:115
+#: templates/profiles/edit_profile.html:118
 msgid ""
 "Notify me by email about new personal messages and edits to the videos I "
 "follow"
@@ -4031,32 +4005,32 @@ msgstr ""
 "Avvertitemi per e-mail dei nuovi messaggi e delle modifiche ai video che "
 "seguo"
 
-#: templates/profiles/edit_profile.html:122
+#: templates/profiles/edit_profile.html:125
 msgid "Follow the videos I submit"
 msgstr "Seguire i video che sottopongo"
 
-#: templates/profiles/edit_profile.html:133
+#: templates/profiles/edit_profile.html:136
 msgid "Language Info"
 msgstr "Informazioni sulla lingua"
 
-#: templates/profiles/edit_profile.html:146
+#: templates/profiles/edit_profile.html:149
 msgid "Languages I Know"
 msgstr "Lingue che conosco"
 
-#: templates/profiles/edit_profile.html:149
-#: templates/profiles/edit_profile.html:168
+#: templates/profiles/edit_profile.html:152
+#: templates/profiles/edit_profile.html:171
 msgid "Remove Language"
 msgstr "Rimuovi una lingua"
 
-#: templates/profiles/edit_profile.html:185
+#: templates/profiles/edit_profile.html:188
 msgid "Add Language"
 msgstr "Aggiungi una lingua"
 
-#: templates/profiles/edit_profile.html:194
+#: templates/profiles/edit_profile.html:197
 msgid "Save Edits to Profile"
 msgstr "Salva le modifiche al profilo"
 
-#: templates/profiles/edit_profile.html:198
+#: templates/profiles/edit_profile.html:201
 msgid "Permanently Delete Your Profile"
 msgstr "Cancella definitivamente il tuo profilo"
 
@@ -4724,8 +4698,8 @@ msgid "Add video"
 msgstr "Aggiungi un video"
 
 #: templates/teams/add_video.html:29 templates/teams/edit.html:138
-#: templates/teams/team_video.html:41 templates/videos/history.html:139
-#: templates/videos/video.html:103
+#: templates/teams/team_video.html:40 templates/videos/history.html:139
+#: templates/videos/video.html:102
 msgid "Save"
 msgstr "Salva"
 
@@ -5399,7 +5373,7 @@ msgstr ""
 
 #: templates/videos/_video_url_panel.html:85
 msgid "Add another URL for this video"
-msgstr ""
+msgstr "Aggiungi un altro URL per questo video"
 
 #: templates/videos/_video_url_panel.html:88
 msgid "Add a URL for another version of the exact same video."
@@ -5790,7 +5764,7 @@ msgstr "Video in risalto"
 msgid "Select two revisions for compare, please"
 msgstr "Per favore, seleziona due revisioni da confrontare, "
 
-#: templates/videos/history.html:95 templates/videos/video.html:61
+#: templates/videos/history.html:95 templates/videos/video.html:60
 msgid "Enter non-empty title"
 msgstr "Inserire un titolo non vuoto"
 
@@ -5816,7 +5790,7 @@ msgstr ""
 "        %(title)s con sottotitoli in %(language)s | Universal Subtitles\n"
 "        "
 
-#: templates/videos/history.html:118 templates/videos/video.html:77
+#: templates/videos/history.html:118 templates/videos/video.html:76
 msgid "edit title"
 msgstr "Modifica il titolo"
 
@@ -5827,6 +5801,9 @@ msgid ""
 "                You are editing the %(language)s translation of the video title\n"
 "            "
 msgstr ""
+"\n"
+"                Stai modificando la traduzione in %(language)s  del titolo del video\n"
+"            "
 
 #: templates/videos/history.html:131
 msgid ""
@@ -5842,21 +5819,21 @@ msgstr ""
 "            originale del video video né nelle altre traduzioni.\n"
 "            "
 
-#: templates/videos/history.html:157 templates/videos/video.html:119
-#: templates/videos/video.html.py:146
-msgid "Video Info"
-msgstr "Informazioni sul video"
-
-#: templates/videos/history.html:161 templates/videos/history.html.py:211
-#: templates/videos/video.html:126
+#: templates/videos/history.html:156 templates/videos/history.html.py:211
+#: templates/videos/video.html:121
 msgid "Add Translation"
 msgstr "Aggiungi Traduzione"
+
+#: templates/videos/history.html:159 templates/videos/video.html:126
+#: templates/videos/video.html.py:142
+msgid "Video Info"
+msgstr "Informazioni sul video"
 
 #: templates/videos/history.html:178
 msgid "Original Language Subtitles"
 msgstr "Lingua originale Sottotitoli"
 
-#: templates/videos/history.html:190 templates/videos/video.html:150
+#: templates/videos/history.html:190 templates/videos/video.html:146
 msgid "Comments"
 msgstr "Commenti"
 
@@ -6085,7 +6062,7 @@ msgstr ""
 msgid "That’s it!"
 msgstr "Questo è tutto!"
 
-#: templates/videos/video.html:83
+#: templates/videos/video.html:82
 msgid ""
 "Subtitles saved!  You can share the video with friends,\n"
 "        or get an embed code for your site.  To add a\n"
@@ -6095,12 +6072,14 @@ msgstr ""
 "        o ottenere un codice di inserimento per il tuo sito.  Per aggiungere una\n"
 "        traduzione, clicca sul pulsante sotto."
 
-#: templates/videos/video.html:92
+#: templates/videos/video.html:91
 msgid ""
 "You are editing the original video title (translations will not be affected)"
 msgstr ""
+"Stai modificando il titolo originale del video (le traduzioni rimarranno "
+"immutate)"
 
-#: templates/videos/video.html:95
+#: templates/videos/video.html:94
 msgid ""
 "\n"
 "            IMPORTANT: the new title will appear in the lists of videos and in \n"
@@ -6114,23 +6093,23 @@ msgstr ""
 "            Per favore, aggiorna ogni traduzione separatamente, se necessario.\n"
 "            "
 
-#: templates/videos/video.html:124
+#: templates/videos/video.html:119
 msgid "Add Subtitles"
 msgstr "Aggiungi sottotitoli"
 
-#: templates/videos/video.html:138
+#: templates/videos/video.html:134
 msgid "Edit in Admin Interface"
 msgstr "Modifica nell'interfaccia di gestione"
 
-#: templates/videos/video.html:159
+#: templates/videos/video.html:155
 msgid "Activity Stream"
 msgstr "Flusso di attività"
 
-#: templates/videos/video.html:165
+#: templates/videos/video.html:161
 msgid "Video URLs"
 msgstr "Gli URL del video"
 
-#: templates/videos/video.html:183
+#: templates/videos/video.html:179
 msgid "all activity"
 msgstr "tutte le attività"
 

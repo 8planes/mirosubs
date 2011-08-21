@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
 "Report-Msgid-Bugs-To: https://www.pivotaltracker.com/projects/224127\n"
-"POT-Creation-Date: 2011-08-14 01:31-0500\n"
-"PO-Revision-Date: 2011-08-14 06:41+0000\n"
+"POT-Creation-Date: 2011-08-21 01:31-0500\n"
+"PO-Revision-Date: 2011-08-21 06:42+0000\n"
 "Last-Translator: unisubsapi <debert+pcf@gmail.com>\n"
 "Language-Team: Czech (http://www.transifex.net/projects/p/universalsubtitles/team/cs/)\n"
 "MIME-Version: 1.0\n"
@@ -582,15 +582,15 @@ msgstr "Statistika zhlédnutí videa"
 msgid "Widget view statistic"
 msgstr "Statistika zobrazení widgetu"
 
-#: apps/subrequests/models.py:82
+#: apps/subrequests/models.py:86
 msgid "request completed"
 msgstr ""
 
-#: apps/subrequests/models.py:84
+#: apps/subrequests/models.py:88
 msgid "follow related activities"
 msgstr ""
 
-#: apps/subrequests/models.py:85
+#: apps/subrequests/models.py:89
 msgid "description of the request"
 msgstr ""
 
@@ -619,7 +619,7 @@ msgstr "Ocenit týmy"
 msgid "Unfeature teams"
 msgstr "Odocenit týmy"
 
-#: apps/teams/admin.py:74 apps/teams/admin.py:104 apps/teams/models.py:100
+#: apps/teams/admin.py:74 apps/teams/admin.py:106 apps/teams/models.py:100
 msgid "Team"
 msgstr "Tým"
 
@@ -641,7 +641,7 @@ msgid ""
 " browse the site and use the 'Add Video to Team' menu."
 msgstr ""
 "Vložte URL jakéhokoli kompatibilního videa nebo videa na naší stránce. "
-"Můžete také procházet stránku a použít menu 'Přidat video do týmu'."
+"Můžete také procházet stránku a použít menu ‚Přidat video do týmu."
 
 #: apps/teams/forms.py:152
 msgid "Video language"
@@ -1102,7 +1102,7 @@ msgstr "Zobrazení widgetu"
 msgid "Views"
 msgstr "Zobrazení"
 
-#: apps/videos/models.py:715
+#: apps/videos/models.py:721
 msgid ""
 "Sorry, you cannot upload subtitles right now because someone is editing the "
 "language you are uploading or a translation of it"
@@ -1110,41 +1110,41 @@ msgstr ""
 "Omlouváme se, nyní nemůžete nahrát titulky, protože někdo již upravuje "
 "titulky v jazyce, který nahráváte, nebo z něj překládá"
 
-#: apps/videos/models.py:1132
+#: apps/videos/models.py:1140
 #, python-format
 msgid ""
 "  rejected <a href=\"%(language_url)s\">%(language)s</a> subtitles for <a "
 "href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1137
+#: apps/videos/models.py:1145
 #, python-format
 msgid ""
 "  approved <a href=\"%(language_url)s\">%(language)s</a> subtitles for <a "
 "href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1142
+#: apps/videos/models.py:1150
 #, python-format
 msgid "added video <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr "přidal video <a href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1144
+#: apps/videos/models.py:1152
 #, python-format
 msgid "<a href=\"%(video_url)s\">%(video_name)s</a> video added"
 msgstr "video <a href=\"%(video_url)s\">%(video_name)s</a> přidáno"
 
-#: apps/videos/models.py:1150
+#: apps/videos/models.py:1158
 #, python-format
 msgid "changed title for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr "změnil název videa <a href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1152
+#: apps/videos/models.py:1160
 #, python-format
 msgid "Title was changed for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr "Název byl změněn u videa <a href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1167
+#: apps/videos/models.py:1175
 #, python-format
 msgid ""
 "commented on <a href=\"%(comments_url)s\">%(language)s subtitles</a> for <a "
@@ -1153,7 +1153,7 @@ msgstr ""
 "komentoval <a href=\"%(comments_url)s\">titulky %(language)s</a> u videa <a "
 "href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1169
+#: apps/videos/models.py:1177
 #, python-format
 msgid ""
 "Comment added for <a href=\"%(comments_url)s\">%(language)s subtitles</a> "
@@ -1162,17 +1162,17 @@ msgstr ""
 "Přidán komentář k <a href=\"%(comments_url)s\">titulkům %(language)s</a> u "
 "videa <a href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1172
+#: apps/videos/models.py:1180
 #, python-format
 msgid "commented on <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr "komentoval video <a href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1174
+#: apps/videos/models.py:1182
 #, python-format
 msgid "Comment added for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr "Přidán komentář k videu <a href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1183
+#: apps/videos/models.py:1191
 #, python-format
 msgid ""
 "started <a href=\"%(language_url)s\">%(language)s subtitles</a> for <a "
@@ -1181,7 +1181,7 @@ msgstr ""
 "založil <a href=\"%(language_url)s\">titulky %(language)s</a> k videu <a "
 "href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1185
+#: apps/videos/models.py:1193
 #, python-format
 msgid ""
 "<a href=\"%(language_url)s\">%(language)s subtitles</a> started for <a "
@@ -1190,7 +1190,7 @@ msgstr ""
 "<a href=\"%(language_url)s\">titulky %(language)s</a> byly založeny k videu "
 "<a href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1196
+#: apps/videos/models.py:1204
 #, python-format
 msgid ""
 "edited <a href=\"%(language_url)s\">%(language)s subtitles</a> for <a "
@@ -1199,7 +1199,7 @@ msgstr ""
 "upravil <a href=\"%(language_url)s\">titulky %(language)s</a> u videa <a "
 "href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1198
+#: apps/videos/models.py:1206
 #, python-format
 msgid ""
 "<a href=\"%(language_url)s\">%(language)s subtitles</a> edited for <a "
@@ -1208,72 +1208,72 @@ msgstr ""
 "<a href=\"%(language_url)s\">titulky %(language)s subtitles</a> upraveny u "
 "videa <a href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1204
+#: apps/videos/models.py:1212
 #, python-format
 msgid "added new URL for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr "přidal novou URL k videu <a href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1206
+#: apps/videos/models.py:1214
 #, python-format
 msgid "New URL added for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 "Nová URL byla přidána k videu <a href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1217
+#: apps/videos/models.py:1228
 #, python-format
 msgid ""
 "requested subtitles for <a href=\"%(video_url)s\">%(video_name)s</a> in "
-"%(languages)s."
+"%(language)s. %(description)s"
 msgstr ""
 
-#: apps/videos/models.py:1219
+#: apps/videos/models.py:1230
 #, python-format
 msgid ""
-"New subtitles requested for <a href=\"%(video_url)s\">%(video_name)s</a> in "
-"%(languages)s."
+"New subtitles requested  for <a href=\"%(video_url)s\">%(video_name)s</a> in"
+" %(language)s. %(language_info)s%(description)s"
 msgstr ""
 
-#: apps/videos/models.py:1235
+#: apps/videos/models.py:1246
 msgid "add video"
 msgstr "přidat video"
 
-#: apps/videos/models.py:1236
+#: apps/videos/models.py:1247
 msgid "change title"
 msgstr "změnit název"
 
-#: apps/videos/models.py:1237
+#: apps/videos/models.py:1248
 msgid "comment"
 msgstr "komentovat"
 
-#: apps/videos/models.py:1238
+#: apps/videos/models.py:1249
 msgid "add version"
 msgstr "přidat verzi"
 
-#: apps/videos/models.py:1239
+#: apps/videos/models.py:1250
 msgid "add translation"
 msgstr "přidat překlad"
 
-#: apps/videos/models.py:1240
+#: apps/videos/models.py:1251
 msgid "add video url"
 msgstr "přidat url videa"
 
-#: apps/videos/models.py:1241
+#: apps/videos/models.py:1252
 msgid "request subtitles"
 msgstr ""
 
-#: apps/videos/models.py:1242
+#: apps/videos/models.py:1253
 msgid "approve version"
 msgstr ""
 
-#: apps/videos/models.py:1243
+#: apps/videos/models.py:1254
 msgid "add contributor"
 msgstr ""
 
-#: apps/videos/models.py:1244
+#: apps/videos/models.py:1255
 msgid "reject version"
 msgstr ""
 
-#: apps/videos/models.py:1442
+#: apps/videos/models.py:1453
 #, python-format
 msgid ""
 "This URL already <a href=\"%(url)s\">exists</a> as its own video in our "
@@ -1393,19 +1393,19 @@ msgstr ""
 "%(count)s videí bylo přidáno. Pro přidání zbývajících videí z tohoto zdroje "
 "vložte tento zdroj znovu a ujistěte se, že jste zaškrtli „Uložit zdroj“."
 
-#: apps/videos/views.py:619
+#: apps/videos/views.py:621
 msgid "You have not permission change this URL"
 msgstr "Nemáte oprávnění změnit tuto URL"
 
-#: apps/videos/views.py:625 apps/videos/views.py:645
+#: apps/videos/views.py:627 apps/videos/views.py:647
 msgid "Object does not exist"
 msgstr "Objekt neexistuje"
 
-#: apps/videos/views.py:638
+#: apps/videos/views.py:640
 msgid "You have not permission delete this URL"
 msgstr "Nemáte oprávnění smazat tuto URL"
 
-#: apps/videos/views.py:641
+#: apps/videos/views.py:643
 msgid "You cann't remove original URL"
 msgstr "Nemůžete odstranit původní URL"
 
@@ -3157,135 +3157,114 @@ msgid ""
 msgstr ""
 
 #: templates/services.html:8
-msgid "Want more video views and a more engaged audience?"
-msgstr "Chcete větší sledovanost svého videa a více angažované publikum?"
-
-#: templates/services.html:11
-msgid ""
-"Subtitles extend your reach to a <strong>global multilingual "
-"audience</strong>"
+msgid "Enterprise Services"
 msgstr ""
-"Titulky rozšiřují váš přístup k <strong>globálnímu mnohojazyčnému "
-"publiku</strong>"
 
-#: templates/services.html:14
+#: templates/services.html:12
 msgid ""
 "\n"
-"        With transcripts, your videos <strong>get much better SEO</strong>. You'll\n"
-"        rank higher in Google and other search engines.\n"
-"        "
+"            <strong>Make your videos more global and more popular.</strong> Transcripts, captions, and translations dramatically increase video viewership.\n"
+"          "
 msgstr ""
-"\n"
-"        S transkripcemi vaše videa <strong>získají mnohem lepší SEO</strong>. Umístíte\n"
-"        se výše v Google a jiných vyhledávačích.\n"
-"        "
 
-#: templates/services.html:20
+#: templates/services.html:17
 msgid ""
 "\n"
-"        Improve <strong>accessibility</strong> for deaf and hard of hearing\n"
-"        viewers.\n"
-"        "
+"            Universal Subtitles is the most powerful subtitling platform in the world. We can help you build an <strong>active and engaged volunteer community</strong> and you can take advantage of <strong>professional transcription and translation services</strong>, all in one unified workflow.\n"
+"          "
 msgstr ""
-"\n"
-"        Zlepšete <strong>přístupnost</strong> pro hluché a sluchově postižené\n"
-"        diváky.\n"
-"        "
 
-#: templates/services.html:26
+#: templates/services.html:23
+msgid "Interested?"
+msgstr ""
+
+#: templates/services.html:25
 msgid ""
 "\n"
-"        Viewers can <strong>watch without headphones</strong> (eg. in a cubicle\n"
-"        setting)\n"
-"        "
+"            To learn more about our services, please contact Dean Jansen, <a href=\"mailto:dean@pculture.org\">dean@pculture.org</a>\n"
+"          "
 msgstr ""
-"\n"
-"        Diváci mohou <strong>sledovat video bez sluchátek</strong> (např. na \n"
-"        koleji)\n"
-"        "
 
-#: templates/services.html:32
-msgid "Universal Subtitles makes it easy to:"
-msgstr "Universal Subtitles vám usnadní:"
+#: templates/services.html:31
+msgid "What Can Universal Subtitles Do?"
+msgstr ""
 
-#: templates/services.html:35
+#: templates/services.html:34
+msgid "Build a Translation Team"
+msgstr ""
+
+#: templates/services.html:36
 msgid ""
 "\n"
-"        <strong>Leverage volunteer help</strong> while expending minimal\n"
-"        resources.\n"
+"          Build a powerful volunteer translation and captioning team around your content. A video that lots of people want to watch is a video that fans will want to translate and share around the world.\n"
 "        "
 msgstr ""
-"\n"
-"        <strong>Využít dobrovolnickou pomoc</strong> a minimalizovat tak\n"
-"        náklady.\n"
-"        "
 
-#: templates/services.html:41
+#: templates/services.html:42
+msgid "Crowdsource with Professional Review"
+msgstr ""
+
+#: templates/services.html:44
 msgid ""
 "\n"
-"        Engage existing fans and <strong>grow your audience</strong> at the same\n"
-"        time.\n"
-"        "
+"            Engage a crowd and use professional quality assurance. This balances amazingly low cost with professional level quality.\n"
+"          "
 msgstr ""
-"\n"
-"        Zapojit existující fanoušky a zároveň <strong>rozšířit své publikum</strong>.\n"
-"        "
 
-#: templates/services.html:47
+#: templates/services.html:50
+msgid "Professional 1-Click Services"
+msgstr ""
+
+#: templates/services.html:52
 msgid ""
 "\n"
-"        <strong>Integration is easy and flexible</strong>. We're compatible with\n"
-"        nearly every video format.\n"
-"        "
+"            Access professional services including: captions, translations, and quality control. These services, when mixed with volunteer contributions, give you ultimate flexibility.\n"
+"          "
 msgstr ""
-"\n"
-"        <strong>Integrace je jednoduchá a flexibilní</strong>. Jsme kompatibilní téměř\n"
-"        se všemi formáty videa.\n"
-"        "
 
-#: templates/services.html:53
+#: templates/services.html:60
+msgid "Work with Any Video Platform"
+msgstr ""
+
+#: templates/services.html:62
 msgid ""
 "\n"
-"        Our subtitling interface is fantastic; <strong>users say they love\n"
-"        it</strong>.\n"
-"        "
+"            Universal Subtitles works with all the most popular video hosting services and video players. Integrate and embed videos with subtitles without changing your current publishing workflow.\n"
+"          "
 msgstr ""
-"\n"
-"        Naše titulkovací rozhraní je fantastické; <strong>uživatelé tvrdí, že ho\n"
-"        milují</strong>.\n"
-"        "
 
-#: templates/services.html:59
+#: templates/services.html:68
+msgid "Improve Your SEO"
+msgstr ""
+
+#: templates/services.html:70
 msgid ""
 "\n"
-"        Our white label product (suitable for enterprise use) <strong>simplifies\n"
-"        subtitle deployment</strong>.\n"
-"        "
+"            Rank higher in Google and other search engines by helping them index full transcripts for all of your videos. Searchable videos are found more often.\n"
+"          "
 msgstr ""
-"\n"
-"        Náš upravitelný produkt (vhodný pro firemní použití) <strong>zjednodušuje\n"
-"        nasazení titulků</strong>.\n"
-"        "
 
-#: templates/services.html:65
+#: templates/services.html:76
+msgid "Flexible Integration"
+msgstr ""
+
+#: templates/services.html:78
 msgid ""
 "\n"
-"        <strong>From enterprise to independent</strong>, we can help you develop a\n"
-"        great subtitle strategy.\n"
-"        "
+"            Need seamless subtitles on your custom video player? Want 1-click features integrated into your back-end or CMS? We can help.\n"
+"          "
 msgstr ""
+
+#: templates/services.html:84
+msgid "Transcription and Translation Service Providers"
+msgstr ""
+
+#: templates/services.html:86
+msgid ""
 "\n"
-"        <strong>Od podniků po OSVČ</strong> vám můžeme pomoci rozvinout\n"
-"        tu správnou strategii pro použití titulků.\n"
-"        "
-
-#: templates/services.html:72
-msgid "For details on enterprise services, email"
-msgstr "Pro další detaily o službách pro podniky napište na"
-
-#: templates/services.html:77
-msgid "Some of Our Partners"
-msgstr "Někteří naši partneři"
+"        Do you provide professional transcription, subtitling, or translation services? We can work together to offer your customers a powerful subtitle management and embedding platform. And if you’d like to offer your services to our customers, we’d also like to hear from you.\n"
+"      "
+msgstr ""
 
 #: templates/settings.html:8 templates/profiles/_top_user_panel.html:10
 #: templates/profiles/my_profile.html:24
@@ -3569,7 +3548,7 @@ msgstr "Poslat zprávu"
 #: templates/videos/_upload_subtitles.html:7
 #: templates/videos/_video_url_panel.html:71
 #: templates/videos/_video_url_panel.html:84 templates/videos/history.html:123
-#: templates/videos/video.html:86 templates/videos/video.html.py:91
+#: templates/videos/video.html:85 templates/videos/video.html.py:90
 msgid "Close"
 msgstr "Zavřít"
 
@@ -3776,67 +3755,67 @@ msgstr "Upravit profil"
 msgid "Do you really want delete picture?"
 msgstr "Opravdu chcete odstranit obrázek?"
 
-#: templates/profiles/edit_profile.html:33
+#: templates/profiles/edit_profile.html:36
 #: templates/videos/_paste_transcription.html:106
 #: templates/videos/_paste_transcription.html:158
 #: templates/videos/_video_url_panel.html:99
 msgid "Saving..."
 msgstr "Ukládám"
 
-#: templates/profiles/edit_profile.html:46
+#: templates/profiles/edit_profile.html:49
 msgid "Edit Your Profile"
 msgstr "Upravit profil"
 
-#: templates/profiles/edit_profile.html:50
+#: templates/profiles/edit_profile.html:53
 msgid "Personal Info"
 msgstr "Osobní info"
 
-#: templates/profiles/edit_profile.html:57
-#: templates/profiles/edit_profile.html:63
-#: templates/profiles/edit_profile.html:69
+#: templates/profiles/edit_profile.html:60
+#: templates/profiles/edit_profile.html:66
+#: templates/profiles/edit_profile.html:72
 msgid "will display publicly"
 msgstr "bude zobrazeno veřejně"
 
-#: templates/profiles/edit_profile.html:82
+#: templates/profiles/edit_profile.html:85
 msgid "remove picture"
 msgstr "odstranit obrázek"
 
-#: templates/profiles/edit_profile.html:88
+#: templates/profiles/edit_profile.html:91
 msgid "Upload picture"
 msgstr "Nahrát obrázek"
 
-#: templates/profiles/edit_profile.html:115
+#: templates/profiles/edit_profile.html:118
 msgid ""
 "Notify me by email about new personal messages and edits to the videos I "
 "follow"
 msgstr ""
 
-#: templates/profiles/edit_profile.html:122
+#: templates/profiles/edit_profile.html:125
 msgid "Follow the videos I submit"
 msgstr ""
 
-#: templates/profiles/edit_profile.html:133
+#: templates/profiles/edit_profile.html:136
 msgid "Language Info"
 msgstr "Jazykové info"
 
-#: templates/profiles/edit_profile.html:146
+#: templates/profiles/edit_profile.html:149
 msgid "Languages I Know"
 msgstr "Jazyky, které znám"
 
-#: templates/profiles/edit_profile.html:149
-#: templates/profiles/edit_profile.html:168
+#: templates/profiles/edit_profile.html:152
+#: templates/profiles/edit_profile.html:171
 msgid "Remove Language"
 msgstr "Odstranit jazyk"
 
-#: templates/profiles/edit_profile.html:185
+#: templates/profiles/edit_profile.html:188
 msgid "Add Language"
 msgstr "Přidat jazyk"
 
-#: templates/profiles/edit_profile.html:194
+#: templates/profiles/edit_profile.html:197
 msgid "Save Edits to Profile"
 msgstr "Uložit změny profilu"
 
-#: templates/profiles/edit_profile.html:198
+#: templates/profiles/edit_profile.html:201
 msgid "Permanently Delete Your Profile"
 msgstr "Natrvalo smazat svůj profil"
 
@@ -4508,8 +4487,8 @@ msgid "Add video"
 msgstr "Přidat video"
 
 #: templates/teams/add_video.html:29 templates/teams/edit.html:138
-#: templates/teams/team_video.html:41 templates/videos/history.html:139
-#: templates/videos/video.html:103
+#: templates/teams/team_video.html:40 templates/videos/history.html:139
+#: templates/videos/video.html:102
 msgid "Save"
 msgstr "Uložit"
 
@@ -5311,8 +5290,7 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"            Revize #%(version_no)s uživatele %(user)s\n"
-"            "
+"Revize #%(version_no)s uživatele %(user)s        "
 
 #: templates/videos/diffing.html:128 templates/videos/diffing.html.py:185
 #: templates/videos/revision.html:139
@@ -5533,7 +5511,7 @@ msgstr "Vybraná videa"
 msgid "Select two revisions for compare, please"
 msgstr "Vyberte dvě revize pro porovnání prosím"
 
-#: templates/videos/history.html:95 templates/videos/video.html:61
+#: templates/videos/history.html:95 templates/videos/video.html:60
 msgid "Enter non-empty title"
 msgstr ""
 
@@ -5553,7 +5531,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: templates/videos/history.html:118 templates/videos/video.html:77
+#: templates/videos/history.html:118 templates/videos/video.html:76
 msgid "edit title"
 msgstr "upravit název"
 
@@ -5574,21 +5552,21 @@ msgid ""
 "            "
 msgstr ""
 
-#: templates/videos/history.html:157 templates/videos/video.html:119
-#: templates/videos/video.html.py:146
-msgid "Video Info"
-msgstr "Informace o videu"
-
-#: templates/videos/history.html:161 templates/videos/history.html.py:211
-#: templates/videos/video.html:126
+#: templates/videos/history.html:156 templates/videos/history.html.py:211
+#: templates/videos/video.html:121
 msgid "Add Translation"
 msgstr "Přidat překlad"
+
+#: templates/videos/history.html:159 templates/videos/video.html:126
+#: templates/videos/video.html.py:142
+msgid "Video Info"
+msgstr "Informace o videu"
 
 #: templates/videos/history.html:178
 msgid "Original Language Subtitles"
 msgstr "Titulky v původním jazyce"
 
-#: templates/videos/history.html:190 templates/videos/video.html:150
+#: templates/videos/history.html:190 templates/videos/video.html:146
 msgid "Comments"
 msgstr "Komentáře"
 
@@ -5708,10 +5686,7 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"            Toto je stará revize titulků %(lang)s\n"
-"            pro video \"%(video)s\", jak byly\n"
-"            editovány uživatelem %(user)s %(date)s. Může\n"
-"            se značně lišit od současné verze.\n"
+"Toto je stará revize titulků %(lang)s pro video \"%(video)s\", jak byly editovány uživatelem %(user)s %(date)s. Může se značně lišit od současné verze.\n"
 "            "
 
 #: templates/videos/revision.html:102
@@ -5722,8 +5697,7 @@ msgid ""
 "                    "
 msgstr ""
 "\n"
-"                    Porovnat #%(version_no)s s #%(prev_version_no)s\n"
-"                    "
+"Porovnat #%(version_no)s s #%(prev_version_no)s"
 
 #: templates/videos/revision.html:112
 #, python-format
@@ -5733,8 +5707,7 @@ msgid ""
 "                    "
 msgstr ""
 "\n"
-"                    Porovnat #%(version_no)s s #%(next_version_no)s\n"
-"                    "
+"Porovnat #%(version_no)s s #%(next_version_no)s"
 
 #: templates/videos/revision.html:122
 #, python-format
@@ -5744,8 +5717,7 @@ msgid ""
 "               "
 msgstr ""
 "\n"
-"               Porovnat #%(version_no)s s #%(latest_version_no)s(current)\n"
-"               "
+"Porovnat #%(version_no)s s #%(latest_version_no)s(current)"
 
 #: templates/videos/revision.html:151
 msgid "See full revision history"
@@ -5815,19 +5787,19 @@ msgstr "Úkoly 2 a 3 jsou volitelné (ale doporučujeme si je zkusit)."
 msgid "That’s it!"
 msgstr "A je to!"
 
-#: templates/videos/video.html:83
+#: templates/videos/video.html:82
 msgid ""
 "Subtitles saved!  You can share the video with friends,\n"
 "        or get an embed code for your site.  To add a\n"
 "        translation, click the button below."
 msgstr ""
 
-#: templates/videos/video.html:92
+#: templates/videos/video.html:91
 msgid ""
 "You are editing the original video title (translations will not be affected)"
 msgstr ""
 
-#: templates/videos/video.html:95
+#: templates/videos/video.html:94
 msgid ""
 "\n"
 "            IMPORTANT: the new title will appear in the lists of videos and in \n"
@@ -5836,23 +5808,23 @@ msgid ""
 "            "
 msgstr ""
 
-#: templates/videos/video.html:124
+#: templates/videos/video.html:119
 msgid "Add Subtitles"
 msgstr "Přidat titulky"
 
-#: templates/videos/video.html:138
+#: templates/videos/video.html:134
 msgid "Edit in Admin Interface"
 msgstr "Upravit v rozhraní správce"
 
-#: templates/videos/video.html:159
+#: templates/videos/video.html:155
 msgid "Activity Stream"
 msgstr "Proud aktivit"
 
-#: templates/videos/video.html:165
+#: templates/videos/video.html:161
 msgid "Video URLs"
 msgstr "URL videa"
 
-#: templates/videos/video.html:183
+#: templates/videos/video.html:179
 msgid "all activity"
 msgstr "všechna aktivita"
 
