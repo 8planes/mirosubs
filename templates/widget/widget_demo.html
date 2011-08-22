@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 {% if not js_use_compiled %}
-  {% include_bundle "js-base-dependencies" %}
+  {% include_bundle "debug-embed-js" %}
   <script>
     goog.require('goog.debug.FancyWindow');
   </script>
