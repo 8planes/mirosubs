@@ -287,8 +287,7 @@ def update_solr_schema():
             run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/{1}/conf/schema.xml'.format(
                     python_exe, 
                     'production' if env.installation_name is None else 'staging'))
-            sudo('service tomcat6 restart')
-            run('screen -d -m "{0} manage.py rebuild_index --no-input --settings=unisubs_settings | mail -s Solr_index_rebuilt_on_{1}  universalsubtitles-dev@pculture.org "'.format(python_exe, env.host_string))
+
     else:
         # dev
         env.host_string = DEV_HOST
@@ -298,8 +297,9 @@ def update_solr_schema():
             _git_pull()
             run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/main/conf/schema.xml'.format(python_exe))
             run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/testing/conf/schema.xml'.format(python_exe))
-            sudo('service tomcat6 restart')
-            run('screen -d -m "yes y | {0} manage.py rebuild_index --settings=unisubs_settings"'.format(python_exe))
+
+    sudo('service tomcat6 restart')
+    run('screen -d -m "{0} manage.py rebuild_index --noinput --settings=unisubs_settings | mail -s Solr_index_rebuilt_on_{1}  universalsubtitles-dev@pculture.org "'.format(python_exe, env.host_string))
 
 def _bounce_celeryd():
     if env.admin_dir:

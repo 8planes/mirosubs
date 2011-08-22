@@ -15,6 +15,7 @@ Contents:
    static-files
    demos
    deployment-guide
+   feature-flags
 
 
 Indices and tables
