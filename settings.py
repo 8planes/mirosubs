@@ -451,6 +451,7 @@ INSTALLED_APPS = (
     'testhelpers',
     'unisubs_compressor',
     'subrequests',
+    'doorman',
     'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 ,
 )
 
@@ -758,4 +759,9 @@ MEDIA_BUNDLES = {
         "optimizations": "WHITESPACE_ONLY",
         "files": JS_BASE_DEPENDENCIES + JS_OFFSITE[:-1]
     }
+}
+
+
+FEATURE_FLAGS  = {
+    "MODERATION": False
 }
