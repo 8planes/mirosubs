@@ -95,13 +95,11 @@ def call_command(command):
                                stderr=subprocess.PIPE)
     return process.communicate()
 
-def get_cache_dir():
-    return os.path.join(settings.MEDIA_ROOT, settings.COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID)
-
 def get_cache_base_url():
     return "%s%s/%s" % (settings.MEDIA_URL_BASE, settings.COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID)
 
-
+def get_cache_dir():
+    return os.path.join(settings.MEDIA_ROOT, settings.COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID)
 
 def sorted_ls(path):
     """
@@ -111,8 +109,9 @@ def sorted_ls(path):
     return list(sorted(os.listdir(path), key=mtime))
 
 class Command(BaseCommand):
-
-
+    """
+    
+    """
 
 
     help = 'Compiles all bundles in settings.py (css and js).'
@@ -129,14 +128,6 @@ class Command(BaseCommand):
             action='store_true', dest='keeps_previous', default=False,
             help="Will remove older static media builds."),
         )
-
-    def create_temp_dir(self):
-        commit_hash = settings.LAST_COMMIT_GUID.split("/")[1]
-        temp = os.path.join("/tmp", "static-%s-%s" % (commit_hash, time.time()))
-        os.makedirs(temp)
-
-        return temp
-
     
     def _append_version_for_debug(self, descriptor, file_type):
         """
@@ -287,7 +278,13 @@ class Command(BaseCommand):
     def compile_media_bundle(self, bundle_name, bundle_type, files):
         getattr(self, "compile_%s_bundle" % bundle_type)(bundle_name, bundle_type, files)
 
-    def copy_media_root_to_temp_dir(self):
+    def _create_temp_dir(self):
+        commit_hash = settings.LAST_COMMIT_GUID.split("/")[1]
+        temp = os.path.join("/tmp", "static-%s-%s" % (commit_hash, time.time()))
+        os.makedirs(temp)
+        return temp
+
+    def _copy_media_root_to_temp_dir(self):
         mr = settings.MEDIA_ROOT
         for dirname in os.listdir(mr):
             original_path = os.path.join(mr, dirname)
@@ -300,20 +297,24 @@ class Command(BaseCommand):
                          ignore=shutil.ignore_patterns(*SKIP_COPING_ON))
          # we need to copy all js, ideally this can be refactored in other libs
 
-        
-
     def _output_embed_to_dir(self, output_dir, version=''):
         file_name = 'embed{0}.js'.format(version)
         context = widget.add_offsite_js_files(
             {'current_site': Site.objects.get_current(),
-             'MEDIA_URL': get_cache_base_url() +"/"})
+             'MEDIA_URL': get_cache_base_url() +"/",
+             "js_file": get_cache_base_url() +"/js/mirosubs-offsite-compiled.js" })
         rendered = render_to_string(
             'widget/{0}'.format(file_name), context)
         with open(os.path.join(output_dir, file_name), 'w') as f:
             f.write(rendered)
             
-    def compile_conf_js(self):
-        file_name = os.path.join(settings.MEDIA_ROOT, 'js/config.js')
+    def _compile_conf_and_embed_js(self):
+        """
+        Compiles config.js, statwidgetconfig.js, and embed.js. These 
+        are used to provide build-specific info (like media url and site url)
+        to compiled js.
+        """
+        file_name = os.path.join(self.temp_dir, 'js/config.js')
 
         context = {'current_site': Site.objects.get_current(),
                    'MEDIA_URL': get_cache_base_url()+ "/"}
@@ -323,54 +324,80 @@ class Command(BaseCommand):
             f.write(rendered)
 
         self._output_embed_to_dir(settings.MEDIA_ROOT)
-        self._output_embed_to_dir(settings.MEDIA_ROOT, settings.EMBED_JS_VERSION)
+        self._output_embed_to_dir(
+            settings.MEDIA_ROOT, settings.EMBED_JS_VERSION)
         for version in settings.PREVIOUS_EMBED_JS_VERSIONS:
-            self._output_embed_to_dir(output_dir, version)
+            self._output_embed_to_dir(settings.MEDIA_ROOT, version)
 
-
-        file_name = os.path.join(settings.MEDIA_ROOT, 'js/statwidget/statwidgetconfig.js')
+        file_name = os.path.join(self.temp_dir, 'js/statwidget/statwidgetconfig.js')
         rendered = render_to_string(
             'widget/statwidgetconfig.js', context)
         with open(file_name, 'w') as f:
             f.write(rendered)    
-            
+
+    def _compile_media_bundles(self, restrict_bundles, args):
+        bundles = settings.MEDIA_BUNDLES
+        for bundle_name, data in bundles.items():
+            if restrict_bundles and bundle_name not in args:
+                continue
+            self.compile_media_bundle(
+                bundle_name, data['type'], data["files"])
+    
+    def _remove_cache_dirs_before(self, num_to_keep):
+        """
+        we remove all but the last export, since the build can fail at the next step
+        in which case it will still need the previous build there
+        """
+        base = os.path.dirname(get_cache_dir())
+        targets = [os.path.join(base, x) for x 
+                   in sorted_ls("media/static-cache/")
+                   if x.startswith(".") is False][:-num_to_keep]
+        [shutil.rmtree(t) for t in targets ]
+
+    def _copy_temp_dir_to_cache_dir(self):
+        cache_dir = get_cache_dir()
+        if os.path.exists(cache_dir):
+            shutil.rmtree(cache_dir)
+        for filename in os.listdir(self.temp_dir):
+            shutil.move(os.path.join(self.temp_dir, filename), 
+                        os.path.join(cache_dir, filename))
+
+    def _copy_files_with_public_urls_from_cache_dir_to_media_dir(self):
+        cache_dir = get_cache_dir()
+        for file in NO_UNIQUE_URL:
+            filename = file['name']
+            from_path = os.path.join(cache_dir, filename)
+            to_path =  os.path.join(settings.MEDIA_ROOT, filename)
+            if os.path.exists(to_path):
+                os.remove(to_path)
+            shutil.copy(from_path, to_path)
+
     def handle(self, *args, **options):
+        """
+        There are three directories involved here:
+        
+        temp_dir: /tmp/static-[commit guid]-[time] This is the working dir
+            for the compilation.
+        MEDIA_ROOT: regular media root directory for django project
+        cache_dir: MEDIA_ROOT/static-cache/[commit guid] where compiled 
+            media ends up
+        """
         self.verbosity = int(options.get('verbosity'))
         self.test_str_version = bool(options.get('test_str_version'))
         self.keeps_previous = bool(options.get('keeps_previous'))
         restrict_bundles = bool(args)
 
         os.chdir(settings.PROJECT_ROOT)
-        self.temp_dir = self.create_temp_dir()
-        bundles = settings.MEDIA_BUNDLES
-        self.copy_media_root_to_temp_dir() 
-        self.compile_conf_js()
-        for bundle_name, data in bundles.items():
-            if restrict_bundles and bundle_name not in args:
-                continue
-            self.compile_media_bundle( bundle_name, data['type'], data["files"])
+        self.temp_dir = self._create_temp_dir()        
+        self._copy_media_root_to_temp_dir() 
+        self._compile_conf_and_embed_js()
+        self._compile_media_bundles(restrict_bundles, args)
             
         if not self.keeps_previous:
-            # we remove all but the last export, since the build can fail at the next step
-            # in which case it will still need the previous build there
-            base = os.path.dirname(get_cache_dir())
-            targets = [os.path.join(base, x) for x in sorted_ls("media/static-cache/")
-                       if x.startswith(".") is False][:-1]
-            [shutil.rmtree(t) for t in targets ]
-        # we now move the old temp dir to it's final destination
-        final_path = get_cache_dir()
-        if os.path.exists(final_path):
-            shutil.rmtree(final_path)
-        for filename in os.listdir(self.temp_dir):
-            shutil.move(os.path.join(self.temp_dir, filename), os.path.join(final_path, filename))
+            self._remove_cache_dirs_before(1)
 
-        for file in NO_UNIQUE_URL:
-            filename = file['name']
-            to_path =  os.path.join(settings.MEDIA_ROOT, filename)
-            from_path = os.path.join(final_path, filename)
-            if os.path.exists(to_path):
-                os.remove(to_path)
-            shutil.copy(from_path, to_path)
+        self._copy_temp_dir_to_cache_dir()
+        self._copy_files_with_public_urls_from_cache_dir_to_media_dir()
 
         if self.test_str_version:
             self.test_string_version()
