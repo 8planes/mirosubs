@@ -189,7 +189,9 @@
                     {% trans 'Roll back to version' %} (#{{ first_version.version_no }})
                 </a>
             {% endif %}
+                {% switch_feature MODERATION %}
                 {% render_approval_toolbar user first_version %}
+                {% endswitch_feature %}
         </div>
         
         <table cellpadding="0" cellspacing="0">

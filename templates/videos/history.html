@@ -2,7 +2,7 @@
 
 {% block body_attrs %}id="video"{% endblock %}
 
-{% load escapejs paginator widget comments i18n subtitles_tags teams_tags media_compressor videos_tags moderation %}
+{% load escapejs paginator widget comments i18n subtitles_tags teams_tags media_compressor videos_tags moderation doorman%}
 
 {% block css %}
     {% if video.thumbnail %}
@@ -163,9 +163,13 @@
         {% if user.is_staff and perms.videos.edit_video %}
             {% feature_video video %}
         {% endif %}
+        {% switch_feature MODERATION %}
         {% render_approve_all_button video user %}
+        {% endswitch_feature %}
         {% team_add_video_select %}
+        {% switch_feature MODERATION %}
         {% render_belongs_to_team_list video %}
+        {% endswitch_feature %}
     </div>
     <div class="wrap grid_9 omega">
         <div id="languages-tab" class="grid_9 alpha omega">
@@ -207,7 +211,9 @@
             </ul>
             <div id="transcripts-tab">
                 <div class="action_buttons grid_9 alpha omega">
+                  {% switch_feature MODERATION %}
                     {% render_approval_toolbar user last_version %}
+                    {% endswitch_feature %}
                     <a id="edit_subtitles_button" href="{{edit_url}}" class="blue_button small {% if not video.is_subtitled  %}add-translation-behavior{% endif %}">{% if not video.is_subtitled %}{% trans 'Add Translation' %}{% else %}{% trans 'Edit Subtitles' %}{% endif %}</a>
                     {% if last_version.subtitles %}
                     <div class="sort_button floatright">
@@ -318,7 +324,7 @@
                             <tr class="revision-history-row moderation-row {% cycle 'even' '' %}" >
                                 <td>
                                     <input type="checkbox" class="version_checkbox" value="{{ item.pk }}"/>
-                                    <a href="{% url videos:revision pk=item.pk %}">#{{ item.version_no}} {% render_moderation_icon item %}</a> ({{ item.revision_time }})
+                                    <a href="{% url videos:revision pk=item.pk %}">#{{ item.version_no}} {% switch_feature MODERATION %}{% render_moderation_icon item %}{% endswitch_feature %}</a> ({{ item.revision_time }})
                                 </td>
                                 <td>
                                     {% if item.user %}
@@ -328,9 +334,12 @@
                                 <td> {% if item.note %}{{ item.note }}{% else %}&nbsp;{% endif %}</td>
                                 <td> {{ item.time_change_display }}</td>
                                 <td class="{% if not user_can_moderate %}last{% endif %}"> {{ item.text_change_display }}</td>
+                                {% switch_feature MODERATION %}
+                                
                                 {% if user_can_moderate %}
                                     <td class="last "> {% render_moderation_togggle_button item %} </td>
                                 {% endif  %}
+                                    {% endswitch_feature %}
                             </tr>
                             {% endfor %}
                         </tbody>

@@ -1,4 +1,4 @@
-{% load i18n subtitles_tags %}
+{% load i18n subtitles_tags doorman %}
     {% if video.subtitle_language %}
         <li class="{% complete_color video.subtitle_language %}{% if language.is_original %} active{% endif %}">
             <a href="{{ video.subtitle_language.get_absolute_url }}">
@@ -16,7 +16,7 @@
                  <span class="done_indicator"></span>
                  {{ item.get_language_display }}
                  <span class="done_percentage">({% complete_indicator item %})</span>
-                <span class="moderation_pending_cound" title="Video has pending moderation">({{item.pending_moderation_count}})</span>
+                {% switch_feature MODERATION %}<span class="moderation_pending_cound" title="Video has pending moderation">({{item.pending_moderation_count}})</span>{% endswitch_feature %}
              </a>
          </li>
       {% endfor %} 
