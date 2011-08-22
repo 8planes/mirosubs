@@ -410,6 +410,8 @@ def history(request, video_id, lang=None, lang_id=None):
             config["languageCode"] = lang
             url = reverse('onsite_widget')+'?config='+urlquote_plus(json.dumps(config))
             return redirect(url)
+        elif video.subtitlelanguage_set.count() > 0:
+            language = video.subtitlelanguage_set.all()[0]
         else:
             raise Http404
 

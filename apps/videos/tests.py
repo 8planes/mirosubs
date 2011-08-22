@@ -755,6 +755,19 @@ class ViewsTest(WebUseTest):
         response = self.client.get(self.video.get_absolute_url('en'))
         self.assertEqual(response.status_code, 200)
 
+    def test_access_video_page_no_original(self):
+        from widget.tests import create_two_sub_session, RequestMockup
+        request = RequestMockup(User.objects.all()[0])
+        session = create_two_sub_session(request)
+        video_pk = session.language.video.pk
+        video = Video.objects.get(pk=video_pk)
+        en = video.subtitlelanguage_set.all()[0]
+        en.is_original=False
+        en.save()
+        video_changed_tasks.delay(video_pk)
+        response = self.client.get(reverse('videos:history', args=[video.video_id]))
+        self.assertEqual(response.status_code, 200)
+
     def test_video_list(self):
         self._simple_test('videos:list')
         self._simple_test('videos:list', data={'o': 'languages_count', 'ot': 'desc'})
