@@ -1,6 +1,6 @@
 {% extends "settings.html" %}
 
-{% load i18n teams_tags paginator %}
+{% load i18n teams_tags paginator doorman %}
 
 {% block body_attrs %}id="teams"{% endblock %}
 
@@ -30,10 +30,11 @@
                     <a href="{{ team_video.video.get_absolute_url }}"><strong>{{ team_video }} </strong></a>
                     <div class="test-me">
                       {% team_video_lang_list team_video.video 6 %}
+                      {% switch_feature MODERATION %}
                       {% if team_video.get_pending_moderation  %}
                       <br>Video has languages pending approval (<a href="{% url moderation:edit_moderation team.pk %}">Review now </a>) 
                       {% endif %}
-
+                      {% endswitch_feature %}
                     </div>
 
                     <div class="completed_in">

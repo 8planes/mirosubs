@@ -26,6 +26,8 @@ from django.contrib import admin
 admin.autodiscover()
 admin.site.unregister([AuthMeta, OpenidProfile, TwitterUserProfile, FacebookUserProfile])
 
+from doorman import feature_is_on
+
 js_info_dict = {
     'packages': ('mirosubs'),
 }
@@ -63,7 +65,6 @@ urlpatterns = patterns(
     url(r'^pagedemo/(\w+)?$', 'pagedemo.views.pagedemo', name="pagedemo"),
     (r'^videos/', include('videos.urls', namespace='videos', 
                           app_name='videos')),
-    (r'^moderation/', include('teams.moderation_urls', namespace="moderation")),
     (r'^teams/', include('teams.urls', namespace='teams', 
                           app_name='teams')),                          
     (r'^profiles/', include('profiles.urls', namespace='profiles', 
@@ -119,6 +120,10 @@ try:
 except ImportError:
     pass
 
+if feature_is_on('MODERATION'):
+    urlpatterns += patterns("",
+        (r'^moderation/', include('teams.moderation_urls', namespace="moderation")),
+    )
 if settings.DEBUG:
     urlpatterns += patterns('',
         (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',

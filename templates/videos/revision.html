@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body_attrs %}id="video"{% endblock %}
 
-{% load widget i18n media_compressor moderation %}
+{% load widget i18n media_compressor moderation doorman %}
 
 {% block css %}
   {{ block.super }}
@@ -62,9 +62,11 @@
         });
     </script>
     {% include_bundle "mirosubs-onsite-compiled" 0 %}
-    {% if user_can_moderate %}
-       {% include_bundle "js-moderation-dashboard" 0 %}
-    {% endif %}
+    {% switch_feature MODERATION %}
+        {% if user_can_moderate %}
+           {% include_bundle "js-moderation-dashboard" 0 %}
+        {% endif %}
+    {% endswitch_feature %}
 
 {% endblock %}
 
@@ -144,7 +146,9 @@
           <span>{% trans 'Roll back to version' %} (#{{ version.version_no }})</span>
       </a>
       {% endif %}
+      {% switch_feature MODERATION %}
       {% render_approval_toolbar user version %}
+      {% endswitch_feature %}
     </div>
     <div class="clearboth">&nbsp;</div>
     <a href="{{ language.get_absolute_url }}#revisions" class="return_history floatright">

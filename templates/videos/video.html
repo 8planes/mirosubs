@@ -2,7 +2,7 @@
 
 {% block body_attrs %}id="video_profile"{% endblock %}
 
-{% load escapejs widget comments recent_activity paginator i18n subtitles_tags teams_tags videos_tags media_compressor moderation %}
+{% load escapejs widget comments recent_activity paginator i18n subtitles_tags teams_tags videos_tags media_compressor moderation doorman %}
 
 {% block css %}
     {% if video.thumbnail %}
@@ -127,7 +127,9 @@
             </li>
             {% include 'videos/_left_navigation.html' %}
         </ul>
+        {% switch_feature MODERATION %}
         {% render_approve_all_button video user %}    
+        {% endswitch_feature %}
     
         {% if user.is_staff and perms.videos.edit_video %}
             <a href="{% url videos:video_debug video.video_id %}"  class="green_button small" target="blank"> View debug info </a>
