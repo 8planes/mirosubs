@@ -3,7 +3,7 @@ from django.conf import settings
 flags = getattr(settings, "FEATURE_FLAGS", {})
 
 
-def feature_is_on(feature_flag_name, request, *extra):
+def feature_is_on(feature_flag_name, request=None, *extra):
     """
     Determines if feature identified by `feature_flag_name` is on or off.
 
