@@ -166,8 +166,8 @@ mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
 
     var videoPlayer = this.getVideoPlayerInternal();
     if (this.isInDocument()) {
-        videoPlayer.setPlayheadTime(0);
         videoPlayer.pause();
+        videoPlayer.setPlayheadTime(0);
     }
 };
 mirosubs.subtitle.Dialog.prototype.suspendKeyEvents_ = function(suspended) {
@@ -197,8 +197,8 @@ mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
     var videoPlayer = this.getVideoPlayerInternal();
     if (this.isInDocument()) {
         // TODO: make video player stop loading here?
-        videoPlayer.setPlayheadTime(0);
         videoPlayer.pause();
+        videoPlayer.setPlayheadTime(0);
     }
 };
 mirosubs.subtitle.Dialog.prototype.handleGoToStep_ = function(event) {

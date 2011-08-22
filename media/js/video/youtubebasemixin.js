@@ -18,6 +18,7 @@ mirosubs.video.YoutubeBaseMixin.prototype.playerStateChange_ = function(newState
     if (newState == s.PLAYING) {
         this.dispatchEvent(et.PLAY);
         this.timeUpdateTimer_.start();
+        this.paused_ = false;
     }
     else if (newState == s.PAUSED) {
         this.dispatchEvent(et.PAUSE);
@@ -80,8 +81,11 @@ mirosubs.video.YoutubeBaseMixin.prototype.playInternal = function () {
         this.commands_.push(goog.bind(this.playInternal, this));
 };
 mirosubs.video.YoutubeBaseMixin.prototype.pauseInternal = function() {
-    if (this.player_)
+    if (this.player_) {
+        this.paused_ = true;
+        this.pausePlayheadTime_ = null;
         this.player_['pauseVideo']();
+    }
     else
         this.commands_.push(goog.bind(this.pauseInternal, this));
 };
@@ -105,14 +109,28 @@ mirosubs.video.YoutubeBaseMixin.prototype.resumeLoadingInternal = function(playh
         this.commands_.push(goog.bind(this.resumeLoadingInternal, this, playheadTime));
 };
 mirosubs.video.YoutubeBaseMixin.prototype.getPlayheadTime = function() {
-    return this.player_ ? this.player_['getCurrentTime']() : 0;
+    if (this.player_) { 
+        if (this.paused_ && !goog.isNull(this.pausePlayheadTime_)) {
+            return this.pausePlayheadTime_;
+        }
+        else {
+            return this.player_['getCurrentTime']();
+        }
+    } else {
+        return 0;
+    }
 };
 
 mirosubs.video.YoutubeBaseMixin.prototype.setPlayheadTime = function(playheadTime, skipsUpdateEvent)
 {
     if (this.player_) {
         this.player_['seekTo'](playheadTime, true);
-        if (!skipsUpdateEvent)this.sendTimeUpdateInternal();
+        if (!skipsUpdateEvent) {
+            if (this.paused_) {
+                this.pausePlayheadTime_ = playheadTime;
+            }
+            this.sendTimeUpdateInternal();
+        }
     }
     else
         this.commands_.push(goog.bind(this.setPlayheadTime,

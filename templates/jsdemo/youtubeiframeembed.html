@@ -30,12 +30,14 @@
      playing = !playing;
      if (playing)
          player.play();
-     else
+     else {
          player.pause();
+         player.setPlayheadTime(0);
+     }
   }
 
   function playerEventHandler(e) {
-     logger.info(e.type);
+//     logger.info(e.type);
   }
 
   goog.events.listen(player, goog.object.getValues(
