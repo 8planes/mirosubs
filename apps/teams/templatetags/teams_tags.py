@@ -140,7 +140,7 @@ def complete_team_video_detail(context, team_video_search_record):
     langs = team_video_search_record.video_completed_langs or ()
     urls = team_video_search_record.video_completed_lang_urls or ()
     context['display_languages'] = \
-        zip([_(ALL_LANGUAGES_DICT[l]) for l in langs, urls])
+        zip([_(ALL_LANGUAGES_DICT[l]) for l in langs], urls)
     return context
 
 @register.inclusion_tag('teams/_team_video_lang_detail.html', takes_context=True)  
