@@ -1,0 +1,56 @@
+{% load media_compressor %}
+<!DOCTYPE html>
+<html>
+  <head>
+    {% include_bundle "widget-css"%}
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/swfobject.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-library/closure/goog/base.js"></script>
+    <script>
+      goog.require('goog.Timer');
+      goog.require('goog.debug.Logger');
+      goog.require('goog.debug.DivConsole');
+    </script>
+  </head>
+  <body>
+<div id="videodiv">
+</div>
+<div>
+  <a href="#" onclick="seek(); return false;">seek to 0</a>
+</div>
+ <!-- Event log. -->
+ <fieldset class="goog-debug-panel">
+   <legend>Event Log</legend>
+   <div id="log" style="height: 300px; overflow-y: auto"></div>
+ </fieldset>
+ <div id="perf"></div>  
+<script type="text/javascript">
+  goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
+  var logger = goog.debug.Logger.getLogger('vimeo');
+  var logConsole = new goog.debug.DivConsole(goog.dom.$('log'));
+
+  logConsole.setCapturing(true);
+
+  function vimeo_player_loaded(apiID) {
+      logger.info('ready with api id ' + apiID);
+  }
+
+  var params = {
+      'allowScriptAccess': 'always',
+      'wmode': 'opaque',
+  };
+
+  var atts = { 'id': 'videodiv' };
+
+  swfURL = 'http://vimeo.com/moogaloop.swf?js_api=1&width=480&height=360&clip_id=2674991&js_swf_id=myswfid';
+  swfobject.embedSWF(swfURL, 'videodiv', 480, 360, "8", null, null, params, atts);
+
+  function seek() {
+      logger.info('seeking to 0');
+      var player = document.getElementById('videodiv');
+      player.api_seekTo(0);
+  }
+
+</script>
+  </body>
+</html>
+
