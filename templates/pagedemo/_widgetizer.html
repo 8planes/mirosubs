@@ -1,0 +1,11 @@
+{% if not js_use_compiled %}
+  {% include "widget/_js_base_dependencies.html" %}
+  <script>
+    goog.require('goog.debug.FancyWindow');
+  </script>
+  {% for dep in js_dependencies %}
+      <script type="text/javascript" src="{{dep|safe}}"></script>
+  {% endfor %}
+{% else %}
+  <script type="text/javascript" src="{{MEDIA_URL_BASE}}js/mirosubs-widgetizer.js"></script>
+{% endif %}
