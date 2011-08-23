@@ -260,8 +260,11 @@ class Command(BaseCommand):
             logging.info("Successfully compiled {0}".format(output_file_name))
 
     def _compile_js_bootloader(self, bundle_name, bootloader_settings):
+        print("_compile_js_bootloader called with MEDIA_URL {0}".format(
+                settings.MEDIA_URL))
         context = { 'gatekeeper' : bootloader_settings['gatekeeper'],
-                    'script_src': "{0}js/{1}-inner.js".format(settings.MEDIA_URL, bundle_name) }
+                    'script_src': "{0}js/{1}-inner.js".format(
+                settings.MEDIA_URL, bundle_name) }
         rendered = render_to_string("widget/bootloader.js", context)
         file_name = os.path.join(
             self.temp_dir, "js", "{0}.js".format(bundle_name))
@@ -314,6 +317,10 @@ class Command(BaseCommand):
         are used to provide build-specific info (like media url and site url)
         to compiled js.
         """
+        print(("_compile_conf_and_embed_js with cache_base_url {0} and "
+               "MEDIA_URL {1}").format(
+                get_cache_base_url(), settings.MEDIA_URL))
+
         file_name = os.path.join(self.temp_dir, 'js/config.js')
 
         context = {'current_site': Site.objects.get_current(),
@@ -382,13 +389,16 @@ class Command(BaseCommand):
         cache_dir: MEDIA_ROOT/static-cache/[commit guid] where compiled 
             media ends up
         """
+        self.temp_dir = self._create_temp_dir()
+        print(("Starting static media compilation with "
+               "temp_dir {0} and cache_dir {1}").format(
+                self.temp_dir, get_cache_dir()));
         self.verbosity = int(options.get('verbosity'))
         self.test_str_version = bool(options.get('test_str_version'))
         self.keeps_previous = bool(options.get('keeps_previous'))
         restrict_bundles = bool(args)
 
         os.chdir(settings.PROJECT_ROOT)
-        self.temp_dir = self._create_temp_dir()        
         self._copy_media_root_to_temp_dir() 
         self._compile_conf_and_embed_js()
         self._compile_media_bundles(restrict_bundles, args)
