@@ -260,11 +260,11 @@ class Command(BaseCommand):
             logging.info("Successfully compiled {0}".format(output_file_name))
 
     def _compile_js_bootloader(self, bundle_name, bootloader_settings):
-        print("_compile_js_bootloader called with MEDIA_URL {0}".format(
-                settings.MEDIA_URL))
+        logging.info("_compile_js_bootloader called with cache_base_url {0}".format(
+                get_cache_base_url()))
         context = { 'gatekeeper' : bootloader_settings['gatekeeper'],
-                    'script_src': "{0}js/{1}-inner.js".format(
-                settings.MEDIA_URL, bundle_name) }
+                    'script_src': "{0}/js/{1}-inner.js".format(
+                get_cache_base_url(), bundle_name) }
         rendered = render_to_string("widget/bootloader.js", context)
         file_name = os.path.join(
             self.temp_dir, "js", "{0}.js".format(bundle_name))
@@ -282,7 +282,7 @@ class Command(BaseCommand):
         getattr(self, "compile_%s_bundle" % bundle_type)(bundle_name, bundle_type, files)
 
     def _create_temp_dir(self):
-        commit_hash = settings.LAST_COMMIT_GUID.split("/")[1]
+        commit_hash = LAST_COMMIT_GUID.split("/")[1]
         temp = os.path.join("/tmp", "static-%s-%s" % (commit_hash, time.time()))
         os.makedirs(temp)
         return temp
@@ -317,9 +317,8 @@ class Command(BaseCommand):
         are used to provide build-specific info (like media url and site url)
         to compiled js.
         """
-        print(("_compile_conf_and_embed_js with cache_base_url {0} and "
-               "MEDIA_URL {1}").format(
-                get_cache_base_url(), settings.MEDIA_URL))
+        logging.info(("_compile_conf_and_embed_js with cache_base_url {0}").format(
+                get_cache_base_url()))
 
         file_name = os.path.join(self.temp_dir, 'js/config.js')
 
@@ -390,8 +389,8 @@ class Command(BaseCommand):
             media ends up
         """
         self.temp_dir = self._create_temp_dir()
-        print(("Starting static media compilation with "
-               "temp_dir {0} and cache_dir {1}").format(
+        logging.info(("Starting static media compilation with "
+                      "temp_dir {0} and cache_dir {1}").format(
                 self.temp_dir, get_cache_dir()));
         self.verbosity = int(options.get('verbosity'))
         self.test_str_version = bool(options.get('test_str_version'))
