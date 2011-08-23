@@ -282,7 +282,7 @@ class Command(BaseCommand):
         getattr(self, "compile_%s_bundle" % bundle_type)(bundle_name, bundle_type, files)
 
     def _create_temp_dir(self):
-        commit_hash = LAST_COMMIT_GUID.split("/")[1]
+        commit_hash = LAST_COMMIT_GUID
         temp = os.path.join("/tmp", "static-%s-%s" % (commit_hash, time.time()))
         os.makedirs(temp)
         return temp
