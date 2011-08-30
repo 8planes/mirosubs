@@ -1,1 +1,0 @@
-ab -n 1000 -c 20 http://dev.universalsubtitles.org/widget/rpc/jsonp/fetch_translations?video_id=%22Hkwy2TKn60x5%22\&language_code=%22lv%22\&callback=_callbacks_._1gd24jqps

@@ -1,9 +1,0 @@
-Welcome to {{ site.name }}!
-
-To verify your email address please click the link below.
-
-http://{{ site.domain }}{% url registration_activate activation_key=activation_key %}
-
-Thanks!
-
--- The {{ site.name }} team

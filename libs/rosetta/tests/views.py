@@ -1,3 +1,0 @@
-def dummy(request):
-    pass
-

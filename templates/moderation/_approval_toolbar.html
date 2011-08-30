@@ -1,8 +1,0 @@
-{% load moderation %}
-{% if version %}
-<div class="moderation-toolbar-remove">
-       {% render_remove_approve_button version %}
-       {% render_approve_button version %}
-       {% render_reject_button version "" 1 %}
-</div>
-{% endif %}

@@ -1,5 +1,0 @@
-{{ object.video }}
-{{ object.language_display }}
-{% for item in object.latest_subtitles %}
-    {{ item.text }}
-{% endfor %}

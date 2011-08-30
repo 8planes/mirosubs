@@ -1,7 +1,0 @@
-Here are JMeter tests for unisubs. 
-
-There are various ways to run them (command line, distributed) and so on, but the simplest is to:
-a) Download jmeter http://jakarta.apache.org/site/downloads/downloads_jmeter.cgi
-b) open the jar achive
-c) choose one of these files from the "File>Open" menu
-d) Choose "Run > Start"

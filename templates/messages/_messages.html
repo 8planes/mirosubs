@@ -1,9 +1,0 @@
-{% load i18n %}
-{% if msg_count %}
-<div class="note">
-    {% blocktrans %}
-        You have {{ msg_count }} new messages.
-    {% endblocktrans %}
-    <a href="{% url messages:index %}">{% trans 'View all' %}</a>
-</div>
-{% endif %}
